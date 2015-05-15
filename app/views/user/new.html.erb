@@ -1,0 +1,294 @@
+<html lang="en">
+<!-- BEGIN HEAD -->
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta content="" name="description"/>
+<meta content="" name="author"/>
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
+<link href="../../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<!-- BEGIN THEME STYLES -->
+<link href="../../assets/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css">
+<link href="../../assets/global/css/plugins.css" rel="stylesheet" type="text/css">
+<link href="../../assets/admin/layout3/css/layout.css" rel="stylesheet" type="text/css">
+<link href="../../assets/admin/layout3/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
+<link href="../../assets/admin/layout3/css/custom.css" rel="stylesheet" type="text/css">
+<!-- END THEME STYLES -->
+<link rel="shortcut icon" href="favicon.ico"/>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<!-- DOC: Apply "page-header-menu-fixed" class to set the mega menu fixed  -->
+<!-- DOC: Apply "page-header-top-fixed" class to set the top menu fixed  -->
+<body>
+<div class="page-header">
+	<!-- BEGIN HEADER TOP -->
+	<div class="page-header-top">
+		<div class="container">
+			<!-- BEGIN LOGO -->
+			<div class="page-logo">
+				<a href="/#"><img src="../../assets/admin/layout3/img/logo-default.png" alt="logo" class="logo-default"></a>
+			</div>
+			<!-- END LOGO -->
+			<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+			<a href="javascript:;" class="menu-toggler"></a>
+			<!-- END RESPONSIVE MENU TOGGLER -->
+			<!-- BEGIN TOP NAVIGATION MENU -->
+			<div class="top-menu">
+				<ul class="nav navbar-nav pull-right">
+					<!-- BEGIN NOTIFICATION DROPDOWN -->
+					<!-- END NOTIFICATION DROPDOWN -->
+					<!-- END TODO DROPDOWN -->
+					<!-- BEGIN INBOX DROPDOWN -->
+					<li class="dropdown dropdown-extended dropdown-dark dropdown-inbox" id="header_inbox_bar">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+						</a>
+					</li>
+					<!-- END INBOX DROPDOWN -->
+					<li class="dropdown dropdown-user dropdown-dark">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+							<img alt="" class="img-circle" src="<%= current_user.photo.url%>">
+							<span class="username username-hide-mobile"><%= current_user.fullname%></span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-default">
+							<li>
+								<a data="<%=current_user.id%>" data-method="get" href="/user/<%=current_user.id%>/edit?method_name=get"><i class="icon-user"></i> Meu perfil </a>
+							</li>
+							<li class="divider">
+							</li>
+							<li>
+								<a rel="nofollow" data-method="delete" href="/users/sign_out"> <i class="fa fa-sign-out"></i> Encerrar Sessão </a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- END TOP NAVIGATION MENU -->
+		</div>
+	</div>
+	<!-- END HEADER TOP --> 
+	<!-- BEGIN HEADER MENU -->
+	<div class="page-header-menu">
+		<div class="container">
+			<!-- BEGIN HEADER SEARCH BOX -->
+			<form class="search-form" action="extra_search.html" method="GET">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search" name="query">
+					<span class="input-group-btn">
+					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
+					</span>
+				</div>
+			</form>
+			<!-- END HEADER SEARCH BOX -->
+			<!-- BEGIN MEGA MENU -->
+			<!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
+			<!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
+			<div class="hor-menu ">
+				<ul class="nav navbar-nav">
+					<li>
+						<%= link_to "Página Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<li class="menu-dropdown mega-menu-dropdown mega-menu-full ">
+						<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+						Cadastros <i class="fa fa-angle-down"></i>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<div class="mega-menu-content">
+									<div class="row">
+										<div class="col-md-3">
+											<ul class="mega-menu-submenu">
+											 <li>
+													<h3>Configurações</h3>
+												</li>
+												<li >
+													<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
+												</li>
+												<li>
+													<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
+
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- END MEGA MENU -->
+		</div>
+	</div>
+	<!-- END HEADER MENU -->
+</div>
+<!-- END HEADER -->
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Página Inicial", root_path %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Usuários", users_path %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						Novo
+					</li>
+				</ul>
+				<div class="col-md-12">
+					<div class="portlet light">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-pencil"></i>Adicionar usuário
+							</div>
+						</div>
+							<div class="portlet-body">
+							<%= form_for((@user), url: new_user_path, html: { method: :post }) do |f|%>
+								<% if @user.errors.any? %>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+										<ul>
+											<% @user.errors.full_messages.each do |message| %>
+											 <li><%= message %></li>
+										 <% end %>
+										</ul>
+									</div>
+								<% end %>
+
+								<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+									<label class="control-label ">Nome Completo</label>
+									<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-font"></i></span>
+										<%= f.text_field :fullname,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+									<label class="control-label ">Email</label>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+										<%= f.email_field :email,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="control-label ">Senha</label>
+									<div class="input-group">
+											<% if @validatable %>
+												<em>(<%= @minimum_password_length %> characters minimum)</em>
+											<% end %> 
+											<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+											<%= f.password_field :password, autocomplete: "off", :class =>"form-control placeholder-no-fix"%>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<label class="control-label ">Confirmação de senha</label>
+									<div class="controls">
+										<div class="input-group">
+											<span class="input-group-addon"><i class="fa fa-check"></i></span>
+												<%= f.password_field :password_confirmation, autocomplete: "off", :class =>"form-control placeholder-no-fix"%>
+										</div>
+									</div>
+								</div>
+
+								<% if current_user.user_type == 0 %>
+									<div class="form-group">
+										<label>Tipo de Usuário:</label>
+										<%= f.select :user_type, [['Master', 0], ['Administrador', 1, :selected=>"true"]], {}, {:class=> 'form-control'} %>
+									</div>
+								<% end %>
+
+								<div class="actions">
+										<%= f.submit "Gravar", :class => "btn green-meadow pull-left"%>
+								</div><br><br><br>
+
+								<%= link_to "Voltar", root_path, :class => "btn default ", 'data-no-turbolink' => true%>
+
+							<% end %>
+
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE CONTENT -->
+	</div>
+</div>  
+<!-- END PAGE CONTAINER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+<script src="../../assets/global/plugins/respond.min.js"></script>
+<script src="../../assets/global/plugins/excanvas.min.js"></script> 
+<![endif]-->
+<script src="../../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="../../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="../../assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="../../assets/admin/layout3/scripts/layout.js" type="text/javascript"></script>
+<script src="../../assets/admin/layout3/scripts/demo.js" type="text/javascript"></script>
+
+<script>
+jQuery(document).ready(function() {       
+	 // initiate layout and plugins
+		Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	
+	/*$('#tabela').DataTable({
+		"sPaginationType": "full_numbers",
+			"processing": true,
+			"serverSide": true,
+		"ajax": $('#tabela').data('source'),
+		 "columns": 
+			[{ "bSortable": false, "bSearchable": false, "data": null, "render": function ( data, type, row ) {
+								return '<a href="/user/'+data.id+'/edit" class="btn yellow btn-xs pull-center"><i class="fa fa-pencil"></i> Editar</a> <a data-confirm="Tem certeza que deseja excluir o usuário?" rel="nofollow" data-method="delete" href="/user/'+data.id+'" class="btn red btn-xs pull-right"> <i class="fa fa-times"></i> Deletar</a> '}}]
+	});*/
+ //init tabela
+});
+
+</script>
+</body>
+<!-- END BODY -->
+</html>

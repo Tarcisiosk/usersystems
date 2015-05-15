@@ -1,0 +1,468 @@
+<html lang="en">
+<!-- BEGIN HEAD -->
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta content="" name="description"/>
+<meta content="" name="author"/>
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
+<link href="../../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN PAGE LEVEL STYLES -->
+<link href="../../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+<link href="../../assets/admin/pages/css/profile.css" rel="stylesheet" type="text/css"/>
+<link href="../../assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/select2/select2.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/tableTools/css/dataTables.tableTools.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+<!-- END PAGE LEVEL STYLES -->
+<!-- BEGIN THEME STYLES -->
+<link href="../../assets/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css">
+<link href="../../assets/global/css/plugins.css" rel="stylesheet" type="text/css">
+<link href="../../assets/admin/layout3/css/layout.css" rel="stylesheet" type="text/css">
+<link href="../../assets/admin/layout3/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
+<link href="../../assets/admin/layout3/css/custom.css" rel="stylesheet" type="text/css">
+<!-- END THEME STYLES -->
+<link rel="shortcut icon" href="favicon.ico"/>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<!-- DOC: Apply "page-header-menu-fixed" class to set the mega menu fixed  -->
+<!-- DOC: Apply "page-header-top-fixed" class to set the top menu fixed  -->
+<body>
+<div class="page-header">
+	<!-- BEGIN HEADER TOP -->
+	<div class="page-header-top">
+		<div class="container">
+			<!-- BEGIN LOGO -->
+			<div class="page-logo">
+				<a href="/#"><img src="../../assets/admin/layout3/img/logo-default.png" alt="logo" class="logo-default"></a>
+			</div>
+			<!-- END LOGO -->
+			<!-- BEGIN RESPONSIVE MENU TOGGLER -->
+			<a href="javascript:;" class="menu-toggler"></a>
+			<!-- END RESPONSIVE MENU TOGGLER -->
+			<!-- BEGIN TOP NAVIGATION MENU -->
+			<div class="top-menu">
+				<ul class="nav navbar-nav pull-right">
+					<!-- BEGIN NOTIFICATION DROPDOWN -->
+					<!-- END NOTIFICATION DROPDOWN -->
+					<!-- END TODO DROPDOWN -->
+					<!-- BEGIN INBOX DROPDOWN -->
+					<li class="dropdown dropdown-extended dropdown-dark dropdown-inbox" id="header_inbox_bar">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+						</a>
+					</li>
+					<!-- END INBOX DROPDOWN -->
+					<li class="dropdown dropdown-user dropdown-dark">
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+							<img alt="" class="img-circle" src="<%= current_user.photo.url%>">
+							<span class="username username-hide-mobile"><%= current_user.fullname%></span>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-default">
+							<li>
+								<a data="<%=current_user.id%>" data-method="get" href="/user/<%=current_user.id%>/edit?method_name=get"><i class="icon-user"></i> Meu perfil </a>
+							</li>
+							<li class="divider">
+							</li>
+							<li>
+								<a rel="nofollow" data-method="delete" href="/users/sign_out"> <i class="fa fa-sign-out"></i> Encerrar Sessão </a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- END TOP NAVIGATION MENU -->
+		</div>
+	</div>
+	<!-- END HEADER TOP --> 
+	<!-- BEGIN HEADER MENU -->
+	<div class="page-header-menu">
+		<div class="container">
+			<!-- BEGIN HEADER SEARCH BOX -->
+			<form class="search-form" action="extra_search.html" method="GET">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Search" name="query">
+					<span class="input-group-btn">
+					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
+					</span>
+				</div>
+			</form>
+			<!-- END HEADER SEARCH BOX -->
+			<!-- BEGIN MEGA MENU -->
+			<!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
+			<!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
+			<div class="hor-menu ">
+				<ul class="nav navbar-nav">
+					<li>
+						<%= link_to "Página Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<li class="menu-dropdown mega-menu-dropdown mega-menu-full ">
+						<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+						Cadastros <i class="fa fa-angle-down"></i>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<div class="mega-menu-content">
+									<div class="row">
+										<div class="col-md-3">
+											<ul class="mega-menu-submenu">
+											 <li>
+													<h3>Configurações</h3>
+												</li>
+												<li >
+													<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
+												</li>
+												<li>
+													<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
+
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- END MEGA MENU -->
+		</div>
+	</div>
+	<!-- END HEADER MENU -->
+</div>
+<!-- END HEADER -->
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Página Inicial", root_path %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Usuários", users_path %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+							Editar
+					</li>
+				</ul>
+
+				<div class="col-md-12">
+
+					<div class="profile-sidebar" style="width: 250px;">
+						<!-- PORTLET MAIN -->
+						<div class="portlet light profile-sidebar-portlet">
+							<!-- SIDEBAR USERPIC -->
+							<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
+								<div class="profile-userpic">
+									<img  class="img-responsive" alt="" src="<%= @user.photo.url %>">
+								</div>
+								<!-- END SIDEBAR USERPIC -->
+								<!-- SIDEBAR USER TITLE -->
+								<div class="profile-usertitle">
+										<div class="profile-usertitle-name">
+											 <%= @user.fullname %>
+										</div>
+										<div class="profile-usertitle-job">
+											 <%= @user.email %>
+										</div><br>
+								</div>
+							<% end %>
+						</div>
+						<!-- END PORTLET MAIN -->
+					</div>
+					<div class="profile-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet light">
+								 <div class="portlet-title tabbable-line">
+										<div class="caption caption-md">
+											<i class="icon-globe theme-font hide"></i>
+												<span class="caption-subject font-blue-madison bold uppercase">Editar Usuário</span>
+											<i class="fa fa-pencil"></i>
+										</div>
+										 <ul class="nav nav-tabs">
+												<li class="active">
+													<a href="#tab_1_1" data-toggle="tab">Geral</a>
+												</li>
+												<li>
+													<a href="#tab_1_2" data-toggle="tab">Alterar Imagem</a>
+												</li>
+												<li>
+													<a href="#tab_1_3" data-toggle="tab">Alterar Senha</a>
+												</li>
+												<% if editingUser.user_type == 2 && current_user.user_type != 2 %>
+													<li>
+														<a href="#tab_1_4" data-toggle="tab">Empresas</a>
+													</li>
+												<%end%>
+											</ul>
+									</div>
+									<div class="portlet-body">
+										<div class="tab-content">
+											<div class="tab-pane active" id="tab_1_1">
+												<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
+													<% if @user.errors.any? %>
+														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+															<ul >
+																<% @user.errors.full_messages.each do |message| %>
+																 <li><%= message %></li>
+															 <% end %>
+															</ul>
+														</div>
+													<% end %>
+														
+													<div class="form-group">
+														<label class="control-label ">Nome Completo</label>
+														<div class="input-group">
+															<span class="input-group-addon"><i class="fa fa-font"></i></span>
+															<%= f.text_field :fullname,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix", :placeholder =>"Nome Completo"%>
+														</div>
+													</div>
+													 
+													<div class="field">
+														<label class="control-label ">Email</label>
+														<div class="input-group">
+															<span class="input-group-addon"><i class="fa fa-user"></i></span>
+															<%= f.email_field :email, autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix", :placeholder =>"Email" %>
+														</div>
+													</div><br>
+
+													<% if current_user.user_type == 0 %>
+														<% if @user.id != 1 %>
+															<div class="form-group">
+																<label>Tipo de Usuário:</label>
+																<%= f.select :user_type, [['Master', 0], ['Administrador', 1], ['Comum', 2]], {}, {:class=> 'form-control', :disabled=>false, :selected => params[:user_type]} %>
+															</div>
+														<% end %>
+													<% end %>
+
+													<div class="actions">
+														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
+													</div><br>
+													<%= link_to "Voltar", root_path, :class => "btn default " %>
+												<% end %>
+
+
+											</div>  
+
+											<div class="tab-pane" id="tab_1_2">
+												<%= form_for((@user), url: user_path(@user), html: { method: :put, :multipart => true}) do |f|%>
+													<% if @user.errors.any? %>
+														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+															<ul >
+																<% @user.errors.full_messages.each do |message| %>
+																 <li><%= message %></li>
+															 <% end %>
+															</ul>
+														</div>
+													<% end %>
+														<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;" id = "target">
+															 <div class="fileinput fileinput-new" id = "target">
+																<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+															</div>
+														</div><br><br>
+														<%= f.file_field :photo,  :id=>"pictureInput" %>
+														<br><br>
+														<div class="actions">
+															<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
+														</div><br>
+														<%= link_to "Voltar", root_path, :class => "btn default " %>
+												<% end %>
+											</div>
+								 
+											<div class="tab-pane" id="tab_1_3">
+												<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
+													<% if @user.errors.any? %>
+														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+															<ul >
+																<% @user.errors.full_messages.each do |message| %>
+																 <li><%= message %></li>
+															 <% end %>
+															</ul>
+														</div>
+													<% end %>
+
+													<div class="form-group">
+														<label class="control-label">Nova senha</label>
+														<%= f.password_field :password, autofocus: true, :autocomplete => "off", :class =>"form-control placeholder-no-fix" %>
+													</div>
+													<div class="form-group">
+														<label class="control-label">Confirmação nova senha</label>
+														<%= f.password_field :password_confirmation, autofocus: false, :autocomplete => "off", :class =>"form-control placeholder-no-fix" %>
+													</div>
+
+													<div class="actions">
+														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
+													</div><br>
+													 <%= link_to "Voltar", root_path, :class => "btn default ", 'data-no-turbolink' => true%>
+												<% end %>
+											</div>
+											<% if editingUser.user_type == 2 && current_user.user_type != 2%>
+												<div class="tab-pane" id="tab_1_4">
+													<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
+														<% if @user.errors.any? %>
+															<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+																<ul >
+																	<% @user.errors.full_messages.each do |message| %>
+																	 <li><%= message %></li>
+																 <% end %>
+																</ul>
+															</div>
+														<% end %>
+														<%= f.hidden_field :fullname,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix", :placeholder =>"Nome Completo"%>
+														<table class="table table-striped table-bordered table-hover" id="SimpleTable" >
+															<thead>
+																<tr>
+																	<th class="" style="width: 24px;">			
+																		<input type="checkbox" class="group-checkable" data-set="#SimpleTable .checkboxes"/>
+																	</th>
+																	<th>
+																		Nome Fantasia
+																	</th>
+																	<th>
+																		CNPJ
+																	</th>
+																</tr>
+															</thead>
+															<tbody>
+																<% empTable.each do |item| %>
+																	<tr class="odd gradeX">
+																		<td>
+																			<% if item.users.include? @user %>
+																				<input type="checkbox" class="checkboxes" checked="true" value= "<%=item.id%>"/>
+																			<%else%>
+																				<input type="checkbox" class="checkboxes" value= "<%=item.id%>"/>
+																			<%end%>
+																		</td>
+																		<td>
+																			<%= item.nome_fantasia %>
+																		</td>
+																		<td>
+																			<%= item.cnpj %>
+																		</td>
+																	</tr>
+																<%end%>
+															</tbody>
+														</table><br>
+														<div class="actions">
+															<%= f.submit "Atualizar", :action=> "update",:class => "btn yellow"%>
+														</div><br>		
+														<%= link_to "Voltar", root_path, :class => "btn default ", 'data-no-turbolink' => true%>
+													<%end%>
+												</div>
+											<%end%>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> 
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE CONTENT -->
+	</div>
+</div>  
+<!-- END PAGE CONTAINER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+<script src="../../assets/global/plugins/respond.min.js"></script>
+<script src="../../assets/global/plugins/excanvas.min.js"></script> 
+<![endif]-->
+<script src="../../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="../../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="../../assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="../../assets/admin/layout3/scripts/layout.js" type="text/javascript"></script>
+<script src="../../assets/admin/layout3/scripts/demo.js" type="text/javascript"></script>
+<script src="../../assets/admin/pages/scripts/table-managed.js"></script>
+
+<script>
+jQuery(document).ready(function() {       
+	 // initiate layout and plugins
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	TableManaged.init();
+
+	$('#pictureInput').on('change', function(event) {
+		var files = event.target.files;
+		var image = files[0]
+		var reader = new FileReader();
+		reader.onload = function(file) {
+			var img = new Image();
+			console.log(file);
+			img.src = file.target.result;
+			$('#target').html(img);
+		}
+		reader.readAsDataURL(image);
+		console.log(files);
+	});
+
+	$(":checkbox").change(function(event){
+	    event.preventDefault();
+	    var checkedObj = $("#SimpleTable input:checkbox:checked").map(function(){ return $(this).val();}).get(); 
+	    
+	    if(checkedObj[0] == "on")
+	    {
+		    checkedObj.shift()
+		}
+
+		$.ajax({
+			type: 'post',
+			url: '/users/checked_rows',
+			data: {empresas : checkedObj}
+		});
+
+	});
+	/*$('#tabela').DataTable({
+		"sPaginationType": "full_numbers",
+			"processing": true,
+			"serverSide": true,
+		"ajax": $('#tabela').data('source'),
+		 "columns": 
+			[{ "bSortable": false, "bSearchable": false, "data": null, "render": function ( data, type, row ) {
+								return '<a href="/user/'+data.id+'/edit" class="btn yellow btn-xs pull-center"><i class="fa fa-pencil"></i> Editar</a> <a data-confirm="Tem certeza que deseja excluir o usuário?" rel="nofollow" data-method="delete" href="/user/'+data.id+'" class="btn red btn-xs pull-right"> <i class="fa fa-times"></i> Deletar</a> '}}]
+	});*/
+ //init tabela
+});
+
+</script>
+</body>
+<!-- END BODY -->
+</html>
