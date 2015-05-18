@@ -2,6 +2,7 @@
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8"/>
+<title>MASTERCOM | USUÁRIOS | EDITAR</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -191,28 +192,28 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="portlet light">
-								 <div class="portlet-title tabbable-line">
+								 	<div class="portlet-title tabbable-line">
 										<div class="caption caption-md">
 											<i class="icon-globe theme-font hide"></i>
 												<span class="caption-subject font-blue-madison bold uppercase">Editar Usuário</span>
 											<i class="fa fa-pencil"></i>
 										</div>
 										 <ul class="nav nav-tabs">
-												<li class="active">
-													<a href="#tab_1_1" data-toggle="tab">Geral</a>
-												</li>
+											<li class="active">
+												<a href="#tab_1_1" data-toggle="tab">Geral</a>
+											</li>
+											<li>
+												<a href="#tab_1_2" data-toggle="tab">Alterar Imagem</a>
+											</li>
+											<li>
+												<a href="#tab_1_3" data-toggle="tab">Alterar Senha</a>
+											</li>
+											<% if editingUser.user_type == 2 && current_user.user_type != 2 %>
 												<li>
-													<a href="#tab_1_2" data-toggle="tab">Alterar Imagem</a>
+													<a href="#tab_1_4" data-toggle="tab">Empresas</a>
 												</li>
-												<li>
-													<a href="#tab_1_3" data-toggle="tab">Alterar Senha</a>
-												</li>
-												<% if editingUser.user_type == 2 && current_user.user_type != 2 %>
-													<li>
-														<a href="#tab_1_4" data-toggle="tab">Empresas</a>
-													</li>
-												<%end%>
-											</ul>
+											<%end%>
+										</ul>
 									</div>
 									<div class="portlet-body">
 										<div class="tab-content">
@@ -273,12 +274,13 @@
 															</ul>
 														</div>
 													<% end %>
-														<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;" id = "target">
+														<div class="fileinput-new thumbnail" style="width: 200px; height: 200px;" id = "target">
 															 <div class="fileinput fileinput-new" id = "target">
-																<img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+																<img src="<%= current_user.photo.url%>" height="200" width="200">
 															</div>
 														</div><br><br>
 														<%= f.file_field :photo,  :id=>"pictureInput" %>
+
 														<br><br>
 														<div class="actions">
 															<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>

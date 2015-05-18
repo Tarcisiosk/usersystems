@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150514141012) do
+ActiveRecord::Schema.define(version: 20150518150802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,7 +22,6 @@ ActiveRecord::Schema.define(version: 20150514141012) do
     t.string   "cnpj"
     t.string   "insc_estadual"
     t.string   "insc_municipal"
-    t.string   "endereco"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.string   "rua"
@@ -32,6 +31,7 @@ ActiveRecord::Schema.define(version: 20150514141012) do
     t.string   "uf"
     t.string   "cep"
     t.integer  "adm_id",         default: 1
+    t.string   "cidade"
   end
 
   create_table "empresas_users", force: :cascade do |t|

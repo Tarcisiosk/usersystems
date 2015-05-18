@@ -2,11 +2,7 @@
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-<meta content="" name="description"/>
-<meta content="" name="author"/>
+<title>MASTERCOM | USUÁRIOS | NOVO</title>
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
 <link href="../../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -15,8 +11,12 @@
 <link href="../../assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
 <!-- END GLOBAL MANDATORY STYLES -->
 <!-- BEGIN PAGE LEVEL STYLES -->
+<link href="../../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+<link href="../../assets/admin/pages/css/profile.css" rel="stylesheet" type="text/css"/>
+<link href="../../assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/select2/select2.css"/>
 <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/tableTools/css/dataTables.tableTools.css"/>
 <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
 <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
 <!-- END PAGE LEVEL STYLES -->
@@ -159,79 +159,123 @@
 					</li>
 				</ul>
 				<div class="col-md-12">
-					<div class="portlet light">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-pencil"></i>Adicionar usuário
-							</div>
+					<div class="profile-sidebar" style="width: 250px;">
+						<!-- PORTLET MAIN -->
+						<div class="portlet light profile-sidebar-portlet">
+								<div class="profile-userpic" >
+										<img  class="img-responsive" alt="" src="<%= current_user.photo.url %>" >
+								</div>
+								<!-- END SIDEBAR USERPIC -->
+								<!-- SIDEBAR USER TITLE -->
+								<div class="profile-usertitle">
+										<div class="profile-usertitle-name">
+											 Nome Usuário
+										</div>
+										<div class="profile-usertitle-job">
+											 Email Usuário
+										</div><br>
+								</div>
 						</div>
-							<div class="portlet-body">
-							<%= form_for((@user), url: new_user_path, html: { method: :post }) do |f|%>
-								<% if @user.errors.any? %>
-									<div id="error_explanation" class="Metronic-alerts alert alert-danger">
-										<ul>
-											<% @user.errors.full_messages.each do |message| %>
-											 <li><%= message %></li>
-										 <% end %>
+						<!-- END PORTLET MAIN -->
+					</div>
+					<div class="profile-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet light">
+									<div class="portlet-title tabbable-line">
+										<div class="caption caption-md">
+											<i class="icon-globe theme-font hide"></i>
+												<span class="caption-subject font-blue-madison bold uppercase">Adicionar Usuário</span>
+											<i class="fa fa-pencil"></i>
+										</div>
+										<ul class="nav nav-tabs">
+											<li class="active">
+												<a href="#tab_1_1" data-toggle="tab">Geral</a>
+											</li>
+											<li>
+												<a href="#tab_1_2" data-toggle="tab">Imagem</a>
+											</li>
 										</ul>
 									</div>
-								<% end %>
+									<div class="portlet-body">
+										<%= form_for((@user), url: new_user_path, html: { method: :post }) do |f|%>
+												<% if @user.errors.any? %>
+													<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+														<ul>
+															<% @user.errors.full_messages.each do |message| %>
+															 <li><%= message %></li>
+														 <% end %>
+														</ul>
+													</div>
+												<% end %>
+											<div class="tab-content">
+												<div class="tab-pane active" id="tab_1_1">
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Nome Completo</label>
+														<div class="input-group">
+														<span class="input-group-addon"><i class="fa fa-font"></i></span>
+															<%= f.text_field :fullname,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+														</div>
+													</div>
 
-								<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-									<label class="control-label ">Nome Completo</label>
-									<div class="input-group">
-									<span class="input-group-addon"><i class="fa fa-font"></i></span>
-										<%= f.text_field :fullname,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Email</label>
+														<div class="input-group">
+															<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+															<%= f.email_field :email,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="control-label ">Senha</label>
+														<div class="input-group">
+																<% if @validatable %>
+																	<em>(<%= @minimum_password_length %> characters minimum)</em>
+																<% end %> 
+																<span class="input-group-addon"><i class="fa fa-lock"></i></span>
+																<%= f.password_field :password, autocomplete: "off", :class =>"form-control placeholder-no-fix"%>
+														</div>
+													</div>
+							
+													<div class="form-group">
+														<label class="control-label ">Confirmação de senha</label>
+														<div class="controls">
+															<div class="input-group">
+																<span class="input-group-addon"><i class="fa fa-check"></i></span>
+																	<%= f.password_field :password_confirmation, autocomplete: "off", :class =>"form-control placeholder-no-fix"%>
+															</div>
+														</div>
+													</div>
+
+													<% if current_user.user_type == 0 %>
+														<div class="form-group">
+															<label>Tipo de Usuário:</label>
+															<%= f.select :user_type, [['Master', 0], ['Administrador', 1, :selected=>"true"]], {}, {:class=> 'form-control'} %>
+														</div>
+													<% end %>
+												</div>
+
+												<div class="tab-pane" id="tab_1_2">
+													<div class="fileinput-new thumbnail" style="width: 200px; height: 200px;" id = "target">
+														 <div class="fileinput fileinput-new" id = "target">
+															<img src="<%= current_user.photo.url%>" height="200" width="200">
+														</div>
+													</div><br>
+													<%= f.file_field :photo,  :id=>"pictureInput" %>
+													<br>
+												</div>
+												<div class="actions">
+													<%= f.submit "Salvar", :class => "btn green-meadow pull-left"%>
+												</div><br><br><br>
+												<%= link_to "Voltar", root_path, :class => "btn default ", 'data-no-turbolink' => true%>
+											</div>
+										<% end %>
 									</div>
 								</div>
-
-								<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-									<label class="control-label ">Email</label>
-									<div class="input-group">
-										<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-										<%= f.email_field :email,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-									</div>
-								</div>
-
-								<div class="form-group">
-									<label class="control-label ">Senha</label>
-									<div class="input-group">
-											<% if @validatable %>
-												<em>(<%= @minimum_password_length %> characters minimum)</em>
-											<% end %> 
-											<span class="input-group-addon"><i class="fa fa-lock"></i></span>
-											<%= f.password_field :password, autocomplete: "off", :class =>"form-control placeholder-no-fix"%>
-									</div>
-								</div>
-								
-								<div class="form-group">
-									<label class="control-label ">Confirmação de senha</label>
-									<div class="controls">
-										<div class="input-group">
-											<span class="input-group-addon"><i class="fa fa-check"></i></span>
-												<%= f.password_field :password_confirmation, autocomplete: "off", :class =>"form-control placeholder-no-fix"%>
-										</div>
-									</div>
-								</div>
-
-								<% if current_user.user_type == 0 %>
-									<div class="form-group">
-										<label>Tipo de Usuário:</label>
-										<%= f.select :user_type, [['Master', 0], ['Administrador', 1, :selected=>"true"]], {}, {:class=> 'form-control'} %>
-									</div>
-								<% end %>
-
-								<div class="actions">
-										<%= f.submit "Gravar", :class => "btn green-meadow pull-left"%>
-								</div><br><br><br>
-
-								<%= link_to "Voltar", root_path, :class => "btn default ", 'data-no-turbolink' => true%>
-
-							<% end %>
-
 							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -273,9 +317,33 @@
 <script>
 jQuery(document).ready(function() {       
 	 // initiate layout and plugins
-		Metronic.init(); // init metronic core components
+	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 	
+	var label_name = $('.profile-usertitle-name');
+	$('#user_fullname').change(function() {
+		label_name.html($('#user_fullname').val());
+    });
+
+    var label_email = $('.profile-usertitle-job');
+	$('#user_email').change(function() {
+		label_email.html($('#user_email').val());
+    });
+
+	$('#pictureInput').on('change', function(event) {
+		var files = event.target.files;
+		var image = files[0]
+		var reader = new FileReader();
+		reader.onload = function(file) {
+			var img = new Image();
+			console.log(file);
+			img.src = file.target.result;
+			$('#target').html(img);
+		}
+		reader.readAsDataURL(image);
+		console.log(files);
+	});
+
 	/*$('#tabela').DataTable({
 		"sPaginationType": "full_numbers",
 			"processing": true,

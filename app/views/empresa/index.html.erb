@@ -2,6 +2,7 @@
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8"/>
+<title>MASTERCOM | EMPRESAS</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -219,7 +220,7 @@
 								<div class="tools">
 									<div class="btn-group">
 										<% if current_user.user_type == 1 || current_user.user_type == 2 %>
-											<a class="btn btn-icon-only green-meadow" href="/empresas/new"><i class="fa fa-plus"></i></a>
+											<a class="btn btn-icon-only green-meadow" href="/empresas/new" data-no-turbolink="true"><i class="fa fa-plus"></i></a>
 										<% else %>
 										<%end%>
 										<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
