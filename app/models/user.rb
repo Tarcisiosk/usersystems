@@ -21,6 +21,7 @@ class User < AbstractRecord
 
  		has_and_belongs_to_many :empresas
 
+
 		devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 	
 		before_save { self.email = email.downcase }
@@ -29,7 +30,7 @@ class User < AbstractRecord
 		#validates :password, confirmation: true, :on => :create
 		validates_presence_of :password_confirmation, :on => :create  
 
-		has_attached_file :photo, :url => "/:attachment/:id/:style/:basename.:extension", :path => ":rails_root/public/:attachment/:id/:style/:basename.:extension"
+		has_attached_file :photo, :storage => :database, :url => "/:attachment/:id/:style/:basename.:extension", :path => ":rails_root/public/:attachment/:id/:style/:basename.:extension"
 		validates_attachment_size :photo, :less_than => 5.megabytes
 		validates_attachment_content_type :photo, :content_type => ['image/jpeg', 'image/jpg', 'image/png']
 

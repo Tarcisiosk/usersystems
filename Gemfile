@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 gem 'node'
 gem 'devise'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.0'
+gem 'rails', '4.2.1'
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
@@ -26,6 +26,8 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
+gem "paperclip_database", :git => "git://github.com/softace/paperclip_database.git"
+gem 'trim_blobs'
 
 gem 'jquery-ui-rails'
 gem 'will_paginate'
