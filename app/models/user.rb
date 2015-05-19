@@ -28,9 +28,10 @@ class User < AbstractRecord
 		validates :fullname, presence: true
 		validates :email, email:true
 		#validates :password, confirmation: true, :on => :create
-		validates_presence_of :password_confirmation, :on => :create  
+		validates_presence_of :password_confirmation, :on => :create
 
-		has_attached_file :photo, :storage => :database, :url => "/:attachment/:id/:style/:basename.:extension", :path => ":rails_root/public/:attachment/:id/:style/:basename.:extension"
+		#:url => "/:attachment/:id/:style/:basename.:extension", :path => ":rails_root/public/:attachment/:id/:style/:basename.:extension"
+		has_attached_file :photo, :storage => :database, :url => "/:attachment/:id/:style/:basename.:extension"
 		validates_attachment_size :photo, :less_than => 5.megabytes
 		validates_attachment_content_type :photo, :content_type => ['image/jpeg', 'image/jpg', 'image/png']
 

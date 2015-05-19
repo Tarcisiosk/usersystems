@@ -65,7 +65,7 @@
 					<!-- END INBOX DROPDOWN -->
 					<li class="dropdown dropdown-user dropdown-dark">
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-							<img alt="" class="img-circle" src="<%= current_user.photo.url%>">
+							<%= image_tag photo_path(current_user), :class => "img-circle" %>
 							<span class="username username-hide-mobile"><%= current_user.fullname%></span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
@@ -172,7 +172,7 @@
 							<!-- SIDEBAR USERPIC -->
 							<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
 								<div class="profile-userpic">
-									<img  class="img-responsive" alt="" src="<%= @user.photo.url %>">
+									<center><%= image_tag photo_path(@user), :class => "img-circle "%></center>
 								</div>
 								<!-- END SIDEBAR USERPIC -->
 								<!-- SIDEBAR USER TITLE -->
@@ -276,7 +276,7 @@
 													<% end %>
 														<div class="fileinput-new thumbnail" style="width: 200px; height: 200px;" id = "target">
 															 <div class="fileinput fileinput-new" id = "target">
-																<img src="<%= current_user.photo.url%>" height="200" width="200">
+																<%= image_tag photo_path(@user), :height =>'200px;', :width =>'200px;' %>
 															</div>
 														</div><br><br>
 														<%= f.file_field :photo,  :id=>"pictureInput" %>

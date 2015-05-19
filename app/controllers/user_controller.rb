@@ -4,6 +4,8 @@ class UserController < ApplicationController
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuario?'}}]
 
+	helper_method :show_image
+
 	###usuario###   
 	def index
 		#current_user.settings(:columns_user).col =  [{:sTitle => 'Nome', :data_name => 'fullname'}, {:sTitle => 'Email', :data_name => 'email'}]
@@ -19,6 +21,11 @@ class UserController < ApplicationController
 
 	def show
 		@user = User.find(params[:id])
+	end
+	
+	def show_image
+		@user = User.find(params[:id])
+    	send_data @user.photo.file_contents, :type => @user.photo_content_type, :filename => @user.photo_file_name, :disposition => 'inline'
 	end
 
 	def new
@@ -40,9 +47,9 @@ class UserController < ApplicationController
 
 	def edit
 		@user = User.find(params[:id]) 
-		@user.empresas.each do |item|
-			puts "Empresas ligadas a esse usuario: #{item.nome_fantasia}"
-		end
+		#@user.empresas.each do |item|
+		# 	puts "Empresas ligadas a esse usuario: #{item.nome_fantasia}"
+		#end
 
 	end
 
@@ -92,7 +99,7 @@ class UserController < ApplicationController
 	
 	#params users e acesso: Master = 0, Admin = 1, Comum = 2. 
 	def user_params
-		params.require(:user).permit(:id, :adm_id, :empresas, :user_type, :fullname, :email, :password, :password_confirmation, :photo, :photo_file_name, :photo_content_type, :photo_file_size, :photo_updated_at)
+		params.require(:user).permit(:id, :adm_id, :empresas, :user_type, :fullname, :email, :password, :password_confirmation, :photo)
 	end 
 
 end

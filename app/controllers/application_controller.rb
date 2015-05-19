@@ -179,7 +179,7 @@ class ApplicationController < ActionController::Base
 	
 	def configure_permitted_parameters
 		devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :remember_me) }
-		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :columns_user, :columns_empresa, :photo, :photo_file_name, :photo_content_type, :photo_file_size, :photo_updated_at) }
+		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :columns_user, :columns_empresa, :photo) }
 	end
 
 	def empTable
