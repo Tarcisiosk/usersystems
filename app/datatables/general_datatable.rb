@@ -53,7 +53,7 @@ class GeneralDatatable < ApplicationController
 				end
 			else
 				if record.adm_id == @current_user.adm_id || record.adm_id == @current_user.id
-					if @current_user.empresas.include?(record) &&  record.is_a?(Empresa)
+					if @current_user.empresas.include?(record) && record.is_a?(Empresa) 
 						columns.each_with_index do |item, index|					
 							data_array[index] = record.send(item)
 						end
@@ -62,7 +62,7 @@ class GeneralDatatable < ApplicationController
 							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1], :class => item.values[2], :data => item.values[4])
 						end
 						final_array << (data_array << links_array.join(""))
-					elsif record.is_a?(User)
+					elsif record.is_a?(User) && record.user_type == 2
 						columns.each_with_index do |item, index|					
 							data_array[index] = record.send(item)
 						end

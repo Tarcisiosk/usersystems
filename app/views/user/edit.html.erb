@@ -257,7 +257,7 @@
 													<div class="actions">
 														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
 													</div><br>
-													<%= link_to "Voltar", root_path, :class => "btn default " %>
+													<%= link_to "Voltar", users_path, :class => "btn default " %>
 												<% end %>
 
 
@@ -285,7 +285,7 @@
 														<div class="actions">
 															<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
 														</div><br>
-														<%= link_to "Voltar", root_path, :class => "btn default " %>
+														<%= link_to "Voltar", users_path, :class => "btn default " %>
 												<% end %>
 											</div>
 								 
@@ -313,7 +313,7 @@
 													<div class="actions">
 														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
 													</div><br>
-													 <%= link_to "Voltar", root_path, :class => "btn default ", 'data-no-turbolink' => true%>
+													 <%= link_to "Voltar", users_path, :class => "btn default ", 'data-no-turbolink' => true%>
 												<% end %>
 											</div>
 											<% if editingUser.user_type == 2 && current_user.user_type != 2%>
@@ -366,7 +366,7 @@
 														<div class="actions">
 															<%= f.submit "Atualizar", :action=> "update",:class => "btn yellow"%>
 														</div><br>		
-														<%= link_to "Voltar", root_path, :class => "btn default ", 'data-no-turbolink' => true%>
+														<%= link_to "Voltar", users_path, :class => "btn default ", 'data-no-turbolink' => true%>
 													<%end%>
 												</div>
 											<%end%>

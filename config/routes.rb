@@ -8,14 +8,13 @@ Rails.application.routes.draw do
 	post 'users/save_settings' => 'user#save_settings'
 	post 'users/checked_rows' => 'user#checked_rows'
 
-
-
 	get 'empresas'=> "empresa#index", as: :empresas
 	get 'empresas/new' => "empresa#new", as: :new_empresa
 	post 'empresas/new'  => 'empresa#create'
 	post 'empresas/save_settings' => 'empresa#save_settings'
 	post 'empresas/checked_rows' => 'empresa#checked_rows'
 
+	get "index" => 'index#index', as: :index
 
 	resources :user, only: [:edit, :destroy, :update, :new, :create]
 	resources :empresa, only: [:edit, :update, :new, :new, :create]

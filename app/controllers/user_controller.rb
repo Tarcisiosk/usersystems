@@ -92,7 +92,7 @@ class UserController < ApplicationController
 			@user = User.find(params[:id])
 			@user.destroy
 			if @user.destroy
-				redirect_to root_path, notice: " "
+				redirect_to users_path, notice: " "
 			end
 		end
 	end

@@ -31,7 +31,7 @@ class User < AbstractRecord
 		validates_presence_of :password_confirmation, :on => :create
 
 		#:url => "/:attachment/:id/:style/:basename.:extension", :path => ":rails_root/public/:attachment/:id/:style/:basename.:extension"
-		has_attached_file :photo, :storage => :database, :url => "/:attachment/:id/:style/:basename.:extension"
+		has_attached_file :photo, :storage => :database, :url => "/:attachment/:id/:style/:basename.:extension", :default_url => "../../public/assets/photos/original/missing.png"
 		validates_attachment_size :photo, :less_than => 5.megabytes
 		validates_attachment_content_type :photo, :content_type => ['image/jpeg', 'image/jpg', 'image/png']
 
