@@ -69,7 +69,11 @@
 					<!-- END INBOX DROPDOWN -->
 					<li class="dropdown dropdown-user dropdown-dark">
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-							<%= image_tag photo_path(current_user), :class => "img-circle" %>
+							<%if current_user.photo.present?%>
+								<%= image_tag photo_path(current_user), :class => "img-circle" %>
+							<%else%>
+								<img src="photos/original/missing.png" class="img-circle">
+							<%end%>
 							<span class="username username-hide-mobile"><%= current_user.fullname%></span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
@@ -118,7 +122,6 @@
 												</li>
 												<li>
 													<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
-
 												</li>
 											</ul>
 										</div>
@@ -127,11 +130,28 @@
 							</li>
 						</ul>
 					</li>
-					<li class="dropdown pull-right tabdrop open">
-						<ul class="nav navbar-nav navbar-right">
-							<li>
-								<a href="javascript:;">Link </a>
-							</li>
+				</ul>
+			</div>
+			<div class="hor-menu pull-right">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="mega-menu-dropdown pull-right">
+						<%if current_user.settings(:last_empresa).edited.present?%>
+							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+							<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
+						<%else%>
+							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+							<i class="icon-briefcase"></i> Sem empresas salvas</i></a>
+						<%end%>
+						<ul class="dropdown-menu pull-right">
+							<div class="mega-menu-content">
+								<li>
+									<% lastEmpTable.each do |item| %>
+										<li>
+											<a data-no-turbolink="true" href="/empresa/<%=item.id%>/edit?method_name=get"><i class="icon-briefcase"></i><%= item.nome_fantasia %> </a>
+										</li>
+									<%end%>
+								</li>
+							</div>
 						</ul>
 					</li>
 				</ul>

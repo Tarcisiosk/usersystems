@@ -38,9 +38,8 @@ class EmpresaController < ApplicationController
 
 	def edit
 		@empresa = Empresa.find(params[:id]) 
-		@empresa.users.each do |item|
-			puts "usuario ligados a essa empresa: #{item.fullname}"
-		end
+		current_user.settings(:last_empresa).edited = @empresa
+		current_user.save!
 	end
 
 	def update

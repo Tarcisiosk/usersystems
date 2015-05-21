@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
 	helper_method :act_columns
 	helper_method :inact_columns
 	helper_method :act_columns_final
+	helper_method :lastEmpTable
 	helper_method :empTable
 	helper_method :userTable
 	helper_method :editingUser
@@ -56,7 +57,7 @@ class ApplicationController < ActionController::Base
 			end
 		end
 	end
-
+	
 	def save_settings
 		new_pref = Array.new
 		params[("columns_" + controller_name.classify.downcase).to_sym].each_with_index do |item, index|
@@ -182,6 +183,25 @@ class ApplicationController < ActionController::Base
 		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :columns_user, :columns_empresa, :photo) }
 	end
 
+	def lastEmpTable
+		obj = instance_variable_get("@" + controller_name.downcase)
+		default_content = []
+		Empresa.all.each_with_index do |item, index|
+			if current_user.user_type == 1
+				if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
+					default_content[index] = item
+				end
+			elsif current_user.user_type == 2
+				if (item.adm_id == current_user.adm_id || item.adm_id == current_user.id) && (item.users.include? current_user) 
+					default_content[index] = item
+				end
+			else
+				default_content[index] = item
+			end
+		end
+		default_content.compact
+	end
+
 	def empTable
 		obj = instance_variable_get("@" + controller_name.downcase)
 		default_content = []
@@ -191,9 +211,7 @@ class ApplicationController < ActionController::Base
 					default_content[index] = item
 				end
 			else
-				if item.adm_id == obj.adm_id
-					default_content[index] = item
-				end
+				default_content[index] = item
 			end
 		end
 		default_content.compact

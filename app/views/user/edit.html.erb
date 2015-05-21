@@ -65,7 +65,11 @@
 					<!-- END INBOX DROPDOWN -->
 					<li class="dropdown dropdown-user dropdown-dark">
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-							<%= image_tag photo_path(current_user), :class => "img-circle" %>
+							<%if current_user.photo.present?%>
+								<%= image_tag photo_path(current_user), :class => "img-circle" %>
+							<%else%>
+								<img src="../../photos/original/missing.png" class="img-circle">
+							<%end%>
 							<span class="username username-hide-mobile"><%= current_user.fullname%></span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
@@ -172,7 +176,11 @@
 							<!-- SIDEBAR USERPIC -->
 							<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
 								<div class="profile-userpic">
-									<center><%= image_tag photo_path(@user), :class => "img-circle "%></center>
+									<%if @user.photo.present?%>
+										<center><%= image_tag photo_path(@user), :height =>'200px;', :width =>'200px;' %></center>
+									<%else%>
+										<center><img src="../../photos/original/missing.png" height="200px;" width="200px;"></center>
+									<%end%>
 								</div>
 								<!-- END SIDEBAR USERPIC -->
 								<!-- SIDEBAR USER TITLE -->
@@ -274,9 +282,14 @@
 															</ul>
 														</div>
 													<% end %>
+														<%= f.hidden_field :fullname,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix", :placeholder =>"Nome Completo"%>
 														<div class="fileinput-new thumbnail" style="width: 200px; height: 200px;" id = "target">
-															 <div class="fileinput fileinput-new" id = "target">
-																<%= image_tag photo_path(@user), :height =>'200px;', :width =>'200px;' %>
+															<div class="fileinput fileinput-new" id = "target">
+															 	<%if @user.photo.present?%>
+																	<%= image_tag photo_path(@user), :height =>'200px;', :width =>'200px;' %>
+																<%else%>
+																	<img src="../../photos/original/missing.png" height="200px;" width="200px;">
+																<%end%>
 															</div>
 														</div><br><br>
 														<%= f.file_field :photo,  :id=>"pictureInput" %>
@@ -347,7 +360,7 @@
 																<% empTable.each do |item| %>
 																	<tr class="odd gradeX">
 																		<td>
-																			<% if item.users.include? @user %>
+																			<%if item.users.include? @user %>
 																				<input type="checkbox" class="checkboxes" checked="true" value= "<%=item.id%>"/>
 																			<%else%>
 																				<input type="checkbox" class="checkboxes" value= "<%=item.id%>"/>
