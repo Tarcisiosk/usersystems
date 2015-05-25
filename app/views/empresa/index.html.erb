@@ -139,12 +139,12 @@
 							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
 							<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
 						<%else%>
-							<a data-hover="megamenu" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-							<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
+						<a data-hover="megamenu" data-close-others="true" href="javascript:;" class="dropdown-toggle">
+								<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
 						<%end%>
 						
 					<%else%>
-						<a data-hover="megamenu" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+						<a data-hover="megamenu" data-close-others="true" href="javascript:;" class="dropdown-toggle">
 						<i class="icon-briefcase"></i> Sem empresas cadastradas</i></a>
 					<%end%>
 					<ul class="dropdown-menu pull-right">
