@@ -3,13 +3,15 @@ class ApplicationController < ActionController::Base
 	# For APIs, you may want to use :null_session instead.
 	protect_from_forgery with: :exception
 	protect_from_forgery with: :null_session, only: Proc.new { |c| c.request.format.json? }
+
 	before_action :configure_permitted_parameters, if: :devise_controller?
-	
 	before_action :require_master_or_adm_acess, only: [:destroy]
 
 	after_action :save_user_empresa, only: [:update]
 	after_action :setAdmin, only: [:create]
-	
+
+	before_filter :set_current_emp_if_first, only: [:index]
+
 	helper_method :getName
 	helper_method :act_columns
 	helper_method :inact_columns
@@ -142,6 +144,12 @@ class ApplicationController < ActionController::Base
 	        format.html { render nothing: true }
 	        format.js { render nothing: true }
    		end
+	end
+
+	def set_current_emp_if_first
+		if current_user.settings(:last_empresa).edited.blank? && lastEmpTable.present?
+			current_user.settings(:last_empresa).edited = lastEmpTable.first
+		end
 	end
 
 	protected
