@@ -25,5 +25,6 @@ module UserSystems
     config.i18n.default_locale = :"pt-BR"
     I18n.enforce_available_locales = false
     config.active_record.raise_in_transactional_callbacks = true
+    config.serve_static_assets = true
   end
 end
