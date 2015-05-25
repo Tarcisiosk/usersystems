@@ -97,6 +97,13 @@ class UserController < ApplicationController
 		end
 	end
 	
+	def set_current_emp
+		@empresa = Empresa.find(params[:emp_id])
+		current_user.settings(:last_empresa).edited = @empresa
+		current_user.save!
+		redirect_to root_path
+	end
+
 	#params users e acesso: Master = 0, Admin = 1, Comum = 2. 
 	def user_params
 		params.require(:user).permit(:id, :adm_id, :empresas, :user_type, :fullname, :email, :password, :password_confirmation, :photo)

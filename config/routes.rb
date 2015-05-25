@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 	post 'users/new'  => 'user#create'
 	post 'users/save_settings' => 'user#save_settings'
 	post 'users/checked_rows' => 'user#checked_rows'
+	post 'users/set_current_emp' => 'user#set_current_emp'
 
 	get 'empresas'=> "empresa#index", as: :empresas
 	get 'empresas/new' => "empresa#new", as: :new_empresa

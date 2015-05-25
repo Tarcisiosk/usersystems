@@ -87,16 +87,7 @@
 		 <!-- BEGIN HEADER MENU -->
 	<div class="page-header-menu">
 		<div class="container">
-			<!-- BEGIN HEADER SEARCH BOX -->
-			<form class="search-form" action="extra_search.html" method="GET">
-				<div class="input-group">
-					<input type="text" class="form-control" placeholder="Search" name="query">
-					<span class="input-group-btn">
-					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
-					</span>
-				</div>
-			</form>
-			<!-- END HEADER SEARCH BOX -->
+			
 			<!-- BEGIN MEGA MENU -->
 			<!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
 			<!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
@@ -130,6 +121,36 @@
 									</div>
 								</div>
 							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<div class="hor-menu pull-right">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="mega-menu-dropdown pull-right">
+						<%if current_user.settings(:last_empresa).edited.present?%>
+							<% if lastEmpTable.count > 1%>
+								<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+								<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
+							<%else%>
+								<a data-hover="megamenu" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+								<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
+							<%end%>
+							
+						<%else%>
+							<a data-hover="megamenu" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+							<i class="icon-briefcase"></i> Sem empresas cadastradas</i></a>
+						<%end%>
+						<ul class="dropdown-menu pull-right">
+							<div class="mega-menu-content">
+								<li>
+									<% lastEmpTable.each do |item| %>
+										<li>
+											<a data-no-turbolink="true"  value="<%=item.id%>" name="emp_link"><i class="icon-briefcase"></i><%= item.nome_fantasia %> </a>
+										</li>
+									<%end%>
+								</li>
+							</div>
 						</ul>
 					</li>
 				</ul>
@@ -325,6 +346,17 @@ jQuery(document).ready(function() {
 	$("#campocnpj").mask("99.999.999/9999-99", {removeMaskOnSubmit: true, clearMaskOnLostFocus: true });
 	$("#new_empresa").submit(function() {
 	 	$("#campocnpj").val($("#campocnpj").mask()); 
+	});
+
+	$('[name="emp_link"]').click(function () 
+	{
+		var id = $(this).attr('value');
+		$.ajax({
+			type: 'post',
+			url: '/users/set_current_emp',
+			data: {emp_id : id}
+		});
+	  	window.location.reload();		
 	});
 
 	/*$('#tabela').DataTable({

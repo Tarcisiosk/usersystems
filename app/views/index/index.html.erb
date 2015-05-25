@@ -78,7 +78,7 @@
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
-								<a data="<%=current_user.id%>" data-method="get" href="/user/<%=current_user.id%>/edit?method_name=get"><i class="icon-user"></i> Meu perfil </a>
+								<a data="<%=current_user.id%>" data-method="get" href="/user/<%=current_user.id%>/edit?method_name=get" ><i class="icon-user"></i> Meu perfil </a>
 							</li>
 							<li class="divider">
 							</li>
@@ -136,18 +136,24 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li class="mega-menu-dropdown pull-right">
 						<%if current_user.settings(:last_empresa).edited.present?%>
-							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-							<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
+							<% if lastEmpTable.count > 1%>
+								<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+								<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
+							<%else%>
+								<a data-hover="megamenu" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+								<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
+							<%end%>
+							
 						<%else%>
-							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-							<i class="icon-briefcase"></i> Sem empresas salvas</i></a>
+							<a data-hover="megamenu" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+							<i class="icon-briefcase"></i> Sem empresas cadastradas</i></a>
 						<%end%>
 						<ul class="dropdown-menu pull-right">
 							<div class="mega-menu-content">
 								<li>
 									<% lastEmpTable.each do |item| %>
 										<li>
-											<a data-no-turbolink="true" href="/empresa/<%=item.id%>/edit?method_name=get"><i class="icon-briefcase"></i><%= item.nome_fantasia %> </a>
+											<a data-no-turbolink="true"  value="<%=item.id%>" name="emp_link"><i class="icon-briefcase"></i><%= item.nome_fantasia %> </a>
 										</li>
 									<%end%>
 								</li>
@@ -229,6 +235,17 @@ jQuery(document).ready(function() {
 	// initiate layout and plugins
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
+	
+	$('[name="emp_link"]').click(function () 
+	{
+		var id = $(this).attr('value');
+		$.ajax({
+			type: 'post',
+			url: '/users/set_current_emp',
+			data: {emp_id : id}
+		});
+	  	window.location.reload();		
+	});
 });
 
 </script>

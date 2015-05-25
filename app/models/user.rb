@@ -8,10 +8,7 @@ end
 
 class User < AbstractRecord
 		TOTAL_COLUMNS_USER = [{:sTitle => 'Nome', :data_name => 'fullname', :bDefault => true}, 
-							  {:sTitle => 'Email', :data_name => 'email', :bDefault => true},
-							  {:sTitle => 'ID', :data_name => 'id', :bDefault => false},
-							  {:sTitle => 'ADM', :data_name => 'adm_id', :bDefault => false},
-							  {:sTitle => 'Tipo', :data_name => 'user_type', :bDefault => false}]
+							  {:sTitle => 'Email', :data_name => 'email', :bDefault => true}]
 
 		#preferencias do usuario
 		has_settings do |s|

@@ -20,7 +20,6 @@ class ApplicationController < ActionController::Base
 	helper_method :editingUser
 	helper_method :save_user_empresa
 
-
 	@@checked_rows = []
 	@@checked_users = []
 	@@checked_empresas = []
@@ -183,6 +182,8 @@ class ApplicationController < ActionController::Base
 		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :columns_user, :columns_empresa, :photo) }
 	end
 
+
+	#empresas disponiveis para seleção
 	def lastEmpTable
 		obj = instance_variable_get("@" + controller_name.downcase)
 		default_content = []

@@ -7,8 +7,7 @@ class Empresa < AbstractRecord
 							 {:sTitle => 'Insc. Municipal', :data_name => 'insc_municipal', :bDefault => false},
 							 {:sTitle => 'Bairro', :data_name => 'bairro', :bDefault => false},
 							 {:sTitle => 'UF', :data_name => 'uf', :bDefault => false},
-							 {:sTitle => 'CEP', :data_name => 'cep', :bDefault => false},
-						     {:sTitle => 'ADM', :data_name => 'adm_id', :bDefault => false}]
+							 {:sTitle => 'CEP', :data_name => 'cep', :bDefault => false}]
   	def cnpj_is_filled 
 	  !cnpj.blank? 	
 	end 
