@@ -71,6 +71,15 @@ class GeneralDatatable < ApplicationController
 							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1], :class => item.values[2], :data => item.values[4])
 						end
 						final_array << (data_array << links_array.join(""))
+					else
+						columns.each_with_index do |item, index|					
+							data_array[index] = record.send(item)
+						end
+						actions.each_with_index do |item, index|
+							item[:id] = record.id
+							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1], :class => item.values[2], :data => item.values[4])
+						end
+						final_array << (data_array << links_array.join(""))
 					end
 				else	
 					record = nil

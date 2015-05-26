@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519152530) do
+ActiveRecord::Schema.define(version: 20150526160421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,13 @@ ActiveRecord::Schema.define(version: 20150519152530) do
     t.integer "empresa_id"
   end
 
+  create_table "grupos", force: :cascade do |t|
+    t.text     "descricao"
+    t.integer  "adm_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "photos", force: :cascade do |t|
     t.integer "user_id"
     t.string  "style"
@@ -55,6 +62,14 @@ ActiveRecord::Schema.define(version: 20150519152530) do
   end
 
   add_index "settings", ["target_type", "target_id", "var"], name: "index_settings_on_target_type_and_target_id_and_var", unique: true, using: :btree
+
+  create_table "subgrupos", force: :cascade do |t|
+    t.text     "descricao"
+    t.integer  "grupo_id"
+    t.integer  "adm_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

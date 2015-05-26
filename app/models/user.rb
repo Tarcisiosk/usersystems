@@ -14,6 +14,9 @@ class User < AbstractRecord
 		has_settings do |s|
 			s.key :columns_user, :defaults => {:col => returnDefaults(User::TOTAL_COLUMNS_USER)}
 			s.key :columns_empresa, :defaults => {:col => returnDefaults(Empresa::TOTAL_COLUMNS_EMPRESA)}
+			s.key :columns_grupo, :defaults => {:col => returnDefaults(Grupo::TOTAL_COLUMNS_GRUPO)}
+			s.key :columns_subgrupo, :defaults => {:col => returnDefaults(Subgrupo::TOTAL_COLUMNS_SUBGRUPO)}
+
 			s.key :last_empresa
 		end
 

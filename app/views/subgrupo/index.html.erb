@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html lang="en">
 <!-- BEGIN HEAD -->
 <head>
 <meta charset="utf-8"/>
-<title>MASTERCOM | EMPRESAS | NOVO</title>
+<title>MASTERCOM | SUBGRUPOS</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -19,6 +20,11 @@
 <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/select2/select2.css"/>
 <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
 <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
+
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.jqueryui.css"/>
+<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.min.css"/>
+
 <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
 <!-- END PAGE LEVEL STYLES -->
 <!-- BEGIN THEME STYLES -->
@@ -27,6 +33,7 @@
 <link href="../../assets/admin/layout3/css/layout.css" rel="stylesheet" type="text/css">
 <link href="../../assets/admin/layout3/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
 <link href="../../assets/admin/layout3/css/custom.css" rel="stylesheet" type="text/css">
+
 <!-- END THEME STYLES -->
 <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -36,6 +43,7 @@
 <!-- DOC: Apply "page-header-top-fixed" class to set the top menu fixed  -->
 <body>
 <div class="page-header">
+
 	<!-- BEGIN HEADER TOP -->
 	<div class="page-header-top">
 		<div class="container">
@@ -64,13 +72,13 @@
 							<%if current_user.photo.present?%>
 								<%= image_tag photo_path(current_user), :class => "img-circle" %>
 							<%else%>
-								<img src="../photos/original/missing.png" class="img-circle">
+								<img src="photos/original/missing.png" class="img-circle">
 							<%end%>
 							<span class="username username-hide-mobile"><%= current_user.fullname%></span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
-								<a data="<%=current_user.id%>" data-method="get" href="/user/<%=current_user.id%>/edit?method_name=get"><i class="icon-user"></i> Meu perfil </a>
+								<a data="<%=current_user.id%>" data-method="get" href="/user/<%=current_user.id%>/edit?method_name=get" ><i class="icon-user"></i> Meu perfil </a>
 							</li>
 							<li class="divider">
 							</li>
@@ -84,10 +92,10 @@
 			<!-- END TOP NAVIGATION MENU -->
 		</div>
 	</div>
-		 <!-- BEGIN HEADER MENU -->
+	<!-- END HEADER TOP -->	
+	<!-- BEGIN HEADER MENU -->
 	<div class="page-header-menu">
 		<div class="container">
-			
 			<!-- BEGIN MEGA MENU -->
 			<!-- DOC: Apply "hor-menu-light" class after the "hor-menu" class below to have a horizontal menu with white background -->
 			<!-- DOC: Remove data-hover="dropdown" and data-close-others="true" attributes below to disable the dropdown opening on mouse hover -->
@@ -170,153 +178,111 @@
 		</div>
 	</div>
 	<!-- END HEADER MENU -->
-	<!-- END HEADER TOP --> 
 </div>
 <!-- END HEADER -->
 <!-- BEGIN PAGE CONTAINER -->
 <div class="page-container">
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
-			<!-- END PAGE TITLE -->
-			<!-- BEGIN PAGE CONTENT -->
+	
+		<!-- END PAGE TITLE -->
+		<!-- BEGIN PAGE CONTENT -->
 		<div class="page-content">
 			<div class="container">
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+				<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Escolher Colunas</h4>
+							</div>
+							<div class="modal-body">
+								<div class="portlet light">
+									<div class="row">
+										<div class = "col-md-6">
+											<div class="portlet-title">
+												<div class="caption">
+													<span class="caption-subject font-green-sharp bold uppercase">Colunas Inativas</span>
+													<div>
+														<%=select_tag 'I_columns[]',  options_for_select(inact_columns.collect{|u| [u[:sTitle], u.to_s]}), {:class=> 'form-control', :id=>"Inativas", :size => "5", :disabled=>false} %>
+														
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class = "col-md-6">
+											<div class="portlet-title">
+												<div class="caption">
+													<span class="caption-subject font-green-sharp bold uppercase">Colunas Ativas</span>
+													<div>
+														<%=select_tag 'A_columns[]',  options_for_select(act_columns.collect{|u| [u[:sTitle], u.to_s]}) , {:class=> 'form-control', :id=>"Ativas",  :size => "5", :disabled=>false}%>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn blue" id="btnsave">Salvar</button>
+								<button type="button" class="btn default" data-dismiss="modal">Cancelar</button>
+
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
+				</div>
+
 				<!-- BEGIN PAGE BREADCRUMB -->
 				<ul class="page-breadcrumb breadcrumb">
 					<li>
-						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
-					</li>
-					<i class="fa fa-circle"></i>
-					<li>
-						<%= link_to "Empresas", empresas_path, 'data-no-turbolink' => true %>
-					</li>
-					<i class="fa fa-circle"></i>
+						<%= link_to "Página Inicial", root_path, 'data-no-turbolink' => true %>
+			  		</li>
+			  		<i class="fa fa-circle"></i>
 					<li class="active">
-						Novo
+						Sub-Grupos
 					</li>
 				</ul>
-				<div class="col-md-12">
-					<div class="portlet light">
-						<div class="portlet-title">
-							<div class="caption">
-								<i class="fa fa-pencil"></i>Adicionar Empresa
+				<div class="row">
+					<div class="col-md-12">
+						<!-- BEGIN SAMPLE TABLE PORTLET-->
+						<div class="portlet light">
+
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="fa fa-users font-green-sharp"></i>
+									<span class="caption-subject font-green-sharp bold uppercase">Sub-Grupos</span>
+								</div>
+								
+								<div class="tools">
+									<div class="btn-group">
+											<a class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/subgrupos/new"><i class="fa fa-plus"></i></a>
+											<!-- <%= link_to "Adicionar", new_user_path, :class => "btn btn-icon-only green"%>-->
+											<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
+											<i class="fa fa-wrench"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+							
+							<div class="portlet-body">
+								<div>
+									<table class="table table-striped table-bordered table-hover" data-source="/subgrupos.json" id="tabela">
+									</table>
+								</div>
 							</div>
 						</div>
-							<div class="portlet-body">
-							<%= form_for((@empresa), url: new_empresa_path, html: { method: :post }) do |f|%>
-								<% if @empresa.errors.any? %>
-									<div id="error_explanation" class="Metronic-alerts alert alert-danger">
-										<ul>
-											<% @empresa.errors.full_messages.each do |message| %>
-											 <li><%= message %></li>
-										 <% end %>
-										</ul>
-									</div>
-								<% end %>
-								<h3 class="form-section">Informações Gerais</h3><br>
-								<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-									<label class="control-label ">Razao Social</label>
-									<%= f.text_field :razao_social,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-								</div>
-
-								<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-									<label class="control-label ">Nome Fantasia</label>
-									<%= f.text_field :nome_fantasia,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-								</div>
-
-								<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-									<label class="control-label ">CNPJ</label>
-									<%= f.text_field :cnpj,  autofocus: true, :autocomplete => "on", :id =>"campocnpj", :class =>"form-control placeholder-no-fix"%>
-								</div>
-
-								<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-									<label class="control-label ">Inscrição Estadual</label>
-									<%= f.text_field :insc_estadual,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-								</div>
-
-								<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-									<label class="control-label ">Inscrição Municipal</label>
-									<%= f.text_field :insc_municipal,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-								</div>
-
-								<div class="form-body">
-											<h3 class="form-section">Endereço</h3><br>
-											<div class="row">
-												<div class="col-md-12 ">
-													<div class="form-group">
-														<label>Rua</label>
-														<%= f.text_field :rua,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col-md-6">
-													<div class="form-group">
-														<label>Numero</label>
-														<%= f.text_field :num_rua,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-												</div>
-												<!--/span-->
-												<div class="col-md-6">
-													<div class="form-group">
-														<label>Complemento</label>
-														<%= f.text_field :complemento,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-												</div>
-												<!--/span-->
-											</div>
-											<!--/row-->
-											<div class="row">
-												<div class="col-md-6">
-													<div class="form-group">
-														<label>Bairro</label>
-														<%= f.text_field :bairro,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-												</div>
-												
-												<div class="col-md-6">
-													<div class="form-group">
-														<label>CEP</label>
-														<%= f.text_field :cep,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-												</div>
-												<div class="col-md-6">
-													<div class="form-group">
-														<label>Cidade</label>
-														<%= f.text_field :cidade,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-												</div>
-												<!--/span-->
-												<div class="col-md-6">
-													<div class="form-group">
-														<label>UF</label>
-														<%= f.select :uf, [['Acre', 'AC'], ['Alagoas', 'AL'], ['Amapá', 'AP'], ['Amazonas', 'AM'], ['Bahia', 'BA'],['Ceará', 'CE'], ['Distrito Federal', 'DF'], ['Espirito Santo', 'ES'], ['Goiás', 'GO'], ['Maranhão', 'MA'], ['Mato Grosso', 'MT'], ['Mato Grosso do Sul', 'MS'], ['Minas Gerais', 'MG'], ['Pará', 'PA'], ['Paraiba', 'PB'], ['Paraná', 'PR'], ['Pernambuco', 'PE'], ['Piauí', 'PI'], ['Rio de Janeiro', 'RJ'], ['Rio Grande do Norte', 'RN'], ['Rio Grande do Sul', 'RS'], ['Rondônia', 'RO'], ['Roraima', 'RR'], ['Santa Catarina', 'SC'], ['São Paulo', 'SP'], ['Sergipe', 'SE'], ['Tocantis', 'TO']], {},{:class =>"form-control"} %>
-													</div>
-												</div>
-												<!--/span-->
-												
-											</div>
-										</div>
-
-									<div class="actions">
-											<%= f.submit "Gravar", :class => "btn green-meadow pull-left"%>
-									</div><br><br><br>
-									
-									<%= link_to "Voltar", empresas_path, :class => "btn default ", 'data-no-turbolink' => true %>
-								<% end %>
-							</div>
+						<!-- END SAMPLE TABLE PORTLET-->
 					</div>
 				</div>
+				<!-- END PAGE CONTENT INNER -->
 			</div>
 		</div>
 		<!-- END PAGE CONTENT -->
 	</div>
-</div>  
+</div>	
 <!-- END PAGE CONTAINER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
@@ -325,7 +291,6 @@
 <script src="../../assets/global/plugins/excanvas.min.js"></script> 
 <![endif]-->
 <script src="../../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-<script src="../../assets/global/plugins/jquery.maskedinput.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
 <script src="../../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
@@ -335,6 +300,8 @@
 <script src="../../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
+
 <!-- END CORE PLUGINS -->
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script type="text/javascript" src="../../assets/global/plugins/select2/select2.min.js"></script>
@@ -343,7 +310,12 @@
 <script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
 <script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
 <script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/ColVis/js/dataTables.colVis.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/ColVis/js/dataTables.colVis.min.js"></script>
+
 <script type="text/javascript" src="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+
 <!-- END PAGE LEVEL PLUGINS -->
 <script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout3/scripts/layout.js" type="text/javascript"></script>
@@ -351,13 +323,40 @@
 
 <script>
 jQuery(document).ready(function() {       
-	 // initiate layout and plugins
+	// initiate layout and plugins
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
-	$("#campocnpj").mask("99.999.999/9999-99", {removeMaskOnSubmit: true, clearMaskOnLostFocus: true });
-	$("#new_empresa").submit(function() {
-	 	$("#campocnpj").val($("#campocnpj").mask()); 
-	});
+	
+	var btnsave = document.getElementById('btnsave');
+	btnsave.onclick = save;
+
+	function save() 
+	{
+		var myOpts = document.getElementById('Ativas').options;
+		var values = [];
+		var values = $.map(myOpts, function(option) {
+			return option.value;
+		});
+		if(myOpts.length > 0)
+		{
+			$.ajax({
+				type: 'post',
+				url: '/subgrupos/save_settings',
+				dataType: 'json',
+				data: {columns_subgrupo : values}
+			});
+			window.location.reload();		
+		}
+		else
+		{
+			bootbox.alert("Escolha no mínimo uma coluna!");
+		}
+	}
+
+	function show_restricted_alert()
+	{
+		bootbox.alert("Você não tem permissão para isso!");	
+	} 	
 
 	$('[name="emp_link"]').click(function () 
 	{
@@ -369,22 +368,9 @@ jQuery(document).ready(function() {
 		});
 	  	window.location.reload();		
 	});
-
-	/*$('#tabela').DataTable({
-		"sPaginationType": "full_numbers",
-			"processing": true,
-			"serverSide": true,
-		"ajax": $('#tabela').data('source'),
-		 "columns": 
-			[{ "bSortable": false, "bSearchable": false, "data": null, "render": function ( data, type, row ) {
-								return '<a href="/user/'+data.id+'/edit" class="btn yellow btn-xs pull-center"><i class="fa fa-pencil"></i> Editar</a> <a data-confirm="Tem certeza que deseja excluir o usuário?" rel="nofollow" data-method="delete" href="/user/'+data.id+'" class="btn red btn-xs pull-right"> <i class="fa fa-times"></i> Deletar</a> '}}]
-	});*/
- //init tabela
 });
 
 </script>
 </body>
 <!-- END BODY -->
 </html>
-
-

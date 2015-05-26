@@ -15,10 +15,23 @@ Rails.application.routes.draw do
 	post 'empresas/save_settings' => 'empresa#save_settings'
 	post 'empresas/checked_rows' => 'empresa#checked_rows'
 
+	get 'grupos' => "grupo#index", as: :grupos
+	get 'grupos/new' => "grupo#new", as: :new_grupo
+	post 'grupos/new'  => 'grupo#create'
+	post 'grupos/save_settings' => 'grupo#save_settings'
+
+	get 'subgrupos' => "subgrupo#index", as: :sub_grupos
+	get 'subgrupos/new' => "subgrupo#new", as: :new_sub_grupo
+	post 'subgrupos/new'  => 'subgrupo#create'
+	post 'subgrupos/save_settings' => 'subgrupo#save_settings'
+
+
 	get "index" => 'index#index', as: :index
 
 	resources :user, only: [:edit, :destroy, :update, :new, :create]
-	resources :empresa, only: [:edit, :update, :new, :new, :create]
+	resources :empresa, only: [:edit, :update, :new, :create]
+	resources :grupo, only: [:edit, :destroy, :update, :new, :create]
+	resources :subgrupo, only: [:edit, :destroy, :update, :new, :create]
 
 	devise_for :users
 
