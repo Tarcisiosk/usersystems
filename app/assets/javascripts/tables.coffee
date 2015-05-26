@@ -6,7 +6,7 @@ jQuery ->
         $.getJSON $('#tabela').data('source'), null, (json) ->
                 $('#tabela').DataTable(
                         sAjaxSource: $('#tabela').data('source')
-                        bStateSave:true
+                        bStateSave:false
                         sPaginationType: "full_numbers"
                         responsive: true
                         bAutoWidth: true
