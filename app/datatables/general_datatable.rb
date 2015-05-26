@@ -29,6 +29,7 @@ class GeneralDatatable < ApplicationController
 		records.map do |record|
 			data_array = Array.new
 			links_array = Array.new
+		
 			if @current_user.user_type == 0
 				columns.each_with_index do |item, index|
 					data_array[index] = record.send(item)
@@ -152,7 +153,7 @@ class GeneralDatatable < ApplicationController
 		columns.each_with_index do |item, index|
 			search_array[index] = item
 		end
-		return search_array.join(" like :search or ") + s_string
+		return search_array.join(" ILIKE :search or ") + s_string
 	end
 
 	def sort_column
