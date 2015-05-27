@@ -34,6 +34,7 @@ gem 'will_paginate'
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git', branch: 'master'
 gem 'ajax-datatables-rails'
 
+gem 'sprockets-rails', :require => 'sprockets/railtie'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
