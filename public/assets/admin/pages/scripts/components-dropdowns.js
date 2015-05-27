@@ -13,7 +13,7 @@ var ComponentsDropdowns = function () {
         });
 
         $("#select2_sample3").select2({
-            placeholder: "Select...",
+            placeholder: "Grupo...",
             allowClear: true,
             minimumInputLength: 1,
             query: function (query) {
@@ -32,6 +32,13 @@ var ComponentsDropdowns = function () {
                 }
                 query.callback(data);
             }
+        });
+
+         $("#select2_grupo").select2({
+            placeholder: "Grupo...",
+            allowClear: true,
+            minimumInputLength: 1
+            
         });
 
         function format(state) {

@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 	helper_method :userTable
 	helper_method :editingUser
 	helper_method :save_user_empresa
+	helper_method :returnItensUsuario
 
 	@@checked_rows = []
 	@@checked_users = []
@@ -29,7 +30,8 @@ class ApplicationController < ActionController::Base
 	def after_sign_in_path_for(resource)
 		'/index'
 	end
-	
+
+	#seta adm para itens criados
 	def setAdmin
 		if controller_name != "sessions"
 			obj = instance_variable_get("@" + controller_name.downcase)
@@ -58,7 +60,8 @@ class ApplicationController < ActionController::Base
 			end
 		end
 	end
-	
+
+	#salva configurações dee coluna do usuario
 	def save_settings
 		new_pref = Array.new
 		params[("columns_" + controller_name.classify.downcase).to_sym].each_with_index do |item, index|
@@ -74,6 +77,7 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	#salva empresas na quais usuario comum tem acesso
 	def save_user_empresa
 		obj = instance_variable_get("@" + controller_name.downcase)
 		ActiveRecord::Base.transaction do
@@ -125,6 +129,7 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	#retorna colunas marcadas para relação usuario/empresa
 	def checked_rows
 		@@checked_rows.clear
 		@@checked_users.clear
@@ -146,6 +151,7 @@ class ApplicationController < ActionController::Base
    		end
 	end
 
+	#seta a empresa atual se não houver nenhuma selecionada
 	def set_current_emp_if_first
 		if current_user.settings(:last_empresa).edited.blank? && lastEmpTable.present?
 			current_user.settings(:last_empresa).edited = lastEmpTable.first
@@ -154,6 +160,7 @@ class ApplicationController < ActionController::Base
 
 	protected
 	#configurações das tables e dados enviados.
+	#colunas ativas
 	def act_columns
 		if (current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col.include?({:sTitle => 'Opções', :bSortable => false, :width => '40px'}))
 			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col - [{:sTitle => 'Opções', :bSortable => false, :width => '40px'}]
@@ -161,11 +168,12 @@ class ApplicationController < ActionController::Base
 			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col
 		end
 	end
-
+	#colunas inatiaas
 	def inact_columns
 		(controller_name.capitalize).constantize::total((controller_name.capitalize).constantize.const_get("TOTAL_COLUMNS_"+ controller_name.classify.upcase)) - current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col
 	end
 
+	#linhas com a coluna opçoes para mandar para o generalDatatabme 
 	def act_columns_final
 		if (current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col.include?({:sTitle => 'Opções', :bSortable => false, :width => '40px'}))
 			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col
@@ -174,6 +182,7 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	#pega nomes para impressao na view
 	def getName(col)
 		name_columns = []
 		col.each_with_index do |item, index|
@@ -185,11 +194,11 @@ class ApplicationController < ActionController::Base
 	end
 	#fim configurações
 	
+	#parametros usuario devise
 	def configure_permitted_parameters
 		devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :remember_me) }
 		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :columns_user, :columns_empresa, :photo) }
 	end
-
 
 	#empresas disponiveis para seleção
 	def lastEmpTable
@@ -211,6 +220,7 @@ class ApplicationController < ActionController::Base
 		default_content.compact
 	end
 
+	#empresaa para o adm dar acesso ao usuario comum
 	def empTable
 		obj = instance_variable_get("@" + controller_name.downcase)
 		default_content = []
@@ -226,6 +236,7 @@ class ApplicationController < ActionController::Base
 		default_content.compact
 	end
 
+	#usuarios para o adm ligar a empresas
 	def userTable
 		obj = instance_variable_get("@" + controller_name.downcase)
 		default_content = []
@@ -243,10 +254,26 @@ class ApplicationController < ActionController::Base
 		default_content.compact
 	end
 
+	#usuario a ser editado
 	def editingUser
 		obj = instance_variable_get("@" + controller_name.downcase)
 	end
 
+	#retorna items que pertencem/sao acessiveis ao usuario
+	def returnItensUsuario
+		itensUser = Array.new
+		if controller_name == "subgrupo"
+			Grupo.all.each_with_index do |item, index|
+				if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
+					itensUser << item
+				end
+			end
+		end
+		return itensUser
+	end
+
+	#---->> Fim funções <<----#
+	
 	#pemissões e autenticações
 	def authenticate_user!
 		if user_signed_in?
@@ -256,18 +283,21 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	#requer acesso master
 	def require_master_acess
 		unless current_user.user_type == 0 
 			redirect_to root_path, notice: "Você não tem permissão para isso!"
 		end
 	end
 	
+	#requer acesso adm
 	def require_adm_acess
 		unless current_user.user_type == 1
 			redirect_to root_path, notice: "Você não tem permissão para isso!"
 		end
 	end
 
+	#requer acesso master ou adm
 	def require_master_or_adm_acess
 		if controller_name != "sessions"
 			unless current_user.user_type == 0 || current_user.user_type == 1
@@ -278,6 +308,7 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	#seta o adm_id do master igual ao adm_id do obj enquanto ele estiver sendo editado
 	def setMasterAdmin
 		obj = instance_variable_get("@" + controller_name.downcase)
 		#se o usuario for master e estiver editando um usuario qualquer o adm_id do master será igual ao adm_id do usuario editado
@@ -286,6 +317,7 @@ class ApplicationController < ActionController::Base
 		end	
 	end
 
+	#retorna papra o adm_id original do master
 	def backMasterAdmin
 		if current_user.user_type == 0
 			current_user.adm_id = (current_user.id).to_s
