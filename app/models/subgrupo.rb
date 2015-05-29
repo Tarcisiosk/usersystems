@@ -3,5 +3,4 @@ class Subgrupo < AbstractRecord
 
 	validates :descricao, presence: true, length: { in: 0..100 }
 	validates :grupo_id, presence: true
-	validates :adm_id, presence: true
 end

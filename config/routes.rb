@@ -26,12 +26,18 @@ Rails.application.routes.draw do
 	post 'subgrupos/save_settings' => 'subgrupo#save_settings'
 
 
+	get 'nivelacesso' => "nivelacesso#index", as: :nivelacessos
+	get 'nivelacesso/new' => "nivelacesso#new", as: :new_nivelacesso
+	post 'nivelacesso/new'  => 'nivelacesso#create'
+	post 'nivelacesso/save_settings' => 'nivelacesso#save_settings'
+
 	get "index" => 'index#index', as: :index
 
 	resources :user, only: [:edit, :destroy, :update, :new, :create]
 	resources :empresa, only: [:edit, :update, :new, :create]
 	resources :grupo, only: [:edit, :destroy, :update, :new, :create]
 	resources :subgrupo, only: [:edit, :destroy, :update, :new, :create]
+	resources :nivelacesso, only: [:edit, :destroy, :update, :new, :create]
 
 	devise_for :users
 

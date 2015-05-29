@@ -148,7 +148,7 @@ class GeneralDatatable < ApplicationController
 	end
 	
 	def search_columns
-		s_string = " like :search"
+		s_string = " ILIKE :search"
 		search_array = Array.new
 		columns.each_with_index do |item, index|
 			search_array[index] = item

@@ -5,7 +5,7 @@
 jQuery ->
         $.getJSON $('#tabela').data('source'), null, (json) ->
                 $('#tabela').DataTable(
-                    search: {caseInsensitive: false, regex: false }
+                    search: {caseInsensitive: true, regex: true }
                     sAjaxSource: $('#tabela').data('source')
                     bStateSave:false
                     sPaginationType: "full_numbers"

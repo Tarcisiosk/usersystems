@@ -64,7 +64,7 @@
 			  		</li>
 			  		<i class="fa fa-circle"></i>
 					<li class="active">
-						Sub-Grupos
+						Nivel Acesso
 					</li>
 				</ul>
 				<div class="row">
@@ -75,12 +75,12 @@
 							<div class="portlet-title">
 								<div class="caption">
 									<i class="fa fa-users font-green-sharp"></i>
-									<span class="caption-subject font-green-sharp bold uppercase">Sub-Grupos</span>
+									<span class="caption-subject font-green-sharp bold uppercase">Nivel Acesso</span>
 								</div>
 								
 								<div class="tools">
 									<div class="btn-group">
-											<a class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/subgrupos/new"><i class="fa fa-plus"></i></a>
+											<a class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/nivelacesso/new"><i class="fa fa-plus"></i></a>
 											<!-- <%= link_to "Adicionar", new_user_path, :class => "btn btn-icon-only green"%>-->
 											<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
 											<i class="fa fa-wrench"></i>
@@ -91,7 +91,7 @@
 							
 							<div class="portlet-body">
 								<div>
-									<table class="table table-striped table-bordered table-hover" data-source="/subgrupos.json" id="tabela">
+									<table class="table table-striped table-bordered table-hover" data-source="/nivelacesso.json" id="tabela">
 									</table>
 								</div>
 							</div>
@@ -163,9 +163,9 @@ jQuery(document).ready(function() {
 		{
 			$.ajax({
 				type: 'post',
-				url: '/subgrupos/save_settings',
+				url: '/nivelacesso/save_settings',
 				dataType: 'json',
-				data: {columns_subgrupo : values}
+				data: {columns_nivelacesso : values}
 			});
 			window.location.reload();		
 		}

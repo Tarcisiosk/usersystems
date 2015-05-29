@@ -106,7 +106,7 @@ class UserController < ApplicationController
 
 	#params users e acesso: Master = 0, Admin = 1, Comum = 2. 
 	def user_params
-		params.require(:user).permit(:id, :adm_id, :empresas, :user_type, :fullname, :email, :password, :password_confirmation, :photo)
+		params.require(:user).permit(:id, :adm_id, :empresas, :user_type, :fullname, :email, :password, :password_confirmation, :n_acesso, :photo)
 	end 
 
 end

@@ -8,7 +8,8 @@ end
 
 class User < AbstractRecord
 		TOTAL_COLUMNS_USER = [{:sTitle => 'Nome', :data_name => 'fullname', :bDefault => true}, 
-							  {:sTitle => 'Email', :data_name => 'email', :bDefault => true}]
+							  {:sTitle => 'Email', :data_name => 'email', :bDefault => true},
+							  {:sTitle => 'Nível de Acesso', :data_name => 'n_acesso', :bDefault => false}]
 
 		#preferencias do usuario
 		has_settings do |s|
@@ -16,6 +17,7 @@ class User < AbstractRecord
 			s.key :columns_empresa, :defaults => {:col => returnDefaults(Empresa::TOTAL_COLUMNS_EMPRESA)}
 			s.key :columns_grupo, :defaults => {:col => returnDefaults(Grupo::TOTAL_COLUMNS_GRUPO)}
 			s.key :columns_subgrupo, :defaults => {:col => returnDefaults(Subgrupo::TOTAL_COLUMNS_SUBGRUPO)}
+			s.key :columns_nivelacesso, :defaults => {:col => returnDefaults(Nivelacesso::TOTAL_COLUMNS_NIVELACESSO)}
 
 			s.key :last_empresa
 		end

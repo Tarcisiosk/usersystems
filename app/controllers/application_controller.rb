@@ -22,6 +22,7 @@ class ApplicationController < ActionController::Base
 	helper_method :editingUser
 	helper_method :save_user_empresa
 	helper_method :returnItensUsuario
+	helper_method :returnNiveisAcesso
 
 	@@checked_rows = []
 	@@checked_users = []
@@ -197,7 +198,7 @@ class ApplicationController < ActionController::Base
 	#parametros usuario devise
 	def configure_permitted_parameters
 		devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :remember_me) }
-		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :columns_user, :columns_empresa, :photo) }
+		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :n_acesso, :columns_user, :columns_empresa, :photo) }
 	end
 
 	#empresas disponiveis para seleção
@@ -263,13 +264,23 @@ class ApplicationController < ActionController::Base
 	def returnItensUsuario
 		itensUser = Array.new
 		if controller_name == "subgrupo"
-			Grupo.all.each_with_index do |item, index|
+			Grupo.all.each do |item|
 				if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
 					itensUser << item
 				end
 			end
 		end
 		return itensUser
+	end
+
+	def returnNiveisAcesso
+		niveis = Array.new
+		Nivelacesso.all.each do |item|
+			if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
+				niveis << item
+			end
+		end
+		return niveis
 	end
 
 	#---->> Fim funções <<----#

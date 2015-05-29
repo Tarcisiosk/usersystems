@@ -12,148 +12,63 @@
 				<!-- BEGIN PAGE BREADCRUMB -->
 				<ul class="page-breadcrumb breadcrumb">
 					<li>
-						<%= link_to "Página Inicial", root_path %>
+						 <%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li>
-						<%= link_to "Usuários", users_path %>
+						<%= link_to "Nivel Acesso", nivelacessos_path, 'data-no-turbolink' => true%>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
-						Novo
+						Editar
 					</li>
 				</ul>
+
 				<div class="col-md-12">
-					<div class="profile-sidebar" style="width: 250px;">
-						<!-- PORTLET MAIN -->
-						<div class="portlet light profile-sidebar-portlet">
-								<div class="profile-userpic" >
-									<div class="fileinput fileinput-new">
-										<center></center>
-									</div>
-								</div>
-								<!-- END SIDEBAR USERPIC -->
-								<!-- SIDEBAR USER TITLE -->
-								<div class="profile-usertitle">
-										<div class="profile-usertitle-name">
-											 Nome Usuário
-										</div>
-										<div class="profile-usertitle-job">
-											 Email Usuário
-										</div><br>
-								</div>
-						</div>
-						<!-- END PORTLET MAIN -->
-					</div>
+
+				 
 					<div class="profile-content">
 						<div class="row">
 							<div class="col-md-12">
 								<div class="portlet light">
-									<div class="portlet-title tabbable-line">
+								 <div class="portlet-title tabbable-line">
 										<div class="caption caption-md">
 											<i class="icon-globe theme-font hide"></i>
-												<span class="caption-subject font-blue-madison bold uppercase">Adicionar Usuário</span>
+												<span class="caption-subject font-blue-madison bold uppercase">Editar Nivel de Acesso</span>
 											<i class="fa fa-pencil"></i>
 										</div>
-										<ul class="nav nav-tabs">
-											<li class="active">
-												<a href="#tab_1_1" data-toggle="tab">Geral</a>
-											</li>
-											<li>
-												<a href="#tab_1_2" data-toggle="tab">Imagem</a>
-											</li>
-										</ul>
 									</div>
 									<div class="portlet-body">
-										<%= form_for((@user), url: new_user_path, html: { method: :post }) do |f|%>
-												<% if @user.errors.any? %>
-													<div id="error_explanation" class="Metronic-alerts alert alert-danger">
-														<ul>
-															<% @user.errors.full_messages.each do |message| %>
-															 <li><%= message %></li>
-														 <% end %>
-														</ul>
-													</div>
-												<% end %>
-											<div class="tab-content">
-												<div class="tab-pane active" id="tab_1_1">
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Nome Completo</label>
-														<div class="input-group">
-														<span class="input-group-addon"><i class="fa fa-font"></i></span>
-															<%= f.text_field :fullname,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-														</div>
-													</div>
-
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Email</label>
-														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-															<%= f.email_field :email,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-														</div>
-													</div>
-
-													<div class="form-group">
-														<label class="control-label ">Senha</label>
-														<div class="input-group">
-																<% if @validatable %>
-																	<em>(<%= @minimum_password_length %> characters minimum)</em>
-																<% end %> 
-																<span class="input-group-addon"><i class="fa fa-lock"></i></span>
-																<%= f.password_field :password, autocomplete: "off", :class =>"form-control placeholder-no-fix"%>
-														</div>
-													</div>
-							
-													<div class="form-group">
-														<label class="control-label ">Confirmação de senha</label>
-														<div class="controls">
-															<div class="input-group">
-																<span class="input-group-addon"><i class="fa fa-check"></i></span>
-																	<%= f.password_field :password_confirmation, autocomplete: "off", :class =>"form-control placeholder-no-fix"%>
-															</div>
-														</div>
-													</div>
-
-													<% if current_user.user_type == 0 %>
-														<div class="form-group">
-															<label>Tipo de Usuário:</label>
-															<%= f.select :user_type, [['Master', 0], ['Administrador', 1, :selected=>"true"]], {}, {:class=> 'form-control'} %>
+										<div class="tab-content">
+											<div class="tab-pane active" id="tab_1_1">
+												<%= form_for((@nivelacesso), url: nivelacesso_path(@nivelacesso), html: { method: :put }) do |f|%>
+													<% if @nivelacesso.errors.any? %>
+														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+															<ul >
+																<% @nivelacesso.errors.full_messages.each do |message| %>
+																 <li><%= message %></li>
+															 <% end %>
+															</ul>
 														</div>
 													<% end %>
-
-													<% if current_user.user_type == 1%>
-														<div class="form-group">
-															<label class="control-label col-md-2">Nível de Acesso</label><br><br>
-															<%= f.select(:n_acesso, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
-																  <% returnNiveisAcesso.each do |n| %>
-																    <%= content_tag(:option, n.descricao, value: n.descricao) %>
-																  <% end %>
-															<% end %>
-														</div><br>
-													<% end %>
-												</div>
-
-												<div class="tab-pane" id="tab_1_2">
-													<div class="fileinput-new thumbnail" style="width: 200px; height: 200px;" id = "target">
-														 <div class="fileinput fileinput-new" id = "target">
-														</div>
+													
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Descrição</label>
+														<%= f.text_field :descricao,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+													</div>
+													<div class="actions">
+														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
 													</div><br>
-													<%= f.file_field :photo,  :id=>"pictureInput" %>
-													<br>
-												</div>
-												<div class="actions">
-													<%= f.submit "Salvar", :class => "btn green-meadow pull-left"%>
-												</div><br><br><br>
-												<%= link_to "Voltar", users_path, :class => "btn default ", 'data-no-turbolink' => true%>
+													<%= link_to "Voltar", nivelacessos_path, :class => "btn default ", 'data-no-turbolink' => true %>
+												<% end %>
 											</div>
-										<% end %>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> 
 				</div>
 			</div>
 		</div>
@@ -169,6 +84,7 @@
 <![endif]-->
 <script src="../../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery.maskedinput.js" type="text/javascript"></script>
 <!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
 <script src="../../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
@@ -190,22 +106,14 @@
 <script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout3/scripts/layout.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout3/scripts/demo.js" type="text/javascript"></script>
+<script src="../../assets/admin/pages/scripts/table-managed.js"></script>
 
 <script>
 jQuery(document).ready(function() {       
 	 // initiate layout and plugins
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
-	
-	var label_name = $('.profile-usertitle-name');
-	$('#user_fullname').change(function() {
-		label_name.html($('#user_fullname').val());
-    });
-
-    var label_email = $('.profile-usertitle-job');
-	$('#user_email').change(function() {
-		label_email.html($('#user_email').val());
-    });
+	TableManaged.init();
 
 	$('#pictureInput').on('change', function(event) {
 		var files = event.target.files;
@@ -221,6 +129,9 @@ jQuery(document).ready(function() {
 		console.log(files);
 	});
 
+
+	
+
 	$('[name="emp_link"]').click(function () 
 	{
 		var id = $(this).attr('value');
@@ -231,7 +142,7 @@ jQuery(document).ready(function() {
 		});
 	  	window.location.reload();		
 	});
-	
+
 	/*$('#tabela').DataTable({
 		"sPaginationType": "full_numbers",
 			"processing": true,
