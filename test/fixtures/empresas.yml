@@ -1,15 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  razao_social: MyString
-  nome_fantasia: MyString
-  cnpj: MyString
-  insc_estadual: MyString
-  insc_municipal: MyString
+  id: 1
+  razao_social: Emp1
+  nome_fantasia: EmpM1
+  cnpj: "10000000000001"
 
 two:
-  razao_social: MyString
-  nome_fantasia: MyString
-  cnpj: MyString
-  insc_estadual: MyString
-  insc_municipal: MyString
+  id: 2
+  razao_social: Emp2
+  nome_fantasia: EmpM2
+  cnpj: "20000000000002"

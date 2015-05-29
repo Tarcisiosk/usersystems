@@ -1,9 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  descricao: MyText
-  adm_id: 1
+  id: 1
+  descricao: Grupo 1
+  adm_id: 2
 
 two:
-  descricao: MyText
-  adm_id: 1
+  id: 2 
+  descricao: Grupo 2
+  adm_id: 2

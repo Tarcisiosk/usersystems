@@ -87,7 +87,7 @@ class UserController < ApplicationController
 		@user = User.find(params[:id])
 		#se usuario for master não pode ser excluido, se usuario for comum não pode excluir
 		if @user.id == 1 || current_user.user_type == 2
- 			redirect_to root_path, notice: "Você não tem permissão para isso!"
+ 			redirect_to users_path, notice: "Você não tem permissão para isso!"
  		else
 			@user = User.find(params[:id])
 			@user.destroy

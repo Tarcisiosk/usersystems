@@ -11,8 +11,10 @@ class Empresa < AbstractRecord
   	def cnpj_is_filled 
 	  !cnpj.blank? 	
 	end 
+
   	has_and_belongs_to_many :users
   	before_save {self.cnpj = cnpj.gsub(/<\/?[^>]*>/, '')}
+  	#after_save {self.cnpj = cnpj.insert(3, '.'), self.cnpj = cnpj.insert(6, '.'), self.cnpj = cnpj.insert(10, '/'), self.cnpj = cnpj.insert(15, '-')}
 
 	validates :razao_social, presence: true, length: { in: 0..60 }
 	validates :nome_fantasia, presence: true, length: { in: 0..60 }

@@ -45,11 +45,14 @@ gem 'sprockets-rails', :require => 'sprockets/railtie'
 # gem 'capistrano-rails', group: :development
 gem 'ledermann-rails-settings'
 
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-
+  
+  gem 'selenium-webdriver', '~> 2.45.0'
+  gem 'rspec-rails', '>= 3.0'
+  gem 'capybara', '>=2.4.1'
+  
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
 end

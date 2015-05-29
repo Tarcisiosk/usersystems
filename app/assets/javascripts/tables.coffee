@@ -5,17 +5,15 @@
 jQuery ->
         $.getJSON $('#tabela').data('source'), null, (json) ->
                 $('#tabela').DataTable(
-                        search: {
-                            caseInsensitive: false
-                        }
-                        sAjaxSource: $('#tabela').data('source')
-                        bStateSave:false
-                        sPaginationType: "full_numbers"
-                        responsive: true
-                        bAutoWidth: true
-                        bProcessing: true
-                        bServerSide: true
-                        aoColumns: json.aaColumns )
+                    search: {caseInsensitive: false, regex: false }
+                    sAjaxSource: $('#tabela').data('source')
+                    bStateSave:false
+                    sPaginationType: "full_numbers"
+                    responsive: true
+                    bAutoWidth: true
+                    bProcessing: true
+                    bServerSide: true
+                    aoColumns: json.aaColumns )
         $().ready ->
           $('#Ativas').click ->
             !$('#Ativas option:selected').remove().appendTo('#Inativas')

@@ -1,57 +1,55 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<%if controller.controller_name != 'sessions' %>
-		<meta charset="utf-8"/>
-		<title>MASTERCOM | <%= controller.controller_name.pluralize.upcase%></title>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-		<meta content="" name="description"/>
-		<meta content="" name="author"/>
-		<!-- BEGIN GLOBAL MANDATORY STYLES -->
-		<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
-		<link href="../../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-		<link href="../../assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css">
-		<link href="../../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-		<link href="../../assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
-		<!-- END GLOBAL MANDATORY STYLES -->
-		<!-- BEGIN PAGE LEVEL STYLES -->
-		<link href="../../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-		<link href="../../assets/admin/pages/css/profile.css" rel="stylesheet" type="text/css"/>
-		<link href="../../assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
-		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/select2/select2.css"/>
-		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
-		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
-		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.css"/>
-		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.min.css"/>
-		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
-		<!-- END PAGE LEVEL STYLES -->
-		<!-- BEGIN THEME STYLES -->
-		<link href="../../assets/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css">
-		<link href="../../assets/global/css/plugins.css" rel="stylesheet" type="text/css">
-		<link href="../../assets/admin/layout3/css/layout.css" rel="stylesheet" type="text/css">
-		<link href="../../assets/admin/layout3/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
-		<link href="../../assets/admin/layout3/css/custom.css" rel="stylesheet" type="text/css">
-		<!-- END THEME STYLES -->
-  	<%end%>
+	<head>
+		<%if controller.controller_name != 'sessions' %>
+			<meta charset="utf-8"/>
+			<title>MASTERCOM | <%= controller.controller_name.pluralize.upcase%></title>
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+			<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+			<meta content="" name="description"/>
+			<meta content="" name="author"/>
+			<!-- BEGIN GLOBAL MANDATORY STYLES -->
+			<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
+			<link href="../../assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+			<link href="../../assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css">
+			<link href="../../assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+			<link href="../../assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+			<!-- END GLOBAL MANDATORY STYLES -->
+			<!-- BEGIN PAGE LEVEL STYLES -->
+			<link href="../../assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
+			<link href="../../assets/admin/pages/css/profile.css" rel="stylesheet" type="text/css"/>
+			<link href="../../assets/admin/pages/css/tasks.css" rel="stylesheet" type="text/css"/>
+			<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/select2/select2.css"/>
+			<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css"/>
+			<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css"/>
+			<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.css"/>
+			<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.min.css"/>
+			<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+			<!-- END PAGE LEVEL STYLES -->
+			<!-- BEGIN THEME STYLES -->
+			<link href="../../assets/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css">
+			<link href="../../assets/global/css/plugins.css" rel="stylesheet" type="text/css">
+			<link href="../../assets/admin/layout3/css/layout.css" rel="stylesheet" type="text/css">
+			<link href="../../assets/admin/layout3/css/themes/default.css" rel="stylesheet" type="text/css" id="style_color">
+			<link href="../../assets/admin/layout3/css/custom.css" rel="stylesheet" type="text/css">
+			<!-- END THEME STYLES -->
+	  	<%end%>
+		<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+		<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+		<%= csrf_meta_tags %>
+	</head>
 
-	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-	<%= csrf_meta_tags %>
-</head>
+	<body>
+		<% flash.each do |key, value| %>
+			<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
+		<% end %>
 
-<body>
- <% flash.each do |key, value| %>
-	<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
-<% end %>
-
-<% if notice %>
-	
-<% end %>
-	
-<%= yield %>
-
-</body>
+		<% if notice %>
+			
+		<% end %>
+			
+		<%= yield %>
+	</body>
 
 </html>

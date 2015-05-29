@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
 			else
 				#se usuario for master os usuarios criados(master/adm) serão adm de si 
 				if current_user.user_type == 1
-					obj.adm_id = current_user.id
+					obj.adm_id = current_user.adm_id
 				#se o usuario for comum os usuarios criados(comuns) serão administrados pelo seu administrador
 				elsif current_user.user_type == 2
 					obj.adm_id = current_user.adm_id
@@ -286,14 +286,14 @@ class ApplicationController < ActionController::Base
 	#requer acesso master
 	def require_master_acess
 		unless current_user.user_type == 0 
-			redirect_to root_path, notice: "Você não tem permissão para isso!"
+			redirect_to "/422", notice: "Você não tem permissão para isso!"
 		end
 	end
 	
 	#requer acesso adm
 	def require_adm_acess
 		unless current_user.user_type == 1
-			redirect_to root_path, notice: "Você não tem permissão para isso!"
+			redirect_to "/422", notice: "Você não tem permissão para isso!"
 		end
 	end
 
@@ -302,7 +302,7 @@ class ApplicationController < ActionController::Base
 		if controller_name != "sessions"
 			unless current_user.user_type == 0 || current_user.user_type == 1
 				respond_to do |format|
-					format.html { redirect_to root_path, notice: "Você não tem permissão para isso!"}
+					format.html { redirect_to "/422", notice: "Você não tem permissão para isso!"}
 				end
 			end
 		end
