@@ -118,7 +118,7 @@
 														<% end %>
 													<% end %>
 
-													<% if current_user.user_type == 1 && editingUser.user_type == 2%>
+													<% if current_user.user_type != 2 && editingUser.user_type == 2 && returnNiveisAcesso.count > 0 %>
 														<div class="form-group">
 															<label class="control-label col-md-2">Nível de Acesso</label><br><br>
 															<%= f.select(:n_acesso, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
@@ -226,21 +226,23 @@
 															</thead>
 															<tbody>
 																<% empTable.each do |item| %>
-																	<tr class="odd gradeX">
-																		<td>
-																			<%if item.users.include? @user %>
-																				<input type="checkbox" class="checkboxes" checked="true" value= "<%=item.id%>"/>
-																			<%else%>
-																				<input type="checkbox" class="checkboxes" value= "<%=item.id%>"/>
-																			<%end%>
-																		</td>
-																		<td>
-																			<%= item.nome_fantasia %>
-																		</td>
-																		<td>
-																			<%= item.cnpj %>
-																		</td>
-																	</tr>
+																	<%if item.adm_id == @user.adm_id%>
+																		<tr class="odd gradeX">
+																			<td>
+																				<%if item.users.include? @user %>
+																					<input type="checkbox" class="checkboxes" checked="true" value= "<%=item.id%>"/>
+																				<%else%>
+																					<input type="checkbox" class="checkboxes" value= "<%=item.id%>"/>
+																				<%end%>
+																			</td>
+																			<td>
+																				<%= item.nome_fantasia %>
+																			</td>
+																			<td>
+																				<%= item.cnpj %>
+																			</td>
+																		</tr>
+																	<%end%>
 																<%end%>
 															</tbody>
 														</table><br>

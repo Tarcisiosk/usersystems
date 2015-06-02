@@ -262,11 +262,18 @@ class ApplicationController < ActionController::Base
 
 	#retorna items que pertencem/sao acessiveis ao usuario
 	def returnItensUsuario
+		obj = instance_variable_get("@" + controller_name.downcase)
 		itensUser = Array.new
 		if controller_name == "subgrupo"
 			Grupo.all.each do |item|
-				if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
-					itensUser << item
+				if current_user.user_type != 0
+					if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
+						itensUser << item
+					end
+				else
+					if item.adm_id == obj.adm_id
+						itensUser << item
+					end
 				end
 			end
 		end
@@ -275,9 +282,14 @@ class ApplicationController < ActionController::Base
 
 	def returnNiveisAcesso
 		niveis = Array.new
+		obj = instance_variable_get("@" + controller_name.downcase)
 		Nivelacesso.all.each do |item|
 			if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
 				niveis << item
+			else
+				if item.adm_id == obj.adm_id
+					niveis << item
+				end
 			end
 		end
 		return niveis

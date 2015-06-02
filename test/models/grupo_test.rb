@@ -2,6 +2,7 @@ require 'test_helper'
 
 class GrupoTest < ActiveSupport::TestCase
   def test_grupo_valid
+=begin	
 		grp1 = Grupo.new(:id => grupos(:one).id,
 						:descricao => grupos(:one).descricao,
 						:adm_id => grupos(:one).adm_id)
@@ -9,7 +10,7 @@ class GrupoTest < ActiveSupport::TestCase
 		grp2 = Grupo.new(:id => grupos(:two).id,
 						:descricao => grupos(:two).descricao,
 						:adm_id => grupos(:two).adm_id)
-		
+=end
 
 		Grupo.all.each do |grp|
 			assert grp.valid?, "Grupo: #{grp.id} não é valido, #{grp.errors.full_messages }"	
@@ -27,4 +28,5 @@ class GrupoTest < ActiveSupport::TestCase
 			assert grp.descricao.present?, "Grupo #{grp.id} sem desrição"
 		end
 	end
+
 end

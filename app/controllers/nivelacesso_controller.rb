@@ -3,9 +3,15 @@ class NivelacessoController < ApplicationController
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo?'}}]
 
 	def index
-		respond_to do |format|
-			format.html
-			format.json { render json: GeneralDatatable.new(Nivelacesso, act_columns_final, @@actions, view_context, current_user) }
+		if current_user.user_type != 2
+			respond_to do |format|
+				format.html
+				format.json { render json: GeneralDatatable.new(Nivelacesso, act_columns_final, @@actions, view_context, current_user) }
+			end
+		else
+			respond_to do |format|
+				format.html { redirect_to "/422", notice: "Você não tem permissão para isso!"}
+			end
 		end
 	end
 	def new
@@ -47,7 +53,7 @@ class NivelacessoController < ApplicationController
 		@nivelacesso = Nivelacesso.find(params[:id])
 		@nivelacesso.destroy
 		if @nivelacesso.destroy
-				redirect_to nivelacessos_path, notice: " "
+			redirect_to nivelacessos_path, notice: " "
 		end
 	end
 

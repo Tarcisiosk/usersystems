@@ -1,6 +1,5 @@
 <html lang="en">
 <%= render :partial => "layouts/shared/header"%>
-
 <!-- BEGIN PAGE CONTAINER -->
 <div class="page-container">
 	<!-- BEGIN PAGE HEAD -->
@@ -58,6 +57,7 @@
 														<%= f.text_field :descricao,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
 													</div>
 											 		
+						
 											 		<div class="form-group">
 														<label class="control-label col-md-2">Grupo</label><br><br>
 														<%= f.select(:grupo_id, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
@@ -66,7 +66,7 @@
 															  <% end %>
 														<% end %>
 													</div><br>
-													
+
 													<div class="actions">
 														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
 													</div><br>
@@ -86,6 +86,7 @@
 	</div>
 </div>  
 <!-- END PAGE CONTAINER -->
+
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
@@ -104,6 +105,7 @@
 <script src="../../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
+
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script type="text/javascript" src="../../assets/global/plugins/select2/select2.min.js"></script>
 <script type="text/javascript" src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
@@ -113,10 +115,12 @@
 <script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
 <script type="text/javascript" src="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <!-- END PAGE LEVEL PLUGINS -->
+
 <script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout3/scripts/layout.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout3/scripts/demo.js" type="text/javascript"></script>
 <script src="../../assets/admin/pages/scripts/table-managed.js"></script>
+<script src="../../assets/admin/pages/scripts/components-form-tools.js"></script>
 
 <script>
 jQuery(document).ready(function() {       
@@ -138,9 +142,6 @@ jQuery(document).ready(function() {
 		reader.readAsDataURL(image);
 		console.log(files);
 	});
-
-
-	
 
 	$('[name="emp_link"]').click(function () 
 	{

@@ -44,7 +44,7 @@
 		<div class="container">
 			<!-- BEGIN LOGO -->
 			<div class="page-logo">
-				<a href="/#"><img src="../../assets/admin/layout3/img/logo-default.png" alt="logo" class="logo-default"></a>
+				<a href="/"><img src="../../assets/admin/layout3/img/logo-default.png" alt="logo" class="logo-default"></a>
 			</div>
 			<!-- END LOGO -->
 			<!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -128,9 +128,11 @@
 												<li >
 													<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
 												</li>
-												<li>
-													<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
-												</li>
+												<%if current_user.user_type != 2%>
+													<li>
+														<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
+													</li>
+												<%end%>
 												<li>
 													<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
 												</li>

@@ -123,7 +123,7 @@
 														</div>
 													<% end %>
 
-													<% if current_user.user_type == 1%>
+													<% if current_user.user_type != 2 && returnNiveisAcesso.count > 0 %>
 														<div class="form-group">
 															<label class="control-label col-md-2">Nível de Acesso</label><br><br>
 															<%= f.select(:n_acesso, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>

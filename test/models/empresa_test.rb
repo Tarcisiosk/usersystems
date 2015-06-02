@@ -2,6 +2,7 @@ require 'test_helper'
 
 class EmpresaTest < ActiveSupport::TestCase
   def test_empresa_valid
+=begin
 		emp1 = Empresa.new(:id => empresas(:one).id,
 						:razao_social => empresas(:one).razao_social,
 						:nome_fantasia => empresas(:one).nome_fantasia, 
@@ -11,7 +12,7 @@ class EmpresaTest < ActiveSupport::TestCase
 						:razao_social => empresas(:two).razao_social,
 						:nome_fantasia => empresas(:two).nome_fantasia, 
 						:cnpj => empresas(:two).cnpj)
-		
+=end
 
 		Empresa.all.each do |emp|
 			assert emp.valid?, "Empresa: #{emp.nome_fantasia} não é valida, #{emp.errors.full_messages }"	

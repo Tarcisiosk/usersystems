@@ -1,6 +1,6 @@
 class GrupoController < ApplicationController
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo?'}}]
+				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo e seus subgrupos?'}}]
 
 	def index
 		respond_to do |format|
@@ -54,6 +54,11 @@ class GrupoController < ApplicationController
 
 	def destroy
 		@grupo = Grupo.find(params[:id])
+		Subgrupo.all.each do |item|
+			if item.grupo_id == @grupo.id
+				item.destroy
+			end
+		end
 		@grupo.destroy
 		if @grupo.destroy
 				redirect_to grupos_path, notice: " "
