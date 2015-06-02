@@ -13,12 +13,28 @@ class GeneralDatatable < ApplicationController
 	end
 
 	def as_json(options = {})
+		data2 = Array.new
+		subData2 = Array.new
+		data.each_with_index do |item, index|
+			item.each_with_index do |subitem, subindex|
+				if @klass.name == "Subgrupo"
+					if subitem.is_a?(Integer)
+						subData2[subindex] = Grupo.find_by(id: subitem).descricao
+					else
+						subData2 = item
+					end
+				else
+					subData2 = item
+				end
+			end
+			data2[index] = subData2
+		end
 		{
 			sEcho: params[:sEcho].to_i,
 			iTotalRecords:  filtered_list.count,
 			iTotalDisplayRecords: records.total_entries,
 			aaColumns: columnsDef,
-			aaData: data
+			aaData: data2
 		}
 	end
 

@@ -50,23 +50,14 @@ class UserController < ApplicationController
 		#@user.empresas.each do |item|
 		# 	puts "Empresas ligadas a esse usuario: #{item.nome_fantasia}"
 		#end
-
 	end
 
 	def update
 		@user = User.find(params[:id]) 
 		#se usuario a editar for master não permite alterar o tipo / Se o usuario logado não for master não permite mudar o tipo de outros usuarios
 		if current_user.adm_id == @user.adm_id || current_user.id == @user.adm_id || current_user.user_type == 0
-			if @user.id == 1 || current_user.user_type != 0
-				respond_to do |format|
-					if @user.update(user_params.except(:user_type))
-						format.html { redirect_to users_path  }
-						format.json { render :show, status: :ok, location: @user }
-					else
-						format.html { render :edit }
-						format.json { render json: @user.errors, status: :unprocessable_entity }
-					end
-				end
+			if @user.id == 1 || (current_user.user_type == 2 && @user.user_type != 2) || (current_user.user_type == 2)
+				redirect_to "/422", notice: "Você não tem permissão para isso!"
 			else
 				respond_to do |format|
 					if @user.update(user_params)
@@ -79,15 +70,15 @@ class UserController < ApplicationController
 				end
 			end
 		else
-			redirect_to users_path
+			redirect_to "/422", notice: "Você não tem permissão para isso!"
 		end
 	end
 
 	def destroy
 		@user = User.find(params[:id])
 		#se usuario for master não pode ser excluido, se usuario for comum não pode excluir
-		if @user.id == 1 || current_user.user_type == 2
- 			redirect_to users_path, notice: "Você não tem permissão para isso!"
+		if @user.id == 1 || (current_user.user_type == 2 && @user.user_type != 2) || ((current_user.adm_id != @user.adm_id) && current_user.user_type != 0)
+ 			redirect_to "/422", notice: "Você não tem permissão para isso!"
  		else
 			@user = User.find(params[:id])
 			@user.destroy

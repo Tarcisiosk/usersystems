@@ -49,14 +49,14 @@
 										<%= f.text_field :descricao,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
 									</div>
 
-										<div class="form-group">
-											<label class="control-label col-md-2">Grupo</label><br><br>
-											<%= f.select(:grupo_id, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
-												  <% returnItensUsuario.each do |c| %>
-												    <%= content_tag(:option, c.descricao, value: c.id) %>
-												  <% end %>
-											<% end %>
-										</div><br>
+									<div class="form-group">
+										<label class="control-label col-md-2">Grupo</label><br><br>
+										<%= f.select(:grupo_id, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
+											  <% returnItensUsuario.each do |c| %>
+											    	<%= content_tag(:option, c.descricao, value: c.id) %>
+											  <% end %>
+										<% end %>
+									</div><br>
 								
 									<div class="actions">
 											<%= f.submit "Gravar", :class => "btn green-meadow pull-left"%>

@@ -27,7 +27,7 @@
 												<div class="caption">
 													<span class="caption-subject font-green-sharp bold uppercase">Colunas Inativas</span>
 													<div>
-														<%=select_tag 'I_columns[]',  options_for_select(inact_columns.collect{|u| [u[:sTitle], u.to_s]}), {:class=> 'form-control', :id=>"Inativas", :size => "5", :disabled=>false} %>
+														<%=select_tag 'I_columns[]', options_for_select(inact_columns.collect{|u| [u[:sTitle], u.to_s]}), {:class=> 'form-control', :id=>"Inativas", :size => "5", :disabled=>false} %>
 														
 													</div>
 												</div>
@@ -38,7 +38,7 @@
 												<div class="caption">
 													<span class="caption-subject font-green-sharp bold uppercase">Colunas Ativas</span>
 													<div>
-														<%=select_tag 'A_columns[]',  options_for_select(act_columns.collect{|u| [u[:sTitle], u.to_s]}) , {:class=> 'form-control', :id=>"Ativas",  :size => "5", :disabled=>false}%>
+														<%=select_tag 'A_columns[]', options_for_select(act_columns.collect{|u| [u[:sTitle], u.to_s]}) , {:class=> 'form-control', :id=>"Ativas",  :size => "5", :disabled=>false}%>
 													</div>
 												</div>
 											</div>
@@ -49,7 +49,6 @@
 							<div class="modal-footer">
 								<button type="button" class="btn blue" id="btnsave">Salvar</button>
 								<button type="button" class="btn default" data-dismiss="modal">Cancelar</button>
-
 							</div>
 						</div>
 						<!-- /.modal-content -->
