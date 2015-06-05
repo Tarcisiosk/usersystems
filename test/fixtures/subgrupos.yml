@@ -1,13 +1,22 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  id: 1
-  descricao: Sub Grupo 1
-  grupo_id: 1
-  adm_id: 2
-
-two:
-  id: 2
-  descricao: Sub Grupo 2
-  grupo_id: 2
-  adm_id: 2
+---
+subgrupos_001:
+  id: '22'
+  descricao: Sub Grupo Tarcisio 1
+  grupo_id: '22'
+  adm_id: '2'
+  created_at: '2015-06-02 12:55:12.821718'
+  updated_at: '2015-06-02 15:13:01.787676'
+subgrupos_002:
+  id: '23'
+  descricao: Sub Grupo Tarcisio 2
+  grupo_id: '22'
+  adm_id: '2'
+  created_at: '2015-06-02 17:50:52.963396'
+  updated_at: '2015-06-02 17:56:18.270002'
+subgrupos_003:
+  id: '24'
+  descricao: Sub Grupo Tarcisio 3
+  grupo_id: '22'
+  adm_id: '2'
+  created_at: '2015-06-02 17:51:06.716182'
+  updated_at: '2015-06-02 17:56:23.163282'

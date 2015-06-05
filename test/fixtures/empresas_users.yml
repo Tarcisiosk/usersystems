@@ -1,0 +1,17 @@
+---
+empresas_users_001:
+  id: '55'
+  user_id: '12'
+  empresa_id: '4'
+empresas_users_002:
+  id: '56'
+  user_id: '12'
+  empresa_id: '4'
+empresas_users_003:
+  id: '57'
+  user_id: '13'
+  empresa_id: '5'
+empresas_users_004:
+  id: '58'
+  user_id: '13'
+  empresa_id: '5'

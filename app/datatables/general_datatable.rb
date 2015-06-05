@@ -31,7 +31,7 @@ class GeneralDatatable < ApplicationController
 		end
 		{
 			sEcho: params[:sEcho].to_i,
-			iTotalRecords:  filtered_list.count,
+			iTotalRecords: filtered_list.count,
 			iTotalDisplayRecords: records.total_entries,
 			aaColumns: columnsDef,
 			aaData: data2

@@ -1,37 +1,133 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-# This model initially had no columns defined.  If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: 
-  id: 1
-  fullname: Fulano do Teste
-  email: FT@hotmail.com
-  encrypted_password: 12345678
-  user_type: 0
-  adm_id: 1
-
-two:
-  id: 2 
-  fullname: Beltrano do Teste
-  email: BT@hotmail.com
-  encrypted_password: 12345678
-  user_type: 1
-  adm_id: 2
-
-three: 
-  id: 3
-  fullname: Ciclano do Teste
-  email: CT@hotmail.com
-  encrypted_password: 12345678
-  user_type: 2
-  adm_id: 2
-
-four: 
-  id: 4
-  fullname: KIEN do Teste
-  email: KT@hotmail.com
-  encrypted_password: 12345678
-  user_type: 2
-  adm_id: 2
+---
+users_001:
+  id: '11'
+  email: admteste@hotmail.com
+  encrypted_password: "$2a$10$j19px35yXWm6.HiL/TXYjud4P6.kq5eiKaBHKLgnlg3QyTkDoGPqi"
+  reset_password_token: 
+  reset_password_sent_at: 
+  remember_created_at: 
+  sign_in_count: '1'
+  current_sign_in_at: '2015-05-21 13:55:58.660848'
+  last_sign_in_at: '2015-05-21 13:55:58.660848'
+  current_sign_in_ip: "::1"
+  last_sign_in_ip: "::1"
+  created_at: '2015-05-21 13:55:46.450149'
+  updated_at: '2015-05-21 13:55:58.661848'
+  fullname: Adm Teste
+  photo_file_name: 
+  photo_content_type: 
+  photo_file_size: 
+  photo_updated_at: 
+  user_type: '1'
+  adm_id: '11'
+  n_acesso: Padrão
+users_002:
+  id: '13'
+  email: usuarioaa@hotmail.com
+  encrypted_password: "$2a$10$3cCZh2OUCG65KrvSCPq/WejjRqIVrnPh7HJuJtvAIo5SvXSszesu2"
+  reset_password_token: 
+  reset_password_sent_at: 
+  remember_created_at: 
+  sign_in_count: '0'
+  current_sign_in_at: 
+  last_sign_in_at: 
+  current_sign_in_ip: 
+  last_sign_in_ip: 
+  created_at: '2015-05-21 13:56:43.871434'
+  updated_at: '2015-05-21 13:56:43.940438'
+  fullname: usuario AA
+  photo_file_name: 
+  photo_content_type: 
+  photo_file_size: 
+  photo_updated_at: 
+  user_type: '2'
+  adm_id: '11'
+  n_acesso: Padrão
+users_003:
+  id: '12'
+  email: usuarioa@hotmail.com
+  encrypted_password: "$2a$10$hBpLYLbA2L7BVJ/6TAHrz.plF1KWxap/GyKcFI4dMwWhy5VXAOkoe"
+  reset_password_token: 
+  reset_password_sent_at: 
+  remember_created_at: 
+  sign_in_count: '1'
+  current_sign_in_at: '2015-05-21 13:58:03.36298'
+  last_sign_in_at: '2015-05-21 13:58:03.36298'
+  current_sign_in_ip: "::1"
+  last_sign_in_ip: "::1"
+  created_at: '2015-05-21 13:56:24.556329'
+  updated_at: '2015-05-21 13:58:03.364981'
+  fullname: usuario A
+  photo_file_name: 
+  photo_content_type: 
+  photo_file_size: 
+  photo_updated_at: 
+  user_type: '2'
+  adm_id: '11'
+  n_acesso: Padrão
+users_004:
+  id: '1'
+  email: master@hotmail.com
+  encrypted_password: "$2a$10$eZybgPxAeR/JkaL7OGwUW.y8ZXKiPWt3xuKJjuUBS.JJ7n6etjEqe"
+  reset_password_token: 
+  reset_password_sent_at: 
+  remember_created_at: 
+  sign_in_count: '15'
+  current_sign_in_at: '2015-06-02 15:09:09.253375'
+  last_sign_in_at: '2015-06-02 14:42:06.912583'
+  current_sign_in_ip: "::1"
+  last_sign_in_ip: "::1"
+  created_at: '2015-05-26 14:48:34.046292'
+  updated_at: '2015-06-02 15:09:09.256376'
+  fullname: Master
+  photo_file_name: 
+  photo_content_type: 
+  photo_file_size: 
+  photo_updated_at: 
+  user_type: '0'
+  adm_id: '1'
+  n_acesso: Padrão
+users_005:
+  id: '2'
+  email: tarcisioskora@hotmail.com
+  encrypted_password: "$2a$10$bm65E75VQdtSyZX5Q8bT7uaqyvJb5ZdEXCEj9CR/0WxCaWqFAvUqS"
+  reset_password_token: 
+  reset_password_sent_at: 
+  remember_created_at: 
+  sign_in_count: '15'
+  current_sign_in_at: '2015-06-03 12:36:19.996365'
+  last_sign_in_at: '2015-06-02 18:01:18.443171'
+  current_sign_in_ip: "::1"
+  last_sign_in_ip: "::1"
+  created_at: '2015-05-29 17:23:44.23878'
+  updated_at: '2015-06-03 12:36:20.000365'
+  fullname: Tarcisio Skora Neto
+  photo_file_name: 
+  photo_content_type: 
+  photo_file_size: 
+  photo_updated_at: 
+  user_type: '1'
+  adm_id: '2'
+  n_acesso: Padrão
+users_006:
+  id: '23'
+  email: usuariot@hotmail.com
+  encrypted_password: "$2a$10$9rnnVf9aHfVb39dUMJDlLeimunp/PidEr7DlKTWsTCpdd8pUlcWnW"
+  reset_password_token: 
+  reset_password_sent_at: 
+  remember_created_at: 
+  sign_in_count: '7'
+  current_sign_in_at: '2015-06-03 13:06:20.560351'
+  last_sign_in_at: '2015-06-02 16:44:26.362375'
+  current_sign_in_ip: "::1"
+  last_sign_in_ip: "::1"
+  created_at: '2015-05-29 17:31:55.827897'
+  updated_at: '2015-06-03 13:06:20.562351'
+  fullname: Usuario T
+  photo_file_name: 
+  photo_content_type: 
+  photo_file_size: 
+  photo_updated_at: 
+  user_type: '2'
+  adm_id: '2'
+  n_acesso: Estagiário

@@ -1,0 +1,277 @@
+---
+settings_001:
+  id: '15'
+  var: columns_user
+  value: |
+    ---
+    col:
+    - :sTitle: Nome
+      :data_name: fullname
+      :bDefault: true
+    - :sTitle: Email
+      :data_name: email
+      :bDefault: true
+    - :sTitle: Nível de Acesso
+      :data_name: n_acesso
+      :bDefault: false
+  target_id: '2'
+  target_type: User
+  created_at: '2015-05-29 17:48:10.390639'
+  updated_at: '2015-05-29 17:48:10.390639'
+settings_002:
+  id: '14'
+  var: last_empresa
+  value: "---\nedited: !ruby/object:Empresa\n  raw_attributes:\n    id: '3'\n    razao_social:
+    Empresa 3\n    nome_fantasia: Empresa Maravilha 3\n    cnpj: '00000000000003'\n
+    \   insc_estadual: ''\n    insc_municipal: ''\n    created_at: '2015-05-21 13:53:19.816762'\n
+    \   updated_at: '2015-05-21 13:53:19.881766'\n    rua: RUA\n    num_rua: '123'\n
+    \   complemento: APTO 1\n    bairro: Mercês\n    uf: PR\n    cep: 82000-000\n
+    \   adm_id: '2'\n    cidade: Curitiba\n  attributes: !ruby/object:ActiveRecord::AttributeSet\n
+    \   attributes: !ruby/object:ActiveRecord::LazyAttributeHash\n      types:\n        id:
+    &3 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Integer\n          precision:
+    \n          scale: \n          limit: \n          range: !ruby/range\n            begin:
+    -2147483648\n            end: 2147483648\n            excl: true\n        razao_social:
+    &1 !ruby/object:ActiveRecord::Type::String\n          precision: \n          scale:
+    \n          limit: \n        nome_fantasia: *1\n        cnpj: *1\n        insc_estadual:
+    *1\n        insc_municipal: *1\n        created_at: !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \         subtype: &2 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::DateTime\n
+    \           precision: \n            scale: \n            limit: \n        updated_at:
+    !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \         subtype: *2\n        rua: *1\n        num_rua: *1\n        complemento:
+    *1\n        bairro: *1\n        uf: *1\n        cep: *1\n        adm_id: *3\n
+    \       cidade: *1\n      values:\n        id: '3'\n        razao_social: Empresa
+    3\n        nome_fantasia: Empresa Maravilha 3\n        cnpj: '00000000000003'\n
+    \       insc_estadual: ''\n        insc_municipal: ''\n        created_at: '2015-05-21
+    13:53:19.816762'\n        updated_at: '2015-05-21 13:53:19.881766'\n        rua:
+    RUA\n        num_rua: '123'\n        complemento: APTO 1\n        bairro: Mercês\n
+    \       uf: PR\n        cep: 82000-000\n        adm_id: '2'\n        cidade: Curitiba\n
+    \     additional_types: {}\n      materialized: true\n      delegate_hash:\n        id:
+    !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name: id\n          value_before_type_cast:
+    '3'\n          type: *3\n          value: 3\n        razao_social: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: razao_social\n          value_before_type_cast: Empresa 3\n          type:
+    *1\n        nome_fantasia: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: nome_fantasia\n          value_before_type_cast: Empresa Maravilha
+    3\n          type: *1\n        cnpj: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: cnpj\n          value_before_type_cast: '00000000000003'\n          type:
+    *1\n        insc_estadual: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: insc_estadual\n          value_before_type_cast: ''\n          type:
+    *1\n        insc_municipal: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: insc_municipal\n          value_before_type_cast: ''\n          type:
+    *1\n        created_at: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    created_at\n          value_before_type_cast: '2015-05-21 13:53:19.816762'\n          type:
+    !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \           subtype: *2\n        updated_at: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: updated_at\n          value_before_type_cast: '2015-05-21 13:53:19.881766'\n
+    \         type: !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \           subtype: *2\n        rua: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: rua\n          value_before_type_cast: RUA\n          type: *1\n
+    \       num_rua: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    num_rua\n          value_before_type_cast: '123'\n          type: *1\n        complemento:
+    !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name: complemento\n
+    \         value_before_type_cast: APTO 1\n          type: *1\n        bairro:
+    !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name: bairro\n          value_before_type_cast:
+    Mercês\n          type: *1\n        uf: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: uf\n          value_before_type_cast: PR\n          type: *1\n
+    \       cep: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    cep\n          value_before_type_cast: 82000-000\n          type: *1\n        adm_id:
+    !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name: adm_id\n          value_before_type_cast:
+    '2'\n          type: *3\n        cidade: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: cidade\n          value_before_type_cast: Curitiba\n          type:
+    *1\n  new_record: false\n"
+  target_id: '2'
+  target_type: User
+  created_at: '2015-05-29 17:24:35.508712'
+  updated_at: '2015-06-03 13:02:04.793722'
+settings_003:
+  id: '16'
+  var: last_empresa
+  value: "---\nedited: !ruby/object:Empresa\n  raw_attributes:\n    id: '1'\n    razao_social:
+    Empresa 1\n    nome_fantasia: Empresa Maravilha 1\n    cnpj: '00000000000001'\n
+    \   insc_estadual: ''\n    insc_municipal: ''\n    created_at: '2015-05-18 14:33:21.767477'\n
+    \   updated_at: '2015-05-29 17:36:15.697761'\n    rua: ''\n    num_rua: ''\n    complemento:
+    ''\n    bairro: ''\n    uf: PR\n    cep: ''\n    adm_id: '2'\n    cidade: ''\n
+    \ attributes: !ruby/object:ActiveRecord::AttributeSet\n    attributes: !ruby/object:ActiveRecord::LazyAttributeHash\n
+    \     types:\n        id: &3 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Integer\n
+    \         precision: \n          scale: \n          limit: \n          range:
+    !ruby/range\n            begin: -2147483648\n            end: 2147483648\n            excl:
+    true\n        razao_social: &1 !ruby/object:ActiveRecord::Type::String\n          precision:
+    \n          scale: \n          limit: \n        nome_fantasia: *1\n        cnpj:
+    *1\n        insc_estadual: *1\n        insc_municipal: *1\n        created_at:
+    !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \         subtype: &2 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::DateTime\n
+    \           precision: \n            scale: \n            limit: \n        updated_at:
+    !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \         subtype: *2\n        rua: *1\n        num_rua: *1\n        complemento:
+    *1\n        bairro: *1\n        uf: *1\n        cep: *1\n        adm_id: *3\n
+    \       cidade: *1\n      values:\n        id: '1'\n        razao_social: Empresa
+    1\n        nome_fantasia: Empresa Maravilha 1\n        cnpj: '00000000000001'\n
+    \       insc_estadual: ''\n        insc_municipal: ''\n        created_at: '2015-05-18
+    14:33:21.767477'\n        updated_at: '2015-05-29 17:36:15.697761'\n        rua:
+    ''\n        num_rua: ''\n        complemento: ''\n        bairro: ''\n        uf:
+    PR\n        cep: ''\n        adm_id: '2'\n        cidade: ''\n      additional_types:
+    {}\n      materialized: true\n      delegate_hash:\n        id: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: id\n          value_before_type_cast: '1'\n          type: *3\n
+    \         value: 1\n        razao_social: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: razao_social\n          value_before_type_cast: Empresa 1\n          type:
+    *1\n        nome_fantasia: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: nome_fantasia\n          value_before_type_cast: Empresa Maravilha
+    1\n          type: *1\n        cnpj: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: cnpj\n          value_before_type_cast: '00000000000001'\n          type:
+    *1\n        insc_estadual: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: insc_estadual\n          value_before_type_cast: ''\n          type:
+    *1\n        insc_municipal: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: insc_municipal\n          value_before_type_cast: ''\n          type:
+    *1\n        created_at: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    created_at\n          value_before_type_cast: '2015-05-18 14:33:21.767477'\n          type:
+    !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \           subtype: *2\n        updated_at: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: updated_at\n          value_before_type_cast: '2015-05-29 17:36:15.697761'\n
+    \         type: !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \           subtype: *2\n        rua: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: rua\n          value_before_type_cast: ''\n          type: *1\n
+    \       num_rua: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    num_rua\n          value_before_type_cast: ''\n          type: *1\n        complemento:
+    !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name: complemento\n
+    \         value_before_type_cast: ''\n          type: *1\n        bairro: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: bairro\n          value_before_type_cast: ''\n          type:
+    *1\n        uf: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    uf\n          value_before_type_cast: PR\n          type: *1\n        cep: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: cep\n          value_before_type_cast: ''\n          type: *1\n
+    \       adm_id: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    adm_id\n          value_before_type_cast: '2'\n          type: *3\n        cidade:
+    !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name: cidade\n          value_before_type_cast:
+    ''\n          type: *1\n  new_record: false\n"
+  target_id: '23'
+  target_type: User
+  created_at: '2015-06-02 12:57:34.815839'
+  updated_at: '2015-06-02 18:00:41.806076'
+settings_004:
+  id: '12'
+  var: last_empresa
+  value: "---\nedited: !ruby/object:Empresa\n  raw_attributes:\n    id: '5'\n    razao_social:
+    Empresa AA\n    nome_fantasia: Empresa MAA\n    cnpj: '00000000000011'\n    insc_estadual:
+    ''\n    insc_municipal: ''\n    created_at: '2015-05-21 13:57:42.20577'\n    updated_at:
+    '2015-05-21 13:57:42.239772'\n    rua: ''\n    num_rua: ''\n    complemento: ''\n
+    \   bairro: ''\n    uf: AC\n    cep: ''\n    adm_id: '11'\n    cidade: ''\n  attributes:
+    !ruby/object:ActiveRecord::AttributeSet\n    attributes: !ruby/object:ActiveRecord::LazyAttributeHash\n
+    \     types:\n        id: &3 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Integer\n
+    \         precision: \n          scale: \n          limit: \n          range:
+    !ruby/range\n            begin: -2147483648\n            end: 2147483648\n            excl:
+    true\n        razao_social: &1 !ruby/object:ActiveRecord::Type::String\n          precision:
+    \n          scale: \n          limit: \n        nome_fantasia: *1\n        cnpj:
+    *1\n        insc_estadual: *1\n        insc_municipal: *1\n        created_at:
+    !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \         subtype: &2 !ruby/object:ActiveRecord::ConnectionAdapters::PostgreSQL::OID::DateTime\n
+    \           precision: \n            scale: \n            limit: \n        updated_at:
+    !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \         subtype: *2\n        rua: *1\n        num_rua: *1\n        complemento:
+    *1\n        bairro: *1\n        uf: *1\n        cep: *1\n        adm_id: *3\n
+    \       cidade: *1\n      values:\n        id: '5'\n        razao_social: Empresa
+    AA\n        nome_fantasia: Empresa MAA\n        cnpj: '00000000000011'\n        insc_estadual:
+    ''\n        insc_municipal: ''\n        created_at: '2015-05-21 13:57:42.20577'\n
+    \       updated_at: '2015-05-21 13:57:42.239772'\n        rua: ''\n        num_rua:
+    ''\n        complemento: ''\n        bairro: ''\n        uf: AC\n        cep:
+    ''\n        adm_id: '11'\n        cidade: ''\n      additional_types: {}\n      materialized:
+    true\n      delegate_hash:\n        id: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: id\n          value_before_type_cast: '5'\n          type: *3\n
+    \         value: 5\n        razao_social: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: razao_social\n          value_before_type_cast: Empresa AA\n          type:
+    *1\n        nome_fantasia: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: nome_fantasia\n          value_before_type_cast: Empresa MAA\n
+    \         type: *1\n        cnpj: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: cnpj\n          value_before_type_cast: '00000000000011'\n          type:
+    *1\n        insc_estadual: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: insc_estadual\n          value_before_type_cast: ''\n          type:
+    *1\n        insc_municipal: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: insc_municipal\n          value_before_type_cast: ''\n          type:
+    *1\n        created_at: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    created_at\n          value_before_type_cast: '2015-05-21 13:57:42.20577'\n          type:
+    !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \           subtype: *2\n        updated_at: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: updated_at\n          value_before_type_cast: '2015-05-21 13:57:42.239772'\n
+    \         type: !ruby/object:ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter\n
+    \           subtype: *2\n        rua: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: rua\n          value_before_type_cast: ''\n          type: *1\n
+    \       num_rua: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    num_rua\n          value_before_type_cast: ''\n          type: *1\n        complemento:
+    !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name: complemento\n
+    \         value_before_type_cast: ''\n          type: *1\n        bairro: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: bairro\n          value_before_type_cast: ''\n          type:
+    *1\n        uf: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    uf\n          value_before_type_cast: AC\n          type: *1\n        cep: !ruby/object:ActiveRecord::Attribute::FromDatabase\n
+    \         name: cep\n          value_before_type_cast: ''\n          type: *1\n
+    \       adm_id: !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name:
+    adm_id\n          value_before_type_cast: '11'\n          type: *3\n        cidade:
+    !ruby/object:ActiveRecord::Attribute::FromDatabase\n          name: cidade\n          value_before_type_cast:
+    ''\n          type: *1\n  new_record: false\n"
+  target_id: '1'
+  target_type: User
+  created_at: '2015-05-29 13:22:29.226857'
+  updated_at: '2015-06-02 15:13:19.17067'
+settings_005:
+  id: '11'
+  var: columns_subgrupo
+  value: |
+    ---
+    col:
+    - :sTitle: Descrição
+      :data_name: descricao
+      :bDefault: true
+    - :sTitle: Grupo
+      :data_name: grupo_id
+      :bDefault: false
+  target_id: '1'
+  target_type: User
+  created_at: '2015-05-27 18:07:03.015984'
+  updated_at: '2015-05-27 18:07:03.015984'
+settings_006:
+  id: '18'
+  var: columns_subgrupo
+  value: |
+    ---
+    col:
+    - :sTitle: Descrição
+      :data_name: descricao
+      :bDefault: true
+    - :sTitle: Grupo
+      :data_name: grupo_id
+      :bDefault: false
+  target_id: '23'
+  target_type: User
+  created_at: '2015-06-02 16:44:33.172765'
+  updated_at: '2015-06-02 16:44:33.172765'
+settings_007:
+  id: '17'
+  var: columns_user
+  value: |
+    ---
+    col:
+    - :sTitle: Nome
+      :data_name: fullname
+      :bDefault: true
+    - :sTitle: Email
+      :data_name: email
+      :bDefault: true
+    - :sTitle: Nível de Acesso
+      :data_name: n_acesso
+      :bDefault: false
+  target_id: '1'
+  target_type: User
+  created_at: '2015-06-02 13:24:06.717891'
+  updated_at: '2015-06-02 13:24:06.717891'
+settings_008:
+  id: '19'
+  var: columns_subgrupo
+  value: |
+    ---
+    col:
+    - :sTitle: Descrição
+      :data_name: descricao
+      :bDefault: true
+    - :sTitle: Grupo
+      :data_name: grupo_id
+      :bDefault: false
+  target_id: '2'
+  target_type: User
+  created_at: '2015-06-02 18:02:26.571068'
+  updated_at: '2015-06-02 18:24:27.83064'

@@ -27,6 +27,12 @@ GIT
       mime-types
       mimemagic (= 0.3.0)
 
+GIT
+  remote: git://github.com/vanboom/yaml_dump.git
+  revision: ed27df9f420f60af559cc1ba7a1702aa231473d0
+  specs:
+    yaml_dump (0.0.7)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -274,3 +280,4 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
   will_paginate
+  yaml_dump!

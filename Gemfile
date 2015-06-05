@@ -35,6 +35,7 @@ gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-ra
 gem 'ajax-datatables-rails'
 
 gem 'sprockets-rails', :require => 'sprockets/railtie'
+gem 'yaml_dump', github: 'vanboom/yaml_dump'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

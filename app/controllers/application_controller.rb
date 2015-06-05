@@ -234,7 +234,7 @@ class ApplicationController < ActionController::Base
 				default_content[index] = item
 			end
 		end
-		default_content.compact
+		(default_content.compact).sort!
 	end
 
 	#usuarios para o adm ligar a empresas

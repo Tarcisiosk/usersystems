@@ -1,13 +1,154 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  id: 1
-  razao_social: Emp1
-  nome_fantasia: EmpM1
-  cnpj: "10000000000001"
-
-two:
-  id: 2
-  razao_social: Emp2
-  nome_fantasia: EmpM2
-  cnpj: "20000000000002"
+---
+empresas_001:
+  id: '3'
+  razao_social: Empresa 3
+  nome_fantasia: Empresa Maravilha 3
+  cnpj: '00000000000003'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-21 13:53:19.816762'
+  updated_at: '2015-05-21 13:53:19.881766'
+  rua: RUA
+  num_rua: '123'
+  complemento: APTO 1
+  bairro: Mercês
+  uf: PR
+  cep: 82000-000
+  adm_id: '2'
+  cidade: Curitiba
+empresas_002:
+  id: '4'
+  razao_social: Empresa A
+  nome_fantasia: Empresa MA
+  cnpj: '00000000000010'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-21 13:57:15.26823'
+  updated_at: '2015-05-21 13:57:15.345234'
+  rua: ''
+  num_rua: ''
+  complemento: ''
+  bairro: ''
+  uf: AC
+  cep: ''
+  adm_id: '11'
+  cidade: ''
+empresas_003:
+  id: '5'
+  razao_social: Empresa AA
+  nome_fantasia: Empresa MAA
+  cnpj: '00000000000011'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-21 13:57:42.20577'
+  updated_at: '2015-05-21 13:57:42.239772'
+  rua: ''
+  num_rua: ''
+  complemento: ''
+  bairro: ''
+  uf: AC
+  cep: ''
+  adm_id: '11'
+  cidade: ''
+empresas_004:
+  id: '6'
+  razao_social: Empresa 4
+  nome_fantasia: Empresa Maravilha 4
+  cnpj: '00000000000004'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-28 13:51:03.660093'
+  updated_at: '2015-05-28 13:51:03.660093'
+  rua: ''
+  num_rua: ''
+  complemento: ''
+  bairro: ''
+  uf: RJ
+  cep: ''
+  adm_id: '2'
+  cidade: ''
+empresas_005:
+  id: '7'
+  razao_social: Empresa 5
+  nome_fantasia: Empresa Maravilha 5
+  cnpj: '00000000000005'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-28 13:54:58.94355'
+  updated_at: '2015-05-28 13:54:58.94355'
+  rua: ''
+  num_rua: ''
+  complemento: ''
+  bairro: ''
+  uf: AC
+  cep: ''
+  adm_id: '2'
+  cidade: ''
+empresas_006:
+  id: '9'
+  razao_social: Empresa 6
+  nome_fantasia: Empresa Maravilha 6
+  cnpj: '00000000000006'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-28 13:59:43.321816'
+  updated_at: '2015-05-28 13:59:43.416821'
+  rua: ''
+  num_rua: ''
+  complemento: ''
+  bairro: ''
+  uf: AC
+  cep: ''
+  adm_id: '2'
+  cidade: ''
+empresas_007:
+  id: '8'
+  razao_social: Empresa 7
+  nome_fantasia: Empresa Maravilha 7
+  cnpj: '00000000000007'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-28 13:56:56.096251'
+  updated_at: '2015-05-29 17:24:41.078031'
+  rua: ''
+  num_rua: ''
+  complemento: ''
+  bairro: ''
+  uf: AC
+  cep: ''
+  adm_id: '2'
+  cidade: ''
+empresas_008:
+  id: '1'
+  razao_social: Empresa 1
+  nome_fantasia: Empresa Maravilha 1
+  cnpj: '00000000000001'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-18 14:33:21.767477'
+  updated_at: '2015-05-29 17:36:15.697761'
+  rua: ''
+  num_rua: ''
+  complemento: ''
+  bairro: ''
+  uf: PR
+  cep: ''
+  adm_id: '2'
+  cidade: ''
+empresas_009:
+  id: '2'
+  razao_social: Empresa 2
+  nome_fantasia: Empresa Maravilha 2
+  cnpj: '00000000000002'
+  insc_estadual: ''
+  insc_municipal: ''
+  created_at: '2015-05-18 14:34:47.913404'
+  updated_at: '2015-05-29 17:36:23.385201'
+  rua: ''
+  num_rua: ''
+  complemento: ''
+  bairro: ''
+  uf: PI
+  cep: ''
+  adm_id: '2'
+  cidade: ''
