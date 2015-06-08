@@ -159,6 +159,7 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+
 	protected
 	#configurações das tables e dados enviados.
 	#colunas ativas
