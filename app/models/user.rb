@@ -23,7 +23,7 @@ class User < AbstractRecord
 		end
 
  		has_and_belongs_to_many :empresas
-
+		has_one :nivelacesso
 
 		devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 	

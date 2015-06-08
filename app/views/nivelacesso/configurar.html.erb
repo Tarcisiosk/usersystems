@@ -1,0 +1,227 @@
+<html lang="en">
+<%= render :partial => "layouts/shared/header"%>
+
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						 <%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Nivel Acesso", nivelacessos_path, 'data-no-turbolink' => true%>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						configurar
+					</li>
+				</ul>
+
+				<div class="col-md-12">
+					<div class="profile-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet light">
+								 	<div class="portlet-title tabbable-line">
+										<div class="caption caption-md">
+											<i class="icon-globe theme-font hide"></i>
+												<span class="caption-subject font-blue-madison bold uppercase">Configurar Nivel de Acesso</span>
+											<i class="fa fa-pencil"></i>
+										</div>
+									</div>
+									<div class="portlet-body">
+										<div class="tab-content">
+											<div class="tab-pane active" id="tab_1_1">
+												<%= form_for((@nivelacesso), url: nivelacesso_path(@nivelacesso), html: { method: :put }) do |f|%>
+													<% if @nivelacesso.errors.any? %>
+														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+															<ul >
+																<% @nivelacesso.errors.full_messages.each do |message| %>
+																 <li><%= message %></li>
+															 <% end %>
+															</ul>
+														</div>
+
+													<% end %>
+
+														<div class="portlet-body">
+															<table class="table table-striped table-bordered table-hover" id="conf_acesso_table">
+																<thead>
+																	<tr>
+																		<th>
+																		 	Módulo
+																		</th>
+																		<th>
+																		 	Ação
+																		</th>
+																		<th class="hidden-xs">
+																			Descrição
+																		</th>
+																		<th width="80px;" bSortable="false">
+																			Permissão
+																		</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<% @nivelacesso.settings(:acesso).modulos.each do |value|%>
+																		<%value.each_with_index do |subvalue, id|%>
+																			<%unless id == 0%>
+																				<%subvalue.each_with_index do |subsubvalue, idx|%>
+																					<tr>
+																						<%subsubvalue.each_with_index do |finalvalue, index|%>
+																							<%unless !!finalvalue == finalvalue%>
+																								<td>
+																									<%=finalvalue%>
+																								</td>
+																							<%else%>
+																								<%if finalvalue == true%>
+																									<td>
+																									 	<input type="checkbox" checked name=<%=subsubvalue[0]%> id=<%=subsubvalue[1]%>>
+																									</td>
+																								<%else%>
+																									<td>
+																									 	<input type="checkbox" name=<%=subsubvalue[0]%> id=<%=subsubvalue[1]%>>
+																									</td>
+																								<%end%>
+																							<%end%>
+																						<%end%>
+																					</tr>
+																				<%end%>
+																			<%end%>
+																		<%end%>
+																	<%end%>
+																</tbody>
+															</table>
+														</div>
+														<div class="actions">
+															<left><%= f.submit "Salvar", :class => "btn yellow" %></left>
+														</div><br>
+													<%= link_to "Voltar", nivelacessos_path, :class => "btn default ", 'data-no-turbolink' => true %>
+												<% end %>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> 
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE CONTENT -->
+	</div>
+</div>  
+<!-- END PAGE CONTAINER -->
+<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+<!-- BEGIN CORE PLUGINS -->
+<!--[if lt IE 9]>
+<script src="../../assets/global/plugins/respond.min.js"></script>
+<script src="../../assets/global/plugins/excanvas.min.js"></script> 
+<![endif]-->
+<script src="../../assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery.maskedinput.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="../../assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="../../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="../../assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<script src="../../assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="../../assets/admin/pages/scripts/components-form-tools.js"></script>
+
+<!-- END PAGE LEVEL PLUGINS -->
+<script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="../../assets/admin/layout3/scripts/layout.js" type="text/javascript"></script>
+<script src="../../assets/admin/layout3/scripts/demo.js" type="text/javascript"></script>
+<script src="../../assets/admin/pages/scripts/table-managed.js"></script>
+
+<script>
+jQuery(document).ready(function() {       
+	 // initiate layout and plugins
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+	TableManaged.init();
+	//ComponentsFormTools.init();
+	$('#conf_acesso_table').dataTable
+	({
+        "scroll": false,
+        "scrollCollapse": false,
+		"bAutoWidth": true,
+		"columnDefs": [{"targets": 3,
+					     "searchable": false,
+					     "orderable": false }]
+    });
+
+	$('[name="emp_link"]').click(function () 
+	{
+		var id = $(this).attr('value');
+		$.ajax({
+			type: 'post',
+			url: '/users/set_current_emp',
+			data: {emp_id : id}
+		});
+	  	window.location.reload();		
+	});
+	
+	$(":checkbox").change(function()
+	{
+
+  		//alert(this.value);
+
+	    event.preventDefault();
+	    var checkedObj = $("#conf_acesso_table input:checkbox:checked").map(function(){ return $(this).attr("name")  + " " + $(this).attr("id")}).get(); 
+	    
+	 	alert(checkedObj);
+
+	    if(checkedObj[0] == "on")
+	    {
+		    checkedObj.shift()
+		}
+
+		
+		/*
+		$.ajax({
+			type: 'post',
+			url: '/users/checked_rows',
+			data: {empresas : checkedObj}
+		});*/
+
+	});
+
+
+
+	/*$('#tabela').DataTable({
+		"sPaginationType": "full_numbers",
+			"processing": true,
+			"serverSide": true,
+		"ajax": $('#tabela').data('source'),
+		 "columns": 
+			[{ "bSortable": false, "bSearchable": false, "data": null, "render": function ( data, type, row ) {
+								return '<a href="/user/'+data.id+'/edit" class="btn yellow btn-xs pull-center"><i class="fa fa-pencil"></i> Editar</a> <a data-confirm="Tem certeza que deseja excluir o usuário?" rel="nofollow" data-method="delete" href="/user/'+data.id+'" class="btn red btn-xs pull-right"> <i class="fa fa-times"></i> Deletar</a> '}}]
+	});*/
+ //init tabela
+});
+
+</script>
+</body>
+<!-- END BODY -->
+</html>

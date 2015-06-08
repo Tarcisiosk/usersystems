@@ -1,5 +1,6 @@
 class NivelacessoController < ApplicationController
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
+	@@actions = [{:caption => 'Configurar', :method_name => :get, :class_name => 'btn blue btn-xs ', :action => 'configurar'},
+				 {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o nivel de acesso?'}}]
 
 	def index
@@ -49,6 +50,15 @@ class NivelacessoController < ApplicationController
 		end
 	end
 
+	def configurar		
+		@nivelacesso = Nivelacesso.find(params[:id]) 
+	end
+
+	def save_conf
+		@nivelacesso = Nivelacesso.find(params[:id]) 
+		@nivelacesso..settings(:acesso).modulo.save!
+	end
+	
 	def destroy
 		@nivelacesso = Nivelacesso.find(params[:id])
 		@nivelacesso.destroy
