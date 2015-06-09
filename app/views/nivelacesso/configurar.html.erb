@@ -71,37 +71,33 @@
 																</thead>
 																<tbody>
 																	<% @nivelacesso.settings(:acesso).modulos.each do |value|%>
-																		<%value.each_with_index do |subvalue, id|%>
-																			<%unless id == 0%>
-																				<%subvalue.each_with_index do |subsubvalue, idx|%>
-																					<tr>
-																						<%subsubvalue.each_with_index do |finalvalue, index|%>
-																							<%unless !!finalvalue == finalvalue%>
-																								<td>
-																									<%=finalvalue%>
-																								</td>
-																							<%else%>
-																								<%if finalvalue == true%>
-																									<td>
-																									 	<input type="checkbox" checked name=<%=subsubvalue[0]%> id=<%=subsubvalue[1]%>>
-																									</td>
-																								<%else%>
-																									<td>
-																									 	<input type="checkbox" name=<%=subsubvalue[0]%> id=<%=subsubvalue[1]%>>
-																									</td>
-																								<%end%>
-																							<%end%>
+																		<tr>
+																			<%value.each_with_index do |subvalue, id|%>
+																				<%if id != 0%>
+																					<%unless !!subvalue == subvalue%>
+																						<td>
+																							<%=subvalue%>
+																						</td>
+																					<%else%>
+																						<%if subvalue == true%>
+																							<td>
+																								<input type="checkbox" checked name=<%=value[1]%> id=<%=value[0]%>>
+																							</td>
+																						<%else%>
+																							<td>
+																							 	<input type="checkbox" name=<%=value[1]%> id=<%=value[0]%>>
+																							</td>
 																						<%end%>
-																					</tr>
+																					<%end%>
 																				<%end%>
 																			<%end%>
-																		<%end%>
+																		</tr>
 																	<%end%>
 																</tbody>
 															</table>
 														</div>
 														<div class="actions">
-															<left><%= f.submit "Salvar", :class => "btn yellow" %></left>
+															<input id="button1" type="button" value="Salvar" class ="btn yellow" >
 														</div><br>
 													<%= link_to "Voltar", nivelacessos_path, :class => "btn default ", 'data-no-turbolink' => true %>
 												<% end %>
@@ -182,28 +178,38 @@ jQuery(document).ready(function() {
 	  	window.location.reload();		
 	});
 	
-	$(":checkbox").change(function()
+
+
+	 $("#button1").click(function()
 	{
 
   		//alert(this.value);
 
-	    event.preventDefault();
-	    var checkedObj = $("#conf_acesso_table input:checkbox:checked").map(function(){ return $(this).attr("name")  + " " + $(this).attr("id")}).get(); 
-	    
-	 	alert(checkedObj);
+	    var checkedObj = $("#conf_acesso_table input:checkbox").map(function(){ return $(this).is(":checked");}).get(); 
+	    var checkedID = $("#conf_acesso_table input:checkbox").map(function(){ return $(this).attr("id");}).get(); 
+	 	
+	 	var checkedFinal = []
+	 	
+	 	$.each(checkedID, function( index, value ) 
+	 	{
+	 		if(checkedObj[index])
+	 		{
+		  		checkedFinal[value] = checkedObj[index]	 			
+	 		}
+			else
+			{
+				checkedFinal[value] = false
+			}
+		});
 
-	    if(checkedObj[0] == "on")
-	    {
-		    checkedObj.shift()
-		}
+	 	//alert(checkedObj + "  " + checkedID + " " + checkedFinal);
 
-		
-		/*
 		$.ajax({
 			type: 'post',
-			url: '/users/checked_rows',
-			data: {empresas : checkedObj}
-		});*/
+			url: '/nivelacesso/conf_acesso/' + <%=editingUser.id%>,
+			data: {conf_acesso : checkedFinal}
+		});
+		window.location.reload();		
 
 	});
 

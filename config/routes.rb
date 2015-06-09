@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 	post 'nivelacesso/new'  => 'nivelacesso#create'
 	post 'nivelacesso/save_settings' => 'nivelacesso#save_settings'
 	get 'nivelacesso/configurar/:id' => "nivelacesso#configurar"
+	post 'nivelacesso/conf_acesso/:id' => "nivelacesso#save_conf_acesso"
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	
 	get "index" => 'index#index', as: :index
@@ -39,7 +40,7 @@ Rails.application.routes.draw do
 	resources :empresa, only: [:edit, :update, :new, :create]
 	resources :grupo, only: [:edit, :destroy, :update, :new, :create]
 	resources :subgrupo, only: [:edit, :destroy, :update, :new, :create]
-	resources :nivelacesso, only: [:edit, :destroy, :update, :new, :create, :configurar, :conf_update]
+	resources :nivelacesso, only: [:edit, :destroy, :update, :new, :create, :configurar]
 
 	devise_for :users
 

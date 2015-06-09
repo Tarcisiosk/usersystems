@@ -5,13 +5,15 @@ class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session, only: Proc.new { |c| c.request.format.json? }
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
-	before_action :require_master_or_adm_acess, only: [:destroy]
+	#before_action :require_master_or_adm_acess, only: [:destroy]
 
 	after_action :save_user_empresa, only: [:update]
 	after_action :setAdmin, only: [:create]
 
 	before_filter :set_current_emp_if_first, only: [:index]
-
+	
+	before_filter :check_acesso_routes, only: [:index, :edit, :delete, :create]
+	
 	helper_method :getName
 	helper_method :act_columns
 	helper_method :inact_columns
@@ -23,6 +25,7 @@ class ApplicationController < ActionController::Base
 	helper_method :save_user_empresa
 	helper_method :returnItensUsuario
 	helper_method :returnNiveisAcesso
+	helper_method :arrayAcessos
 
 	@@checked_rows = []
 	@@checked_users = []
@@ -31,7 +34,7 @@ class ApplicationController < ActionController::Base
 	def after_sign_in_path_for(resource)
 		'/index'
 	end
-
+	
 	#seta adm para itens criados
 	def setAdmin
 		if controller_name != "sessions"
@@ -138,12 +141,10 @@ class ApplicationController < ActionController::Base
 		if controller_name == "user"
 			params[:empresas].each_with_index do |item, index|
 				@@checked_rows[index] = Empresa.find(item.to_i)
-				puts "CHECKED ROW: #{@@checked_rows[index].nome_fantasia}"
 			end 
 		elsif controller_name == "empresa"
 			params[:users].each_with_index do |item, index|
 				@@checked_rows[index] = User.find(item.to_i)
-				puts "CHECKED ROW: #{@@checked_rows[index].fullname}"
 			end
 		end
 		respond_to do |format| 
@@ -158,7 +159,6 @@ class ApplicationController < ActionController::Base
 			current_user.settings(:last_empresa).edited = lastEmpTable.first
 		end
 	end
-
 
 	protected
 	#configurações das tables e dados enviados.
@@ -295,7 +295,75 @@ class ApplicationController < ActionController::Base
 		end
 		return niveis
 	end
+	
+	def arrayAcessos
+		acessoArray = Array.new
+		if current_user.user_type == 2
+			current_user.nivelacesso.settings(:acesso).modulos.each_with_index do |nivel, index|
+				#puts "*************NIVEL: #{nivel}"
+				acessoArray[index] = nivel[-1]
+			end
+		end
+		return acessoArray
+	end
 
+	def check_acesso_routes
+		if controller_name != "sessions" 
+			if current_user.user_type == 2
+
+				if controller_name == "grupo"
+					if arrayAcessos[0] == false && arrayAcessos[1] == false && arrayAcessos[2] == false
+						redirect_to "/422"
+					else
+						if action_name == "create" && arrayAcessos[0] == false
+							redirect_to "/422"
+						elsif action_name == "edit" && arrayAcessos[1] == false
+							redirect_to "/422"
+						elsif action_name == "delete" && arrayAcessos[2] == false
+							redirect_to "/422"
+						end
+					end
+				end
+				if controller_name == "subgrupo"
+					if arrayAcessos[3] == false && arrayAcessos[4] == false && arrayAcessos[5] == false
+						redirect_to "/422"
+					else
+						if action_name == "create" && arrayAcessos[3] == false
+							redirect_to "/422"
+						elsif action_name == "edit" && arrayAcessos[4] == false
+							redirect_to "/422"
+						elsif action_name == "delete" && arrayAcessos[5] == false
+							redirect_to "/422"
+						end
+					end
+				end
+				if controller_name == "empresa"
+					if arrayAcessos[6] == false  && arrayAcessos[7] == false
+						redirect_to "/422"
+					else
+						if action_name == "create" && arrayAcessos[6] == false
+							redirect_to "/422"
+						elsif action_name == "edit" && arrayAcessos[7] == false
+							redirect_to "/422"
+						end
+					end
+				end
+				if controller_name == "user"
+					if arrayAcessos[8] == false && arrayAcessos[9] == false  && arrayAcessos[10] == false
+						redirect_to "/422"
+					else
+						if action_name == "create" && arrayAcessos[8] == false
+							redirect_to "/422"
+						elsif action_name == "edit" && arrayAcessos[9] == false
+							redirect_to "/422"
+						elsif action_name == "delete" && arrayAcessos[10] == false
+							redirect_to "/422"
+						end
+					end
+				end
+			end
+		end
+	end
 	#---->> Fim funções <<----#
 	
 	#pemissões e autenticações

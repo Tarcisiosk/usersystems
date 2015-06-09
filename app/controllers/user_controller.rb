@@ -1,5 +1,6 @@
 class UserController < ApplicationController
 	before_filter :authenticate_user!
+	after_action :setNivelAcesso, only: [:update, :create]
 
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuario?'}}]
@@ -99,6 +100,14 @@ class UserController < ApplicationController
 	def user_params
 		params.require(:user).permit(:id, :adm_id, :empresas, :nivelacesso, :user_type, :fullname, :email, :password, :password_confirmation, :n_acesso, :photo)
 	end 
+
+	def setNivelAcesso
+		@user.nivelacesso = Nivelacesso.find_by_descricao(@user.n_acesso)
+		unless @user.nivelacesso.users.include?(@user)
+			@user.nivelacesso.users << @user
+		end
+		puts "NIVEL ACESSO: #{@user.nivelacesso.descricao}"
+	end
 
 end
 	

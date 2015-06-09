@@ -1,8 +1,18 @@
 <head>
 	<%if controller.controller_name != 'sessions'  %>
 		<meta charset="utf-8"/>
-		<%if controller_name != 'index'%>
-			<title>MASTERCOM | <%= controller.controller_name.upcase%></title>
+		<%if controller_name == 'index'%>
+			<title>MASTERCOM | INDEX</title>
+		<%elsif controller_name == 'grupo'%>
+			<title>MASTERCOM | GRUPOS</title>
+		<%elsif controller_name == 'subgrupo'%>
+			<title>MASTERCOM | SUBGRUPOS</title>
+		<%elsif controller_name == 'empresa'%>
+			<title>MASTERCOM | EMPRESAS</title>
+		<%elsif controller_name == 'user'%>
+			<title>MASTERCOM | USUARIOS</title>
+		<%elsif controller_name == 'nivelacesso'%>
+			<title>MASTERCOM | ACESSOS title>
 		<%else%>
 			<title>MASTERCOM</title>
 		<%end%>
@@ -104,51 +114,114 @@
 					<li>
 						<a data-no-turbolink="true" href="/"> Página Inicial</a>
 					</li>
-					<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
-						<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-						Cadastros <i class="fa fa-angle-down"></i>
-						</a>
-						<ul class="dropdown-menu">
-							<li>
-								<div class="mega-menu-content">
-									<div class="row">
-										<div class="col-md-2">
-											<ul class="mega-menu-submenu">
-												<li>
-													<h3>Cadastros</h3>
-												</li>
-												<li >
-													<a data-no-turbolink="true" href="/grupos"><i class="fa fa-angle-right"></i>  Grupos</a>
-												</li>
-												<li>
-													<a data-no-turbolink="true" href="/subgrupos"><i class="fa fa-angle-right"></i>  Sub-Grupos</a>
-												</li>
-											</ul>
-										</div>
-										<div class="col-md-2">
-											<ul class="mega-menu-submenu">
-												<li>
-													<h3>Configurações</h3>
-												</li>
-												<li >
-													<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
-												</li>
-												<%if current_user.user_type != 2%>
+					<%if current_user.user_type != 2%>
+						<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
+							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+							Cadastros <i class="fa fa-angle-down"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<div class="mega-menu-content">
+										<div class="row">
+											<div class="col-md-2">
+												<ul class="mega-menu-submenu">
 													<li>
-														<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
+														<h3>Cadastros</h3>
 													</li>
-												<%end%>
-												<li>
-													<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
-												</li>
-												
-											</ul>
+													<li >
+														<a data-no-turbolink="true" href="/grupos"><i class="fa fa-angle-right"></i>  Grupos</a>
+													</li>
+													<li>
+														<a data-no-turbolink="true" href="/subgrupos"><i class="fa fa-angle-right"></i>  Sub-Grupos</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-md-2">
+												<ul class="mega-menu-submenu">
+													<li>
+														<h3>Configurações</h3>
+													</li>
+													<li >
+														<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
+													</li>
+													<%if current_user.user_type != 2%>
+														<li>
+															<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
+														</li>
+													<%end%>
+													<li>
+														<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
+													</li>
+													
+												</ul>
+											</div>
 										</div>
 									</div>
-								</div>
+								</li>
+							</ul>
+						</li>
+					<%elsif current_user.user_type == 2 && current_user.nivelacesso.present?%>
+						<%if arrayAcessos.all? {|bool| bool == false}%>
+						<%else%>
+							<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
+								<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+								Cadastros <i class="fa fa-angle-down"></i>
+								</a>
+								<ul class="dropdown-menu">
+									<li>
+										<div class="mega-menu-content">
+											<div class="row">
+												<% if arrayAcessos[0] == true ||arrayAcessos[1] == true || arrayAcessos[2] == true || arrayAcessos[3] == true || arrayAcessos[4] == true || arrayAcessos[5] == true%>
+													<div class="col-md-2">
+														<ul class="mega-menu-submenu">
+															<li>
+																<h3>Cadastros</h3>
+															</li>
+															<%if arrayAcessos[0] == true || arrayAcessos[1] == true || arrayAcessos[2] == true%>
+																<li >
+																	<a data-no-turbolink="true" href="/grupos"><i class="fa fa-angle-right"></i>  Grupos</a>
+																</li>
+															<%end%>
+															
+															<%if arrayAcessos[3] == true || arrayAcessos[4] == true  || arrayAcessos[5] == true%>
+																<li>
+																	<a data-no-turbolink="true" href="/subgrupos"><i class="fa fa-angle-right"></i>  Sub-Grupos</a>
+																</li>
+															<%end%>
+														</ul>
+													</div>
+												<%end%>
+												<% if arrayAcessos[6] == true ||arrayAcessos[7] == true || arrayAcessos[8] == true || arrayAcessos[9] == true || arrayAcessos[10] == true %>
+													<div class="col-md-2">
+														<ul class="mega-menu-submenu">
+															<li>
+																<h3>Configurações</h3>
+															</li>
+															<%if arrayAcessos[6] ==  true || arrayAcessos[7] == true%>
+																<li >
+																	<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
+																</li>
+															<%end%>
+															<%if current_user.user_type != 2%>
+																<li>
+																	<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
+																</li>
+															<%end%>
+															<%if arrayAcessos[8] ==  true || arrayAcessos[9]  == true || arrayAcessos[10] == true%>
+																<li>
+																	<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
+																</li>
+															<%end%>
+														</ul>
+													</div>
+												<%end%>
+											</div>
+										</div>
+									</li>
+								</ul>
 							</li>
-						</ul>
-					</li>
+						<%end%>
+					<%end%>
 				</ul>
 			</div>
 			<div class="hor-menu pull-right">

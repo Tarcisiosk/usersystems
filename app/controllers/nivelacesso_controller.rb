@@ -38,7 +38,6 @@ class NivelacessoController < ApplicationController
 
 	def update
 		@nivelacesso = Nivelacesso.find(params[:id]) 
-		#se usuario a editar for master não permite alterar o tipo / Se o usuario logado não for master não permite mudar o tipo de outros usuarios
 		respond_to do |format|
 			if @nivelacesso.update(nivelacesso_params)
 				format.html { redirect_to nivelacessos_path, notice: ' ' }
@@ -52,11 +51,24 @@ class NivelacessoController < ApplicationController
 
 	def configurar		
 		@nivelacesso = Nivelacesso.find(params[:id]) 
+		#@nivelacesso.settings(:acesso).modulos = [[0, "Grupo", "Criar", "Permite a criação", false],
+		#										 [1, "Grupo", "Editar", "Permite a edição", false],
+		#										 [2, "Grupo", "Deletar", "Permite a exclusão", false],
+		#										 [3, "Sub-Grupo", "Criar", "Permite a criação", false],
+		#										 [4, "Sub-Grupo", "Editar", "Permite a edição", false],
+		#										 [5, "Sub-Grupo", "Deletar", "Permite a exclusão", false],
+		#										 [6, "Empresa", "Criar", "Permite a criação", false],
+		#										 [7, "Empresa", "Editar", "Permite a edição", false],
+		#										 [8, "Usuário", "Criar", "Permite a criação", false],
+		#										 [9, "Usuário", "Editar", "Permite a edição", false],
+		#										 [10, "Usuário", "Deletar", "Permite a exclusão", false]]
+		#@nivelacesso.save!
+
 	end
 
 	def save_conf
 		@nivelacesso = Nivelacesso.find(params[:id]) 
-		@nivelacesso..settings(:acesso).modulo.save!
+		@nivelacesso.settings(:acesso).modulos.save!
 	end
 	
 	def destroy
@@ -67,8 +79,23 @@ class NivelacessoController < ApplicationController
 		end
 	end
 
+	def save_conf_acesso
+		@nivelacesso = Nivelacesso.find(params[:id])
+
+		@nivelacesso.settings(:acesso).modulos.each_with_index do |value, id|
+			if params[:conf_acesso][id] == "true"
+				value[-1] = true
+			elsif params[:conf_acesso][id] == "false"
+				value[-1] = false
+			end
+		end
+		@nivelacesso.save!
+
+		redirect_to nivelacessos_path
+	end
+
 	def nivelacesso_params
-		params.require(:nivelacesso).permit(:descricao, :adm_id)
+		params.require(:nivelacesso).permit(:id, :descricao, :adm_id, :acesso, :users)
 	end 
 
 end
