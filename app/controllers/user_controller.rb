@@ -58,7 +58,7 @@ class UserController < ApplicationController
 		#se usuario a editar for master não permite alterar o tipo / Se o usuario logado não for master não permite mudar o tipo de outros usuarios
 		if current_user.adm_id == @user.adm_id || current_user.id == @user.adm_id || current_user.user_type == 0
 			if @user.id == 1 || (current_user.user_type == 2 && @user.user_type != 2) || (current_user.user_type == 2)
-				redirect_to "/422", notice: "Você não tem permissão para isso!"
+				redirect_to notAllowed_path, notice: "Você não tem permissão para isso!"
 			else
 				respond_to do |format|
 					if @user.update(user_params)
@@ -71,7 +71,7 @@ class UserController < ApplicationController
 				end
 			end
 		else
-			redirect_to "/422", notice: "Você não tem permissão para isso!"
+			redirect_to notAllowed_path, notice: "Você não tem permissão para isso!"
 		end
 	end
 
@@ -79,7 +79,7 @@ class UserController < ApplicationController
 		@user = User.find(params[:id])
 		#se usuario for master não pode ser excluido, se usuario for comum não pode excluir
 		if @user.id == 1 || (current_user.user_type == 2 && @user.user_type != 2) || ((current_user.adm_id != @user.adm_id) && current_user.user_type != 0)
- 			redirect_to "/422", notice: "Você não tem permissão para isso!"
+ 			redirect_to notAllowed_path, notice: "Você não tem permissão para isso!"
  		else
 			@user = User.find(params[:id])
 			@user.destroy
@@ -108,6 +108,26 @@ class UserController < ApplicationController
 		end
 		puts "NIVEL ACESSO: #{@user.nivelacesso.descricao}"
 	end
-
+=begin
+	def user_actions
+		if current_user.user_type == 2
+			if arrayAcessos[9] == true && arrayAcessos[10] == false
+				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'}]
+			
+			elsif arrayAcessos[9] == false && arrayAcessos[10] == true
+				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o  usuário?'}}]
+			
+			elsif arrayAcessos[9] == false && arrayAcessos[10] == false
+			 	@actions = []
+			else
+				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
+							 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
+			end
+		else
+			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
+							 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
+		end
+	end
+=end
 end
 	

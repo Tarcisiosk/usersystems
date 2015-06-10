@@ -31,10 +31,13 @@ Rails.application.routes.draw do
 	post 'nivelacesso/new'  => 'nivelacesso#create'
 	post 'nivelacesso/save_settings' => 'nivelacesso#save_settings'
 	get 'nivelacesso/configurar/:id' => "nivelacesso#configurar"
-	post 'nivelacesso/conf_acesso/:id' => "nivelacesso#save_conf_acesso"
+	post 'nivelacesso/act_acesso/:id' => "nivelacesso#act_acesso"
+	post 'nivelacesso/deact_acesso/:id' => "nivelacesso#deact_acesso"
+
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	
 	get "index" => 'index#index', as: :index
+	get "error-422" => 'index#notAllowed', as: :notAllowed
 
 	resources :user, only: [:edit, :destroy, :update, :new, :create]
 	resources :empresa, only: [:edit, :update, :new, :create]

@@ -64,32 +64,31 @@
 																		<th class="hidden-xs">
 																			Descrição
 																		</th>
-																		<th width="80px;" bSortable="false">
+																		<th width="50px;" bSortable="false">
 																			Permissão
 																		</th>
 																	</tr>
 																</thead>
 																<tbody>
-																	<% @nivelacesso.settings(:acesso).modulos.each do |value|%>
+																	<% Acesso.all.each do |acesso|%>
 																		<tr>
-																			<%value.each_with_index do |subvalue, id|%>
-																				<%if id != 0%>
-																					<%unless !!subvalue == subvalue%>
-																						<td>
-																							<%=subvalue%>
-																						</td>
-																					<%else%>
-																						<%if subvalue == true%>
-																							<td>
-																								<input type="checkbox" checked name=<%=value[1]%> id=<%=value[0]%>>
-																							</td>
-																						<%else%>
-																							<td>
-																							 	<input type="checkbox" name=<%=value[1]%> id=<%=value[0]%>>
-																							</td>
-																						<%end%>
-																					<%end%>
-																				<%end%>
+																			<td>
+																				<%=acesso.modulo%>
+																			</td>
+																			<td>
+																				<%=acesso.opcao%>
+																			</td>
+																			<td>
+																				<%=acesso.descricao%>
+																			</td>
+																			<%if @nivelacesso.acessos.include?(acesso)%>
+																				<td>
+																					<center><a class="btn green" name="buttonDeact" type="button" item=<%=acesso.id%>><i class="fa fa-check"></i></a></center>
+																				</td>
+																			<%else%>
+																				<td>
+																					<center><a class="btn red" name="buttonAct" type="button" item=<%=acesso.id%>><i class="fa fa-times"></i></a></center>
+																				</td>
 																			<%end%>
 																		</tr>
 																	<%end%>
@@ -97,7 +96,6 @@
 															</table>
 														</div>
 														<div class="actions">
-															<input id="button1" type="button" value="Salvar" class ="btn yellow" >
 														</div><br>
 													<%= link_to "Voltar", nivelacessos_path, :class => "btn default ", 'data-no-turbolink' => true %>
 												<% end %>
@@ -177,42 +175,33 @@ jQuery(document).ready(function() {
 		});
 	  	window.location.reload();		
 	});
-	
 
-
-	 $("#button1").click(function()
+	$("[name='buttonAct']").live("click", function()
 	{
 
-  		//alert(this.value);
-
-	    var checkedObj = $("#conf_acesso_table input:checkbox").map(function(){ return $(this).is(":checked");}).get(); 
-	    var checkedID = $("#conf_acesso_table input:checkbox").map(function(){ return $(this).attr("id");}).get(); 
-	 	
-	 	var checkedFinal = []
-	 	
-	 	$.each(checkedID, function( index, value ) 
-	 	{
-	 		if(checkedObj[index])
-	 		{
-		  		checkedFinal[value] = checkedObj[index]	 			
-	 		}
-			else
-			{
-				checkedFinal[value] = false
-			}
-		});
-
-	 	//alert(checkedObj + "  " + checkedID + " " + checkedFinal);
+	    var acessoSel = $(this).attr("item");
 
 		$.ajax({
 			type: 'post',
-			url: '/nivelacesso/conf_acesso/' + <%=editingUser.id%>,
-			data: {conf_acesso : checkedFinal}
+			url: '/nivelacesso/act_acesso/' + <%=editingUser.id%>,
+			data: {acesso : acessoSel}
+		});
+		window.location.reload();		
+	});
+
+ 	$("[name='buttonDeact']").live("click", function()
+	{
+
+	    var acessoSel = $(this).attr("item");
+
+		$.ajax({
+			type: 'post',
+			url: '/nivelacesso/deact_acesso/' + <%=editingUser.id%>,
+			data: {acesso : acessoSel}
 		});
 		window.location.reload();		
 
 	});
-
 
 
 	/*$('#tabela').DataTable({

@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
 	before_filter :set_current_emp_if_first, only: [:index]
 	
-	before_filter :check_acesso_routes, only: [:index, :edit, :delete, :create]
+	before_filter :check_acesso_routes, only: [:index, :new, :edit, :destroy]
 	
 	helper_method :getName
 	helper_method :act_columns
@@ -25,7 +25,6 @@ class ApplicationController < ActionController::Base
 	helper_method :save_user_empresa
 	helper_method :returnItensUsuario
 	helper_method :returnNiveisAcesso
-	helper_method :arrayAcessos
 
 	@@checked_rows = []
 	@@checked_users = []
@@ -295,75 +294,16 @@ class ApplicationController < ActionController::Base
 		end
 		return niveis
 	end
-	
-	def arrayAcessos
-		acessoArray = Array.new
-		if current_user.user_type == 2
-			current_user.nivelacesso.settings(:acesso).modulos.each_with_index do |nivel, index|
-				#puts "*************NIVEL: #{nivel}"
-				acessoArray[index] = nivel[-1]
-			end
-		end
-		return acessoArray
-	end
 
 	def check_acesso_routes
-		if controller_name != "sessions" 
-			if current_user.user_type == 2
-
-				if controller_name == "grupo"
-					if arrayAcessos[0] == false && arrayAcessos[1] == false && arrayAcessos[2] == false
-						redirect_to "/422"
-					else
-						if action_name == "create" && arrayAcessos[0] == false
-							redirect_to "/422"
-						elsif action_name == "edit" && arrayAcessos[1] == false
-							redirect_to "/422"
-						elsif action_name == "delete" && arrayAcessos[2] == false
-							redirect_to "/422"
-						end
-					end
-				end
-				if controller_name == "subgrupo"
-					if arrayAcessos[3] == false && arrayAcessos[4] == false && arrayAcessos[5] == false
-						redirect_to "/422"
-					else
-						if action_name == "create" && arrayAcessos[3] == false
-							redirect_to "/422"
-						elsif action_name == "edit" && arrayAcessos[4] == false
-							redirect_to "/422"
-						elsif action_name == "delete" && arrayAcessos[5] == false
-							redirect_to "/422"
-						end
-					end
-				end
-				if controller_name == "empresa"
-					if arrayAcessos[6] == false  && arrayAcessos[7] == false
-						redirect_to "/422"
-					else
-						if action_name == "create" && arrayAcessos[6] == false
-							redirect_to "/422"
-						elsif action_name == "edit" && arrayAcessos[7] == false
-							redirect_to "/422"
-						end
-					end
-				end
-				if controller_name == "user"
-					if arrayAcessos[8] == false && arrayAcessos[9] == false  && arrayAcessos[10] == false
-						redirect_to "/422"
-					else
-						if action_name == "create" && arrayAcessos[8] == false
-							redirect_to "/422"
-						elsif action_name == "edit" && arrayAcessos[9] == false
-							redirect_to "/422"
-						elsif action_name == "delete" && arrayAcessos[10] == false
-							redirect_to "/422"
-						end
-					end
-				end
+		action = controller_name + "#" + action_name 
+		if controller_name != "sessions" && controller_name != "index" && controller_name != "nivelacesso" && current_user.user_type == 2
+			unless current_user.nivelacesso.acessos.include?(Acesso.find_by_acao(action))
+				redirect_to notAllowed_path
 			end
 		end
 	end
+
 	#---->> Fim funções <<----#
 	
 	#pemissões e autenticações
@@ -378,14 +318,14 @@ class ApplicationController < ActionController::Base
 	#requer acesso master
 	def require_master_acess
 		unless current_user.user_type == 0 
-			redirect_to "/422", notice: "Você não tem permissão para isso!"
+			redirect_to notAllowed_path
 		end
 	end
 	
 	#requer acesso adm
 	def require_adm_acess
 		unless current_user.user_type == 1
-			redirect_to "/422", notice: "Você não tem permissão para isso!"
+			redirect_to notAllowed_path
 		end
 	end
 
@@ -394,7 +334,7 @@ class ApplicationController < ActionController::Base
 		if controller_name != "sessions"
 			unless current_user.user_type == 0 || current_user.user_type == 1
 				respond_to do |format|
-					format.html { redirect_to "/422", notice: "Você não tem permissão para isso!"}
+					format.html { redirect_to notAllowed_path}
 				end
 			end
 		end

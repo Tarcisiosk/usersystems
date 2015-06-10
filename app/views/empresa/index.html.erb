@@ -77,8 +77,8 @@
 								
 								<div class="tools">
 									<div class="btn-group">
-										<% if current_user.user_type == 1 || current_user.user_type == 2 %>
-											<a class="btn btn-icon-only green-meadow" href="/empresas/new" data-no-turbolink="true"><i class="fa fa-plus"></i></a>
+										<% if current_user.user_type != 0%>
+												<a class="btn btn-icon-only green-meadow" href="/empresas/new" data-no-turbolink="true"><i class="fa fa-plus"></i></a>
 										<% else %>
 										<%end%>
 										<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">

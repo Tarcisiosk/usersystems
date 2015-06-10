@@ -39,6 +39,8 @@
 		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.css"/>
 		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/extensions/ColVis/css/dataTables.colVis.min.css"/>
 		<link rel="stylesheet" type="text/css" href="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css"/>
+		<link href="../../assets/admin/pages/css/error.css" rel="stylesheet" type="text/css"/>
+
 		<!-- END PAGE LEVEL STYLES -->
 		<!-- BEGIN THEME STYLES -->
 		<link href="../../assets/global/css/components-rounded.css" id="style_components" rel="stylesheet" type="text/css">
@@ -125,6 +127,7 @@
 										<div class="row">
 											<div class="col-md-2">
 												<ul class="mega-menu-submenu">
+
 													<li>
 														<h3>Cadastros</h3>
 													</li>
@@ -161,66 +164,52 @@
 							</ul>
 						</li>
 					<%elsif current_user.user_type == 2 && current_user.nivelacesso.present?%>
-						<%if arrayAcessos.all? {|bool| bool == false}%>
-						<%else%>
-							<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
-								<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-								Cadastros <i class="fa fa-angle-down"></i>
-								</a>
-								<ul class="dropdown-menu">
-									<li>
-										<div class="mega-menu-content">
-											<div class="row">
-												<% if arrayAcessos[0] == true ||arrayAcessos[1] == true || arrayAcessos[2] == true || arrayAcessos[3] == true || arrayAcessos[4] == true || arrayAcessos[5] == true%>
-													<div class="col-md-2">
-														<ul class="mega-menu-submenu">
-															<li>
-																<h3>Cadastros</h3>
-															</li>
-															<%if arrayAcessos[0] == true || arrayAcessos[1] == true || arrayAcessos[2] == true%>
-																<li >
-																	<a data-no-turbolink="true" href="/grupos"><i class="fa fa-angle-right"></i>  Grupos</a>
-																</li>
-															<%end%>
-															
-															<%if arrayAcessos[3] == true || arrayAcessos[4] == true  || arrayAcessos[5] == true%>
-																<li>
-																	<a data-no-turbolink="true" href="/subgrupos"><i class="fa fa-angle-right"></i>  Sub-Grupos</a>
-																</li>
-															<%end%>
-														</ul>
-													</div>
-												<%end%>
-												<% if arrayAcessos[6] == true ||arrayAcessos[7] == true || arrayAcessos[8] == true || arrayAcessos[9] == true || arrayAcessos[10] == true %>
-													<div class="col-md-2">
-														<ul class="mega-menu-submenu">
-															<li>
-																<h3>Configurações</h3>
-															</li>
-															<%if arrayAcessos[6] ==  true || arrayAcessos[7] == true%>
-																<li >
-																	<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
-																</li>
-															<%end%>
-															<%if current_user.user_type != 2%>
-																<li>
-																	<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
-																</li>
-															<%end%>
-															<%if arrayAcessos[8] ==  true || arrayAcessos[9]  == true || arrayAcessos[10] == true%>
-																<li>
-																	<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
-																</li>
-															<%end%>
-														</ul>
-													</div>
-												<%end%>
+						<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
+							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+							Cadastros <i class="fa fa-angle-down"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<div class="mega-menu-content">
+										<div class="row">
+
+											<div class="col-md-2">
+												<ul class="mega-menu-submenu">
+													<li>
+														<h3>Cadastros</h3>
+													</li>
+													<li>
+														<a data-no-turbolink="true" href="/grupos"><i class="fa fa-angle-right"></i>  Grupos</a>
+													</li>
+													<li>
+														<a data-no-turbolink="true" href="/subgrupos"><i class="fa fa-angle-right"></i>  Sub-Grupos</a>
+													</li>
+												</ul>
+											</div>
+											<div class="col-md-2">
+												<ul class="mega-menu-submenu">
+													<li>
+														<h3>Configurações</h3>
+													</li>
+													<li >
+														<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
+													</li>
+													<%if current_user.user_type != 2%>
+														<li>
+															<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
+														</li>
+													<%end%>
+													<li>
+														<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
+													</li>
+													
+												</ul>
 											</div>
 										</div>
-									</li>
-								</ul>
-							</li>
-						<%end%>
+									</div>
+								</li>
+							</ul>
+						</li>
 					<%end%>
 				</ul>
 			</div>

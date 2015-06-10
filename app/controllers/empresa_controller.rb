@@ -64,6 +64,19 @@ class EmpresaController < ApplicationController
 			redirect_to empresas_path, notice: "Você não tem permissão para isso!"
 		end
 	end
-
-
+=begin
+	def empresa_actions
+		if current_user.user_type == 2
+			if arrayAcessos[7] == true
+				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+			elsif arrayAcessos[7] == false
+				@@actions = []
+			else
+				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+			end
+		else
+			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+		end
+	end
+=end
 end

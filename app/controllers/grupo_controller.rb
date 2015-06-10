@@ -1,7 +1,6 @@
 class GrupoController < ApplicationController
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo e seus subgrupos?'}}]
-
 	def index
 		respond_to do |format|
 			format.html
@@ -67,5 +66,30 @@ class GrupoController < ApplicationController
 
 	def grupo_params
 		params.require(:grupo).permit(:descricao, :adm_id)
+	end
+
+=begin
+	def grupo_actions
+		if current_user.user_type == 2
+			if arrayAcessos[1] == true && arrayAcessos[2] == false
+				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'}]
+			
+			elsif arrayAcessos[1] == false && arrayAcessos[2] == true
+				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo e seus subgrupos?'}}]
+			
+			elsif arrayAcessos[1] == false && arrayAcessos[2] == false
+			 	@actions = []
+			
+			else
+				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
+					 		{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo e seus subgrupos?'}}]
+			end
+		else
+			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
+					 		{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo e seus subgrupos?'}}]
+		end
 	end 
+=end
+	
+
 end
