@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
 	
 	before_filter :check_acesso_routes, only: [:index, :new, :edit, :destroy]
 	
+	helper_method :menu
 	helper_method :getName
 	helper_method :act_columns
 	helper_method :inact_columns
@@ -33,7 +34,47 @@ class ApplicationController < ActionController::Base
 	def after_sign_in_path_for(resource)
 		'/index'
 	end
-	
+
+	def menu
+		menuBuilder = {:maincadastros => {:label=>'Cadastros', 
+										  :cadastros => {:label=>'Cadastros', 
+														 :grupos =>{:label => 'Grupos', :path => '/grupos', :acao =>'grupo#index'}, 
+														 :subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'}}, 
+										  :configuracoes =>{:label=>'Configurações', 
+										 				    :empresas =>{:label=> 'Empresas', :path => '/empresas', :acao =>'empresa#index'}, 
+										 				    :nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'}, 
+										 				    :usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}} }
+		if current_user.user_type == 2
+			menuBuilder.each do |hkey, hvalue|
+				if hvalue.is_a?(Hash)
+					hvalue.each do |subkey, subvalue|
+						if subvalue.is_a?(Hash)
+							subvalue.each  do |optkey, optvalue|
+								if optvalue.is_a?(Hash)
+									if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao(optvalue[:acao]))
+										puts "ACESSOS DISPONIVELS: #{optvalue[:acao]}"
+									else
+										subvalue.except!(optkey)
+									end
+								end 
+							end
+							if subvalue.except(:label).empty?
+								hvalue.except!(subkey)
+							end
+						end
+					end
+					if hvalue.except(:label).empty?
+						menuBuilder.except!(hkey)
+					end
+				end
+			end
+			menuBuilder
+
+		else
+			menuBuilder
+		end
+	end
+
 	#seta adm para itens criados
 	def setAdmin
 		if controller_name != "sessions"

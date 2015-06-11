@@ -16,7 +16,7 @@ class UserController < ApplicationController
  		#	current_user.save!
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(User, act_columns_final, @@actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(User, act_columns_final, user_actions, view_context, current_user) }
 		end
 	end
 
@@ -106,28 +106,29 @@ class UserController < ApplicationController
 		unless @user.nivelacesso.users.include?(@user)
 			@user.nivelacesso.users << @user
 		end
-		puts "NIVEL ACESSO: #{@user.nivelacesso.descricao}"
 	end
-=begin
+
 	def user_actions
 		if current_user.user_type == 2
-			if arrayAcessos[9] == true && arrayAcessos[10] == false
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'}]
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#destroy'))
+				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
+				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
+
+			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#edit'))
+				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+
+			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#destroy'))
+				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
 			
-			elsif arrayAcessos[9] == false && arrayAcessos[10] == true
-				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o  usuário?'}}]
-			
-			elsif arrayAcessos[9] == false && arrayAcessos[10] == false
-			 	@actions = []
 			else
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-							 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
+				@@actions = []
+				act_columns_final.tap(&:pop)
 			end
 		else
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-							 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
+				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
 		end
 	end
-=end
+
 end
 	

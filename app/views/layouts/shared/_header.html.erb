@@ -116,95 +116,33 @@
 					<li>
 						<a data-no-turbolink="true" href="/"> Página Inicial</a>
 					</li>
-					<%if current_user.user_type != 2%>
+					<% menu.each do |hkey, hvalue|%>
 						<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
-							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-							Cadastros <i class="fa fa-angle-down"></i>
-							</a>
+							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"> <%= hvalue[:label]%> <i class="fa fa-angle-down"></i></a>
 							<ul class="dropdown-menu">
 								<li>
 									<div class="mega-menu-content">
 										<div class="row">
-											<div class="col-md-2">
-												<ul class="mega-menu-submenu">
-
-													<li>
-														<h3>Cadastros</h3>
-													</li>
-													<li >
-														<a data-no-turbolink="true" href="/grupos"><i class="fa fa-angle-right"></i>  Grupos</a>
-													</li>
-													<li>
-														<a data-no-turbolink="true" href="/subgrupos"><i class="fa fa-angle-right"></i>  Sub-Grupos</a>
-													</li>
-												</ul>
-											</div>
-											<div class="col-md-2">
-												<ul class="mega-menu-submenu">
-													<li>
-														<h3>Configurações</h3>
-													</li>
-													<li >
-														<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
-													</li>
-													<%if current_user.user_type != 2%>
-														<li>
-															<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
-														</li>
+											<%if hvalue.is_a?(Hash)%>
+												<% hvalue.each do |subkey, subvalue|%>
+													<%if subvalue.is_a?(Hash)%>
+														<div class="col-md-2">
+															<ul class="mega-menu-submenu">
+																<li>
+																	<h3><%=subvalue[:label]%></h3>
+																</li>
+																<% subvalue.each do |optkey, optvalue|%>
+																	<% if optvalue.is_a?(Hash)%>
+																		<li>
+																			<a data-no-turbolink="true" href=<%=optvalue[:path]%>><i class="fa fa-angle-right"></i><%=optvalue[:label]%></a>
+																		</li>
+																	<%end%>
+																<%end%>
+															</ul>
+														</div>
 													<%end%>
-													<li>
-														<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
-													</li>
-													
-												</ul>
-											</div>
-										</div>
-									</div>
-								</li>
-							</ul>
-						</li>
-					<%elsif current_user.user_type == 2 && current_user.nivelacesso.present?%>
-						<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
-							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
-							Cadastros <i class="fa fa-angle-down"></i>
-							</a>
-							<ul class="dropdown-menu">
-								<li>
-									<div class="mega-menu-content">
-										<div class="row">
-
-											<div class="col-md-2">
-												<ul class="mega-menu-submenu">
-													<li>
-														<h3>Cadastros</h3>
-													</li>
-													<li>
-														<a data-no-turbolink="true" href="/grupos"><i class="fa fa-angle-right"></i>  Grupos</a>
-													</li>
-													<li>
-														<a data-no-turbolink="true" href="/subgrupos"><i class="fa fa-angle-right"></i>  Sub-Grupos</a>
-													</li>
-												</ul>
-											</div>
-											<div class="col-md-2">
-												<ul class="mega-menu-submenu">
-													<li>
-														<h3>Configurações</h3>
-													</li>
-													<li >
-														<a data-no-turbolink="true" href="/empresas"><i class="fa fa-angle-right"></i>  Empresas</a>
-													</li>
-													<%if current_user.user_type != 2%>
-														<li>
-															<a data-no-turbolink="true" href="/nivelacesso"><i class="fa fa-angle-right"></i>  Nivel acesso</a>
-														</li>
-													<%end%>
-													<li>
-														<a data-no-turbolink="true" href="/users"><i class="fa fa-angle-right"></i>  Usuários</a>
-													</li>
-													
-												</ul>
-											</div>
+												<%end%>
+											<%end%>
 										</div>
 									</div>
 								</li>
@@ -213,6 +151,7 @@
 					<%end%>
 				</ul>
 			</div>
+
 			<div class="hor-menu pull-right">
 				<ul class="nav navbar-nav navbar-right">
 					<li class="mega-menu-dropdown pull-right">
