@@ -12,8 +12,8 @@ class NivelacessoTest < ActiveSupport::TestCase
 						:adm_id => nivelacessos(:two).adm_id)
 		
 =end
-		Nivelacesso.all.each do |niv|
-			assert niv.valid?, "Nivel acesso: #{niv.id} não é valido, #{niv.errors.full_messages }"	
+	Nivelacesso.all.each do |niv|
+			assert niv.valid?, "Nivel acesso: #{niv.id} não é valido, #{niv.errors.full_messages}"	
 		end
 	end
 

@@ -1,5 +1,6 @@
 <html lang="en">
 <%= render :partial => "layouts/shared/header"%>
+
 <!-- BEGIN PAGE CONTAINER -->
 <div class="page-container">
 	<!-- BEGIN PAGE HEAD -->
@@ -15,7 +16,7 @@
 					</li>
 					<i class="fa fa-circle"></i>
 					<li>
-						<%= link_to "Sub-Grupos", sub_grupos_path, 'data-no-turbolink' => true%>
+						<%= link_to "Tipo Empresas/Contatos", tipoentidades_path, 'data-no-turbolink' => true%>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
@@ -30,21 +31,21 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="portlet light">
-								 <div class="portlet-title tabbable-line">
+								 	<div class="portlet-title tabbable-line">
 										<div class="caption caption-md">
 											<i class="icon-globe theme-font hide"></i>
-												<span class="caption-subject font-blue-madison bold uppercase">Editar Sub-Grupo</span>
+												<span class="caption-subject font-blue-madison bold uppercase">Editar Tipo Empresas/Contatos</span>
 											<i class="fa fa-pencil"></i>
 										</div>
 									</div>
 									<div class="portlet-body">
 										<div class="tab-content">
 											<div class="tab-pane active" id="tab_1_1">
-												<%= form_for((@subgrupo), url: subgrupo_path(@subgrupo), html: { method: :put }) do |f|%>
-													<% if @subgrupo.errors.any? %>
+												<%= form_for((@tipoentidade), url: tipoentidade_path(@tipoentidade), html: { method: :put }) do |f|%>
+													<% if @tipoentidade.errors.any? %>
 														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 															<ul >
-																<% @subgrupo.errors.full_messages.each do |message| %>
+																<% @tipoentidade.errors.full_messages.each do |message| %>
 																 <li><%= message %></li>
 															 <% end %>
 															</ul>
@@ -56,25 +57,11 @@
 														<label class="control-label ">Descrição</label>
 														<%= f.text_field :descricao,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
 													</div>
-											 		
-						
-											 		<div class="form-group">
-														<label class="control-label">Grupo</label><br>
-														<%= f.select(:grupo_id, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
-															  <% returnItensUsuario.each do |c| %>
-															    <%= content_tag(:option, c.descricao, value: c.id) %>
-															  <% end %>
-														<% end %>
-
-														<br>
-														<!--<input type="text" id="typeahead_grupo" name="typeahead_grupo" class="form-control"/>-->
-
-													</div><br>
-
+											 
 													<div class="actions">
 														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
 													</div><br>
-													<%= link_to "Voltar", sub_grupos_path, :class => "btn default ", 'data-no-turbolink' => true %>
+													<%= link_to "Voltar", tipoentidades_path, :class => "btn default ", 'data-no-turbolink' => true %>
 												<% end %>
 											</div>
 										</div>
@@ -90,7 +77,6 @@
 	</div>
 </div>  
 <!-- END PAGE CONTAINER -->
-
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
@@ -109,7 +95,6 @@
 <script src="../../assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="../../assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 <!-- END CORE PLUGINS -->
-
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script type="text/javascript" src="../../assets/global/plugins/select2/select2.min.js"></script>
 <script type="text/javascript" src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
@@ -118,15 +103,11 @@
 <script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
 <script type="text/javascript" src="../../assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
 <script type="text/javascript" src="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
-<script src="../../assets/global/plugins/typeahead/handlebars.min.js" type="text/javascript"></script>
-<script src="../../assets/global/plugins/typeahead/typeahead.bundle.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
-
 <script src="../../assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout3/scripts/layout.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout3/scripts/demo.js" type="text/javascript"></script>
 <script src="../../assets/admin/pages/scripts/table-managed.js"></script>
-<script src="../../assets/admin/pages/scripts/components-form-tools.js"></script>
 
 <script>
 jQuery(document).ready(function() {       
@@ -148,6 +129,21 @@ jQuery(document).ready(function() {
 		reader.readAsDataURL(image);
 		console.log(files);
 	});
+	$(":checkbox").change(function(event){
+	    event.preventDefault();
+	    var checkedObj = $("#SimpleTable input:checkbox:checked").map(function(){ return $(this).val();}).get(); 
+	    
+	    if(checkedObj[0] == "on")
+	    {
+		    checkedObj.shift()
+		}
+
+		$.ajax({
+			type: 'post',
+			url: '/empresas/checked_rows',
+			data: {users : checkedObj}
+		});
+	});
 
 	$('[name="emp_link"]').click(function () 
 	{
@@ -160,23 +156,6 @@ jQuery(document).ready(function() {
 	  	window.location.reload();		
 	});
 
-	
-	var grupos = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.whitespace,
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  // url points to a json file that contains an array of country names, see
-	  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-	  prefetch: <%=json_builder('grupo')%>
-	});
-	 
-	// passing in `null` for the `options` arguments will result in the default
-	// options being used
-	/*
-	$('#typeahead_grupo').typeahead(null, {
-	  name: 'grupos',
-	  source: grupos
-	});
-	*/
 	/*$('#tabela').DataTable({
 		"sPaginationType": "full_numbers",
 			"processing": true,
