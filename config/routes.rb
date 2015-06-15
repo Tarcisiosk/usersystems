@@ -31,6 +31,12 @@ Rails.application.routes.draw do
 	post 'tipoentidades/new'  => 'tipoentidade#create'
 	post 'tipoentidades/save_settings' => 'tipoentidade#save_settings'
 
+	get 'entidades'=> "entidade#index", as: :entidades
+	get 'entidades/new' => "entidade#new", as: :new_entidade
+	post 'entidades/new' => 'entidade#create'
+	post 'entidades/save_settings' => 'entidade#save_settings'
+
+
 	get 'nivelacesso' => "nivelacesso#index", as: :nivelacessos
 	get 'nivelacesso/new' => "nivelacesso#new", as: :new_nivelacesso
 	post 'nivelacesso/new'  => 'nivelacesso#create'
@@ -50,6 +56,7 @@ Rails.application.routes.draw do
 	resources :subgrupo, only: [:edit, :destroy, :update, :new, :create]
 	resources :nivelacesso, only: [:edit, :destroy, :update, :new, :create, :configurar]
 	resources :tipoentidade, only: [:edit, :destroy, :update, :new, :create]
+	resources :entidade, only: [:edit, :update, :new, :create, :destroy]
 
 
 	devise_for :users

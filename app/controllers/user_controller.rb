@@ -94,14 +94,15 @@ class UserController < ApplicationController
 		puts " O! #{@empresa}"
 		current_user.settings(:last_empresa).edited = @empresa
 		current_user.save!
-		redirect_to :back
+		redirect_to root_path
 	end
 
 	#params users e acesso: Master = 0, Admin = 1, Comum = 2. 
 	def user_params
-		params.require(:user).permit(:id, :adm_id, :empresas, :nivelacesso, :user_type, :fullname, :email, :password, :password_confirmation, :n_acesso, :photo)
+		params.require(:user).permit(:id, :adm_id, :empresas, :nivelacesso, :user_type, :fullname, :email, :password, :password_confirmation, :n_acesso, :photo, :api_key)
 	end 
-
+	
+	##ARRUMAR AQUI##
 	def setNivelAcesso
 		@user.nivelacesso = Nivelacesso.find_by_descricao(@user.n_acesso)
 		unless @user.nivelacesso.users.include?(@user)

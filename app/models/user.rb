@@ -20,6 +20,7 @@ class User < AbstractRecord
 			s.key :columns_subgrupo, :defaults => {:col => returnDefaults(Subgrupo::TOTAL_COLUMNS_SUBGRUPO)}
 			s.key :columns_nivelacesso, :defaults => {:col => returnDefaults(Nivelacesso::TOTAL_COLUMNS_NIVELACESSO)}
 			s.key :columns_tipoentidade, :defaults => {:col => returnDefaults(Tipoentidade::TOTAL_COLUMNS_TIPOENTIDADE)}
+			s.key :columns_entidade, :defaults => {:col => returnDefaults(Entidade::TOTAL_COLUMNS_ENTIDADE)}
 
 			s.key :last_empresa
 		end

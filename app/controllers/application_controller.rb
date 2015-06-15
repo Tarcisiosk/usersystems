@@ -39,8 +39,8 @@ class ApplicationController < ActionController::Base
 	def menu
 		menuBuilder = {:maincadastros => {:label=>'Cadastros', 
 										  :tipo_entidade => {:label=>'Empresas e Contatos', 
-														 :grupos =>{:label => 'Tipos', :path => '/tipoentidades', :acao =>'tipoentidade#index'}, 
-														 :subgrupos =>{:label => 'Empresa/Contato', :path => '/subgrupos', :acao =>'grupo#index'}}, 
+														 :tipos =>{:label => 'Tipos', :path => '/tipoentidades', :acao =>'tipoentidade#index'}, 
+														 :entidades =>{:label => 'Empresa/Contato', :path => '/entidades', :acao =>'entidade#index'}}, 
 										  :cadastros => {:label=>'Produtos', 
 														 :grupos =>{:label => 'Grupos', :path => '/grupos', :acao =>'grupo#index'}, 
 														 :subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'}}, 
@@ -252,7 +252,7 @@ class ApplicationController < ActionController::Base
 	#parametros usuario devise
 	def configure_permitted_parameters
 		devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :remember_me) }
-		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :n_acesso, :columns_user, :columns_empresa, :photo) }
+		devise_parameter_sanitizer.for(:account_update) { |u| u.permit(:fullname, :email, :password, :password_confirmation, :current_password, :n_acesso, :columns_user, :columns_empresa, :photo, :api_key) }
 	end
 
 	#empresas disponiveis para seleção
@@ -272,7 +272,8 @@ class ApplicationController < ActionController::Base
 				default_content[index] = item
 			end
 		end
-		default_content.compact
+		default_content.compact!
+		default_content.sort_by! &:nome_fantasia
 	end
 
 	#empresaa para o adm dar acesso ao usuario comum
@@ -320,6 +321,19 @@ class ApplicationController < ActionController::Base
 		itensUser = Array.new
 		if controller_name == "subgrupo"
 			Grupo.all.each do |item|
+				if current_user.user_type != 0
+					if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
+						itensUser << item
+					end
+				else
+					if item.adm_id == obj.adm_id
+						itensUser << item
+					end
+				end
+			end
+		end
+		if controller_name == "entidade"
+			Tipoentidade.all.each do |item|
 				if current_user.user_type != 0
 					if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
 						itensUser << item

@@ -22,6 +22,8 @@ Rails.application.configure do
   # config/initializers/devise.rb
   config.mailer_sender = "youremail@domain.com"
 
+  config.assets.js_compressor = :uglifier
+  config.assets.css_compressor = :sass
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -41,6 +43,7 @@ Rails.application.configure do
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
+  config.serve_static_files = true
 
 
   # Raises error for missing translations
