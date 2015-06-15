@@ -53,7 +53,13 @@ class NivelacessoController < ApplicationController
 		@nivelacesso = Nivelacesso.find(params[:id]) 
 	end
 
-	
+	def destroy
+		@nivelacesso = Nivelacesso.find(params[:id])
+		@nivelacesso.destroy
+		if @nivelacesso.destroy
+			redirect_to nivelacessos_path, notice: " "
+		end
+	end
 
 	def act_acesso
 		@nivelacesso = Nivelacesso.find(params[:id])

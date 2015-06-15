@@ -91,9 +91,10 @@ class UserController < ApplicationController
 	
 	def set_current_emp
 		@empresa = Empresa.find(params[:emp_id])
+		puts " O! #{@empresa}"
 		current_user.settings(:last_empresa).edited = @empresa
 		current_user.save!
-		redirect_to root_path
+		redirect_to :back
 	end
 
 	#params users e acesso: Master = 0, Admin = 1, Comum = 2. 
@@ -129,6 +130,7 @@ class UserController < ApplicationController
 				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
 		end
 	end
+	
 	def generate_api_key
 		user = User.find(params[:user][:id])
 		user.generate_api_key 		

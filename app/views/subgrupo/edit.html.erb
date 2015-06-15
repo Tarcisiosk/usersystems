@@ -161,22 +161,6 @@ jQuery(document).ready(function() {
 	});
 
 	
-	var grupos = new Bloodhound({
-	  datumTokenizer: Bloodhound.tokenizers.whitespace,
-	  queryTokenizer: Bloodhound.tokenizers.whitespace,
-	  // url points to a json file that contains an array of country names, see
-	  // https://github.com/twitter/typeahead.js/blob/gh-pages/data/countries.json
-	  prefetch: <%=json_builder('grupo')%>
-	});
-	 
-	// passing in `null` for the `options` arguments will result in the default
-	// options being used
-	/*
-	$('#typeahead_grupo').typeahead(null, {
-	  name: 'grupos',
-	  source: grupos
-	});
-	*/
 	/*$('#tabela').DataTable({
 		"sPaginationType": "full_numbers",
 			"processing": true,

@@ -22,4 +22,5 @@ jQuery ->
             !$('#Inativas option:selected').remove().appendTo('#Ativas')
             $('option:selected').prop 'selected', false
           return
-	
+
+

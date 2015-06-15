@@ -26,7 +26,6 @@ class ApplicationController < ActionController::Base
 	helper_method :save_user_empresa
 	helper_method :returnItensUsuario
 	helper_method :returnNiveisAcesso
-	helper_method :json_builder
 
 
 	@@checked_rows = []
@@ -74,21 +73,20 @@ class ApplicationController < ActionController::Base
 				end
 			end
 			menuBuilder
-
 		else
 			menuBuilder
 		end
 	end
 
-	def json_builder(cls_name)
-		options = Array.new
-		(cls_name.capitalize).constantize.all.each do |item|
-			if item.adm_id ==  current_user.adm_id
-				options << item.descricao
-			end
-		end
-		return options.to_json
-	end
+#	def json_builder(cls_name)
+#		options = Array.new
+#		(cls_name.capitalize).constantize.all.each do |item|
+#			if item.adm_id ==  current_user.adm_id
+#				options << item.descricao
+#			end
+#		end
+#		return options.to_json
+#	end
 
 	#seta adm para itens criados
 	def setAdmin
