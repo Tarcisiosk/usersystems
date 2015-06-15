@@ -77,10 +77,32 @@
 													<a href="#tab_1_4" data-toggle="tab">Empresas</a>
 												</li>
 											<%end%>
+											<li>
+												<a href="#tab_1_6" data-toggle="tab">API Key</a>
+											</li>
+
 										</ul>
 									</div>
 									<div class="portlet-body">
 										<div class="tab-content">
+
+											<div class="tab-pane" id="tab_1_6">
+												<%= form_for((@user), url: {action: 'generate_api_key'}, html: { method: :post }) do |f|%>
+													<%= f.hidden_field :id %>
+
+													<div class="form-group">
+														<label class="control-label ">API Key</label>
+														<input type="text" disabled class ="form-control placeholder-no-fix" value="<%=@user.api_key%>"/>
+
+													</div>
+													<div class="actions">
+														<left><%= f.submit "Gerar nova chave de acesso", :class => "btn yellow" %></left>
+													</div><br>
+													<%= link_to "Voltar", users_path, :class => "btn default " %>
+
+												<% end %>
+											</div>  												
+
 											<div class="tab-pane active" id="tab_1_1">
 												<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
 													<% if @user.errors.any? %>

@@ -1,3 +1,4 @@
+require 'securerandom'
 class EmailValidator < ActiveModel::EachValidator
 	def validate_each(record, attribute, value)
 		unless value =~ /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
@@ -28,7 +29,11 @@ class User < AbstractRecord
 
 		devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 	
-		before_save { self.email = email.downcase }
+		before_save { 
+			self.email = email.downcase 
+			generate_api_key
+
+		}
 		validates :fullname, presence: true
 		validates :email, email:true
 		#validates :password, confirmation: true, :on => :create
@@ -39,4 +44,7 @@ class User < AbstractRecord
 		validates_attachment_size :photo, :less_than => 5.megabytes
 		validates_attachment_content_type :photo, :content_type => ['image/jpeg', 'image/jpg', 'image/png']
 
+		def generate_api_key
+			self.api_key = SecureRandom.hex
+		end
 end

@@ -129,6 +129,12 @@ class UserController < ApplicationController
 				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
 		end
 	end
+	def generate_api_key
+		user = User.find(params[:user][:id])
+		user.generate_api_key 		
+		user.save!
+		redirect_to users_path
+	end
 
 end
 	

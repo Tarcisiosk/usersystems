@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 	get 'users'  => "user#index", as: :users
 	get 'users/new'  => 'user#new', as: :new_user 
 	get 'users/showImg/:id' => 'user#show_image', as: :photo
+	post 'users/generate_api_key' => 'user#generate_api_key'
 	post 'users/new'  => 'user#create'
 	post 'users/save_settings' => 'user#save_settings'
 	post 'users/checked_rows' => 'user#checked_rows'
