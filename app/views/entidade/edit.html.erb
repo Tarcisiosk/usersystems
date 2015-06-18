@@ -25,6 +25,48 @@
 				</ul>
 
 				<div class="col-md-12">
+					<div class="profile-sidebar" style="width: 250px;">
+						<!-- PORTLET MAIN -->
+						<div class="portlet light ">
+							<div class="profile-usertitle-name">
+								 Empresas
+							</div>
+							<div class="profile-desc-text">
+								<div class="form-group">
+									<div class="checkbox-list">
+										<% lastEmpTable.each_with_index do |item, index| %>
+											<% if item == current_user.settings(:last_empresa).edited%>
+												<input type="checkbox" checked class="checkboxes" value= "<%=item.id%>" disabled><%= item.nome_fantasia %></input><br>	
+											<%else%>
+												<input type="checkbox" class="checkboxes" value= "<%=item.id%>"><%= item.nome_fantasia %></input><br>	
+											<%end%>
+										<%end%>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- END PORTLET MAIN -->
+						<div class="portlet light">
+							<div class="profile-usertitle-name">
+								 Tipos
+							</div>
+							<div class="profile-desc-text">
+								<div class="form-group">
+									<div class="checkbox-list">
+										<% returnItensUsuario.each_with_index do |item, index| %>
+											<%if index == 0%>
+												<input type="checkbox" checked class="checkboxes" value= "<%=item.id%>" name='tipo'><%= item.descricao %></input><br>
+											<%else%>
+												<input type="checkbox" class="checkboxes" value= "<%=item.id%>" name='tipo'><%= item.descricao %></input><br>
+											<%end%>
+										<%end%>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+
 					<div class="profile-content">
 						<div class="row">
 							<div class="col-md-12">
@@ -86,70 +128,11 @@
 														<label class="control-label ">Inscrição Municipal</label>
 														<%= f.text_field :insc_municipal,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
 													</div>
-
-													<div class="row">
-														<div class="col-md-6">
-															<label class="caption-subject font-black bold uppercase">Tipo Empresa/Contato</label>
-															<table class="table table-striped table-bordered table-hover" id="TipoEntidadeTable" >
-																<thead>
-																	<tr>
-																		<th class="" style="width: 24px;">			
-																			<input type="checkbox" class="group-checkable" data-set="#TipoEntidadeTable .checkboxes"/>
-																		</th>
-																		<th>
-																			Tipo
-																		</th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<% returnItensUsuario.each_with_index do |item, index| %>
-																		<tr class="odd gradeX">
-																			<td>
-																				<input type="checkbox" class="checkboxes" value= "<%=item.id%>"/>
-																			</td>
-																			<td>
-																				<%= item.descricao %>
-																			</td>
-																		</tr>
-																	<%end%>
-																</tbody>
-															</table>
-														</div>
-														<div class="col-md-6">
-															<label class="caption-subject font-black bold uppercase">Empresas Relacionadas</label>
-
-															<table class="table table-striped table-bordered table-hover" id="EntidadeEmpresaTable" >
-																<thead>
-																	<tr>
-																		<th class="" style="width: 24px;">			
-																			<input type="checkbox" class="group-checkable" data-set="#EntidadeEmpresaTable .checkboxes"/>
-																		</th>
-																		<th>
-																			Tipo
-																		</th>
-																	
-																	</tr>
-																</thead>
-																<tbody>
-																	<% lastEmpTable.each_with_index do |item, index| %>
-																		<tr class="odd gradeX">
-																			<td>
-																				<input type="checkbox" class="checkboxes" value= "<%=item.id%>"/>
-																			</td>
-																			<td>
-																				<%= item.nome_fantasia %>
-																			</td>
-																		</tr>
-																	<%end%>
-																</tbody>
-															</table>
-														</div>
-													</div>
 												</div>
 												<div class="tab-pane" id="tab_1_2">
 													<%= render :partial => "layouts/shared/enderecoform", :locals => { :f => f } %>
 
-													<a href="#endereco-config" data-toggle="modal" class="btn btn-icon-only green-meadow" data-original-title="" title=""><i class="fa fa-plus"></i></a>
+													<a href="entidade/add_end" data-toggle="modal" class="btn btn-icon-only green-meadow" data-original-title="" title=""><i class="fa fa-plus"></i></a>
 												</div><br><br>
 												<div class="actions">
 													<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
@@ -200,6 +183,7 @@
 <script src="../../assets/admin/layout3/scripts/layout.js" type="text/javascript"></script>
 <script src="../../assets/admin/layout3/scripts/demo.js" type="text/javascript"></script>
 <script src="../../assets/admin/pages/scripts/table-managed.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
 <script>
 jQuery(document).ready(function() {       
@@ -224,6 +208,17 @@ jQuery(document).ready(function() {
 		});
 	  	window.location.reload();		
 	});
+
+/*	
+	$(" .checkboxes-t").change(function(){
+
+	    var checked = $(".checkboxes-t input:checked").length == 1;
+	    if (!checked){
+	        alert("Please check at least one checkbox");
+	        return false;
+	    }
+	});
+*/
 
 	/*$('#tabela').DataTable({
 		"sPaginationType": "full_numbers",

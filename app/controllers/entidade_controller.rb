@@ -65,6 +65,7 @@ class EntidadeController < ApplicationController
 	end
 
 	def add_form
+		render :partial => '/layouts/shared/enderecoform'
 	end
 
 	def entidade_actions
