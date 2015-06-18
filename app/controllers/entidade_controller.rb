@@ -64,6 +64,8 @@ class EntidadeController < ApplicationController
 		params.require(:entidade).permit(:id, :razao_social, :users, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :adm_id)
 	end
 
+	def  
+	end
 
 	def entidade_actions
 		if current_user.user_type == 2
