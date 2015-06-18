@@ -17,4 +17,4 @@
 //= require dataTables/jquery.dataTables
 //= require_tree .
 //= require angular
-//= require angular/app
+//= require angular/controllers/entidade

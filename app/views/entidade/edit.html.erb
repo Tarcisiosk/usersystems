@@ -2,7 +2,7 @@
 <%= render :partial => "layouts/shared/header"%>
 
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container">
+<div class="page-container" ng-view>
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 			<!-- END PAGE TITLE -->
@@ -64,6 +64,14 @@
 								</div>
 							</div>
 							
+						</div>
+					</div>
+
+					<div class="container" ng-controller="EntidadeCtrl">
+						<h1 class="text-center">???</h1>
+						<div class="row" ng-repeat="entidade in data.entidades">
+						    <h2>{{ entidade.razao_social }}</h2>
+						    <p>{{ entidade.cnpj }}</p>
 						</div>
 					</div>
 
@@ -201,12 +209,15 @@ jQuery(document).ready(function() {
 	$('[name="emp_link"]').click(function () 
 	{
 		var id = $(this).attr('value');
-		$.ajax({
+		$.ajax
+		({
 			type: 'post',
 			url: '/users/set_current_emp',
-			data: {emp_id : id}
+			data: {emp_id : id},
+			success: function(msg) {
+            window.location.reload(true);
+        }
 		});
-	  	window.location.reload();		
 	});
 
 /*	
