@@ -91,7 +91,7 @@ class UserController < ApplicationController
 	
 	def set_current_emp
 		@empresa = Empresa.find(params[:emp_id])
-		puts " O! #{@empresa}"
+		#puts " O! #{@empresa}"
 		current_user.settings(:last_empresa).edited = @empresa
 		current_user.save!
 		redirect_to root_path
@@ -99,14 +99,19 @@ class UserController < ApplicationController
 
 	#params users e acesso: Master = 0, Admin = 1, Comum = 2. 
 	def user_params
-		params.require(:user).permit(:id, :adm_id, :empresas, :nivelacesso, :user_type, :fullname, :email, :password, :password_confirmation, :n_acesso, :photo, :api_key)
+		params.require(:user).permit(:id, :adm_id, :empresas, :nivelacesso, :user_type, :fullname, :email, :password, :password_confirmation, :n_acesso, :nivelacesso_id, :photo, :api_key)
 	end 
 	
 	##ARRUMAR AQUI##
 	def setNivelAcesso
-		@user.nivelacesso = Nivelacesso.find_by_descricao(@user.n_acesso)
-		unless @user.nivelacesso.users.include?(@user)
-			@user.nivelacesso.users << @user
+		if editingUser.user_type == 2
+			@user.nivelacesso = Nivelacesso.find_by_id(@user.nivelacesso_id)
+			unless @user.nivelacesso.users.include?(@user)
+				@user.nivelacesso.users << @user
+			end
+			@user.n_acesso = @user.nivelacesso.descricao
+			#puts "ACESSO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #{@user.n_acesso}"
+			@user.save!
 		end
 	end
 

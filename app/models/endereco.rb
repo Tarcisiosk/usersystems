@@ -1,2 +1,3 @@
-class Endereco < ActiveRecord::Base
+class Endereco < AbstractRecord
+	belongs_to :entidade
 end

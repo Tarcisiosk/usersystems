@@ -36,6 +36,10 @@ Rails.application.routes.draw do
 	post 'entidades/new' => 'entidade#create'
 	post 'entidades/save_settings' => 'entidade#save_settings'
 
+	get 'enderecos'=> "endereco#index", as: :enderecos
+	get 'enderecos/new' => "endereco#new", as: :new_endereco
+	post 'enderecos/new' => 'endereco#create'
+	post 'enderecos/save_settings' => 'endereco#save_settings'
 
 	get 'nivelacesso' => "nivelacesso#index", as: :nivelacessos
 	get 'nivelacesso/new' => "nivelacesso#new", as: :new_nivelacesso
@@ -57,6 +61,7 @@ Rails.application.routes.draw do
 	resources :nivelacesso, only: [:edit, :destroy, :update, :new, :create, :configurar]
 	resources :tipoentidade, only: [:edit, :destroy, :update, :new, :create]
 	resources :entidade, only: [:edit, :update, :new, :create, :destroy]
+	resources :endereco, only: [:edit, :update, :new, :create, :destroy]
 
 
 	devise_for :users

@@ -139,7 +139,7 @@ class ApplicationController < ActionController::Base
 		obj = instance_variable_get("@" + controller_name.downcase)
 		ActiveRecord::Base.transaction do
 
-			puts "CHECKED ROWS: #{@@checked_rows}"
+			#puts "CHECKED ROWS: #{@@checked_rows}"
 			if @@checked_rows == [] || @@checked_rows.blank?
 				if controller_name == "user"
 					#user

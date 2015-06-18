@@ -143,9 +143,9 @@
 													<% if current_user.user_type != 2 && editingUser.user_type == 2 && returnNiveisAcesso.count > 0 %>
 														<div class="form-group">
 															<label class="control-label col-md-2">Nível de Acesso</label><br><br>
-															<%= f.select(:n_acesso, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
+															<%= f.select(:nivelacesso_id, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
 																  <% returnNiveisAcesso.each do |n| %>
-																    <%= content_tag(:option, n.descricao, value: n.descricao) %>
+																    <%= content_tag(:option, n.descricao, value: n.id) %>
 																  <% end %>
 															<% end %>
 														</div><br>

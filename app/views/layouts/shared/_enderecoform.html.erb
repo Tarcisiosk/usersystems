@@ -1,0 +1,56 @@
+<%= f.fields_for :endereco do |e| %>
+	<div class="row">
+		<div class="col-md-12 ">
+			<div class="form-group">
+				<label>Rua</label>
+				<%= e.text_field :rua,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>Numero</label>
+				<%= e.text_field :num_rua,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+			</div>
+		</div>
+		<!--/span-->
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>Complemento</label>
+				<%= e.text_field :complemento,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+			</div>
+		</div>
+		<!--/span-->
+	</div>
+	<!--/row-->
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>Bairro</label>
+				<%= e.text_field :bairro,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+			</div>
+		</div>
+		<!--/span-->
+		
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>CEP</label>
+				<%= e.text_field :cep,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>Cidade</label>
+				<%= e.text_field :cidade,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+			</div>
+		</div>
+		<!--/span-->
+		<div class="col-md-6">
+			<div class="form-group">
+				<label>UF</label>
+				<%= e.select :uf, [['Acre', 'AC'], ['Alagoas', 'AL'], ['Amapá', 'AP'], ['Amazonas', 'AM'], ['Bahia', 'BA'],['Ceará', 'CE'], ['Distrito Federal', 'DF'], ['Espirito Santo', 'ES'], ['Goiás', 'GO'], ['Maranhão', 'MA'], ['Mato Grosso', 'MT'], ['Mato Grosso do Sul', 'MS'], ['Minas Gerais', 'MG'], ['Pará', 'PA'], ['Paraiba', 'PB'], ['Paraná', 'PR'], ['Pernambuco', 'PE'], ['Piauí', 'PI'], ['Rio de Janeiro', 'RJ'], ['Rio Grande do Norte', 'RN'], ['Rio Grande do Sul', 'RS'], ['Rondônia', 'RO'], ['Roraima', 'RR'], ['Santa Catarina', 'SC'], ['São Paulo', 'SP'], ['Sergipe', 'SE'], ['Tocantis', 'TO']], {},{:class =>"form-control"} %>
+			</div>
+		</div>
+	</div>
+<%end%>
