@@ -13,6 +13,7 @@ class Empresa < AbstractRecord
 	end 
 
   	has_and_belongs_to_many :users
+  	has_and_belongs_to_many :entidades
   	before_save {self.cnpj = cnpj.gsub(/<\/?[^>]*>/, '')}
   	#after_save {self.cnpj = cnpj.insert(3, '.'), self.cnpj = cnpj.insert(6, '.'), self.cnpj = cnpj.insert(10, '/'), self.cnpj = cnpj.insert(15, '-')}
 

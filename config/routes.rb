@@ -35,6 +35,7 @@ Rails.application.routes.draw do
 	get 'entidades/new' => "entidade#new", as: :new_entidade
 	post 'entidades/new' => 'entidade#create'
 	post 'entidades/save_settings' => 'entidade#save_settings'
+	post 'entidades/save_angular/:id' => 'entidade#save_angular'
 	get 'entidades/add_end' => "entidade#add_form"
 
 	get 'enderecos'=> "endereco#index", as: :enderecos

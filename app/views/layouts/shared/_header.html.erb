@@ -51,10 +51,18 @@
 		<link href="../../assets/admin/layout3/css/custom.css" rel="stylesheet" type="text/css">
 		<!-- END THEME STYLES -->
   	<%end%>
+  	<script>
+	  	var myApp = angular.module('myApp', []);
+		/*myApp.config([
+		  '$httpProvider', function($httpProvider) {
+		    return $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
+		  }
+		]);*/
+
+  	</script>
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
-<body>
 <div class="page-header">
 
 	<!-- BEGIN HEADER TOP -->

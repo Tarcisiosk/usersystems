@@ -2,6 +2,13 @@ class EntidadeController < ApplicationController
 
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}]
+	
+	@@angularActions = {:razao_social => '', :nome_fantasia => '', :cnpj => '', :insc_estadual => '', :insc_municipal => '', 
+						:tipoentidades => [], :empresas => [],
+						:endereco => [{:rua => '', :num_rua => '', :cep => '', :uf => '', :cidade => '', :bairro => ''}]}
+	
+	helper_method :send_json
+
 	def index
 		respond_to do |format|
 			format.html
@@ -32,6 +39,11 @@ class EntidadeController < ApplicationController
 
 	def edit
 		@entidade = Entidade.find(params[:id]) 
+		
+		@@angularActions = {:razao_social => @entidade.razao_social, :nome_fantasia => @entidade.nome_fantasia, :cnpj => @entidade.cnpj, :insc_estadual => @entidade.insc_estadual, :insc_municipal => @entidade.insc_municipal, 
+						:tipoentidades => @entidade.tipoentidades.pluck(:id), :empresas => @entidade.empresas.pluck(:id),
+						:endereco => [{:rua => '', :num_rua => '', :cep => '', :uf => '', :cidade => '', :bairro => ''}]}
+
 		#@entidade.empresas.each do |item|
 		# 	puts "Empresas ligadas a esse usuario: #{item.nome_fantasia}"
 		#end
@@ -61,11 +73,50 @@ class EntidadeController < ApplicationController
 	end
 
 	def entidade_params
-		params.require(:entidade).permit(:id, :razao_social, :users, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :adm_id)
+		params.require(:entidade).permit(:razao_social, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :users, :tipoentidades, :empresas, :adm_id)
 	end
 
-	def add_form
-		render :partial => '/layouts/shared/enderecoform'
+	def send_json
+		return @@angularActions.to_json
+	end
+	
+	def save_angular
+		@entidade = Entidade.find(params[:id])
+		data_hash = params[:data].symbolize_keys
+		array_empresas = []
+		array_tipos = []
+		
+		@entidade.razao_social = data_hash[:razao_social]
+		@entidade.nome_fantasia = data_hash[:nome_fantasia]
+		@entidade.cnpj = data_hash[:cnpj]
+		@entidade.insc_estadual = data_hash[:insc_estadual]
+		@entidade.insc_estadual = data_hash[:insc_municipal]
+		
+		if data_hash[:empresas].present?
+			data_hash[:empresas].each do |item|
+				if item.present? && item != "false"
+					if Empresa.find(item).adm_id == current_user.adm_id
+						array_empresas << Empresa.find(item)
+					end
+				end
+			end
+		end
+
+		if data_hash[:tipoentidades].present?
+			data_hash[:tipoentidades].each do |item|
+				if item.present? && item != "false"
+					if Tipoentidade.find(item).adm_id == current_user.adm_id
+						array_tipos << Tipoentidade.find(item)
+						puts "TIPOS SALVOS = #{item}"
+					end
+				end
+			end
+		end
+		@entidade.empresas = array_empresas
+		@entidade.tipoentidades = array_tipos
+		@entidade.save!
+
+		redirect_to entidades_path
 	end
 
 	def entidade_actions
@@ -74,7 +125,7 @@ class EntidadeController < ApplicationController
 				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
 				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contatos?'}}]
 
-			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#edit'))
+			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#edit'))
 				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
 
 			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))

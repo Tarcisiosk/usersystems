@@ -1,12 +1,13 @@
 <html lang="en">
 <%= render :partial => "layouts/shared/header"%>
 
+<body ng-controller="EntidadeCtrl">
 <!-- BEGIN PAGE CONTAINER -->
 <div class="page-container" ng-view>
 	<!-- BEGIN PAGE HEAD -->
-	<div class="page-head">
-			<!-- END PAGE TITLE -->
-			<!-- BEGIN PAGE CONTENT -->
+	<div class="page-head" >
+		<!-- END PAGE TITLE -->
+		<!-- BEGIN PAGE CONTENT -->
 		<div class="page-content">
 			<div class="container">
 				<!-- BEGIN PAGE BREADCRUMB -->
@@ -23,7 +24,6 @@
 						Editar
 					</li>
 				</ul>
-
 				<div class="col-md-12">
 					<div class="profile-sidebar" style="width: 250px;">
 						<!-- PORTLET MAIN -->
@@ -34,13 +34,14 @@
 							<div class="profile-desc-text">
 								<div class="form-group">
 									<div class="checkbox-list">
-										<% lastEmpTable.each_with_index do |item, index| %>
-											<% if item == current_user.settings(:last_empresa).edited%>
-												<input type="checkbox" checked class="checkboxes" value= "<%=item.id%>" disabled><%= item.nome_fantasia %></input><br>	
-											<%else%>
-												<input type="checkbox" class="checkboxes" value= "<%=item.id%>"><%= item.nome_fantasia %></input><br>	
-											<%end%>
-										<%end%>
+										<div ng-repeat="x in empresas_total" >
+											<div ng-if= 'x.id != empresa_atual'>	
+												<input type="checkbox" ng-checked="data.empresas.indexOf(x.id) > -1" ng-model='data.empresas[$index]' ng-true-value='{{ x.id }}' class="checkboxes" > {{ x.nome_fantasia }} </input>
+											</div>
+											<div ng-if= 'x.id == empresa_atual'>	
+												<input type="checkbox" disabled ng-model='data.empresas[$index]' ng-true-value='{{x.id}}' ng-checked="x.id == empresa_atual" class="checkboxes"> {{ x.nome_fantasia }} </input>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -53,13 +54,9 @@
 							<div class="profile-desc-text">
 								<div class="form-group">
 									<div class="checkbox-list">
-										<% returnItensUsuario.each_with_index do |item, index| %>
-											<%if index == 0%>
-												<input type="checkbox" checked class="checkboxes" value= "<%=item.id%>" name='tipo'><%= item.descricao %></input><br>
-											<%else%>
-												<input type="checkbox" class="checkboxes" value= "<%=item.id%>" name='tipo'><%= item.descricao %></input><br>
-											<%end%>
-										<%end%>
+										<div ng-repeat="t in tipos_total" >
+											<input type="checkbox" ng-checked='data.tipoentidades.indexOf(t.id) > -1' ng-model='data.tipoentidades[$index]' ng-true-value='{{t.id}}' class="checkboxes" > {{ t.descricao }}</input>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -67,14 +64,6 @@
 						</div>
 					</div>
 
-<!--					<div class="container" ng-controller="EntidadeCtrl">
-						<h1 class="text-center">???</h1>
-						<div class="row" ng-repeat="entidade in data.entidades">
-						    <h2>{{ entidade.razao_social }}</h2>
-						    <p>{{ entidade.cnpj }}</p>
-						</div>
-					</div>
--->
 					<div class="profile-content">
 						<div class="row">
 							<div class="col-md-12">
@@ -105,49 +94,48 @@
 													</ul>
 												</div>
 											<% end %>
-											<div class="tab-content">
-												<div class="tab-pane active" id="tab_1_1">												
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Razao Social</label>
-														<%= f.text_field :razao_social,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Nome Fantasia</label>
-														<%= f.text_field :nome_fantasia,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">CNPJ</label>
-														<%= f.text_field :cnpj,  autofocus: true, :autocomplete => "on", :id =>"campocnpj", :class =>"form-control placeholder-no-fix"%>
-													</div>
-
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Inscrição Estadual</label>
-														<%= f.text_field :insc_estadual,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Inscrição Municipal</label>
-														<%= f.text_field :insc_municipal,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-												</div>
-												<div class="tab-pane" id="tab_1_2">
-													<%= render :partial => "layouts/shared/enderecoform", :locals => { :f => f } %>
-
-													<a href="entidade/add_end" data-toggle="modal" class="btn btn-icon-only green-meadow" data-original-title="" title=""><i class="fa fa-plus"></i></a>
-												</div><br><br>
-												<div class="actions">
-													<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
-												</div><br>
-												<%= link_to "Voltar", entidades_path, :class => "btn default ", 'data-no-turbolink' => true %>
-											</div>
 										<% end %>
+
+										<div class="tab-content">
+											<div class="tab-pane active" id="tab_1_1">												
+												<div class="form-group">
+													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+													<label class="control-label ">Razao Social</label>
+													<input type="text" name="razao_social" ng-model='data.razao_social' class='form-control placeholder-no-fix'>
+												</div>
+
+												<div class="form-group">
+													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+													<label class="control-label ">Nome Fantasia</label>
+													<input type="text" name="nome_fantasia" ng-model='data.nome_fantasia' class='form-control placeholder-no-fix'>
+												</div>
+
+												<div class="form-group">
+													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+													<label class="control-label ">CNPJ</label>
+													<input type="text" name="cnpj" ng-model='data.cnpj' class='form-control placeholder-no-fix'>
+												</div>
+
+												<div class="form-group">
+													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+													<label class="control-label ">Inscrição Estadual</label>
+													<input type="text" name="insc_estadual" ng-model='data.insc_estadual' class='form-control placeholder-no-fix'>
+												</div>
+
+												<div class="form-group">
+													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+													<label class="control-label ">Inscrição Municipal</label>
+													<input type="text" name="insc_municipal" ng-model='data.insc_municipal' class='form-control placeholder-no-fix'>
+												</div>
+											</div>
+											<div class="tab-pane" id="tab_1_2">
+												<a href="entidade/add_end" data-toggle="modal" class="btn btn-icon-only green-meadow" data-original-title="" title=""><i class="fa fa-plus"></i></a>
+											</div><br><br>
+
+											<button ng-click="save()" class="btn yellow">Atualizar</button><br><br>
+											<%= link_to "Voltar", entidades_path, :class => "btn default ", 'data-no-turbolink' => true %>
+
+										</div>
 									</div>
 								</div>
 							</div>
@@ -159,6 +147,8 @@
 		<!-- END PAGE CONTENT -->
 	</div>
 </div>  
+</body>
+
 <!-- END PAGE CONTAINER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
@@ -194,13 +184,44 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
 <script>
+myApp.controller('EntidadeCtrl', ['$scope', function($scope)
+{
+	$scope.data = <%= send_json.to_s.html_safe %>;
+	$scope.tipos_total = <%=returnItensUsuario.to_json.to_s.html_safe%>
+	$scope.empresas_total = <%=lastEmpTable.to_json.to_s.html_safe%>
+	$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>
+	console.log($scope.data);
+
+   	$scope.save = function() {
+    	var request;
+    	request = $.ajax({
+      		method: 'post',
+      		url: '/entidades/save_angular/' + '<%= editingUser.id%>',
+      		data: { data: $scope.data }
+   	 	});
+   	 	window.alert("Salvando");
+   	 	console.log($scope.data);
+	}
+
+	/*
+	$scope.getValueTipo = function(event, index) 
+	{
+    	$scope.data.tipoentidades[index] = event.target.value;
+	}
+	$scope.getValueEmp = function(event, index) 
+	{
+	    $scope.data.empresas[index] = event.target.value;
+	}*/
+
+}]);
+
 jQuery(document).ready(function() {       
 	 // initiate layout and plugins
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 	TableManaged.init();
 
-
+	
 	$("#campocnpj").mask("99.999.999/9999-99");
 	$(".edit_entidade").submit(function() {
 	 	$("#campocnpj").val($("#campocnpj").mask()); 

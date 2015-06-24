@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150618143526) do
+ActiveRecord::Schema.define(version: 20150623143933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,11 @@ ActiveRecord::Schema.define(version: 20150618143526) do
     t.string   "cidade"
   end
 
+  create_table "empresas_entidades", force: :cascade do |t|
+    t.integer "empresa_id"
+    t.integer "entidade_id"
+  end
+
   create_table "empresas_users", force: :cascade do |t|
     t.integer "user_id"
     t.integer "empresa_id"
@@ -74,6 +79,11 @@ ActiveRecord::Schema.define(version: 20150618143526) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.integer  "adm_id"
+  end
+
+  create_table "entidades_tipoentidades", force: :cascade do |t|
+    t.integer "entidade_id"
+    t.integer "tipoentidade_id"
   end
 
   create_table "grupos", force: :cascade do |t|

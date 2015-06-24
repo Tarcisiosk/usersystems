@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<html ng-app>
-
-<html>
+<html >
 	<head>
 		<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
 		<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 		<%= csrf_meta_tags %>
 	</head>
 
-	<body>
+	<body ng-app='myApp'>
 		<% flash.each do |key, value| %>
 			<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
 		<% end %>
@@ -20,4 +18,5 @@
 		<%= yield %>
 	</body>
 
+	
 </html>

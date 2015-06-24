@@ -8,6 +8,9 @@ class Entidade < AbstractRecord
 	def cnpj_is_filled 
 	  !cnpj.blank? 	
 	end 
+	has_and_belongs_to_many :tipoentidades
+  	has_and_belongs_to_many :empresas
+  	
   	has_many :enderecos, :dependent => :destroy
     accepts_nested_attributes_for :enderecos
 
