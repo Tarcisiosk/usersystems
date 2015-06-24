@@ -12,8 +12,6 @@ class Entidade < AbstractRecord
   	has_and_belongs_to_many :empresas
   	
   	has_many :enderecos, :dependent => :destroy
-    accepts_nested_attributes_for :enderecos
-
 
   	before_save {self.cnpj = cnpj.gsub(/<\/?[^>]*>/, '')}
 

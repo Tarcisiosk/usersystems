@@ -39,7 +39,7 @@
 												<input type="checkbox" ng-checked="data.empresas.indexOf(x.id) > -1" ng-model='data.empresas[$index]' ng-true-value='{{ x.id }}' class="checkboxes" > {{ x.nome_fantasia }} </input>
 											</div>
 											<div ng-if= 'x.id == empresa_atual'>	
-												<input type="checkbox" disabled ng-model='data.empresas[$index]' ng-true-value='{{x.id}}' ng-checked="x.id == empresa_atual" class="checkboxes"> {{ x.nome_fantasia }} </input>
+												<input type="checkbox" disabled ng-checked="x.id == empresa_atual" ng-model='data.empresas[$index]' ng-true-value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
 											</div>
 										</div>
 									</div>
@@ -129,7 +129,73 @@
 												</div>
 											</div>
 											<div class="tab-pane" id="tab_1_2">
-												<a href="entidade/add_end" data-toggle="modal" class="btn btn-icon-only green-meadow" data-original-title="" title=""><i class="fa fa-plus"></i></a>
+												<div ng-repeat="e in data.endereco" >
+													<div ng-if= '$index > 0'>	
+														<div class="portlet">
+															<div class="portlet-title">
+																<div class="tools">
+																	<a href="javascript:;" class="collapse"> </a>
+																</div>
+															</div>	
+															<div class="portlet-body">
+																<div class="row">
+																	<div class="col-md-12 ">
+																		<div class="form-group">
+																			<label>Rua</label>
+																			<input type="text" name="e" ng-model='e.rua' class='form-control placeholder-no-fix'>
+																		</div>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>Numero</label>
+																			<input type="text" name="e" ng-model='e.num_rua' class='form-control placeholder-no-fix'>
+																		</div>
+																	</div>
+																	<!--/span-->
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>Complemento</label>
+																			<input type="text" name="e" ng-model='e.complemento' class='form-control placeholder-no-fix'>
+																		</div>
+																	</div>
+																	<!--/span-->
+																</div>
+																<!--/row-->
+																<div class="row">
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>Bairro</label>
+																			<input type="text" name="e" ng-model='e.bairro' class='form-control placeholder-no-fix'>
+																		</div>
+																	</div>
+																	<!--/span-->
+																	
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>CEP</label>
+																			<input type="text" name="e" ng-model='e.cep' class='form-control placeholder-no-fix'>
+																		</div>
+																	</div>
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>Cidade</label>
+																			<input type="text" name="e" ng-model='e.cidade' class='form-control placeholder-no-fix'>
+																		</div>
+																	</div>
+																	<!--/span-->
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>UF</label>
+																		</div>
+																	</div>												
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<button ng-click="add_blank_end()" class="btn green-meadow">+</button><br><br>
 											</div><br><br>
 
 											<button ng-click="save()" class="btn yellow">Atualizar</button><br><br>
@@ -201,6 +267,12 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
    	 	});
    	 	window.alert("Salvando");
    	 	console.log($scope.data);
+	}
+
+	$scope.add_blank_end = function()
+	{
+		var blank_end = $scope.data.endereco.slice();
+		$scope.data.endereco.push(blank_end);
 	}
 
 	/*
