@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623143933) do
+ActiveRecord::Schema.define(version: 20150624140546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 20150623143933) do
   create_table "acessos_nivelacessos", force: :cascade do |t|
     t.integer "acesso_id"
     t.integer "nivelacesso_id"
+  end
+
+  create_table "classificacaofiscals", force: :cascade do |t|
+    t.integer  "codigo_ncm"
+    t.string   "descricao"
+    t.integer  "adm_id"
+    t.integer  "versao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "empresas", force: :cascade do |t|
@@ -84,6 +93,16 @@ ActiveRecord::Schema.define(version: 20150623143933) do
   create_table "entidades_tipoentidades", force: :cascade do |t|
     t.integer "entidade_id"
     t.integer "tipoentidade_id"
+  end
+
+  create_table "estados", force: :cascade do |t|
+    t.integer  "codigo_ibge"
+    t.string   "uf",           limit: 2
+    t.string   "descricao",    limit: 50
+    t.float    "icms_interno"
+    t.float    "diferimento"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "grupos", force: :cascade do |t|

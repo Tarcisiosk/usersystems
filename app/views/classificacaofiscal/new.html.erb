@@ -1,0 +1,98 @@
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Classificações Fiscais", classificacaofiscals_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						Novo
+					</li>
+				</ul>
+				<div class="col-md-12">
+					<div class="portlet light">
+						<div class="portlet-title tabbable-line">
+							<div class="caption caption-md">
+								<i class="icon-globe theme-font hide"></i>
+									<span class="caption-subject font-blue-madison bold uppercase">Adicionar Classificação Fiscal</span>
+								<i class="fa fa-plus"></i>
+							</div>
+						</div>
+							<div class="portlet-body">
+							<%= form_for((@classificacaofiscal), url: new_classificacaofiscal_path, html: { method: :post }) do |f|%>
+								<% if @classificacaofiscal.errors.any? %>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger">
+										<ul>
+											<% @classificacaofiscal.errors.full_messages.each do |message| %>
+											 <li><%= message %></li>
+										 <% end %>
+										</ul>
+									</div>
+								<% end %>
+								<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+									<label class="control-label ">Código NCM</label>
+									<%= f.text_field :codigo_ncm,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+								</div>							
+
+								<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+									<label class="control-label ">Descrição</label>
+									<%= f.text_field :descricao,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
+								</div>								
+
+								<div class="actions">
+										<%= f.submit "Gravar", :class => "btn green-meadow pull-left"%>
+								</div><br><br><br>
+										
+								<%= link_to "Voltar", classificacaofiscals_path, :class => "btn default ", 'data-no-turbolink' => true %>
+							<% end %>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE CONTENT -->
+	</div>
+</div>  
+<script>
+jQuery(document).ready(function() {       
+	 // initiate layout and plugins
+	Metronic.init(); // init metronic core components
+	Layout.init(); // init current layout
+
+	$('[name="emp_link"]').click(function () 
+	{
+		var id = $(this).attr('value');
+		$.ajax({
+			type: 'post',
+			url: '/users/set_current_emp',
+			data: {emp_id : id}
+		});
+	  	window.location.reload();		
+	});
+
+	/*$('#tabela').DataTable({
+		"sPaginationType": "full_numbers",
+			"processing": true,
+			"serverSide": true,
+		"ajax": $('#tabela').data('source'),
+		 "columns": 
+			[{ "bSortable": false, "bSearchable": false, "data": null, "render": function ( data, type, row ) {
+								return '<a href="/user/'+data.id+'/edit" class="btn yellow btn-xs pull-center"><i class="fa fa-pencil"></i> Editar</a> <a data-confirm="Tem certeza que deseja excluir o usuário?" rel="nofollow" data-method="delete" href="/user/'+data.id+'" class="btn red btn-xs pull-right"> <i class="fa fa-times"></i> Deletar</a> '}}]
+	});*/
+ //init tabela
+});
+
+</script>

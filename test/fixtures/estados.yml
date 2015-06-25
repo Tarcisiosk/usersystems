@@ -1,0 +1,37 @@
+---
+estado_001:
+  id: '1'
+  codigo_ibge: '41'
+  uf: 'PR'
+  descricao: 'Paraná'
+  icms_interno: '12'
+  diferimento: '15'
+estado_002:
+  id: '2'
+  codigo_ibge: '12'
+  uf: 'AC'
+  descricao: 'Acre'
+  icms_interno: '12'
+  diferimento: '15'
+estado_003:
+  id: '3'
+  codigo_ibge: '13'
+  uf: 'AM'
+  descricao: 'Amazonas'
+  icms_interno: '10'
+  diferimento: '13'
+estado_004:
+  id: '4'
+  codigo_ibge: '14'
+  uf: 'RR'
+  descricao: 'Roraima'
+  icms_interno: '9'
+  diferimento: '16'
+estado_005:
+  id: '5'
+  codigo_ibge: '35'
+  uf: 'SP'
+  descricao: 'São Paulo'
+  icms_interno: '14'
+  diferimento: '17'
+

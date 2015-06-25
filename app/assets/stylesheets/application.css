@@ -10,7 +10,33 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_self
+ *= require_self 
+ *= require font-awesome.min
+ *= require simple-line-icons.min
+ *= require bootstrap.min
+ *= require uniform.default
+ *= require bootstrap-switch.min
+ *= require bootstrap-fileinput
+ *= require profile
+ *= require tasks
+ *= require select2
+ *= require dataTables.scroller.min
+ *= require dataTables.colReorder.min
+ *= require dataTables.colVis
+ *= require dataTables.colVis.min
+ *= require dataTables.bootstrap
+ *= require typeahead
+ *= require error
+ *= require login-soft
+ *= require components-rounded
+ *= require plugins
+ *= require layout
+ *= require default
+ *= require custom
  *= require_tree 
  */
+
+
+
+
 

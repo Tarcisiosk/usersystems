@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 	post 'tipoentidades/new'  => 'tipoentidade#create'
 	post 'tipoentidades/save_settings' => 'tipoentidade#save_settings'
 
+
 	get 'entidades'=> "entidade#index", as: :entidades
 	get 'entidades/new' => "entidade#new", as: :new_entidade
 	post 'entidades/new' => 'entidade#create'
@@ -42,6 +43,16 @@ Rails.application.routes.draw do
 	get 'enderecos/new' => "endereco#new", as: :new_endereco
 	post 'enderecos/new' => 'endereco#create'
 	post 'enderecos/save_settings' => 'endereco#save_settings'
+
+	get 'estados' => "estado#index", as: :estados
+	get 'estados/new' => "estado#new", as: :new_estado
+	post 'estados/new' => 'estado#create'
+	post 'estados/save_settings' => 'estado#save_settings'
+
+	get 'classificacaofiscal' => "classificacaofiscal#index", as: :classificacaofiscals
+	get 'classificacaofiscal/new' => "classificacaofiscal#new", as: :new_classificacaofiscal
+	post 'classificacaofiscal/new' => 'classificacaofiscal#create'
+	post 'classificacaofiscal/save_settings' => 'classificacaofiscal#save_settings'
 
 	get 'nivelacesso' => "nivelacesso#index", as: :nivelacessos
 	get 'nivelacesso/new' => "nivelacesso#new", as: :new_nivelacesso
@@ -60,6 +71,8 @@ Rails.application.routes.draw do
 	resources :empresa, only: [:edit, :update, :new, :create]
 	resources :grupo, only: [:edit, :destroy, :update, :new, :create]
 	resources :subgrupo, only: [:edit, :destroy, :update, :new, :create]
+	resources :estado, only: [:edit, :destroy, :update, :new, :create] 
+	resources :classificacaofiscal, only: [:edit, :destroy, :update, :new, :create] 
 	resources :nivelacesso, only: [:edit, :destroy, :update, :new, :create, :configurar]
 	resources :tipoentidade, only: [:edit, :destroy, :update, :new, :create]
 	resources :entidade, only: [:edit, :update, :new, :create, :destroy]

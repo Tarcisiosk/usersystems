@@ -18,4 +18,11 @@ class AbstractRecord <  ActiveRecord::Base
 		end
 		default_columns
 	end
+
+	def version_id_sequence
+		array_version_sequence = ActiveRecord::Base.connection.execute("SELECT nextval('version_id_seq') AS version_id")
+		version_object = array_version_sequence[0]		 
+		return version_object["version_id"]
+	end	
+
 end

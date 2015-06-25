@@ -21,7 +21,8 @@ class User < AbstractRecord
 			s.key :columns_nivelacesso, :defaults => {:col => returnDefaults(Nivelacesso::TOTAL_COLUMNS_NIVELACESSO)}
 			s.key :columns_tipoentidade, :defaults => {:col => returnDefaults(Tipoentidade::TOTAL_COLUMNS_TIPOENTIDADE)}
 			s.key :columns_entidade, :defaults => {:col => returnDefaults(Entidade::TOTAL_COLUMNS_ENTIDADE)}
-
+			s.key :columns_estado, :defaults => {:col => returnDefaults(Estado::TOTAL_COLUMNS_ESTADO)}
+			s.key :columns_classificacaofiscal, :defaults => {:col => returnDefaults(Classificacaofiscal::TOTAL_COLUMNS_CLASSIFICACAOFISCAL)}
 			s.key :last_empresa
 		end
 

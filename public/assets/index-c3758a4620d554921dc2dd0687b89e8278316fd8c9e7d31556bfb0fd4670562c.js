@@ -1,0 +1,1 @@
+(function(){jQuery(function(){return $('[name="emp_link"]').click(function(){var t;t=$(this).attr("value"),$.ajax({type:"post",url:"/users/set_current_emp",data:{emp_id:t}})})})}).call(this);

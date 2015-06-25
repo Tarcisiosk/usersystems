@@ -47,14 +47,27 @@ class GeneralDatatable < ApplicationController
 			links_array = Array.new
 		
 			if @current_user.user_type == 0
-				columns.each_with_index do |item, index|
-					data_array[index] = record.send(item)
-				end
-				actions.each_with_index do |item, index|
-					item[:id] = record.id
-					links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1], :class => item.values[2], :data => item.values[4])
-				end
-				final_array << (data_array << links_array.join(""))
+				if record.try(:adm_id)
+					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
+						columns.each_with_index do |item, index|
+							data_array[index] = record.send(item)
+						end
+						actions.each_with_index do |item, index|
+							item[:id] = record.id
+							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1], :class => item.values[2], :data => item.values[4])
+						end
+						final_array << (data_array << links_array.join(""))
+					end	
+				else
+					columns.each_with_index do |item, index|
+						data_array[index] = record.send(item)
+					end
+					actions.each_with_index do |item, index|
+						item[:id] = record.id
+						links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1], :class => item.values[2], :data => item.values[4])
+					end
+					final_array << (data_array << links_array.join(""))
+				end 				
 			elsif @current_user.user_type == 1	
 				if record.adm_id == @current_user.adm_id || record.adm_id == @current_user.id
 					columns.each_with_index do |item, index|					

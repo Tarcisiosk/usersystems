@@ -38,16 +38,21 @@ class ApplicationController < ActionController::Base
 
 	def menu
 		menuBuilder = {:maincadastros => {:label=>'Cadastros', 
-										  :tipo_entidade => {:label=>'Empresas e Contatos', 
+										  :tipo_entidade => {:label=>'Empresas e Contatos',
 														 :tipos =>{:label => 'Tipos', :path => '/tipoentidades', :acao =>'tipoentidade#index'}, 
 														 :entidades =>{:label => 'Empresa/Contato', :path => '/entidades', :acao =>'entidade#index'}}, 
 										  :cadastros => {:label=>'Produtos', 
 														 :grupos =>{:label => 'Grupos', :path => '/grupos', :acao =>'grupo#index'}, 
-														 :subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'}}, 
+														 :subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'},
+														 :classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}, 
 										  :configuracoes =>{:label=>'Configurações', 
 										 				    :empresas =>{:label=> 'Empresas', :path => '/empresas', :acao =>'empresa#index'}, 
 										 				    :nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'}, 
-										 				    :usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}} }
+										 				    :usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
+				       :mainadministracao =>{:label=>'Administração', :cadastros =>{:label=>'Cadastros', :estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'}}}}
+		if current_user.user_type != 0
+			menuBuilder.except!(:mainadministracao)
+		end									 				    
 		if current_user.user_type == 2
 			menuBuilder.each do |hkey, hvalue|
 				if hvalue.is_a?(Hash)
@@ -89,13 +94,13 @@ class ApplicationController < ActionController::Base
 #	end
 
 	#seta adm para itens criados
-	def setAdmin
+	def setAdmin		
 		if controller_name != "sessions"
 			obj = instance_variable_get("@" + controller_name.downcase)
 			if controller_name == "user"
 				#se usuario for master os usuarios criados(master/adm) serão adm de si 
 				if current_user.user_type == 0
-					obj.adm_id = obj.id
+					obj.adm_id = obj.id					
 				#se usuario for adm os usuarios criados(comuns) serão administrados pelo criador 
 				elsif current_user.user_type == 1
 					obj.adm_id = current_user.id
@@ -104,8 +109,12 @@ class ApplicationController < ActionController::Base
 					obj.adm_id = current_user.adm_id
 				end
 			else
+				if current_user.user_type == 0					
+					if obj.attributes.key?('adm_id')
+						obj.adm_id = current_user.settings(:last_empresa).edited.adm_id						
+					end
 				#se usuario for master os usuarios criados(master/adm) serão adm de si 
-				if current_user.user_type == 1
+				elsif current_user.user_type == 1
 					obj.adm_id = current_user.adm_id
 				#se o usuario for comum os usuarios criados(comuns) serão administrados pelo seu administrador
 				elsif current_user.user_type == 2

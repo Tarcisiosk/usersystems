@@ -1,0 +1,32 @@
+---
+classificacaofiscal_001:
+  id: '1'
+  codigo_ncm: '1'
+  descricao: 'teste'
+  adm_id: '1'
+  versao: '1'
+classificacaofiscal_002:
+  id: '2'
+  codigo_ncm: '2'
+  descricao: 'teste'
+  adm_id: '1'
+  versao: '2'
+classificacaofiscal_003:
+  id: '3'
+  codigo_ncm: '3'
+  descricao: 'teste'
+  adm_id: '1'
+  versao: '3'
+classificacaofiscal_004:
+  id: '4'
+  codigo_ncm: '4'
+  descricao: 'teste'
+  adm_id: '1'
+  versao: '4'
+classificacaofiscal_005:
+  id: '5'
+  codigo_ncm: '5'
+  descricao: 'teste'
+  adm_id: '1'
+  versao: '5'       
+
