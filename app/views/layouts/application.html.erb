@@ -168,6 +168,9 @@
 	</div>
 	<!-- END HEADER MENU -->
 </div>
+	<script>
+		var myApp = angular.module('myApp',[]); 
+	</script>
 <%end%>
 		<% flash.each do |key, value| %>
 			<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
@@ -177,11 +180,6 @@
 			
 		<% end %>
 			
-		<%= yield %>
-		<script>
-			var myApp = angular.module('myApp',[]); 
-		</script>
-	</body>
-
-	
+		<%= yield %>		
+	</body>	
 </html>
