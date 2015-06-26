@@ -39,10 +39,9 @@ class EntidadeController < ApplicationController
 
 	def edit
 		@entidade = Entidade.find(params[:id]) 
-		
 		@@angularActions = {:razao_social => @entidade.razao_social, :nome_fantasia => @entidade.nome_fantasia, :cnpj => @entidade.cnpj, :insc_estadual => @entidade.insc_estadual, :insc_municipal => @entidade.insc_municipal, 
 						:tipoentidades => @entidade.tipoentidades.pluck(:id), :empresas => @entidade.empresas.pluck(:id),
-						:endereco => [{:rua => '', :num_rua => '', :cep => '', :uf => '', :cidade => '', :bairro => ''}]}
+						:endereco => @entidade.enderecos}
 
 		#@entidade.empresas.each do |item|
 		# 	puts "Empresas ligadas a esse usuario: #{item.nome_fantasia}"
@@ -73,7 +72,7 @@ class EntidadeController < ApplicationController
 	end
 
 	def entidade_params
-		params.require(:entidade).permit(:razao_social, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :users, :tipoentidades, :empresas, :adm_id)
+		params.require(:entidade).permit(:razao_social, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :users, :tipoentidades, :empresas, :enderecos, :adm_id)
 	end
 
 	def send_json
@@ -83,7 +82,6 @@ class EntidadeController < ApplicationController
 	def save_angular
 		@entidade = Entidade.find(params[:id])
 		data_hash = params[:data].symbolize_keys
-		data_hash[:endereco] = data_hash[:endereco].symbolize_keys
 		
 		array_empresas = []
 		array_tipos = []
@@ -119,7 +117,19 @@ class EntidadeController < ApplicationController
 			data_hash[:endereco].each do |item|
 				item.each do |subitem|
 					if subitem.is_a?(Hash)
-						array_enderecos << Endereco.new(rua: subitem[:rua], num_rua: subitem[:num_rua], bairro: subitem[:bairro], cep: subitem[:cep], cidade: subitem[:cidade], uf: subitem[:uf], adm_id: current_user.adm_id)
+						if Endereco.where(:id => subitem['id']).present?
+							e = Endereco.find(subitem['id'])
+							e.rua = subitem['rua']
+							e.num_rua = subitem['num_rua']
+							e.bairro = subitem['bairro']
+							e.cidade = subitem['cidade']
+							e.uf = subitem['uf']
+							e.adm_id = current_user.settings(:last_empresa).edited.adm_id
+							array_enderecos << e
+						elsif 
+							e = Endereco.new(rua: subitem['rua'], num_rua: subitem['num_rua'], bairro: subitem['bairro'], cep: subitem['cep'], cidade: subitem['cidade'], uf: subitem['uf'], adm_id: current_user.adm_id)
+							array_enderecos << e
+						end
 					end
 				end
 			end
@@ -128,8 +138,6 @@ class EntidadeController < ApplicationController
 		@entidade.empresas = array_empresas
 		@entidade.tipoentidades = array_tipos
 		@entidade.enderecos = array_enderecos
-		puts "ENDERECOS!!!!: #{array_enderecos}"
-
 		@entidade.save!
 
 		redirect_to entidades_path

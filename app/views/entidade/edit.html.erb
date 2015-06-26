@@ -31,17 +31,13 @@
 								<div class="form-group">
 									<div class="checkbox-list">
 										<div ng-repeat="x in empresas_total" >
-											<div ng-if= 'x.id != empresa_atual'>	
-												<input type="checkbox" ng-checked="data.empresas.indexOf(x.id) > -1" ng-model='data.empresas[$index]' ng-true-value='{{ x.id }}' class="checkboxes" > {{ x.nome_fantasia }} </input>
-											</div>
-											<div ng-if= 'x.id == empresa_atual'>	
-												<input type="checkbox" disabled ng-checked="x.id == empresa_atual" ng-model='data.empresas[$index]' ng-true-value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
-											</div>
+											<input type="checkbox" disabled ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" ng-model='data.empresas[$index]' ng-true-value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+
 						<!-- END PORTLET MAIN -->
 						<div class="portlet light">
 							<div class="profile-usertitle-name">
@@ -56,7 +52,6 @@
 									</div>
 								</div>
 							</div>
-							
 						</div>
 					</div>
 
@@ -126,67 +121,61 @@
 											</div>
 											<div class="tab-pane" id="tab_1_2">
 												<div ng-repeat="e in data.endereco" >
-													<div ng-if= '$index > 0'>	
-														<div class="portlet">
-															<div class="portlet-title">
-																<div class="tools">
-																	<a href="javascript:;" class="collapse"> </a>
-																</div>
-															</div>	
-															<div class="portlet-body">
-																<div class="row">
-																	<div class="col-md-12 ">
-																		<div class="form-group">
-																			<label>Rua</label>
-																			<input type="text" name="e" ng-model='e.rua' class='form-control placeholder-no-fix'>
-																		</div>
+													<div class="portlet">
+														<div class="portlet-body">
+															<div class="row">
+																<div class="col-md-6">
+																	<div class="form-group">
+																		<label>CEP</label>
+																		<input type="text" ng-model='e.cep' class='form-control placeholder-no-fix'>
 																	</div>
 																</div>
-																<div class="row">
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>Numero</label>
-																			<input type="text" name="e" ng-model='e.num_rua' class='form-control placeholder-no-fix'>
-																		</div>
+																<div class="col-md-12 ">
+																	<div class="form-group">
+																		<label>Rua</label>
+																		<input type="text" ng-model='e.rua' class='form-control placeholder-no-fix'>
 																	</div>
-																	<!--/span-->
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>Complemento</label>
-																			<input type="text" name="e" ng-model='e.complemento' class='form-control placeholder-no-fix'>
-																		</div>
-																	</div>
-																	<!--/span-->
 																</div>
-																<!--/row-->
-																<div class="row">
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>Bairro</label>
-																			<input type="text" name="e" ng-model='e.bairro' class='form-control placeholder-no-fix'>
-																		</div>
+															</div>
+															<div class="row">
+																<div class="col-md-6">
+																	<div class="form-group">
+																		<label>Numero</label>
+																		<input type="text" ng-model='e.num_rua' class='form-control placeholder-no-fix'>
 																	</div>
-																	<!--/span-->
-																	
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>CEP</label>
-																			<input type="text" name="e" ng-model='e.cep' class='form-control placeholder-no-fix'>
-																		</div>
-																	</div>
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>Cidade</label>
-																			<input type="text" name="e" ng-model='e.cidade' class='form-control placeholder-no-fix'>
-																		</div>
-																	</div>
-																	<!--/span-->
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>UF</label>
-																		</div>
-																	</div>												
 																</div>
+																<!--/span-->
+																<div class="col-md-6">
+																	<div class="form-group">
+																		<label>Complemento</label>
+																		<input type="text" ng-model='e.complemento' class='form-control placeholder-no-fix'>
+																	</div>
+																</div>
+																<!--/span-->
+															</div>
+															<!--/row-->
+															<div class="row">
+																<div class="col-md-6">
+																	<div class="form-group">
+																		<label>Bairro</label>
+																		<input type="text" ng-model='e.bairro' class='form-control placeholder-no-fix'>
+																	</div>
+																</div>
+																<!--/span-->
+																
+															
+																<div class="col-md-6">
+																	<div class="form-group">
+																		<label>Cidade</label>
+																		<input type="text" ng-model='e.cidade' class='form-control placeholder-no-fix'>
+																	</div>
+																</div>
+																<!--/span-->
+																<div class="col-md-6">
+																	<div class="form-group">
+																		<label>UF</label>
+																	</div>
+																</div>												
 															</div>
 														</div>
 													</div>
@@ -218,6 +207,7 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 	$scope.tipos_total = <%=returnItensUsuario.to_json.to_s.html_safe%>
 	$scope.empresas_total = <%=lastEmpTable.to_json.to_s.html_safe%>
 	$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>
+
 	console.log($scope.data);
 
    	$scope.save = function() {
@@ -233,20 +223,9 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 
 	$scope.add_blank_end = function()
 	{
-		var blank_end = $scope.data.endereco.slice();
+		var blank_end = {"rua":"","num_rua":"","cep":"","uf":"","cidade":"","bairro":""};
 		$scope.data.endereco.push(blank_end);
 	}
-
-	/*
-	$scope.getValueTipo = function(event, index) 
-	{
-    	$scope.data.tipoentidades[index] = event.target.value;
-	}
-	$scope.getValueEmp = function(event, index) 
-	{
-	    $scope.data.empresas[index] = event.target.value;
-	}*/
-
 }]);
 
 jQuery(document).ready(function() {       
@@ -274,28 +253,6 @@ jQuery(document).ready(function() {
         }
 		});
 	});
-
-/*	
-	$(" .checkboxes-t").change(function(){
-
-	    var checked = $(".checkboxes-t input:checked").length == 1;
-	    if (!checked){
-	        alert("Please check at least one checkbox");
-	        return false;
-	    }
-	});
-*/
-
-	/*$('#tabela').DataTable({
-		"sPaginationType": "full_numbers",
-			"processing": true,
-			"serverSide": true,
-		"ajax": $('#tabela').data('source'),
-		 "columns": 
-			[{ "bSortable": false, "bSearchable": false, "data": null, "render": function ( data, type, row ) {
-								return '<a href="/user/'+data.id+'/edit" class="btn yellow btn-xs pull-center"><i class="fa fa-pencil"></i> Editar</a> <a data-confirm="Tem certeza que deseja excluir o usuário?" rel="nofollow" data-method="delete" href="/user/'+data.id+'" class="btn red btn-xs pull-right"> <i class="fa fa-times"></i> Deletar</a> '}}]
-	});*/
- //init tabela
 });
 
 </script>
