@@ -91,27 +91,6 @@ jQuery(document).ready(function() {
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 
-	$('[name="emp_link"]').click(function () 
-	{
-		var id = $(this).attr('value');
-		$.ajax({
-			type: 'post',
-			url: '/users/set_current_emp',
-			data: {emp_id : id}
-		});
-	  	window.location.reload();		
-	});
-
-	/*$('#tabela').DataTable({
-		"sPaginationType": "full_numbers",
-			"processing": true,
-			"serverSide": true,
-		"ajax": $('#tabela').data('source'),
-		 "columns": 
-			[{ "bSortable": false, "bSearchable": false, "data": null, "render": function ( data, type, row ) {
-								return '<a href="/user/'+data.id+'/edit" class="btn yellow btn-xs pull-center"><i class="fa fa-pencil"></i> Editar</a> <a data-confirm="Tem certeza que deseja excluir o usuário?" rel="nofollow" data-method="delete" href="/user/'+data.id+'" class="btn red btn-xs pull-right"> <i class="fa fa-times"></i> Deletar</a> '}}]
-	});*/
- //init tabela
 });
 
 </script>

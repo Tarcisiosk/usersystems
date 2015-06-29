@@ -234,6 +234,24 @@
 		    } 
 		  };
 		});
+
+		
+		jQuery(document).ready(function() 
+		{       
+			$('[name="emp_link"]').click(function () 
+			{
+				var id = $(this).attr('value');
+				$.ajax
+				({
+					type: 'post',
+					url: '/users/set_current_emp',
+					data: {emp_id : id},
+					success: function(msg) {
+		            window.location.reload(true);
+		        }
+				});
+			});
+		});
 	</script>
 		<% flash.each do |key, value| %>
 			<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>

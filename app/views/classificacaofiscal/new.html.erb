@@ -72,16 +72,6 @@ jQuery(document).ready(function() {
 	Metronic.init(); // init metronic core components
 	Layout.init(); // init current layout
 
-	$('[name="emp_link"]').click(function () 
-	{
-		var id = $(this).attr('value');
-		$.ajax({
-			type: 'post',
-			url: '/users/set_current_emp',
-			data: {emp_id : id}
-		});
-	  	window.location.reload();		
-	});
 
 	/*$('#tabela').DataTable({
 		"sPaginationType": "full_numbers",
