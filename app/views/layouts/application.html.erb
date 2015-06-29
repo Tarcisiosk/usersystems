@@ -171,6 +171,69 @@
 <%end%>
 	<script>
 		var myApp = angular.module('myApp',[]); 
+
+		//diretiva para somente numeros
+		myApp.directive('numbersOnly', function(){
+		   	return { require: 'ngModel',
+	     		link: function(scope, element, attrs, modelCtrl) {
+	      			modelCtrl.$parsers.push(function (inputValue) {
+	           			if (inputValue == undefined) return '' 
+           				var transformedInput = inputValue.replace(/[^0-9]/g, ''); 
+           				if (transformedInput!=inputValue)
+           				{
+				            modelCtrl.$setViewValue(transformedInput);
+				            modelCtrl.$render();
+           				}         
+	          			return transformedInput;         
+	       			});
+	     		}
+	 		};
+		});
+
+		//diretiva para tamanho maximo
+		myApp.directive('maxlength', function() {
+		  return {
+		    require: 'ngModel',
+		    link: function (scope, element, attrs, ngModelCtrl) {
+		      var maxlength = Number(attrs.myMaxlength);
+		      function fromUser(text) {
+		          if (text.length > maxlength) {
+		            var transformedInput = text.substring(0, maxlength);
+		            ngModelCtrl.$setViewValue(transformedInput);
+		            ngModelCtrl.$render();
+		            return transformedInput;
+		          } 
+		          return text;
+		      }
+		      ngModelCtrl.$parsers.push(fromUser);
+		    }
+		  }; 
+		});
+
+		//diretiva para tamanho minimo
+		myApp.directive('minlength',function(){
+		  return {
+		    require: 'ngModel',
+		    link: function(scope,elm,attr,ngModel){
+
+		      var minlength = 0;
+
+		      var minLengthValidator = function(value){     
+		        var validity = ngModel.$isEmpty(value) || value.length >= minlength;
+		        ngModel.$setValidity('minlength',  validity);
+		        return validity ? value : undefined;
+		      };
+
+		      attr.$observe('myMinlength', function(val){
+		         minlength = parseInt(val,10);
+		         minLengthValidator(ngModel.$viewValue);
+		      });
+
+		      ngModel.$parsers.push(minLengthValidator);
+		      ngModel.$formatters.push(minLengthValidator);
+		    } 
+		  };
+		});
 	</script>
 		<% flash.each do |key, value| %>
 			<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>

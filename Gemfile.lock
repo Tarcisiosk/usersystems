@@ -288,6 +288,3 @@ DEPENDENCIES
   web-console
   will_paginate
   yaml_dump!
-
-BUNDLED WITH
-   1.10.3

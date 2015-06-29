@@ -55,7 +55,7 @@ class EstadoController < ApplicationController
 	def destroy
 		@estado = Estado.find(params[:id])	
 		if @estado.destroy
-				redirect_to estados_path, notice: " "
+			redirect_to estados_path, notice: " "
 		end
 	end
 

@@ -59,13 +59,18 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="portlet light">
-								 	<div class="portlet-title tabbable-line">
+								 	<div class="portlet-title ">
 										<div class="caption caption-md">
 											<i class="icon-globe theme-font hide"></i>
-												<span class="caption-subject font-blue-madison bold uppercase">Editar Empresa/Contato</span>
-											<i class="fa fa-pencil"></i>
+											<span class="caption-subject font-blue-madison bold uppercase">Editar Empresa/Contato</span><i class="fa fa-pencil"></i>
 										</div>
-										 <ul class="nav nav-tabs">
+										<div class="actions btn-set">
+											<%= link_to "Voltar", entidades_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
+											<button ng-click="save()" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
+										</div>
+									</div>
+									<div class="portlet-body ">
+										<ul class="nav nav-tabs">
 										 	<li class="active">
 												<a href="#tab_1_1" data-toggle="tab">Informações Gerais</a>
 											</li>
@@ -73,118 +78,105 @@
 												<a href="#tab_1_2" data-toggle="tab">Endereços</a>
 											</li>
 										</ul>
-									</div>
-									<div class="portlet-body">
-										<%= form_for((@entidade), url: entidade_path(@entidade), html: { method: :put }) do |f|%>
-											<% if @entidade.errors.any? %>
-												<div id="error_explanation" class="Metronic-alerts alert alert-danger">
-													<ul >
-														<% @entidade.errors.full_messages.each do |message| %>
-														 <li><%= message %></li>
-													 <% end %>
-													</ul>
-												</div>
-											<% end %>
-										<% end %>
-
 										<div class="tab-content">
-											<div class="tab-pane active" id="tab_1_1">												
-												<div class="form-group">
-													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-													<label class="control-label ">Razao Social</label>
-													<input type="text" name="razao_social" ng-model='data.razao_social' class='form-control placeholder-no-fix'>
-												</div>
+											<div class="tab-pane active" id="tab_1_1">	
+												<form name="form_1" class="css-form" novalidate>
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Razao Social</label>
+														<input type="text" name="razao_social" ng-model='data.razao_social' class='form-control placeholder-no-fix'>
+													</div>
 
-												<div class="form-group">
-													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-													<label class="control-label ">Nome Fantasia</label>
-													<input type="text" name="nome_fantasia" ng-model='data.nome_fantasia' class='form-control placeholder-no-fix'>
-												</div>
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Nome Fantasia</label>
+														<input type="text" name="nome_fantasia" ng-model='data.nome_fantasia' class='form-control placeholder-no-fix'>
+													</div>
 
-												<div class="form-group">
-													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-													<label class="control-label ">CNPJ</label>
-													<input type="text" name="cnpj" ng-model='data.cnpj' class='form-control placeholder-no-fix'>
-												</div>
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">CNPJ</label>
+														<input type="text" name="cnpj" id="campocnpj" ng-model='data.cnpj' minlength="14" maxlength="14" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
 
-												<div class="form-group">
-													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-													<label class="control-label ">Inscrição Estadual</label>
-													<input type="text" name="insc_estadual" ng-model='data.insc_estadual' class='form-control placeholder-no-fix'>
-												</div>
+													</div>
 
-												<div class="form-group">
-													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-													<label class="control-label ">Inscrição Municipal</label>
-													<input type="text" name="insc_municipal" ng-model='data.insc_municipal' class='form-control placeholder-no-fix'>
-												</div>
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Inscrição Estadual</label>
+														<input type="text" name="insc_estadual" minlength="10" ng-model='data.insc_estadual' maxlength="10" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+													</div>
+
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Inscrição Municipal</label>
+														<input type="text" name="insc_municipal" ng-model='data.insc_municipal' minlength="10" maxlength="10" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+													</div>
+												</form>
 											</div>
 											<div class="tab-pane" id="tab_1_2">
-												<div ng-repeat="e in data.endereco" >
-													<div class="portlet">
-														<div class="portlet-body">
-															<div class="row">
-																<div class="col-md-6">
-																	<div class="form-group">
-																		<label>CEP</label>
-																		<input type="text" ng-model='e.cep' class='form-control placeholder-no-fix'>
+												<form name="form_2" class="css-form" novalidate>
+													<div ng-repeat="e in data.endereco" >
+														<div class="portlet">
+															<div class="portlet-body">
+																<div class="row">
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>CEP</label>
+																			<input type="text" ng-model='e.cep' name="cep" maxlength="8" ng-blur="find_cep(e.cep, $index)" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+																		</div>
 																	</div>
 																</div>
-																<div class="col-md-12 ">
-																	<div class="form-group">
-																		<label>Rua</label>
-																		<input type="text" ng-model='e.rua' class='form-control placeholder-no-fix'>
+
+																<div class="row">
+																	<div class="col-md-12 ">
+																		<div class="form-group">
+																			<label>Rua</label>
+																			<input type="text" ng-model='e.rua' name="rua" class='form-control placeholder-no-fix'>
+																		</div>
 																	</div>
 																</div>
-															</div>
-															<div class="row">
-																<div class="col-md-6">
-																	<div class="form-group">
-																		<label>Numero</label>
-																		<input type="text" ng-model='e.num_rua' class='form-control placeholder-no-fix'>
+																<div class="row">
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>Numero</label>
+																			<input type="text" ng-model='e.num_rua' numbers-only="numbers-only" name="num_rua" class='form-control placeholder-no-fix'>
+																		</div>
+																	</div>
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>Complemento</label>
+																			<input type="text" ng-model='e.complemento' name="complemento" class='form-control placeholder-no-fix'>
+																		</div>
 																	</div>
 																</div>
-																<!--/span-->
-																<div class="col-md-6">
-																	<div class="form-group">
-																		<label>Complemento</label>
-																		<input type="text" ng-model='e.complemento' class='form-control placeholder-no-fix'>
+																<div class="row">
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>Bairro</label>
+																			<input type="text" ng-model='e.bairro' name="bairro" class='form-control placeholder-no-fix'>
+																		</div>
 																	</div>
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>Cidade</label>
+																			<input type="text" ng-model='e.cidade' name="cidade" class='form-control placeholder-no-fix'>
+																		</div>
+																	</div>
+																	<div class="col-md-6">
+																		<div class="form-group">
+																			<label>UF</label>
+																			<select ng-model="e.uf" class ="form-control">
+																				<option ng-repeat="estado in estados_total" value="{{estado.uf}}">{{estado.descricao}}</option>
+																			</select>
+																		</div>
+																	</div>												
 																</div>
-																<!--/span-->
-															</div>
-															<!--/row-->
-															<div class="row">
-																<div class="col-md-6">
-																	<div class="form-group">
-																		<label>Bairro</label>
-																		<input type="text" ng-model='e.bairro' class='form-control placeholder-no-fix'>
-																	</div>
-																</div>
-																<!--/span-->
-																
-															
-																<div class="col-md-6">
-																	<div class="form-group">
-																		<label>Cidade</label>
-																		<input type="text" ng-model='e.cidade' class='form-control placeholder-no-fix'>
-																	</div>
-																</div>
-																<!--/span-->
-																<div class="col-md-6">
-																	<div class="form-group">
-																		<label>UF</label>
-																	</div>
-																</div>												
 															</div>
 														</div>
 													</div>
-												</div>
-												<button ng-click="add_blank_end()" class="btn green-meadow">+</button><br><br>
+													<button ng-click="add_blank_end()" ng-disabled='!form_2.cep.$dirty' class="btn green-meadow btn circle"><i class="fa fa-plus"></i></button><br><br>
+												</form>
 											</div><br><br>
-
-											<button ng-click="save()" class="btn yellow">Atualizar</button><br><br>
-											<%= link_to "Voltar", entidades_path, :class => "btn default ", 'data-no-turbolink' => true %>
 
 										</div>
 									</div>
@@ -207,8 +199,10 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 	$scope.tipos_total = <%=returnItensUsuario.to_json.to_s.html_safe%>
 	$scope.empresas_total = <%=lastEmpTable.to_json.to_s.html_safe%>
 	$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>
+	$scope.estados_total = <%=returnAllEstados.to_json.to_s.html_safe%>
 
 	console.log($scope.data);
+	console.log($scope.estados_total);
 
    	$scope.save = function() {
     	var request;
@@ -217,8 +211,29 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
       		url: '/entidades/save_angular/' + '<%= editingUser.id%>',
       		data: { data: $scope.data }
    	 	});
-   	 	window.alert("Salvando");
+		window.location.replace('/entidades');
    	 	console.log($scope.data);
+	}
+
+	$scope.find_cep = function(cep, id)
+	{
+		$.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) 
+		{
+            if (!("erro" in dados)) 
+           {
+                $("[name=rua]").val(dados.logradouro);
+                $("[name=bairro]").val(dados.bairro);
+                $("[name=cidade]").val(dados.localidade);
+
+                $scope.data.endereco[id].rua =  dados.logradouro;
+                $scope.data.endereco[id].bairro =  dados.bairro;
+                $scope.data.endereco[id].cidade =  dados.localidade;
+            }
+            else 
+            {
+                alert("CEP não encontrado.");
+            }
+        });
 	}
 
 	$scope.add_blank_end = function()
@@ -226,7 +241,11 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 		var blank_end = {"rua":"","num_rua":"","cep":"","uf":"","cidade":"","bairro":""};
 		$scope.data.endereco.push(blank_end);
 	}
+
+	$scope.add_blank_end();
+
 }]);
+
 
 jQuery(document).ready(function() {       
 	 // initiate layout and plugins

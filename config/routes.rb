@@ -31,11 +31,11 @@ Rails.application.routes.draw do
 	post 'tipoentidades/new'  => 'tipoentidade#create'
 	post 'tipoentidades/save_settings' => 'tipoentidade#save_settings'
 
-
 	get 'entidades'=> "entidade#index", as: :entidades
 	get 'entidades/new' => "entidade#new", as: :new_entidade
 	post 'entidades/new' => 'entidade#create'
 	post 'entidades/save_settings' => 'entidade#save_settings'
+	post 'entidades/save_angular' => 'entidade#save_angular'
 	post 'entidades/save_angular/:id' => 'entidade#save_angular'
 	get 'entidades/add_end' => "entidade#add_form"
 

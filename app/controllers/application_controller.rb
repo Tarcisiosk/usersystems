@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 	helper_method :save_user_empresa
 	helper_method :returnItensUsuario
 	helper_method :returnNiveisAcesso
-
+	helper_method :returnAllEstados
 
 	@@checked_rows = []
 	@@checked_users = []
@@ -34,6 +34,10 @@ class ApplicationController < ActionController::Base
 
 	def after_sign_in_path_for(resource)
 		'/index'
+	end
+	
+	def render_validation_errors(model)
+	  render :json => { :errors => model.errors }, status: 422
 	end
 
 	def menu
@@ -322,6 +326,14 @@ class ApplicationController < ActionController::Base
 	#usuario a ser editado
 	def editingUser
 		obj = instance_variable_get("@" + controller_name.downcase)
+	end
+
+	def returnAllEstados
+		estados = Array.new
+		Estado.all.each do |item|
+			estados << item
+		end
+		return estados
 	end
 
 	#retorna items que pertencem/sao acessiveis ao usuario

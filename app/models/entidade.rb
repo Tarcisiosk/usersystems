@@ -21,4 +21,5 @@ class Entidade < AbstractRecord
 	validates :cnpj, numericality: true, uniqueness: true, length: { in: 14..14 }, :if => :cnpj_is_filled
 	validates :insc_estadual, numericality: true, uniqueness: true, length: { in: 0..20}, :allow_blank => true
 	validates :insc_municipal, numericality: true, uniqueness: true, length: { in: 0..20 }, :allow_blank => true
+	
 end

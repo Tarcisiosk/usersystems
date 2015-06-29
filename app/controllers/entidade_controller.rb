@@ -3,9 +3,7 @@ class EntidadeController < ApplicationController
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}]
 	
-	@@angularActions = {:razao_social => '', :nome_fantasia => '', :cnpj => '', :insc_estadual => '', :insc_municipal => '', 
-						:tipoentidades => [], :empresas => [],
-						:endereco => [{:rua => '', :num_rua => '', :cep => '', :uf => '', :cidade => '', :bairro => ''}]}
+	
 	
 	helper_method :send_json
 
@@ -22,6 +20,9 @@ class EntidadeController < ApplicationController
 
 	def new
 		@entidade = Entidade.new
+		@@angularActions = {:razao_social => '', :nome_fantasia => '', :cnpj => '', :insc_estadual => '', :insc_municipal => '', 
+						:tipoentidades => [], :empresas => [],
+						:endereco => []}
 	end
 
 	def create
@@ -80,19 +81,22 @@ class EntidadeController < ApplicationController
 	end
 	
 	def save_angular
-		@entidade = Entidade.find(params[:id])
 		data_hash = params[:data].symbolize_keys
-		
 		array_empresas = []
 		array_tipos = []
 		array_enderecos = []
 
-		@entidade.razao_social = data_hash[:razao_social]
-		@entidade.nome_fantasia = data_hash[:nome_fantasia]
-		@entidade.cnpj = data_hash[:cnpj]
-		@entidade.insc_estadual = data_hash[:insc_estadual]
-		@entidade.insc_estadual = data_hash[:insc_municipal]
-		
+		if Entidade.where(:cnpj => data_hash[:cnpj]).present? 
+			@entidade = Entidade.find(params[:id])
+			@entidade.razao_social = data_hash[:razao_social]
+			@entidade.nome_fantasia = data_hash[:nome_fantasia]
+			@entidade.cnpj = data_hash[:cnpj]
+			@entidade.insc_estadual = data_hash[:insc_estadual]
+			@entidade.insc_estadual = data_hash[:insc_municipal]
+		else
+			@entidade = Entidade.new(razao_social: data_hash[:razao_social], nome_fantasia: data_hash[:nome_fantasia], cnpj: data_hash[:cnpj], insc_estadual: data_hash[:insc_estadual], insc_municipal: data_hash[:insc_municipa], adm_id: current_user.adm_id)
+		end
+
 		if data_hash[:empresas].present?
 			data_hash[:empresas].each do |item|
 				if item.present? && item != "false"
@@ -116,8 +120,8 @@ class EntidadeController < ApplicationController
 		if data_hash[:endereco].present?
 			data_hash[:endereco].each do |item|
 				item.each do |subitem|
-					if subitem.is_a?(Hash)
-						if Endereco.where(:id => subitem['id']).present?
+					if subitem.is_a?(Hash) 
+						if Endereco.where(:id => subitem['id']).present? && (subitem['rua'].present? && subitem['cep'].present? && subitem['uf'].present?)
 							e = Endereco.find(subitem['id'])
 							e.rua = subitem['rua']
 							e.num_rua = subitem['num_rua']
@@ -126,9 +130,11 @@ class EntidadeController < ApplicationController
 							e.uf = subitem['uf']
 							e.adm_id = current_user.settings(:last_empresa).edited.adm_id
 							array_enderecos << e
-						elsif 
+						elsif subitem['rua'].present? && subitem['cep'].present? && subitem['uf'].present?
 							e = Endereco.new(rua: subitem['rua'], num_rua: subitem['num_rua'], bairro: subitem['bairro'], cep: subitem['cep'], cidade: subitem['cidade'], uf: subitem['uf'], adm_id: current_user.adm_id)
 							array_enderecos << e
+						else
+							
 						end
 					end
 				end
@@ -138,7 +144,13 @@ class EntidadeController < ApplicationController
 		@entidade.empresas = array_empresas
 		@entidade.tipoentidades = array_tipos
 		@entidade.enderecos = array_enderecos
+		
 		@entidade.save!
+
+		unless @entidade.save
+			format.html { render :edit }
+    		render_validation_errors(@entidade)
+  		end
 
 		redirect_to entidades_path
 	end
