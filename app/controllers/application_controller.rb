@@ -8,8 +8,8 @@ class ApplicationController < ActionController::Base
 	#before_action :require_master_or_adm_acess, only: [:destroy]
 
 	after_action :save_user_empresa, only: [:update]
-	after_action :setAdmin, only: [:create]
-
+	after_action :setAdmin, only: [:create]	
+	
 	before_filter :set_current_emp_if_first, only: [:index]
 	
 	before_filter :check_acesso_routes, only: [:index, :new, :edit, :destroy]

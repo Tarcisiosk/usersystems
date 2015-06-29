@@ -51,13 +51,16 @@ gem 'bower-rails'
 # gem 'capistrano-rails', group: :development
 gem 'ledermann-rails-settings'
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-  
-  gem 'selenium-webdriver'
-  gem 'rspec-rails'
+group :development, :test do 
+	gem 'byebug'
+	gem 'rspec-rails'
+end
+
+group :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console  
+  gem 'selenium-webdriver'  
   gem 'capybara'
+  gem 'poltergeist'
   
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console'

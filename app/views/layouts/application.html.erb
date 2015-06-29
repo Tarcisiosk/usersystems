@@ -139,10 +139,10 @@
 					<li class="mega-menu-dropdown pull-right">
 						<%if current_user.settings(:last_empresa).edited.present?%>
 							<% if lastEmpTable.count > 1%>
-								<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
+								<a id="empresa_menu_dropdown" data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle">
 								<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
 							<%else%>
-								<a data-hover="megamenu" data-close-others="true" href="javascript:;" class="dropdown-toggle">
+								<a id="empresa_menu_dropdown" data-hover="megamenu" data-close-others="true" href="javascript:;" class="dropdown-toggle">
 								<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
 							<%end%>
 							
@@ -154,7 +154,7 @@
 								<li>
 									<% lastEmpTable.each do |item| %>
 										<li>
-											<a data-no-turbolink="true"  value="<%=item.id%>" name="emp_link"><i class="icon-briefcase"></i><%= item.nome_fantasia %> </a>
+											<a data-no-turbolink="true" id="Empresa<%=item.id%>"  value="<%=item.id%>" name="emp_link"><i class="icon-briefcase"></i><%= item.nome_fantasia %> </a>
 										</li>
 									<%end%>
 								</li>
