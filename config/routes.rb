@@ -65,6 +65,7 @@ Rails.application.routes.draw do
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	
 	get "index" => 'index#index', as: :index
+	
 	get "error-422" => 'index#notAllowed', as: :notAllowed
 
 	resources :user, only: [:edit, :destroy, :update, :new, :create]

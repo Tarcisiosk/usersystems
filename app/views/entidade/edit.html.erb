@@ -131,7 +131,7 @@
 																	<div class="col-md-12 ">
 																		<div class="form-group">
 																			<label>Rua</label>
-																			<input type="text" ng-model='e.rua' name="rua" class='form-control placeholder-no-fix'>
+																			<input type="text" ng-model='e.rua' name="rua{{$index}}" class='form-control placeholder-no-fix'>
 																		</div>
 																	</div>
 																</div>
@@ -139,13 +139,13 @@
 																	<div class="col-md-6">
 																		<div class="form-group">
 																			<label>Numero</label>
-																			<input type="text" ng-model='e.num_rua' numbers-only="numbers-only" name="num_rua" class='form-control placeholder-no-fix'>
+																			<input type="text" ng-model='e.num_rua' numbers-only="numbers-only" name="num_rua{{$index}}" class='form-control placeholder-no-fix'>
 																		</div>
 																	</div>
 																	<div class="col-md-6">
 																		<div class="form-group">
 																			<label>Complemento</label>
-																			<input type="text" ng-model='e.complemento' name="complemento" class='form-control placeholder-no-fix'>
+																			<input type="text" ng-model='e.complemento' name="complemento{{$index}}" class='form-control placeholder-no-fix'>
 																		</div>
 																	</div>
 																</div>
@@ -153,13 +153,13 @@
 																	<div class="col-md-6">
 																		<div class="form-group">
 																			<label>Bairro</label>
-																			<input type="text" ng-model='e.bairro' name="bairro" class='form-control placeholder-no-fix'>
+																			<input type="text" ng-model='e.bairro' name="bairro{{$index}}" class='form-control placeholder-no-fix'>
 																		</div>
 																	</div>
 																	<div class="col-md-6">
 																		<div class="form-group">
 																			<label>Cidade</label>
-																			<input type="text" ng-model='e.cidade' name="cidade" class='form-control placeholder-no-fix'>
+																			<input type="text" ng-model='e.cidade' name="cidade{{$index}}" class='form-control placeholder-no-fix'>
 																		</div>
 																	</div>
 																	<div class="col-md-6">
@@ -221,9 +221,9 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 		{
             if (!("erro" in dados)) 
            {
-                $("[name=rua]").val(dados.logradouro);
-                $("[name=bairro]").val(dados.bairro);
-                $("[name=cidade]").val(dados.localidade);
+               $("[name=rua"+ id + "]").val(dados.logradouro);
+                $("[name=bairro"+ id + "]").val(dados.bairro);
+               $("[name=cidade"+ id + "]").val(dados.localidade);
 
                 $scope.data.endereco[id].rua =  dados.logradouro;
                 $scope.data.endereco[id].bairro =  dados.bairro;
@@ -259,19 +259,7 @@ jQuery(document).ready(function() {
 	 	$("#campocnpj").val($("#campocnpj").mask()); 
 	});
 
-	$('[name="emp_link"]').click(function () 
-	{
-		var id = $(this).attr('value');
-		$.ajax
-		({
-			type: 'post',
-			url: '/users/set_current_emp',
-			data: {emp_id : id},
-			success: function(msg) {
-            window.location.reload(true);
-        }
-		});
-	});
+
 });
 
 </script>
