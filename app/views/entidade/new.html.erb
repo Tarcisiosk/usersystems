@@ -250,19 +250,12 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 }]);
 
 
-jQuery(document).ready(function() {       
-	 // initiate layout and plugins
-	Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
-	TableManaged.init();
-
-	
+jQuery(document).ready(function() 
+{       
 	$("#campocnpj").mask("99.999.999/9999-99");
 	$(".edit_entidade").submit(function() {
 	 	$("#campocnpj").val($("#campocnpj").mask()); 
 	});
-
-
 });
 
 </script>

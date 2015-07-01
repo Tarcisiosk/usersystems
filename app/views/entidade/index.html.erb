@@ -76,11 +76,11 @@
 								<div class="tools">
 									<div class="btn-group">
 										<%if current_user.nivelacesso.present? && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidades#new')) && current_user.user_type == 2%>
-											<a class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/entidades/new"><i class="fa fa-plus"></i></a>
+											<a id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/entidades/new"><i class="fa fa-plus"></i></a>
 										<%elsif current_user.user_type == 1%>
-											<a class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/entidades/new"><i class="fa fa-plus"></i></a>
+											<a id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/entidades/new"><i class="fa fa-plus"></i></a>
 										<%elsif current_user.user_type == 0%>
-											<a class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/entidades/new"><i class="fa fa-plus"></i></a>
+											<a id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/entidades/new"><i class="fa fa-plus"></i></a>
 										<%end%>
 											<!-- <%= link_to "Adicionar", new_user_path, :class => "btn btn-icon-only green"%>-->
 											<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
@@ -108,11 +108,8 @@
 </div>	
 
 <script>
-jQuery(document).ready(function() {       
-	// initiate layout and plugins
-	Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
-	
+jQuery(document).ready(function() 
+{       
 	var btnsave = document.getElementById('btnsave');
 	btnsave.onclick = save;
 

@@ -39,7 +39,7 @@
 										</ul>
 									</div>
 								<% end %>
-								<%if returnItensUsuario.count > 0 %>
+								<%if returnItensUsuario.count > 0 || current_user.user_type == 0%>
 									<div class="form-group">
 										<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 										<label class="control-label ">Descrição</label>
@@ -75,13 +75,4 @@
 <!-- END PAGE CONTAINER -->
 
 <script>
-jQuery(document).ready(function() {       
-	 // initiate layout and plugins
-	Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
-    ComponentsDropdowns.init();
-
-
-});
-
 </script>

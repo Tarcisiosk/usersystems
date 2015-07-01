@@ -75,12 +75,8 @@
 </div>  
 
 <script>
-jQuery(document).ready(function() {       
-	 // initiate layout and plugins
-	Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
-	TableManaged.init();
-
+jQuery(document).ready(function() 
+{       
 	$('#pictureInput').on('change', function(event) {
 		var files = event.target.files;
 		var image = files[0]

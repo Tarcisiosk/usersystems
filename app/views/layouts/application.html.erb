@@ -237,7 +237,12 @@
 
 		
 		jQuery(document).ready(function() 
-		{       
+		{       	
+			Metronic.init(); // init metronic core components
+			Layout.init(); // init current layout
+			TableManaged.init();
+			ComponentsDropdowns.init();
+
 			$('[name="emp_link"]').click(function () 
 			{
 				var id = $(this).attr('value');

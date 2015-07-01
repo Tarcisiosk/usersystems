@@ -142,7 +142,7 @@
 													<br>
 												</div>
 												<div class="actions">
-													<%= f.submit "Salvar", :class => "btn green-meadow pull-left"%>
+													<%= f.submit "Gravar", :class => "btn green-meadow pull-left"%>
 												</div><br><br><br>
 												<%= link_to "Voltar", users_path, :class => "btn default ", 'data-no-turbolink' => true%>
 											</div>
@@ -161,11 +161,8 @@
 <!-- END PAGE CONTAINER -->
 
 <script>
-jQuery(document).ready(function() {       
-	 // initiate layout and plugins
-	Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
-	
+jQuery(document).ready(function() 
+{       
 	var label_name = $('.profile-usertitle-name');
 	$('#user_fullname').change(function() {
 		label_name.html($('#user_fullname').val());

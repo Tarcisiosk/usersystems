@@ -343,11 +343,11 @@ class ApplicationController < ActionController::Base
 		if controller_name == "subgrupo"
 			Grupo.all.each do |item|
 				if current_user.user_type != 0
-					if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
+					if item.adm_id == current_user.settings(:last_empresa).edited.adm_id || item.adm_id == current_user.id
 						itensUser << item
 					end
 				else
-					if item.adm_id == obj.adm_id
+					if item.adm_id == obj.adm_id || item.adm_id == current_user.settings(:last_empresa).edited.adm_id
 						itensUser << item
 					end
 				end
@@ -356,11 +356,11 @@ class ApplicationController < ActionController::Base
 		if controller_name == "entidade"
 			Tipoentidade.all.each do |item|
 				if current_user.user_type != 0
-					if item.adm_id == current_user.adm_id || item.adm_id == current_user.id
+					if item.adm_id == current_user.settings(:last_empresa).edited.adm_id || item.adm_id == current_user.id
 						itensUser << item
 					end
 				else
-					if item.adm_id == obj.adm_id
+					if item.adm_id == obj.adm_id || item.adm_id == current_user.settings(:last_empresa).edited.adm_id
 						itensUser << item
 					end
 				end

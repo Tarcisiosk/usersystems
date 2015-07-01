@@ -76,7 +76,7 @@
 								
 								<div class="tools">
 									<div class="btn-group">
-											<a class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/nivelacesso/new"><i class="fa fa-plus"></i></a>
+											<a id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/nivelacesso/new"><i class="fa fa-plus"></i></a>
 											<!-- <%= link_to "Adicionar", new_user_path, :class => "btn btn-icon-only green"%>-->
 											<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
 											<i class="fa fa-wrench"></i>
@@ -103,11 +103,8 @@
 </div>	
 
 <script>
-jQuery(document).ready(function() {       
-	// initiate layout and plugins
-	Metronic.init(); // init metronic core components
-	Layout.init(); // init current layout
-	
+jQuery(document).ready(function() 
+{       
 	var btnsave = document.getElementById('btnsave');
 	btnsave.onclick = save;
 
@@ -133,13 +130,6 @@ jQuery(document).ready(function() {
 			bootbox.alert("Escolha no mínimo uma coluna!");
 		}
 	}
-
-	function show_restricted_alert()
-	{
-		bootbox.alert("Você não tem permissão para isso!");	
-	} 	
-
-	
 });
 
 </script>

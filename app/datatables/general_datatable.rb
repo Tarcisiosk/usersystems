@@ -47,8 +47,8 @@ class GeneralDatatable < ApplicationController
 			links_array = Array.new
 		
 			if @current_user.user_type == 0
-				if record.try(:adm_id)
-					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
+				if record.try(:adm_id) && !record.is_a?(User) 
+					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id 
 						columns.each_with_index do |item, index|
 							data_array[index] = record.send(item)
 						end
