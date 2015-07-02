@@ -252,12 +252,13 @@
 				$scope.empresas_total = <%=returnEmpresas.to_json.to_s.html_safe%>
 				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>
 				$scope.estados_total = <%=returnAllEstados.to_json.to_s.html_safe%>
-				
+				$scope.enderecoEditar = ""
+				$scope.novo = false
+
 				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
 				{
 					$scope.data.empresas.push($scope.empresa_atual);
 				}
-				console.log($scope.data.empresas);
 			   	
 			   	$scope.save = function() {
 			    	var request;
@@ -268,24 +269,42 @@
 			   	 	});
 					window.location.replace('/entidades');
 				}
+				
+				console.log($scope.data.tipoentidades);
 
-				$scope.getValue = function(event, index) 
+				$scope.getValue = function(event, index, caso) 
 				{
-
-					if ($scope.data.empresas.indexOf(Number(event.target.value)) <= -1)
+					if(caso == 1)
 					{
-					  	$scope.data.empresas.push(Number(event.target.value));
-					}
-					else
-					{
-						var indexArray = $scope.data.empresas.indexOf(Number(event.target.value));
-					 	if (index > -1) 
-					 	{
-						    $scope.data.empresas.splice(indexArray, 1);
+						if ($scope.data.empresas.indexOf(Number(event.target.value)) <= -1)
+						{
+						  	$scope.data.empresas.push(Number(event.target.value));
+						}
+						else
+						{
+							var indexArray = $scope.data.empresas.indexOf(Number(event.target.value));
+						 	if (index > -1) 
+						 	{
+							    $scope.data.empresas.splice(indexArray, 1);
+							}
 						}
 					}
-
-			    	console.log($scope.data.empresas);
+					else if(caso == 2)
+					{
+						if ($scope.data.tipoentidades.indexOf(Number(event.target.value)) <= -1)
+						{
+						  	$scope.data.tipoentidades.push(Number(event.target.value));
+						}
+						else
+						{
+							var indexArray = $scope.data.tipoentidades.indexOf(Number(event.target.value));
+						 	if (index > -1) 
+						 	{
+								$scope.data.tipoentidades.splice(indexArray, 1);
+							}
+						}
+						console.log($scope.data.tipoentidades.length);
+					}
 				}
 
 				$scope.find_cep = function(cep, id)
@@ -298,9 +317,9 @@
 			                $("[name=bairro"+ id + "]").val(dados.bairro);
 			               $("[name=cidade"+ id + "]").val(dados.localidade);
 
-			                $scope.data.endereco[id].rua =  dados.logradouro;
-			                $scope.data.endereco[id].bairro =  dados.bairro;
-			                $scope.data.endereco[id].cidade =  dados.localidade;
+			               $scope.enderecoEditar.rua = dados.logradouro;
+			               $scope.enderecoEditar.bairro =  dados.bairro;
+			                $scope.enderecoEditar.cidade =  dados.localidade;
 			            }
 			            else 
 			            {
@@ -312,10 +331,36 @@
 				$scope.add_blank_end = function()
 				{
 					var blank_end = {"rua":"","num_rua":"","cep":"","uf":"","cidade":"","bairro":""};
-					$scope.data.endereco.push(blank_end);
+					$scope.enderecoEditar = blank_end;
+					$scope.novo = true;
+				}
+				
+				$scope.set_novo = function()
+				{
+					$scope.novo = false;
+					console.log($scope.data.tipoentidades)
 				}
 
-				$scope.add_blank_end();
+				$scope.edit_end = function(index)
+				{
+					$scope.enderecoEditar =  $scope.data.endereco[index];
+					console.log($scope.tipoentidades);
+				}
+
+				$scope.save_end = function(index)
+				{
+					if(!$scope.novo)
+					{
+						$scope.data.endereco[index] = $scope.enderecoEditar;
+					}
+					else
+					{
+						$scope.data.endereco.push($scope.enderecoEditar);
+						$scope.novo = false;
+					}
+				}
+
+				//$scope.add_blank_end();
 
 			}]);
 		<%end%>

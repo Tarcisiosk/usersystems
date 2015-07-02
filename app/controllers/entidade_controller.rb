@@ -81,7 +81,6 @@ class EntidadeController < ApplicationController
 		array_tipos = Array.new
 		array_enderecos = Array.new
 
-		puts "EMPRESAS QUE VIERAM DA VIEW #{data_hash[:empresas]}"
 		if data_hash[:empresas].present?
 			data_hash[:empresas].each do |item|
 				if item.present? && item != "false"
@@ -91,7 +90,6 @@ class EntidadeController < ApplicationController
 				end
 			end
 		end
-		puts "EMPRESAS ARRAY EMPRESAS #{array_empresas}"
 
 		if data_hash[:tipoentidades].present?
 			data_hash[:tipoentidades].each do |item|
@@ -115,6 +113,7 @@ class EntidadeController < ApplicationController
 							e.cidade = subitem['cidade']
 							e.uf = subitem['uf']
 							e.adm_id = current_user.settings(:last_empresa).edited.adm_id
+							e.save!
 							array_enderecos << e
 						elsif subitem['rua'].present? && subitem['cep'].present? && subitem['uf'].present?
 							e = Endereco.new(rua: subitem['rua'], num_rua: subitem['num_rua'], bairro: subitem['bairro'], cep: subitem['cep'], cidade: subitem['cidade'], uf: subitem['uf'], adm_id: current_user.adm_id)
@@ -135,18 +134,21 @@ class EntidadeController < ApplicationController
 			@entidade.insc_estadual = data_hash[:insc_estadual]
 			@entidade.insc_municipal = data_hash[:insc_municipal]
 			@entidade.empresas.clear
+			@entidade.tipoentidades.clear
+
 			array_empresas.each do |empresa|
 				@entidade.empresas << empresa
 			end
+			array_tipos.each do |tipo|
+				@entidade.tipoentidades << tipo
+			end
+			
 		else
 			@entidade = Entidade.new(razao_social: data_hash[:razao_social], nome_fantasia: data_hash[:nome_fantasia], cnpj: data_hash[:cnpj], 
 									 insc_estadual: data_hash[:insc_estadual], insc_municipal: data_hash[:insc_municipal], empresas: array_empresas, 
 									 enderecos: array_enderecos, tipoentidades: array_tipos, adm_id: current_user.adm_id)
 		end
 	
-
-		puts "EMPRESAS: #{@entidade.empresas}"
-		@entidade.tipoentidades = array_tipos
 		@entidade.enderecos = array_enderecos
 		@entidade.save!
 		redirect_to entidades_path

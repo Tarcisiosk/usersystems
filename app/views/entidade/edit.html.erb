@@ -6,6 +6,78 @@
 		<!-- BEGIN PAGE CONTENT -->
 		<div class="page-content">
 			<div class="container">
+				<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+				<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Editar Endereço</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-4">
+										<div class="form-group">
+											<label>CEP</label>
+											<input type="text" ng-model='enderecoEditar.cep' name="cep" maxlength="8" ng-blur="find_cep(enderecoEditar.cep, $index)" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-12 ">
+										<div class="form-group">
+											<label>Rua</label>
+											<input type="text" ng-model='enderecoEditar.rua' name="rua{{$index}}" class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Numero</label>
+											<input type="text" ng-model='enderecoEditar.num_rua' numbers-only="numbers-only" name="num_rua{{$index}}" class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Complemento</label>
+											<input type="text" ng-model='enderecoEditar.complemento' name="complemento{{$index}}" class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Bairro</label>
+											<input type="text" ng-model='enderecoEditar.bairro' name="bairro{{$index}}" class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>Cidade</label>
+											<input type="text" ng-model='enderecoEditar.cidade' name="cidade{{$index}}" class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label>UF</label>
+											<select ng-model="enderecoEditar.uf" class ="form-control">
+												<option ng-repeat="estado in estados_total" value="{{estado.uf}}">{{estado.descricao}}</option>
+											</select>
+										</div>
+									</div>												
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" ng-click="save_end()" class="btn blue" data-dismiss="modal">Salvar</button>
+								<button type="button"  ng-click="set_novo()" class="btn default" data-dismiss="modal">Cancelar</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
+				</div> 
 				<!-- BEGIN PAGE BREADCRUMB -->
 				<ul class="page-breadcrumb breadcrumb">
 					<li>
@@ -31,7 +103,7 @@
 								<div class="form-group">
 									<div class="checkbox-list">
 										<div ng-repeat="x in empresas_total" >
-											<input type="checkbox" ng-click="getValue($event, $index)" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
+											<input type="checkbox" ng-click="getValue($event, $index, 1)" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
 										</div>
 									</div>
 								</div>
@@ -47,7 +119,7 @@
 								<div class="form-group">
 									<div class="checkbox-list">
 										<div ng-repeat="t in tipos_total" >
-											<input type="checkbox" ng-checked='data.tipoentidades.indexOf(t.id) > -1' ng-model='data.tipoentidades[$index]' ng-true-value='{{t.id}}' class="checkboxes" > {{ t.descricao }}</input>
+											<input type="checkbox" ng-click="getValue($event, $index, 2)" ng-checked='data.tipoentidades.indexOf(t.id) > -1' value='{{t.id}}' class="checkboxes" > {{ t.descricao }}</input>
 										</div>
 									</div>
 								</div>
@@ -64,6 +136,7 @@
 											<i class="icon-globe theme-font hide"></i>
 											<span class="caption-subject font-blue-madison bold uppercase">Editar Empresa/Contato</span><i class="fa fa-pencil"></i>
 										</div>
+										
 										<div class="actions btn-set">
 											<%= link_to "Voltar", entidades_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
 											<button ng-click="save()" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
@@ -78,6 +151,10 @@
 												<a href="#tab_1_2" data-toggle="tab">Endereços</a>
 											</li>
 										</ul>
+										<div role="alert">
+									      <span class="error" ng-show="data.tipoentidades.lenght <= 0"> Escolha pelo menos uma entidade! </span>
+									    
+									    </div>
 										<div class="tab-content">
 											<div class="tab-pane active" id="tab_1_1">	
 												<form name="form_1" class="css-form" novalidate>
@@ -114,70 +191,64 @@
 												</form>
 											</div>
 											<div class="tab-pane" id="tab_1_2">
+
 												<form name="form_2" class="css-form" novalidate>
-													<div ng-repeat="e in data.endereco" >
+													<a href="#portlet-config" ng-click="add_blank_end()" data-toggle="modal" class="btn green-meadow pull-right"><i class="fa fa-plus"></i></a>
 														<div class="portlet">
 															<div class="portlet-body">
-																<div class="row">
-																	<div class="col-md-3">
-																		<div class="form-group">
-																			<label>CEP</label>
-																			<input type="text" ng-model='e.cep' name="cep" maxlength="8" ng-blur="find_cep(e.cep, $index)" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+																<div ng-repeat="e in data.endereco" >
+																	<div ng-if="$index % 2 == 1">
+																		<div class="row">
+																			<div class="col-md-6">
+																				<div class="portlet box green-haze">
+																					<div class="portlet-title">
+																						<div class="caption">
+																							<i class="fa fa-home"></i>Casa
+																						</div>
+																						<div class="actions">
+																							<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
+																							<i class="fa fa-pencil"></i> </a>
+																							<a href="javascript:;" class="btn red-sunglo btn-sm">
+																							<i class="fa fa-trash-o"></i> </a>
+																						</div>
+																					</div>
+																					<div class="portlet-body">
+																						<div class="scroller" style="height:60px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
+																							<h4>{{e.rua}}, {{e.num_rua}}, {{e.cep}} - {{e.bairro}}, {{e.cidade}}, {{e.uf}}</h4>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
 																		</div>
 																	</div>
-																</div>
-
-																<div class="row">
-																	<div class="col-md-12 ">
-																		<div class="form-group">
-																			<label>Rua</label>
-																			<input type="text" ng-model='e.rua' name="rua{{$index}}" class='form-control placeholder-no-fix'>
+																	<div ng-if="$index % 2 == 0">
+																		<div class="col-md-6">
+																			<div class="portlet box green-haze">
+																				<div class="portlet-title">
+																					<div class="caption">
+																						<i class="fa fa-home"></i>Casa
+																					</div>
+																					<div class="actions">
+																						<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
+																						<i class="fa fa-pencil"></i> </a>
+																						<a href="javascript:;" class="btn red-sunglo btn-sm">
+																						<i class="fa fa-trash-o"></i> </a>
+																					</div>
+																				</div>
+																				<div class="portlet-body">
+																					<div class="scroller" style="height:60px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
+																						<h4>{{e.rua}}, {{e.num_rua}}, {{e.cep}} - {{e.bairro}}, {{e.cidade}}, {{e.uf}}</h4>
+																					</div>
+																				</div>
+																			</div>
 																		</div>
 																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>Numero</label>
-																			<input type="text" ng-model='e.num_rua' numbers-only="numbers-only" name="num_rua{{$index}}" class='form-control placeholder-no-fix'>
-																		</div>
-																	</div>
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>Complemento</label>
-																			<input type="text" ng-model='e.complemento' name="complemento{{$index}}" class='form-control placeholder-no-fix'>
-																		</div>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>Bairro</label>
-																			<input type="text" ng-model='e.bairro' name="bairro{{$index}}" class='form-control placeholder-no-fix'>
-																		</div>
-																	</div>
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>Cidade</label>
-																			<input type="text" ng-model='e.cidade' name="cidade{{$index}}" class='form-control placeholder-no-fix'>
-																		</div>
-																	</div>
-																	<div class="col-md-6">
-																		<div class="form-group">
-																			<label>UF</label>
-																			<select ng-model="e.uf" class ="form-control">
-																				<option ng-repeat="estado in estados_total" value="{{estado.uf}}">{{estado.descricao}}</option>
-																			</select>
-																		</div>
-																	</div>												
 																</div>
 															</div>
 														</div>
-													</div>
-													<button ng-click="add_blank_end()" ng-disabled='!form_2.cep.$dirty' class="btn green-meadow btn circle"><i class="fa fa-plus"></i></button><br><br>
-												</form>
-											</div><br><br>
-
+													</form>
+												</div><br><br>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -187,10 +258,9 @@
 				</div>
 			</div>
 		</div>
-		<!-- END PAGE CONTENT -->
-	</div>
-</div>  
+	</div> 
 </body>
+
 
 <script>
 
