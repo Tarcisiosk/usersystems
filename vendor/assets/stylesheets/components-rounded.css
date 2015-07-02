@@ -3576,6 +3576,7 @@ Portlets
   -o-border-radius: 4px;
   border-radius: 4px;
 }
+
 .portlet.portlet-fullscreen {
   z-index: 10060;
   margin: 0;

@@ -27,6 +27,8 @@ class ApplicationController < ActionController::Base
 	helper_method :returnItensUsuario
 	helper_method :returnNiveisAcesso
 	helper_method :returnAllEstados
+	helper_method :returnEmpresas
+
 
 	@@checked_rows = []
 	@@checked_users = []
@@ -334,6 +336,16 @@ class ApplicationController < ActionController::Base
 			estados << item
 		end
 		return estados
+	end
+
+	def returnEmpresas
+		empresas = Array.new
+		Empresa.all.each do |item|
+			if item.adm_id == current_user.settings(:last_empresa).edited.adm_id
+				empresas << item
+			end
+		end
+		return empresas.sort!
 	end
 
 	#retorna items que pertencem/sao acessiveis ao usuario

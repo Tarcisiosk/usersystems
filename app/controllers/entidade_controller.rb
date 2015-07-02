@@ -41,13 +41,8 @@ class EntidadeController < ApplicationController
 	def edit
 		@entidade = Entidade.find(params[:id]) 
 		@@angularActions = {:razao_social => @entidade.razao_social, :nome_fantasia => @entidade.nome_fantasia, :cnpj => @entidade.cnpj, :insc_estadual => @entidade.insc_estadual, :insc_municipal => @entidade.insc_municipal, 
-						:tipoentidades => @entidade.tipoentidades.pluck(:id), :empresas => @entidade.empresas.pluck(:id),
+						:tipoentidades => @entidade.tipoentidades.ids, :empresas => @entidade.empresas.ids,
 						:endereco => @entidade.enderecos}
-
-		#@entidade.empresas.each do |item|
-		# 	puts "Empresas ligadas a esse usuario: #{item.nome_fantasia}"
-		#end
-
 	end
 
 	def update
@@ -82,21 +77,11 @@ class EntidadeController < ApplicationController
 	
 	def save_angular
 		data_hash = params[:data].symbolize_keys
-		array_empresas = []
-		array_tipos = []
-		array_enderecos = []
+		array_empresas = Array.new
+		array_tipos = Array.new
+		array_enderecos = Array.new
 
-		if Entidade.where(:cnpj => data_hash[:cnpj]).present? 
-			@entidade = Entidade.find(params[:id])
-			@entidade.razao_social = data_hash[:razao_social]
-			@entidade.nome_fantasia = data_hash[:nome_fantasia]
-			@entidade.cnpj = data_hash[:cnpj]
-			@entidade.insc_estadual = data_hash[:insc_estadual]
-			@entidade.insc_estadual = data_hash[:insc_municipal]
-		else
-			@entidade = Entidade.new(razao_social: data_hash[:razao_social], nome_fantasia: data_hash[:nome_fantasia], cnpj: data_hash[:cnpj], insc_estadual: data_hash[:insc_estadual], insc_municipal: data_hash[:insc_municipa], adm_id: current_user.adm_id)
-		end
-
+		puts "EMPRESAS QUE VIERAM DA VIEW #{data_hash[:empresas]}"
 		if data_hash[:empresas].present?
 			data_hash[:empresas].each do |item|
 				if item.present? && item != "false"
@@ -106,6 +91,7 @@ class EntidadeController < ApplicationController
 				end
 			end
 		end
+		puts "EMPRESAS ARRAY EMPRESAS #{array_empresas}"
 
 		if data_hash[:tipoentidades].present?
 			data_hash[:tipoentidades].each do |item|
@@ -140,18 +126,29 @@ class EntidadeController < ApplicationController
 				end
 			end
 		end
+				
+		if Entidade.where(:cnpj => data_hash[:cnpj]).present? 
+			@entidade = Entidade.find(params[:id])
+			@entidade.razao_social = data_hash[:razao_social]
+			@entidade.nome_fantasia = data_hash[:nome_fantasia]
+			@entidade.cnpj = data_hash[:cnpj]
+			@entidade.insc_estadual = data_hash[:insc_estadual]
+			@entidade.insc_municipal = data_hash[:insc_municipal]
+			@entidade.empresas.clear
+			array_empresas.each do |empresa|
+				@entidade.empresas << empresa
+			end
+		else
+			@entidade = Entidade.new(razao_social: data_hash[:razao_social], nome_fantasia: data_hash[:nome_fantasia], cnpj: data_hash[:cnpj], 
+									 insc_estadual: data_hash[:insc_estadual], insc_municipal: data_hash[:insc_municipal], empresas: array_empresas, 
+									 enderecos: array_enderecos, tipoentidades: array_tipos, adm_id: current_user.adm_id)
+		end
+	
 
-		@entidade.empresas = array_empresas
+		puts "EMPRESAS: #{@entidade.empresas}"
 		@entidade.tipoentidades = array_tipos
 		@entidade.enderecos = array_enderecos
-		
 		@entidade.save!
-
-		unless @entidade.save
-			format.html { render :edit }
-    		render_validation_errors(@entidade)
-  		end
-
 		redirect_to entidades_path
 	end
 

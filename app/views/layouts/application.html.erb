@@ -170,6 +170,15 @@
 </div>	
 <%end%>
 	<script>
+
+		function unique(list) {
+		    var result = [];
+		    $.each(list, function(i, e) {
+		        if ($.inArray(e, result) == -1) result.push(e);
+		    });
+		    return result;
+		}
+
 		var myApp = angular.module('myApp',[]); 
 
 		//diretiva para somente numeros
@@ -234,7 +243,82 @@
 		    } 
 		  };
 		});
+		
+		<%if controller_name == "entidade" && action_name == "edit"%>
+			myApp.controller('EntidadeCtrl', ['$scope', function($scope)
+			{
+				$scope.data = <%= send_json.to_s.html_safe %>;
+				$scope.tipos_total = <%=returnItensUsuario.to_json.to_s.html_safe%>
+				$scope.empresas_total = <%=returnEmpresas.to_json.to_s.html_safe%>
+				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>
+				$scope.estados_total = <%=returnAllEstados.to_json.to_s.html_safe%>
+				
+				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
+				{
+					$scope.data.empresas.push($scope.empresa_atual);
+				}
+				console.log($scope.data.empresas);
+			   	
+			   	$scope.save = function() {
+			    	var request;
+			    	request = $.ajax({
+			      		method: 'post',
+			      		url: '/entidades/save_angular/' + '<%= editingUser.id%>',
+			      		data: { data: $scope.data }
+			   	 	});
+					window.location.replace('/entidades');
+				}
 
+				$scope.getValue = function(event, index) 
+				{
+
+					if ($scope.data.empresas.indexOf(Number(event.target.value)) <= -1)
+					{
+					  	$scope.data.empresas.push(Number(event.target.value));
+					}
+					else
+					{
+						var indexArray = $scope.data.empresas.indexOf(Number(event.target.value));
+					 	if (index > -1) 
+					 	{
+						    $scope.data.empresas.splice(indexArray, 1);
+						}
+					}
+
+			    	console.log($scope.data.empresas);
+				}
+
+				$scope.find_cep = function(cep, id)
+				{
+					$.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) 
+					{
+			            if (!("erro" in dados)) 
+			           {
+			               $("[name=rua"+ id + "]").val(dados.logradouro);
+			                $("[name=bairro"+ id + "]").val(dados.bairro);
+			               $("[name=cidade"+ id + "]").val(dados.localidade);
+
+			                $scope.data.endereco[id].rua =  dados.logradouro;
+			                $scope.data.endereco[id].bairro =  dados.bairro;
+			                $scope.data.endereco[id].cidade =  dados.localidade;
+			            }
+			            else 
+			            {
+			                alert("CEP não encontrado.");
+			            }
+			        });
+				}
+
+				$scope.add_blank_end = function()
+				{
+					var blank_end = {"rua":"","num_rua":"","cep":"","uf":"","cidade":"","bairro":""};
+					$scope.data.endereco.push(blank_end);
+				}
+
+				$scope.add_blank_end();
+
+			}]);
+		<%end%>
 		
 		jQuery(document).ready(function() 
 		{       	
