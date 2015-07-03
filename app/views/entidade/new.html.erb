@@ -12,7 +12,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 class="modal-title">Editar Endereço</h4>
+								<h4 class="modal-title">Endereço</h4>
 							</div>
 							<div class="modal-body">
 								<div class="row">
@@ -20,6 +20,12 @@
 										<div class="form-group">
 											<label>CEP</label>
 											<input type="text" ng-model='enderecoEditar.cep' name="cep" maxlength="8" ng-blur="find_cep(enderecoEditar.cep, $index)" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+									<div class="col-md-8">
+										<div class="form-group">
+											<label>Tipo de endereço</label>
+											<input type="text" ng-model='enderecoEditar.tipo_endereco' name="tipo_endereco" maxlength="20" class='form-control placeholder-no-fix'>
 										</div>
 									</div>
 								</div>
@@ -139,7 +145,7 @@
 										
 										<div class="actions btn-set">
 											<%= link_to "Voltar", entidades_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
-											<button ng-click="save()" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
+											<button ng-click="save(true)" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
 										</div>
 									</div>
 									<div class="portlet-body ">
@@ -203,12 +209,12 @@
 																				<div class="portlet box green-haze">
 																					<div class="portlet-title">
 																						<div class="caption">
-																							<i class="fa fa-home"></i>Casa
+																							<i class="fa fa-home"></i>{{e.tipo_endereco}}
 																						</div>
 																						<div class="actions">
 																							<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
 																							<i class="fa fa-pencil"></i> </a>
-																							<a href="javascript:;" class="btn red-sunglo btn-sm">
+																							<a ng-click="delete_end($index)" class="btn red-sunglo btn-sm">
 																							<i class="fa fa-trash-o"></i> </a>
 																						</div>
 																					</div>
@@ -226,12 +232,12 @@
 																			<div class="portlet box green-haze">
 																				<div class="portlet-title">
 																					<div class="caption">
-																						<i class="fa fa-home"></i>Casa
+																						<i class="fa fa-home"></i>{{e.tipo_endereco}}
 																					</div>
 																					<div class="actions">
 																						<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
 																						<i class="fa fa-pencil"></i> </a>
-																						<a href="javascript:;" class="btn red-sunglo btn-sm">
+																						<a ng-click="delete_end($index)" class="btn red-sunglo btn-sm">
 																						<i class="fa fa-trash-o"></i> </a>
 																					</div>
 																				</div>

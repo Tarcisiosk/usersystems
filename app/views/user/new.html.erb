@@ -9,11 +9,11 @@
 				<!-- BEGIN PAGE BREADCRUMB -->
 				<ul class="page-breadcrumb breadcrumb">
 					<li>
-						<%= link_to "Página Inicial", root_path %>
+						<%= link_to "Página Inicial", root_path%>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li>
-						<%= link_to "Usuários", users_path %>
+						<%= link_to "Usuários", users_path%>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
@@ -62,7 +62,7 @@
 										</ul>
 									</div>
 									<div class="portlet-body">
-										<%= form_for((@user), url: new_user_path, html: { method: :post }) do |f|%>
+										<%= form_for((@user), url: new_user_path, html: { method: :post, dName: "form_save" }) do |f|%>
 												<% if @user.errors.any? %>
 													<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 														<ul>

@@ -27,6 +27,7 @@
 //= require jquery.cokie.min
 //= require jquery.validate.min
 //= require jquery.backstretch.min
+//= require jquery.dirtyFields
 //= require jquery.uniform.min
 //= require bootbox.min
 //= require bootstrap-select.min

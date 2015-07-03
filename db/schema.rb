@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624140546) do
+ActiveRecord::Schema.define(version: 20150703125755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,16 @@ ActiveRecord::Schema.define(version: 20150624140546) do
     t.integer "entidade_id"
   end
 
+  create_table "empresas_grupos", force: :cascade do |t|
+    t.integer "empresa_id"
+    t.integer "grupo_id"
+  end
+
+  create_table "empresas_subgrupos", force: :cascade do |t|
+    t.integer "empresa_id"
+    t.integer "subgrupo_id"
+  end
+
   create_table "empresas_users", force: :cascade do |t|
     t.integer "user_id"
     t.integer "empresa_id"
@@ -74,9 +84,10 @@ ActiveRecord::Schema.define(version: 20150624140546) do
     t.string   "cep"
     t.integer  "adm_id"
     t.string   "cidade"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "entidade_id"
+    t.string   "tipo_endereco"
   end
 
   create_table "entidades", force: :cascade do |t|

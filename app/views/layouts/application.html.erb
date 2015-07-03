@@ -20,6 +20,8 @@
 				<title>MASTERCOM | ACESSOS </title>
 			<%elsif controller_name == 'estado'%>
 				<title>MASTERCOM | ESTADOS </title>
+			<%elsif controller_name == 'entidade'%>
+				<title>MASTERCOM | EMPRESAS/CONTATOS </title>
 			<%elsif controller_name == 'classificacaofiscal'%>
 				<title>MASTERCOM | CLASSIFICAÇÕES FISCAIS </title>		
 			<%else%>
@@ -43,7 +45,7 @@
 		<div class="container">
 			<!-- BEGIN LOGO -->
 			<div class="page-logo">
-				<a href="/"><img src="../../assets/admin/layout3/img/logo-default.png" alt="logo" class="logo-default"></a>
+				<a check href="/"><img src="../../assets/admin/layout3/img/logo-default.png" alt="logo" class="logo-default"></a>
 			</div>
 			<!-- END LOGO -->
 			<!-- BEGIN RESPONSIVE MENU TOGGLER -->
@@ -96,11 +98,11 @@
 			<div class="hor-menu ">
 				<ul class="nav navbar-nav">
 					<li>
-						<a data-no-turbolink="true" href="/"> Página Inicial</a>
+						<a data-no-turbolink="true" check href="/"> Página Inicial</a>
 					</li>
 					<% menu.each do |hkey, hvalue|%>
 						<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
-							<a data-hover="megamenu-dropdown" data-close-others="true" data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"> <%= hvalue[:label]%> <i class="fa fa-angle-down"></i></a>
+							<a data-hover="megamenu-dropdown" data-close-others="true"  ncheck data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"> <%= hvalue[:label]%> <i class="fa fa-angle-down"></i></a>
 							<ul class="dropdown-menu">
 								<li>
 									<div class="mega-menu-content">
@@ -260,17 +262,26 @@
 					$scope.data.empresas.push($scope.empresa_atual);
 				}
 			   	
-			   	$scope.save = function() {
-			    	var request;
-			    	request = $.ajax({
-			      		method: 'post',
-			      		url: '/entidades/save_angular/' + '<%= editingUser.id%>',
-			      		data: { data: $scope.data }
-			   	 	});
-					window.location.replace('/entidades');
+			   	$scope.save = function(reload) 
+			   	{
+			   		if($scope.data.tipoentidades.length <= 0 )
+			   		{
+			   			bootbox.alert("Escolha no mínimo um tipo de entidade!");
+			   		} 
+			   		else
+			   		{
+				    	var request;
+				    	request = $.ajax({
+				      		method: 'post',
+				      		url: '/entidades/save_angular/' + '<%= editingUser.id%>',
+				      		data: { data: $scope.data }
+				   	 	});
+				   	 	if(reload)
+				   	 	{
+							window.location.replace('/entidades');
+						}
+					}
 				}
-				
-				console.log($scope.data.tipoentidades);
 
 				$scope.getValue = function(event, index, caso) 
 				{
@@ -303,7 +314,6 @@
 								$scope.data.tipoentidades.splice(indexArray, 1);
 							}
 						}
-						console.log($scope.data.tipoentidades.length);
 					}
 				}
 
@@ -330,7 +340,7 @@
 
 				$scope.add_blank_end = function()
 				{
-					var blank_end = {"rua":"","num_rua":"","cep":"","uf":"","cidade":"","bairro":""};
+					var blank_end = {"tipo_endereco":"", "rua":"","num_rua":"","cep":"","uf":"","cidade":"","bairro":""};
 					$scope.enderecoEditar = blank_end;
 					$scope.novo = true;
 				}
@@ -347,20 +357,37 @@
 					console.log($scope.tipoentidades);
 				}
 
-				$scope.save_end = function(index)
+				$scope.delete_end = function(index)
 				{
-					if(!$scope.novo)
-					{
-						$scope.data.endereco[index] = $scope.enderecoEditar;
-					}
-					else
-					{
-						$scope.data.endereco.push($scope.enderecoEditar);
-						$scope.novo = false;
+					var deleteEnd = window.confirm('Voce deseja excluir esse endereço? A ação não pode ser desfeita!');
+
+   					if (deleteEnd) 
+   					{
+						$scope.data.endereco.splice(index, 1);    
+						$scope.save(false);
 					}
 				}
 
-				//$scope.add_blank_end();
+				$scope.save_end = function(index)
+				{
+					if($scope.enderecoEditar.cep.length <= 6 || $scope.enderecoEditar.rua.length < 3)
+					{
+						bootbox.alert("Endereco invalido!");
+					}
+					else
+					{
+						if(!$scope.novo)
+						{
+							$scope.data.endereco[index] = $scope.enderecoEditar;
+						}
+						else
+						{
+							$scope.data.endereco.push($scope.enderecoEditar);
+							$scope.novo = false;
+						}
+						$scope.save(false);
+					}
+				}
 
 			}]);
 		<%end%>
@@ -371,6 +398,30 @@
 			Layout.init(); // init current layout
 			TableManaged.init();
 			ComponentsDropdowns.init();
+
+			var options = 
+			{
+			    denoteDirtyForm: true,
+			    denoteDirtyFields: true,
+			    denoteDirtyOptions: true,
+			    trimText:true,
+			};
+
+			$('form').dirtyFields(options);
+
+			$('a:not([ncheck])').click(function() 
+			{    
+				if ($(".dirtyForm").length > 0) 
+				{
+					window.alert("nao salvou")
+					e.preventDefault();
+					bootbox.confirm('Se sair agora as mudanças serão perdidas, deseja sair?', function(confirmed) 
+					{
+						return confirmed;
+				    });
+				}
+			});
+
 
 			$('[name="emp_link"]').click(function () 
 			{

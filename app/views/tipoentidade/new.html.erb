@@ -30,7 +30,7 @@
 							</div>
 						</div>
 							<div class="portlet-body">
-							<%= form_for((@tipoentidade), url: new_tipoentidade_path, html: { method: :post }) do |f|%>
+							<%= form_for((@tipoentidade), url: new_tipoentidade_path, html: { method: :post, dName: "form_save" }) do |f|%>
 								<% if @tipoentidade.errors.any? %>
 									<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 										<ul>
@@ -50,7 +50,7 @@
 										<%= f.submit "Gravar", :class => "btn green-meadow pull-left"%>
 								</div><br><br><br>
 										
-								<%= link_to "Voltar", tipoentidades_path, :class => "btn default ", 'data-no-turbolink' => true %>
+								<%= link_to "Voltar", tipoentidades_path, :class => "btn default ", 'data-no-turbolink' => true%>
 							<% end %>
 						</div>
 					</div>

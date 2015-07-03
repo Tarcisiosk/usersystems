@@ -105,8 +105,9 @@ class EntidadeController < ApplicationController
 			data_hash[:endereco].each do |item|
 				item.each do |subitem|
 					if subitem.is_a?(Hash) 
-						if Endereco.where(:id => subitem['id']).present? && (subitem['rua'].present? && subitem['cep'].present? && subitem['uf'].present?)
+						if Endereco.where(:id => subitem['id']).present? && (subitem['tipo_endereco'].present? && subitem['rua'].present? && subitem['cep'].present? && subitem['uf'].present?)
 							e = Endereco.find(subitem['id'])
+							e.tipo_endereco = subitem['tipo_endereco']
 							e.rua = subitem['rua']
 							e.num_rua = subitem['num_rua']
 							e.bairro = subitem['bairro']
@@ -116,7 +117,7 @@ class EntidadeController < ApplicationController
 							e.save!
 							array_enderecos << e
 						elsif subitem['rua'].present? && subitem['cep'].present? && subitem['uf'].present?
-							e = Endereco.new(rua: subitem['rua'], num_rua: subitem['num_rua'], bairro: subitem['bairro'], cep: subitem['cep'], cidade: subitem['cidade'], uf: subitem['uf'], adm_id: current_user.adm_id)
+							e = Endereco.new(tipo_endereco: subitem['tipo_endereco'], rua: subitem['rua'], num_rua: subitem['num_rua'], bairro: subitem['bairro'], cep: subitem['cep'], cidade: subitem['cidade'], uf: subitem['uf'], adm_id: current_user.adm_id)
 							array_enderecos << e
 						else
 							

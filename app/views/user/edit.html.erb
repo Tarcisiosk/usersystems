@@ -13,7 +13,7 @@
 					</li>
 					<i class="fa fa-circle"></i>
 					<li>
-						<%= link_to "Usuários", users_path %>
+						<%= link_to "Usuários", users_path%>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
@@ -27,7 +27,7 @@
 						<!-- PORTLET MAIN -->
 						<div class="portlet light profile-sidebar-portlet">
 							<!-- SIDEBAR USERPIC -->
-							<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
+							<%= form_for((@user), url: user_path(@user), html: { method: :put, dName: "form_save" }) do |f|%>
 								<div class="profile-userpic">
 									<%if @user.photo.present?%>
 										<center><%= image_tag photo_path(@user), :height =>'200px;', :width =>'200px;' %></center>
@@ -84,7 +84,7 @@
 										<div class="tab-content">
 
 											<div class="tab-pane" id="tab_1_6">
-												<%= form_for((@user), url: {action: 'generate_api_key'}, html: { method: :post }) do |f|%>
+												<%= form_for((@user), url: {action: 'generate_api_key'}, html: { method: :post, dName: "form_save" }) do |f|%>
 													<%= f.hidden_field :id %>
 
 													<div class="form-group">
@@ -101,7 +101,7 @@
 											</div>  												
 
 											<div class="tab-pane active" id="tab_1_1">
-												<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
+												<%= form_for((@user), url: user_path(@user), html: { method: :put, dName: "form_save" }) do |f|%>
 													<% if @user.errors.any? %>
 														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 															<ul >
@@ -159,7 +159,7 @@
 											</div>  
 
 											<div class="tab-pane" id="tab_1_2">
-												<%= form_for((@user), url: user_path(@user), html: { method: :put, :multipart => true}) do |f|%>
+												<%= form_for((@user), url: user_path(@user), html: { method: :put, :multipart => true, dName: "form_save"}) do |f|%>
 													<% if @user.errors.any? %>
 														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 															<ul >
@@ -190,7 +190,7 @@
 											</div>
 								 
 											<div class="tab-pane" id="tab_1_3">
-												<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
+												<%= form_for((@user), url: user_path(@user), html: { method: :put, dName: "form_save" }) do |f|%>
 													<% if @user.errors.any? %>
 														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 															<ul >
@@ -218,7 +218,7 @@
 											</div>
 											<% if editingUser.user_type == 2 && current_user.user_type != 2%>
 												<div class="tab-pane" id="tab_1_4">
-													<%= form_for((@user), url: user_path(@user), html: { method: :put }) do |f|%>
+													<%= form_for((@user), url: user_path(@user), html: { method: :put, dName: "form_save" }) do |f|%>
 														<% if @user.errors.any? %>
 															<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 																<ul >
@@ -261,7 +261,7 @@
 																				<%= item.cnpj %>
 																			</td>
 																		</tr>
-																	<%end%>
+																	<%end%>s
 																<%end%>
 															</tbody>
 														</table><br>

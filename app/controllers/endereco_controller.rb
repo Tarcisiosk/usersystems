@@ -60,7 +60,7 @@ class EnderecoController < ApplicationController
 	end
 
 	def endereco_params
-		params.require(:endereco).permit(:rua, :num_rua, :cep, :uf, :complemento, :bairro)
+		params.require(:endereco).permit(:tipo_endereco, :rua, :num_rua, :cep, :uf, :complemento, :bairro)
 	end
 
 
