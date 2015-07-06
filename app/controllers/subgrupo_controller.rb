@@ -2,6 +2,9 @@ class SubgrupoController < ApplicationController
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o subgrupo?'}}]
 
+	helper_method :send_json
+
+
 	def index
 		respond_to do |format|
 			format.html
@@ -11,10 +14,13 @@ class SubgrupoController < ApplicationController
 
 	def show
 		@subgrupo = Subgrupo.find(params[:id])
+
 	end
 
 	def new
 		@subgrupo = Subgrupo.new
+		@@angularActions = {:descricao => '',:grupo_id =>'', :empresas => []}
+
 	end
 
 	def create
@@ -32,9 +38,8 @@ class SubgrupoController < ApplicationController
 
 	def edit
 		@subgrupo = Subgrupo.find(params[:id]) 
-		#@subgrupo.empresas.each do |item|
-		# 	puts "Empresas ligadas a esse usuario: #{item.nome_fantasia}"
-		#end
+		@@angularActions = {:descricao => @subgrupo.descricao, :grupo_id => @subgrupo.grupo_id, :empresas => @subgrupo.empresas.ids }
+
 	end
 
 	def update
@@ -58,6 +63,42 @@ class SubgrupoController < ApplicationController
 				redirect_to sub_grupos_path, notice: " "
 		end
 	end
+
+	def send_json
+		return @@angularActions.to_json
+	end
+
+	def save_angular
+		data_hash = params[:data].symbolize_keys
+		array_empresas = Array.new
+	
+		if data_hash[:empresas].present?
+			data_hash[:empresas].each do |item|
+				if item.present? && item != "false"
+					if Empresa.find(item).adm_id == current_user.adm_id
+						array_empresas << Empresa.find(item)
+					end
+				end
+			end
+		end
+				
+		if Subgrupo.where(:id => params[:id]).present? 
+			@subgrupo = Subgrupo.find(params[:id])
+			@subgrupo.descricao = data_hash[:descricao]
+			@subgrupo.descricao = data_hash[:grupo_id]
+			@subgrupo.empresas.clear
+
+			array_empresas.each do |empresa|
+				@subgrupo.empresas << empresa
+			end
+		else
+			@subgrupo = Subgrupo.new(descricao: data_hash[:descricao], grupo_id: data_hash[:grupo_id], empresas: array_empresas, adm_id: current_user.adm_id)
+		end
+	
+		@subgrupo.save!
+		redirect_to entidades_path
+	end
+
 
 	def subgrupo_params
 		params.require(:subgrupo).permit(:descricao, :grupo_id, :adm_id)

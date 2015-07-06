@@ -27,7 +27,7 @@
 						<!-- PORTLET MAIN -->
 						<div class="portlet light profile-sidebar-portlet">
 							<!-- SIDEBAR USERPIC -->
-							<%= form_for((@user), url: user_path(@user), html: { method: :put, dName: "form_save" }) do |f|%>
+							<%= form_for((@user), url: user_path(@user), html: { method: :put}) do |f|%>
 								<div class="profile-userpic">
 									<%if @user.photo.present?%>
 										<center><%= image_tag photo_path(@user), :height =>'200px;', :width =>'200px;' %></center>
@@ -261,7 +261,7 @@
 																				<%= item.cnpj %>
 																			</td>
 																		</tr>
-																	<%end%>s
+																	<%end%>
 																<%end%>
 															</tbody>
 														</table><br>

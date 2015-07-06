@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container">
+<div class="page-container" ng-view ng-controller="GrupoCtrl">
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 			<!-- END PAGE TITLE -->
@@ -21,37 +21,48 @@
 					</li>
 				</ul>
 				<div class="col-md-12">
-					<div class="portlet light">
-						<div class="portlet-title tabbable-line">
-							<div class="caption caption-md">
-								<i class="icon-globe theme-font hide"></i>
-									<span class="caption-subject font-blue-madison bold uppercase">Adicionar Grupo</span>
-								<i class="fa fa-plus"></i>
+					<div class="profile-sidebar" style="width: 250px;">
+						<!-- PORTLET MAIN -->
+						<div class="portlet light ">
+							<div class="profile-usertitle-name">
+								 Empresas
+							</div>
+							<div class="profile-desc-text">
+								<div class="form-group">
+									<div class="checkbox-list">
+										<div ng-repeat="x in empresas_total" >
+											<input type="checkbox" ng-click="getValue($event, $index)" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-							<div class="portlet-body">
-							<%= form_for((@grupo), url: new_grupo_path, html: { method: :post }) do |f|%>
-								<% if @grupo.errors.any? %>
-									<div id="error_explanation" class="Metronic-alerts alert alert-danger">
-										<ul>
-											<% @grupo.errors.full_messages.each do |message| %>
-											 <li><%= message %></li>
-										 <% end %>
-										</ul>
-									</div>
-								<% end %>
-								<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-									<label class="control-label ">Descrição</label>
-									<%= f.text_field :descricao,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-								</div>
+					</div>
 
-								<div class="actions">
-										<%= f.submit "Gravar", :class => "btn green-meadow pull-left"%>
-								</div><br><br><br>
-										
-								<%= link_to "Voltar", grupos_path, :class => "btn default ", 'data-no-turbolink' => true %>
-							<% end %>
+					<div class="profile-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet light">
+									<div class="portlet-title tabbable-line">
+										<div class="caption caption-md">
+											<i class="icon-globe theme-font hide"></i>
+												<span class="caption-subject font-blue-madison bold uppercase">Adicionar Grupo</span>
+											<i class="fa fa-plus"></i>
+										</div>
+										<div class="actions btn-set">
+											<%= link_to "Voltar", grupos_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
+											<button ng-click="save(true)" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
+										</div>
+									</div>
+									<div class="portlet-body">
+										<div class="form-group">
+											<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+											<label class="control-label ">Descrição</label>
+											<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

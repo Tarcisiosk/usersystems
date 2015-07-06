@@ -19,11 +19,15 @@ Rails.application.routes.draw do
 	get 'grupos' => "grupo#index", as: :grupos
 	get 'grupos/new' => "grupo#new", as: :new_grupo
 	post 'grupos/new'  => 'grupo#create'
+	post 'grupos/save_angular' => 'grupo#save_angular'	
+	post 'grupos/save_angular/:id' => 'grupo#save_angular'
 	post 'grupos/save_settings' => 'grupo#save_settings'
 
 	get 'subgrupos' => "subgrupo#index", as: :sub_grupos
 	get 'subgrupos/new' => "subgrupo#new", as: :new_sub_grupo
 	post 'subgrupos/new'  => 'subgrupo#create'
+	post 'subgrupos/save_angular' => 'subgrupo#save_angular'	
+	post 'subgrupos/save_angular/:id' => 'subgrupo#save_angular'
 	post 'subgrupos/save_settings' => 'subgrupo#save_settings'
 
 	get 'tipoentidades' => "tipoentidade#index", as: :tipoentidades

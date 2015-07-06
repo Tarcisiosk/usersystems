@@ -45,7 +45,7 @@ class GeneralDatatable < ApplicationController
 		records.map do |record|
 			data_array = Array.new
 			links_array = Array.new
-		
+			#usuario master
 			if @current_user.user_type == 0
 				if record.try(:adm_id) && !record.is_a?(User) 
 					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id 
@@ -67,11 +67,12 @@ class GeneralDatatable < ApplicationController
 						links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1],:id => item.values[0] + record.id.to_s,:class => item.values[2], :data => item.values[4])
 					end
 					final_array << (data_array << links_array.join(""))
-				end 				
+				end
+			#usuario adm 				
 			elsif @current_user.user_type == 1	
 				if record.adm_id == @current_user.adm_id || record.adm_id == @current_user.id
-
-					if record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo)
+#|| record.is_a?(Grupo) || record.is_a?(Subgrupo)
+					if record.is_a?(Entidade) || record.is_a?(Grupo)
 						
 						if record.empresas.include?(current_user.settings(:last_empresa).edited)
 							columns.each_with_index do |item, index|					
@@ -98,6 +99,7 @@ class GeneralDatatable < ApplicationController
 				else	
 					record = nil
 				end
+			#usuario comum
 			else
 				if record.adm_id == @current_user.adm_id || record.adm_id == @current_user.id
 					if @current_user.empresas.include?(record) && record.is_a?(Empresa) 

@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
 	helper_method :returnNiveisAcesso
 	helper_method :returnAllEstados
 	helper_method :returnEmpresas
-
+	helper_method :returnGrupoEmpresas
 
 	@@checked_rows = []
 	@@checked_users = []
@@ -348,20 +348,23 @@ class ApplicationController < ActionController::Base
 		return empresas.sort!
 	end
 
+	def returnGrupoEmpresas(gid)
+		empresas_array = Array.new
+		Grupo.find(gid).empresas do |item|
+			puts "GRUPO: #{item.descricao} "
+			empresas_array << item.empresas
+		end
+		return empresas_array.sort!
+	end
+
 	#retorna items que pertencem/sao acessiveis ao usuario
 	def returnItensUsuario
 		obj = instance_variable_get("@" + controller_name.downcase)
 		itensUser = Array.new
 		if controller_name == "subgrupo"
 			Grupo.all.each do |item|
-				if current_user.user_type != 0
-					if item.adm_id == current_user.settings(:last_empresa).edited.adm_id || item.adm_id == current_user.id
-						itensUser << item
-					end
-				else
-					if item.adm_id == obj.adm_id || item.adm_id == current_user.settings(:last_empresa).edited.adm_id
-						itensUser << item
-					end
+				if item.empresas.include?(current_user.settings(:last_empresa).edited) && item.adm_id == current_user.settings(:last_empresa).edited.adm_id
+					itensUser << item
 				end
 			end
 		end

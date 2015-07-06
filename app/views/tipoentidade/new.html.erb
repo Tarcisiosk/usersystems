@@ -30,7 +30,7 @@
 							</div>
 						</div>
 							<div class="portlet-body">
-							<%= form_for((@tipoentidade), url: new_tipoentidade_path, html: { method: :post, dName: "form_save" }) do |f|%>
+							<%= form_for((@tipoentidade), url: new_tipoentidade_path, html: { method: :post}) do |f|%>
 								<% if @tipoentidade.errors.any? %>
 									<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 										<ul>

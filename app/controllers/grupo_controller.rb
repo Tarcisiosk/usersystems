@@ -2,6 +2,10 @@ class GrupoController < ApplicationController
 	
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo e seus subgrupos?'}}]
+	
+	helper_method :send_json
+	helper_method :returnGrupoEmpresas
+
 	def index
 		respond_to do |format|
 			format.html
@@ -15,6 +19,8 @@ class GrupoController < ApplicationController
 
 	def new
 		@grupo = Grupo.new
+		@@angularActions = {:descricao => '', :empresas => []}
+
 	end
 
 	def create
@@ -32,9 +38,7 @@ class GrupoController < ApplicationController
 
 	def edit
 		@grupo = Grupo.find(params[:id]) 
-		#@grupo.empresas.each do |item|
-		# 	puts "Empresas ligadas a esse usuario: #{item.nome_fantasia}"
-		#end
+		@@angularActions = {:descricao => @grupo.descricao, :empresas => @grupo.empresas.ids }
 
 	end
 
@@ -65,10 +69,43 @@ class GrupoController < ApplicationController
 		end
 	end
 
-	def grupo_params
-		params.require(:grupo).permit(:descricao, :adm_id)
+	def send_json
+		return @@angularActions.to_json
 	end
 
+	def save_angular
+		data_hash = params[:data].symbolize_keys
+		array_empresas = Array.new
+	
+		if data_hash[:empresas].present?
+			data_hash[:empresas].each do |item|
+				if item.present? && item != "false"
+					if Empresa.find(item).adm_id == current_user.adm_id
+						array_empresas << Empresa.find(item)
+					end
+				end
+			end
+		end
+				
+		if Grupo.where(:id => params[:id]).present? 
+			@grupo = Grupo.find(params[:id])
+			@grupo.descricao = data_hash[:descricao]
+			@grupo.empresas.clear
+
+			array_empresas.each do |empresa|
+				@grupo.empresas << empresa
+			end
+		else
+			@grupo = Grupo.new(descricao: data_hash[:descricao], empresas: array_empresas, adm_id: current_user.adm_id)
+		end
+	
+		@grupo.save!
+		redirect_to entidades_path
+	end
+
+	def grupo_params
+		params.require(:grupo).permit(:descricao, :empresas, :adm_id)
+	end
 
 	def grupo_actions
 		if current_user.user_type == 2

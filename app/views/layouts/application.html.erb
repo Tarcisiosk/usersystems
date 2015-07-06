@@ -32,7 +32,7 @@
 			<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 			<meta content="" name="description"/>
 			<meta content="" name="author"/>
-			<link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">		
+			<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">		
 
 		<%end%>
 	</head>	
@@ -172,7 +172,6 @@
 </div>	
 <%end%>
 	<script>
-
 		function unique(list) {
 		    var result = [];
 		    $.each(list, function(i, e) {
@@ -391,9 +390,113 @@
 
 			}]);
 		<%end%>
-		
-		jQuery(document).ready(function() 
-		{       	
+
+		<%if controller_name == "grupo" && (action_name == "edit"||action_name == "new")%>
+			myApp.controller('GrupoCtrl', ['$scope', function($scope)
+			{
+				$scope.data = <%= send_json.to_s.html_safe %>;
+				$scope.empresas_total = <%=returnEmpresas.to_json.to_s.html_safe%>
+				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>
+
+				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
+				{
+					$scope.data.empresas.push($scope.empresa_atual);
+				}
+			   	
+			   	$scope.save = function(reload) 
+			   	{   		
+			    	var request;
+			    	request = $.ajax({
+			      		method: 'post',
+			      		url: '/grupos/save_angular/' + '<%= editingUser.id%>',
+			      		data: { data: $scope.data }
+			   	 	});
+			   	 	if(reload)
+			   	 	{
+						window.location.replace('/grupos');
+					}
+				}
+
+				$scope.getValue = function(event, index, caso) 
+				{
+	
+					if ($scope.data.empresas.indexOf(Number(event.target.value)) <= -1)
+					{
+					  	$scope.data.empresas.push(Number(event.target.value));
+					}
+					else
+					{
+						var indexArray = $scope.data.empresas.indexOf(Number(event.target.value));
+					 	if (index > -1) 
+					 	{
+						    $scope.data.empresas.splice(indexArray, 1);
+						}
+					}
+					console.log($scope.data);
+				}
+			}]);
+		<%end%>
+
+		<%if controller_name == "subgrupo" && (action_name == "edit"||action_name == "new")%>
+			myApp.controller('SubgrupoCtrl', ['$scope', function($scope)
+			{
+
+				$scope.data = <%= send_json.to_s.html_safe %>;				
+				$scope.grupo_opts = <%=returnItensUsuario.to_json.to_s.html_safe%>
+				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>
+				<%if action_name == "new"%>
+					$scope.data.grupo_id = $scope.grupo_opts[0].id;
+				<%end%>
+
+				console.log($scope.data.grupo_id);
+
+				$scope.empresas_total = <%=returnGrupoEmpresas(26).to_json.to_s.html_safe%>
+				console.log($scope.empresas_total);
+
+				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
+				{
+					$scope.data.empresas.push($scope.empresa_atual);
+				}
+			   	
+		   	
+
+			   	$scope.save = function(reload) 
+			   	{   		
+			    	var request;
+			    	request = $.ajax({
+			      		method: 'post',
+			      		url: '/subgrupos/save_angular/' + '<%= editingUser.id%>',
+			      		data: { data: $scope.data }
+			   	 	});
+			   	 	if(reload)
+			   	 	{
+						window.location.replace('/subgrupos');
+					}
+				}
+
+				$scope.getValue = function(event, index, caso) 
+				{
+					if ($scope.data.empresas.indexOf(Number(event.target.value)) <= -1)
+					{
+					  	$scope.data.empresas.push(Number(event.target.value));
+					}
+					else
+					{
+						var indexArray = $scope.data.empresas.indexOf(Number(event.target.value));
+					 	if (index > -1) 
+					 	{
+						    $scope.data.empresas.splice(indexArray, 1);
+						}
+					console.log($scope.data);
+					}
+				};
+
+			}]);
+
+		<%end%>
+
+
+		jQuery(document).ready(function() {       	
 			Metronic.init(); // init metronic core components
 			Layout.init(); // init current layout
 			TableManaged.init();
@@ -413,12 +516,15 @@
 			{    
 				if ($(".dirtyForm").length > 0) 
 				{
-					window.alert("nao salvou")
-					e.preventDefault();
-					bootbox.confirm('Se sair agora as mudanças serão perdidas, deseja sair?', function(confirmed) 
-					{
-						return confirmed;
-				    });
+
+					var r = confirm("Se sair agora as mudanças serão perdidas, deseja sair?");
+					return r;
+
+				//	window.alert("nao salvou")
+				//	e.preventDefault();
+				//	bootbox.confirm('Se sair agora as mudanças serão perdidas, deseja sair?', //function(confirmed) 
+				//	{
+				//    });
 				}
 			});
 
@@ -437,6 +543,8 @@
 				});
 			});
 		});
+
+
 	</script>
 		<% flash.each do |key, value| %>
 			<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
