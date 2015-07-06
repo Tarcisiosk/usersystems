@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 	#before_action :require_master_or_adm_acess, only: [:destroy]
 
 	after_action :save_user_empresa, only: [:update]
-	after_action :setAdmin, only: [:create]	
+	after_action :setAdmin, only: [:create, :save_angular]	
 	
 	before_filter :set_current_emp_if_first, only: [:index]
 	
@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
 					end
 				#se usuario for master os usuarios criados(master/adm) serão adm de si 
 				elsif current_user.user_type == 1
-					obj.adm_id = current_user.adm_id
+					obj.adm_id = current_user.settings(:last_empresa).edited.adm_id	
 				#se o usuario for comum os usuarios criados(comuns) serão administrados pelo seu administrador
 				elsif current_user.user_type == 2
 					obj.adm_id = current_user.adm_id

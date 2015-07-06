@@ -54,13 +54,16 @@
 											<button ng-click="save(true)" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
 										</div>
 									</div>
-									<div class="portlet-body">
-										<div class="form-group">
-											<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-											<label class="control-label ">Descrição</label>
-											<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+									<form name="form_1" class="css-form" novalidate>
+
+										<div class="portlet-body">
+											<div class="form-group">
+												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+												<label class="control-label ">Descrição</label>
+												<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+											</div>
 										</div>
-									</div>
+									</form>
 								</div>
 							</div>
 						</div>

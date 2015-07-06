@@ -84,12 +84,14 @@ class EntidadeController < ApplicationController
 		if data_hash[:empresas].present?
 			data_hash[:empresas].each do |item|
 				if item.present? && item != "false"
-					if Empresa.find(item).adm_id == current_user.adm_id
+					if Empresa.find(item).adm_id == current_user.settings(:last_empresa).edited.adm_id
 						array_empresas << Empresa.find(item)
+					
 					end
 				end
 			end
 		end
+			
 
 		if data_hash[:tipoentidades].present?
 			data_hash[:tipoentidades].each do |item|
@@ -140,6 +142,7 @@ class EntidadeController < ApplicationController
 			array_empresas.each do |empresa|
 				@entidade.empresas << empresa
 			end
+
 			array_tipos.each do |tipo|
 				@entidade.tipoentidades << tipo
 			end
