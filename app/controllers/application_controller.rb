@@ -351,7 +351,7 @@ class ApplicationController < ActionController::Base
 	def returnGrupoEmpresas(gid)
 		empresas_array = Array.new
 		Grupo.find(gid).empresas do |item|
-			puts "GRUPO: #{item.descricao} "
+			puts "GRUPO!!!!!!!!!!!!!!!!!!!!: #{item.descricao} "
 			empresas_array << item.empresas
 		end
 		return empresas_array.sort!

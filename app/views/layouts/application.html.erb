@@ -450,7 +450,7 @@
 
 				console.log($scope.data.grupo_id);
 
-				$scope.empresas_total = <%=returnGrupoEmpresas(26).to_json.to_s.html_safe%>
+				$scope.empresas_total = <%=returnGrupoEmpresas($scope.data.grupo_id).to_json.to_s.html_safe%>
 				console.log($scope.empresas_total);
 
 				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)

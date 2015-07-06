@@ -48,7 +48,20 @@ class GeneralDatatable < ApplicationController
 			#usuario master
 			if @current_user.user_type == 0
 				if record.try(:adm_id) && !record.is_a?(User) 
-					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id 
+					if record.is_a?(Entidade) || record.is_a?(Grupo)	
+						if record.empresas.include?(current_user.settings(:last_empresa).edited)
+							columns.each_with_index do |item, index|					
+								data_array[index] = record.send(item)
+							end
+							actions.each_with_index do |item, index|
+								item[:id] = record.id
+								links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+							end
+							final_array << (data_array << links_array.join(""))
+						else
+							record = nil
+						end
+					elsif record.adm_id == @current_user.settings(:last_empresa).edited.adm_id 
 						columns.each_with_index do |item, index|
 							data_array[index] = record.send(item)
 						end
@@ -57,7 +70,7 @@ class GeneralDatatable < ApplicationController
 							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1],:id => item.values[0] + record.id.to_s,:class => item.values[2], :data => item.values[4])
 						end
 						final_array << (data_array << links_array.join(""))
-					end	
+					end
 				else
 					columns.each_with_index do |item, index|
 						data_array[index] = record.send(item)
@@ -71,7 +84,7 @@ class GeneralDatatable < ApplicationController
 			#usuario adm 				
 			elsif @current_user.user_type == 1	
 				if record.adm_id == @current_user.adm_id || record.adm_id == @current_user.id
-#|| record.is_a?(Grupo) || record.is_a?(Subgrupo)
+# || record.is_a?(Subgrupo)
 					if record.is_a?(Entidade) || record.is_a?(Grupo)
 						
 						if record.empresas.include?(current_user.settings(:last_empresa).edited)
