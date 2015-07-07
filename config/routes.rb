@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
 	get 'subgrupos' => "subgrupo#index", as: :sub_grupos
 	get 'subgrupos/new' => "subgrupo#new", as: :new_sub_grupo
+	get 'subgrupos/grupoempresa/:id' => "subgrupo#returnGrupoEmpresas"
 	post 'subgrupos/new'  => 'subgrupo#create'
 	post 'subgrupos/save_angular' => 'subgrupo#save_angular'	
 	post 'subgrupos/save_angular/:id' => 'subgrupo#save_angular'

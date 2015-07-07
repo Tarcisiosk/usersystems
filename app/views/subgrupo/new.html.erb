@@ -27,7 +27,6 @@
 								<div class="form-group">
 									<div class="checkbox-list">
 										<div ng-repeat="x in empresas_total" >
-										
 											<input type="checkbox" ng-click="getValue($event, $index)" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
 										</div>
 									</div>
@@ -41,14 +40,24 @@
 							<div class="col-md-12">
 								<div class="portlet light">
 									<div class="portlet-title tabbable-line">
+										
+										
 										<div class="caption caption-md">
 											<i class="fa fa-plus"></i>
 												<span class="caption-subject font-blue-madison bold uppercase">Novo Sub-Grupo</span>
 										</div>
+
+									
+										
 										<div class="actions btn-set">
 											<%= link_to "Voltar", sub_grupos_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
-											<button ng-click="save(true)" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
+											<button ng-click="save()" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
 										</div>
+									</div>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
+										<ul ng-repeat="m in mensagens">
+											 <li>{{m}}</li>
+										</ul>
 									</div>
 									<div class="portlet-body">
 										<%if returnItensUsuario.count > 0 || current_user.user_type == 0%>
@@ -59,7 +68,7 @@
 											</div>
 
 
-											<select ng-model="data.grupo_id" class = 'form-control input-medium select2me' id ='select2_grupo' ng-options="g.id as g.descricao for g in grupo_opts">
+											<select ng-model="data.grupo_id" ng-change="getEmpresas()" class = 'form-control input-medium select2me' id ='select2_grupo' ng-options="g.id as g.descricao for g in grupo_opts">
 												
 											</select>
 

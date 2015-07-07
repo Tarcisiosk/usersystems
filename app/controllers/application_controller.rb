@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
 		menuBuilder = {:maincadastros => {:label=>'Cadastros', 
 										  :tipo_entidade => {:label=>'Empresas e Contatos',
 														 :tipos =>{:label => 'Tipos', :path => '/tipoentidades', :acao =>'tipoentidade#index'}, 
-														 :entidades =>{:label => 'Empresa/Contato', :path => '/entidades', :acao =>'entidade#index'}}, 
+														 :entidades =>{:label => 'Empresas/Contatos', :path => '/entidades', :acao =>'entidade#index'}}, 
 										  :cadastros => {:label=>'Produtos', 
 														 :grupos =>{:label => 'Grupos', :path => '/grupos', :acao =>'grupo#index'}, 
 														 :subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'},
@@ -329,7 +329,8 @@ class ApplicationController < ActionController::Base
 	def editingUser
 		obj = instance_variable_get("@" + controller_name.downcase)
 	end
-
+	
+	#retorna eestados
 	def returnAllEstados
 		estados = Array.new
 		Estado.all.each do |item|
@@ -338,6 +339,7 @@ class ApplicationController < ActionController::Base
 		return estados
 	end
 
+	//#retorna empresas
 	def returnEmpresas
 		empresas = Array.new
 		Empresa.all.each do |item|
@@ -346,15 +348,6 @@ class ApplicationController < ActionController::Base
 			end
 		end
 		return empresas.sort!
-	end
-
-	def returnGrupoEmpresas(gid)
-		empresas_array = Array.new
-		Grupo.find(gid).empresas do |item|
-			puts "GRUPO!!!!!!!!!!!!!!!!!!!!: #{item.descricao} "
-			empresas_array << item.empresas
-		end
-		return empresas_array.sort!
 	end
 
 	#retorna items que pertencem/sao acessiveis ao usuario
@@ -384,6 +377,7 @@ class ApplicationController < ActionController::Base
 		return itensUser
 	end
 
+	#retorna niveis de acesso
 	def returnNiveisAcesso
 		niveis = Array.new
 		obj = instance_variable_get("@" + controller_name.downcase)

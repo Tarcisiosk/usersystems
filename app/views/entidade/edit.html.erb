@@ -9,23 +9,24 @@
 				<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 				<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
-						<div class="modal-content">
+						<div class="modal-content" id="end_form">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 								<h4 class="modal-title">Endereço</h4>
 							</div>
-							<div class="modal-body">
+							<div class="modal-body" >
 								<div class="row">
-									<div class="col-md-4">
-										<div class="form-group">
-											<label>CEP</label>
-											<input type="text" ng-model='enderecoEditar.cep' name="cep" maxlength="8" ng-blur="find_cep(enderecoEditar.cep, $index)" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
-										</div>
-									</div>
 									<div class="col-md-8">
 										<div class="form-group">
 											<label>Tipo de endereço</label>
 											<input type="text" ng-model='enderecoEditar.tipo_endereco' name="tipo_endereco" maxlength="20" class='form-control placeholder-no-fix'>
+										</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="form-group">
+											<label>CEP</label>
+											<input type="text" ng-model='enderecoEditar.cep' name="cep" id="campocep" maxlength="8" ng-blur="find_cep(enderecoEditar.cep, $index); ApplyMask(1)" ng-focus="RemoveMask(1)" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
 										</div>
 									</div>
 								</div>
@@ -42,7 +43,7 @@
 									<div class="col-md-6">
 										<div class="form-group">
 											<label>Numero</label>
-											<input type="text" ng-model='enderecoEditar.num_rua' numbers-only="numbers-only" name="num_rua{{$index}}" class='form-control placeholder-no-fix'>
+											<input type="text" ng-model='enderecoEditar.num_rua' id="camponum" numbers-only="numbers-only" name="num_rua{{$index}}" class='form-control placeholder-no-fix'>
 										</div>
 									</div>
 									<div class="col-md-6">
@@ -95,7 +96,7 @@
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
-						Editar
+						Novo
 					</li>
 				</ul>
 				<div class="col-md-12">
@@ -140,21 +141,26 @@
 								 	<div class="portlet-title ">
 										<div class="caption caption-md">
 											<i class="icon-globe theme-font hide"></i>
-											<span class="caption-subject font-blue-madison bold uppercase">Editar Empresa/Contato</span><i class="fa fa-pencil"></i>
+											<span class="caption-subject font-blue-madison bold uppercase">Novo(a) Empresa/Contato</span><i class="fa fa-pencil"></i>
 										</div>
 										
 										<div class="actions btn-set">
 											<%= link_to "Voltar", entidades_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
-											<button ng-click="save(true)" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
+											<button ng-click="save(true)" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
 										</div>
+									</div>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
+										<ul ng-repeat="m in mensagens">
+											 <li>{{m}}</li>
+										</ul>
 									</div>
 									<div class="portlet-body ">
 										<ul class="nav nav-tabs">
 										 	<li class="active">
-												<a href="#tab_1_1" data-toggle="tab">Informações Gerais</a>
+												<a href="#tab_1_1" ncheck="" data-toggle="tab">Informações Gerais</a>
 											</li>
 											<li>
-												<a href="#tab_1_2" data-toggle="tab">Endereços</a>
+												<a href="#tab_1_2" ncheck="" data-toggle="tab">Endereços</a>
 											</li>
 										</ul>
 										<div role="alert">
@@ -175,24 +181,51 @@
 														<label class="control-label ">Nome Fantasia</label>
 														<input type="text" name="nome_fantasia" ng-model='data.nome_fantasia' class='form-control placeholder-no-fix'>
 													</div>
-
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">CNPJ</label>
-														<input type="text" name="cnpj" id="campocnpj" ng-model='data.cnpj' minlength="14" maxlength="14" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
-
+													<div class="row">
+														<div class="col-md-4">
+															<div class="form-group">
+																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+																<label class="control-label ">CNPJ/CPF</label>
+																<input type="text" name="cnpj" id="campocnpj" ng-focus="RemoveMask(2)" ng-blur="ApplyMask(2)" ng-model='data.cnpj'  maxlength="14" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+															</div>
+														</div>
+														<div class="col-md-4">
+															<div class="form-group">
+																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+																<label class="control-label ">Inscrição Estadual</label>
+																<input type="text" name="insc_estadual" minlength="10" ng-model='data.insc_estadual' maxlength="10" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+															</div>
+														</div>
+														<div class="col-md-4">
+															<div class="form-group">
+																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+																<label class="control-label ">Inscrição Municipal</label>
+																<input type="text" name="insc_municipal" ng-model='data.insc_municipal' minlength="10" maxlength="10" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+															</div>
+														</div>
 													</div>
-
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Inscrição Estadual</label>
-														<input type="text" name="insc_estadual" minlength="10" ng-model='data.insc_estadual' maxlength="10" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
-													</div>
-
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Inscrição Municipal</label>
-														<input type="text" name="insc_municipal" ng-model='data.insc_municipal' minlength="10" maxlength="10" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+													<div class="row">
+														<div class="col-md-3">
+															<div class="form-group">
+																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+																<label class="control-label ">Telefone</label>
+																<input type="text" name="telefone" id="campocnpj" ng-model='data.telefone'  maxlength="11" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+															</div>
+														</div>
+														<div class="col-md-3">
+															<div class="form-group">
+																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+																<label class="control-label ">Celular</label>
+																<input type="text" name="celular" minlength="10" ng-model='data.celular' maxlength="11" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="form-group">
+																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+																<label class="control-label ">Email</label>
+																<input type="text" name="email" ng-model='data.email' class='form-control placeholder-no-fix'>
+															</div>
+														</div>
 													</div>
 												</form>
 											</div>
@@ -202,18 +235,42 @@
 													<a href="#portlet-config" ng-click="add_blank_end()" data-toggle="modal" class="btn green-meadow pull-right"><i class="fa fa-plus"></i></a>
 														<div class="portlet">
 															<div class="portlet-body">
-																<div class="row">
-																	<div ng-repeat="e in data.endereco" >
+																<div ng-repeat="e in data.endereco" >
+																	<div ng-if="$index % 2 == 1">
+																		<div class="row">
+																			<div class="col-md-6">
+																				<div class="portlet box green-haze">
+																					<div class="portlet-title">
+																						<div class="caption">
+																							<i class="fa fa-home"></i>{{e.tipo_endereco}}
+																						</div>
+																						<div class="actions">
+																							<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
+																							<i class="fa fa-pencil"></i> </a>
+																							<a ng-click="delete_end($index)" class="btn red-sunglo btn-sm">
+																							<i class="fa fa-trash-o"></i> </a>
+																						</div>
+																					</div>
+																					<div class="portlet-body">
+																						<div class="scroller" style="height:60px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
+																							<h4>{{e.rua}}, {{e.num_rua}}, {{e.cep}} - {{e.bairro}}, {{e.cidade}}, {{e.uf}}</h4>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div ng-if="$index % 2 == 0">
 																		<div class="col-md-6">
-																			<div class="portlet box grey-silver">
+																			<div class="portlet box green-haze">
 																				<div class="portlet-title">
 																					<div class="caption">
 																						<i class="fa fa-home"></i>{{e.tipo_endereco}}
 																					</div>
 																					<div class="actions">
-																						<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn btn-default btn-sm">
+																						<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
 																						<i class="fa fa-pencil"></i> </a>
-																						<a ng-click="delete_end($index)" class="btn btn-default btn-sm">
+																						<a ng-click="delete_end($index)" class="btn red-sunglo btn-sm">
 																						<i class="fa fa-trash-o"></i> </a>
 																					</div>
 																				</div>
@@ -245,14 +302,5 @@
 
 
 <script>
-
-
-jQuery(document).ready(function() 
-{       
-	$("#campocnpj").mask("99.999.999/9999-99");
-	$(".edit_entidade").submit(function() {
-	 	$("#campocnpj").val($("#campocnpj").mask()); 
-	});
-});
 
 </script>

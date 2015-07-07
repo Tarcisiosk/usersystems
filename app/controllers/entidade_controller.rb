@@ -20,7 +20,7 @@ class EntidadeController < ApplicationController
 
 	def new
 		@entidade = Entidade.new
-		@@angularActions = {:razao_social => '', :nome_fantasia => '', :cnpj => '', :insc_estadual => '', :insc_municipal => '', 
+		@@angularActions = {:razao_social => '', :nome_fantasia => '', :cnpj => '', :insc_estadual => '', :insc_municipal => '', :email =>'' , :telefone =>'' , :celular =>'' , 
 						:tipoentidades => [], :empresas => [],
 						:endereco => []}
 	end
@@ -40,7 +40,7 @@ class EntidadeController < ApplicationController
 
 	def edit
 		@entidade = Entidade.find(params[:id]) 
-		@@angularActions = {:razao_social => @entidade.razao_social, :nome_fantasia => @entidade.nome_fantasia, :cnpj => @entidade.cnpj, :insc_estadual => @entidade.insc_estadual, :insc_municipal => @entidade.insc_municipal, 
+		@@angularActions = {:razao_social => @entidade.razao_social, :nome_fantasia => @entidade.nome_fantasia, :cnpj => @entidade.cnpj, :insc_estadual => @entidade.insc_estadual, :insc_municipal => @entidade.insc_municipal, :email => @entidade.email , :telefone => @entidade.telefone , :celular => @entidade.celular,
 						:tipoentidades => @entidade.tipoentidades.ids, :empresas => @entidade.empresas.ids,
 						:endereco => @entidade.enderecos}
 	end
@@ -68,7 +68,7 @@ class EntidadeController < ApplicationController
 	end
 
 	def entidade_params
-		params.require(:entidade).permit(:razao_social, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :users, :tipoentidades, :empresas, :enderecos, :adm_id)
+		params.require(:entidade).permit(:razao_social, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :email, :telefone, :celular, :users, :tipoentidades, :empresas, :enderecos, :adm_id)
 	end
 
 	def send_json
@@ -136,6 +136,9 @@ class EntidadeController < ApplicationController
 			@entidade.cnpj = data_hash[:cnpj]
 			@entidade.insc_estadual = data_hash[:insc_estadual]
 			@entidade.insc_municipal = data_hash[:insc_municipal]
+			@entidade.email = data_hash[:email]
+			@entidade.telefone = data_hash[:telefone]
+			@entidade.celular = data_hash[:celular]
 			@entidade.empresas.clear
 			@entidade.tipoentidades.clear
 
@@ -149,13 +152,18 @@ class EntidadeController < ApplicationController
 			
 		else
 			@entidade = Entidade.new(razao_social: data_hash[:razao_social], nome_fantasia: data_hash[:nome_fantasia], cnpj: data_hash[:cnpj], 
-									 insc_estadual: data_hash[:insc_estadual], insc_municipal: data_hash[:insc_municipal], empresas: array_empresas, 
+									 insc_estadual: data_hash[:insc_estadual], insc_municipal: data_hash[:insc_municipal], email: data_hash[:email], telefone: data_hash[:telefone], celular: data_hash[:celular] , empresas: array_empresas, 
 									 enderecos: array_enderecos, tipoentidades: array_tipos, adm_id: current_user.adm_id)
 		end
 	
 		@entidade.enderecos = array_enderecos
-		@entidade.save!
-		redirect_to entidades_path
+		@entidade.save
+
+		if @entidade.valid?
+			redirect_to entidades_path
+		else
+		 	render json: @entidade.errors.full_messages, status: :unprocessable_entity 
+		end
 	end
 
 	def entidade_actions

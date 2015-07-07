@@ -99,8 +99,13 @@ class GrupoController < ApplicationController
 			@grupo = Grupo.new(descricao: data_hash[:descricao], empresas: array_empresas, adm_id: current_user.adm_id)
 		end
 	
-		@grupo.save!
-		redirect_to entidades_path
+		@grupo.save
+
+		if @grupo.valid?
+			render :index
+		else
+		 	render json: @grupo.errors.full_messages, status: :unprocessable_entity 
+		end
 	end
 
 	def grupo_params

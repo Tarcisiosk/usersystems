@@ -51,8 +51,13 @@
 										</div>
 										<div class="actions btn-set">
 											<%= link_to "Voltar", grupos_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
-											<button ng-click="save(true)" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
+											<button ng-click="save()" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
 										</div>
+									</div>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
+										<ul ng-repeat="m in mensagens">
+											 <li>{{m}}</li>
+										</ul>
 									</div>
 									<div class="portlet-body">
 										<div class="form-group">

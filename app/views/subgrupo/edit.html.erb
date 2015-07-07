@@ -1,110 +1,79 @@
-<!-- BEGIN PAGE CONTAINER -->
-<div class="page-container">
-	<!-- BEGIN PAGE HEAD -->
+<div class="page-container" ng-view ng-controller="SubgrupoCtrl">
 	<div class="page-head">
-			<!-- END PAGE TITLE -->
-			<!-- BEGIN PAGE CONTENT -->
 		<div class="page-content">
 			<div class="container">
 				<!-- BEGIN PAGE BREADCRUMB -->
 				<ul class="page-breadcrumb breadcrumb">
 					<li>
-						 <%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li>
-						<%= link_to "Sub-Grupos", sub_grupos_path, 'data-no-turbolink' => true%>
+						<%= link_to "Sub-Grupos", sub_grupos_path, 'data-no-turbolink' => true %>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
 						Editar
 					</li>
 				</ul>
-
 				<div class="col-md-12">
-
-				 
-					<div class="profile-content">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="portlet light">
-								 <div class="portlet-title tabbable-line">
-										<div class="caption caption-md">
-											<i class="icon-globe theme-font hide"></i>
-												<span class="caption-subject font-blue-madison bold uppercase">Editar Sub-Grupo</span>
-											<i class="fa fa-pencil"></i>
-										</div>
-									</div>
-									<div class="portlet-body">
-										<div class="tab-content">
-											<div class="tab-pane active" id="tab_1_1">
-												<%= form_for((@subgrupo), url: subgrupo_path(@subgrupo), html: { method: :put }) do |f|%>
-													<% if @subgrupo.errors.any? %>
-														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
-															<ul >
-																<% @subgrupo.errors.full_messages.each do |message| %>
-																 <li><%= message %></li>
-															 <% end %>
-															</ul>
-														</div>
-													<% end %>
-													
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Descrição</label>
-														<%= f.text_field :descricao,  autofocus: true, :autocomplete => "on", :class =>"form-control placeholder-no-fix"%>
-													</div>
-											 		
-						
-											 		<div class="form-group">
-														<label class="control-label">Grupo</label><br>
-														<%= f.select(:grupo_id, [], {}, {:class => 'form-control input-medium select2me', :id => 'select2_grupo'}) do %>
-															  <% returnItensUsuario.each do |c| %>
-															    <%= content_tag(:option, c.descricao, value: c.id) %>
-															  <% end %>
-														<% end %>
-
-														<br>
-														<!--<input type="text" id="typeahead_grupo" name="typeahead_grupo" class="form-control"/>-->
-
-													</div><br>
-
-													<div class="actions">
-														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
-													</div><br>
-													<%= link_to "Voltar", sub_grupos_path, :class => "btn default ", 'data-no-turbolink' => true %>
-												<% end %>
-											</div>
+					<div class="profile-sidebar" style="width: 250px;">
+						<!-- PORTLET MAIN -->
+						<div class="portlet light ">
+							<div class="profile-usertitle-name">
+								 Empresas
+							</div>
+							<div class="profile-desc-text">
+								<div class="form-group">
+									<div class="checkbox-list">
+										<div ng-repeat="x in empresas_total" >
+											<input type="checkbox" ng-click="getValue($event, $index)" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div> 
+					</div>
+
+					<div class="profile-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet light">
+									<div class="portlet-title tabbable-line">
+										
+										
+										<div class="caption caption-md">
+											<i class="fa fa-plus"></i>
+												<span class="caption-subject font-blue-madison bold uppercase">Editar Sub-Grupo</span>
+										</div>
+
+									
+										
+										<div class="actions btn-set">
+											<%= link_to "Voltar", sub_grupos_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
+											<button ng-click="save()" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
+										</div>
+									</div>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
+										<ul ng-repeat="m in mensagens">
+											 <li>{{m}}</li>
+										</ul>
+									</div>
+									<div class="portlet-body">
+										<div class="form-group">
+											<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+											<label class="control-label ">Descrição</label>
+											<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+										</div>
+										<select ng-model="data.grupo_id" ng-change="getEmpresas()" class = 'form-control input-medium select2me' id ='select2_grupo' ng-options="g.id as g.descricao for g in grupo_opts"> </select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<!-- END PAGE CONTENT -->
-	</div>
-</div>  
+	</div>  
+</div>
 <!-- END PAGE CONTAINER -->
-
-<script>
-jQuery(document).ready(function() 
-{       
-	$('#pictureInput').on('change', function(event) {
-		var files = event.target.files;
-		var image = files[0]
-		var reader = new FileReader();
-		reader.onload = function(file) {
-			var img = new Image();
-			console.log(file);
-			img.src = file.target.result;
-			$('#target').html(img);
-		}
-		reader.readAsDataURL(image);
-		console.log(files);
-	});
-});
-
-</script>

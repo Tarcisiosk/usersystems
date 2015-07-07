@@ -85,7 +85,7 @@ class SubgrupoController < ApplicationController
 		if Subgrupo.where(:id => params[:id]).present? 
 			@subgrupo = Subgrupo.find(params[:id])
 			@subgrupo.descricao = data_hash[:descricao]
-			@subgrupo.descricao = data_hash[:grupo_id]
+			@subgrupo.grupo_id = data_hash[:grupo_id]
 			@subgrupo.empresas.clear
 
 			array_empresas.each do |empresa|
@@ -94,11 +94,26 @@ class SubgrupoController < ApplicationController
 		else
 			@subgrupo = Subgrupo.new(descricao: data_hash[:descricao], grupo_id: data_hash[:grupo_id], empresas: array_empresas, adm_id: current_user.adm_id)
 		end
-	
-		@subgrupo.save!
-		redirect_to entidades_path
+		
+		@subgrupo.save
+
+		if @subgrupo.valid?
+			redirect_to entidades_path
+		else
+		 	render json: @subgrupo.errors.full_messages, status: :unprocessable_entity 
+		end
+
 	end
 
+	#retorna empresas do grupo
+	def returnGrupoEmpresas
+		empresas_array = Array.new
+		@grupo = Grupo.find(params[:id])
+		@grupo.empresas.each do |item|
+			empresas_array << item
+		end
+ 		render :json => empresas_array.to_json.to_s.html_safe
+	end
 
 	def subgrupo_params
 		params.require(:subgrupo).permit(:descricao, :grupo_id, :adm_id)
