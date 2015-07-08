@@ -33,6 +33,7 @@
 //= require bootstrap-select.min
 //= require select2.min
 //= require jquery.multi-select
+//= require datatable
 //= require jquery.dataTables.min
 //= require jquery.dataTables
 //= require dataTables.tableTools.min

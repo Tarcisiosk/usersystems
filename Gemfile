@@ -36,6 +36,7 @@ gem 'ajax-datatables-rails'
 
 gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'yaml_dump', github: 'vanboom/yaml_dump'
+gem 'yaml_db'
 # Use ActiveModel has_secure_password
  gem 'bcrypt', '~> 3.1.7'
 

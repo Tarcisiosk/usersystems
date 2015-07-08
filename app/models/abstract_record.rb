@@ -25,4 +25,12 @@ class AbstractRecord <  ActiveRecord::Base
 		return version_object["version_id"]
 	end	
 
+	def self.attr_localized(*fields)
+    fields.each do |field|
+      define_method("#{field}=") do |value|      	
+        self[field] = value.is_a?(String) ? value.to_s.scan(/\b-?[\d.]+/).join.to_f : value    	
+      end
+    end
+  end
+
 end

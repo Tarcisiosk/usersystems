@@ -38,7 +38,7 @@
 									<div class="portlet-body">
 										<div class="tab-content">
 											<div class="tab-pane active" id="tab_1_1">
-												<%= form_for((@tipoentidade), url: tipoentidade_path(@tipoentidade), html: { method: :puts}) do |f|%>
+												<%= form_for((@tipoentidade), url: tipoentidade_path(@tipoentidade), html: { method: :put}) do |f|%>
 													<% if @tipoentidade.errors.any? %>
 														<div id="error_explanation" class="Metronic-alerts alert alert-danger">
 															<ul >
@@ -75,10 +75,5 @@
 </div>  
 
 <script>
-jQuery(document).ready(function() 
-{       
-
-
-});
 
 </script>

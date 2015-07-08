@@ -4,7 +4,7 @@ RSpec.feature "Entidades", type: :feature, :js => true do
 
 	scenario 'listar entidades' do					
 		abro_pagina_as_adm 'entidades'
-		consigo_ver 'EntidadeTeste'		
+		consigo_ver 'EMPRESAS/CONTATOS'		
 	end
 =begin
 	scenario 'adicionar entidade' do		

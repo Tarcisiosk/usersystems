@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Users", type: :feature, :js => true do
  	scenario 'listar usuarios' do					
 		abro_pagina 'users'
-		consigo_ver 'UsuarioTeste'		
+		consigo_ver 'USUÁRIOS'		
 	end
 
 	scenario 'validar campos em branco do usuario' do
@@ -18,7 +18,7 @@ RSpec.feature "Users", type: :feature, :js => true do
 	end
 	
 	scenario 'adicionar usuario' do		
-		abro_pagina 'users'
+		abro_pagina_as_adm 'users'
 		clico_link 'Novo'
 		preencho_campo_com 'user[fullname]', 'UsuarioTeste2'
 		preencho_campo_com 'user[email]', 'usuarioteste2@hotmail.Completo'
@@ -30,7 +30,7 @@ RSpec.feature "Users", type: :feature, :js => true do
 
 	scenario 'editar usuario' do	
 		@user = User.find_by(fullname: 'UsuarioTeste2')
-		abro_pagina 'users'	
+		abro_pagina_as_adm 'users'	
 		clico_link 'Editar' + @user.id.to_s		
 		preencho_campo_com 'user[fullname]', 'UsuarioTeste 2'
 		clico_botao 'Atualizar'
@@ -39,7 +39,7 @@ RSpec.feature "Users", type: :feature, :js => true do
 
 	scenario 'deletar usuario' do
 		@user = User.find_by(fullname: 'UsuarioTeste 2')
-		abro_pagina 'users'
+		abro_pagina_as_adm 'users'
 		clico_link 'Deletar'+ @user.id.to_s
 		clico_ok_alerta
 		nao_consigo_ver 'UsuarioTeste 2'

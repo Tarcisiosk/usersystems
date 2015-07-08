@@ -40,7 +40,7 @@ class TipoentidadeController < ApplicationController
 		#se usuario a editar for master não permite alterar o tipo / Se o usuario logado não for master não permite mudar o tipo de outros usuarios
 		respond_to do |format|
 			if @tipoentidade.update(tipoentidade_params)
-				format.html { redirect_to tipoentidades_path, notice: ' ' }
+				format.html { render :index, notice: ' ' }
 				format.json { render :show, status: :ok, location: @tipoentidade }
 			else
 				format.html { render :edit }

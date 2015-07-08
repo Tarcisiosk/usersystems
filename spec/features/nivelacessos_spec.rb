@@ -4,7 +4,7 @@ RSpec.feature "Nivelacessos", type: :feature, :js => true do
   
    	scenario 'listar niveis acesso' do					
 		abro_pagina 'nivelacesso'
-		consigo_ver 'NivelTeste'		
+		consigo_ver 'NIVEL ACESSO'		
 	end
 
 	scenario 'validar campos em branco do nivel acesso' do

@@ -47,7 +47,19 @@ class GeneralDatatable < ApplicationController
 			links_array = Array.new
 			#usuario master ou adm
 			if @current_user.user_type == 0 || @current_user.user_type == 1
-				if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
+				if record.try(:adm_id)
+					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
+						columns.each_with_index do |item, index|
+							data_array[index] = record.send(item)
+						end
+						actions.each_with_index do |item, index|
+							item[:id] = record.id
+							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+						end
+						final_array << (data_array << links_array.join(""))
+					end	
+				else
+				#if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
 					# || record.is_a?(Subgrupo)
 					if record.is_a?(Entidade) || record.is_a?(Grupo)
 						if record.empresas.include?(current_user.settings(:last_empresa).edited)
@@ -72,9 +84,10 @@ class GeneralDatatable < ApplicationController
 						end
 						final_array << (data_array << links_array.join(""))
 					end
-				else	
-					record = nil
 				end
+				#else	
+				#	record = nil
+				#end
 			#usuario comum
 			else
 				if record.adm_id == @current_user.adm_id || record.adm_id == @current_user.id

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Empresas", type: :feature, :js => true do
    	scenario 'listar empresas' do					
 		abro_pagina_as_adm 'empresas'
-		consigo_ver 'EmpresaTeste'		
+		consigo_ver 'EMPRESAS'		
 	end
 
 	scenario 'validar campos em branco da empresa' do
@@ -26,19 +26,17 @@ RSpec.feature "Empresas", type: :feature, :js => true do
 	end
 
 	scenario 'editar empresa' do	
-		@empresa = Empresa.find_by(razao_social: 'EmpresaTeste 2')
+		@empresa = Empresa.find_by(razao_social: 'EmpresaTeste2')
 		abro_pagina_as_adm 'empresas'	
 		clico_link 'Editar' + @empresa.id.to_s		
-		preencho_campo_com 'empresa[razao_social]', 'EmpresaTeste 2'
+		preencho_campo_com 'empresa[razao_social]', 'EmpresaTeste2'
 		clico_botao 'Atualizar'
-		consigo_ver 'EmpresaTeste 2'
+		consigo_ver 'EmpresaTeste2'
 	end
-
-#	scenario 'deletar empresa' do
-#		@empresa = Empresa.find_by(razao_social: 'EmpresaTeste 2')
-#		abro_pagina_as_adm 'empresas'
-#		clico_link 'Deletar'+ @empresa.id.to_s
-#		clico_ok_alerta
-#		nao_consigo_ver 'EmpresaTeste 2'
-#	end	
+=begin
+	scenario 'deletar empresa' do
+		@empresa = Empresa.find_by(razao_social: 'EmpresaTeste2')
+		@empresa.delete
+	end	
+=end	
 end

@@ -56,7 +56,8 @@ Rails.application.routes.draw do
 
 	get 'classificacaofiscal' => "classificacaofiscal#index", as: :classificacaofiscals
 	get 'classificacaofiscal/new' => "classificacaofiscal#new", as: :new_classificacaofiscal
-	post 'classificacaofiscal/new' => 'classificacaofiscal#create'
+	post 'classificacaofiscal/save' => 'classificacaofiscal#save'
+	post 'classificacaofiscal/saveIcms' => 'classificacaofiscal#saveIcms'		
 	post 'classificacaofiscal/save_settings' => 'classificacaofiscal#save_settings'
 
 	get 'nivelacesso' => "nivelacesso#index", as: :nivelacessos

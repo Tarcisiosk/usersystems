@@ -17,12 +17,14 @@ module Features
     def abro_pagina_as_adm(path)
       faco_login_com 'usuarioteste@hotmail.com','12345678'
       visit 'http://localhost:3000/' + path
-    end  
-    
-    def preencho_campo_com(name,value)
-    	fill_in name, with: value
-    end
-
+    end 
+      
+    def preencho_campo_com(name,value)    	
+      fill_in name, with: value
+    end 
+    def preencho_campo_mascarado_com(name,value)
+      page.execute_script("$('[name=#{name}]').val('#{value}').trigger('focus')")
+    end 
     def clico_botao(value)
     	click_button value
     end
@@ -30,7 +32,9 @@ module Features
     def clico_link(value)
     	click_link value
     end	
-
+    def clico_primeiro_link(value)
+      first(:link,value).click
+    end
     def consigo_ver(value)
     	expect(page).to have_content(value)
     end
@@ -38,19 +42,23 @@ module Features
     def nao_consigo_ver(value)
     	expect(page).to_not have_content(value)
     end
-
-    def clico_ok_alerta
-    	page.evaluate_script('window.confirm = function() { return true; }')    			
+    def clico_ok_alerta     	
+      page.execute_script('window.confirm = function() { return true; }')    			
    	end
 
    	def clico_cancelar_alerta
-   		page.evaluate_script('window.confirm = function() { return true; }')		
+   		page.execute_script('window.confirm = function() { return false; }')		
    	end	
 
     def escolho_empresa (empresa)
       find('#empresa_menu_dropdown').hover
-      page.execute_script("$('##{empresa}').click()")      
-    end  
-
+      page.execute_script("$('##{empresa}').click()") 
+    end 
+    def seleciono_opcao_do(option,select)
+      select(option, :from => select)
+    end
+    def marco_checkbox(checkbox)
+      page.execute_script("$('##{checkbox}').click()")      
+    end 
   end  
 end    

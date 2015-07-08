@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Estados", type: :feature, :js => true do
     scenario 'listar estados' do					
 		abro_pagina 'estados'
-		consigo_ver 'Acre'		
+		consigo_ver 'ESTADOS'		
 	end
 	scenario 'validar campos em branco do estado' do
 		abro_pagina 'estados'
@@ -29,15 +29,15 @@ RSpec.feature "Estados", type: :feature, :js => true do
 		abro_pagina 'estados'
 		clico_link 'Novo'
 		preencho_campo_com 'estado[codigo_ibge]', '33'
-		preencho_campo_com 'estado[uf]', 'RJ'
-		preencho_campo_com 'estado[descricao]', 'Rio de Janeiro'
+		preencho_campo_com 'estado[uf]', 'TE'
+		preencho_campo_com 'estado[descricao]', 'Test'
 		preencho_campo_com 'estado[icms_interno]', '15'
 		preencho_campo_com 'estado[diferimento]', '12'
 		clico_botao 'Gravar'
-		consigo_ver 'Rio de Janeiro' 
+		consigo_ver 'Test' 
 	end
 	scenario 'editar estado' do	
-		@estado = Estado.find_by(descricao: 'Rio de Janeiro')
+		@estado = Estado.find_by(descricao: 'Test')
 		abro_pagina 'estados'	
 		clico_link 'Editar' + @estado.id.to_s		
 		preencho_campo_com 'estado[uf]', 'XX'
@@ -45,10 +45,10 @@ RSpec.feature "Estados", type: :feature, :js => true do
 		consigo_ver 'XX'
 	end
 	scenario 'deletar estado' do
-		@estado = Estado.find_by(descricao: 'Rio de Janeiro')
+		@estado = Estado.find_by(descricao: 'Test')
 		abro_pagina 'estados'
 		clico_link 'Deletar'+@estado.id.to_s
 		clico_ok_alerta
-		nao_consigo_ver 'Rio de Janeiro'
+		nao_consigo_ver 'Test'
 	end	
 end

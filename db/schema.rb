@@ -29,12 +29,20 @@ ActiveRecord::Schema.define(version: 20150707165237) do
   end
 
   create_table "classificacaofiscals", force: :cascade do |t|
-    t.integer  "codigo_ncm"
+    t.string   "codigo_ncm"
     t.string   "descricao"
     t.integer  "adm_id"
     t.integer  "versao"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "codigo_ex"
+    t.integer  "pis_cst_id"
+    t.float    "pis_aliquota"
+    t.integer  "cofins_cst_id"
+    t.float    "cofins_aliquota"
+    t.float    "ii_aliquota"
+    t.integer  "ipi_cst_id"
+    t.float    "ipi_aliquota"
   end
 
   create_table "empresas", force: :cascade do |t|
@@ -126,6 +134,34 @@ ActiveRecord::Schema.define(version: 20150707165237) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "icmsclassificacaofiscals", force: :cascade do |t|
+    t.integer  "classificacaofiscal_id"
+    t.integer  "estado_id"
+    t.float    "reducaobasecalculo"
+    t.float    "diferimento"
+    t.float    "aliquota"
+    t.boolean  "icmsst"
+    t.integer  "modalidadebcicmsst_id"
+    t.float    "mva"
+    t.boolean  "reducaomva"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "ipicsts", force: :cascade do |t|
+    t.integer  "codigo"
+    t.string   "descricao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "modalidadebcicmssts", force: :cascade do |t|
+    t.integer  "codigo"
+    t.string   "descricao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "nivelacessos", force: :cascade do |t|
     t.string   "descricao"
     t.integer  "adm_id"
@@ -137,6 +173,13 @@ ActiveRecord::Schema.define(version: 20150707165237) do
     t.integer "user_id"
     t.string  "style"
     t.binary  "file_contents"
+  end
+
+  create_table "piscofinscsts", force: :cascade do |t|
+    t.integer  "codigo"
+    t.string   "descricao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "settings", force: :cascade do |t|

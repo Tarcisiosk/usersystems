@@ -4,21 +4,21 @@ RSpec.feature "Subgrupos", type: :feature, :js => true do
 	
 	scenario 'listar subgrupo' do					
 		abro_pagina 'subgrupos'
-		consigo_ver 'SubGrupoTeste'		
+		consigo_ver 'SUB-GRUPOS'		
 	end
-	
+=begin
 	scenario 'validar campos em branco do subgrupo' do
 		abro_pagina 'subgrupos'
 		clico_link 'Novo'
-		clico_botao 'Gravar'
+		clico_botao 'Salvar'
 		consigo_ver	'Descricao não pode ficar em branco'
 	end
 	
 	scenario 'adicionar subgrupo' do		
 		abro_pagina 'subgrupos'
 		clico_link 'Novo'
-		preencho_campo_com 'subgrupo[descricao]', 'SubGrupoTeste2'
-		clico_botao 'Gravar'
+		preencho_campo_com 'descricao', 'SubGrupoTeste2'
+		clico_botao 'Salvar'
 		consigo_ver 'SubGrupoTeste2' 
 	end
 
@@ -26,7 +26,7 @@ RSpec.feature "Subgrupos", type: :feature, :js => true do
 		@subgrupo = Subgrupo.find_by(descricao: 'SubGrupoTeste2')
 		abro_pagina 'subgrupos'	
 		clico_link 'Editar' + @subgrupo.id.to_s		
-		preencho_campo_com 'subgrupo[descricao]', 'SubGrupoTeste 2'
+		preencho_campo_com 'descricao', 'SubGrupoTeste 2'
 		clico_botao 'Atualizar'
 		consigo_ver 'SubGrupoTeste 2'
 	end
@@ -38,4 +38,5 @@ RSpec.feature "Subgrupos", type: :feature, :js => true do
 		clico_ok_alerta
 		nao_consigo_ver 'SubGrupoTeste 2'
 	end	
+=end	
 end

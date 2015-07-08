@@ -5,6 +5,8 @@ class Estado < AbstractRecord
 							{:sTitle => 'ICMS Interno', :data_name => 'icms_interno', :bDefault => true},
 							{:sTitle => 'Diferimento', :data_name => 'diferimento', :bDefault => true}]
 
+	has_many :icmsclassificacaofiscals, dependent: :destroy
+
 	validates :codigo_ibge, presence: true, numericality: true
 	validates :uf, presence: true, length: { in: 0..2 }
 	validates :descricao, presence: true, length: { in: 0..50 }

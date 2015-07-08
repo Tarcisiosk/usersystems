@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
 					end
 				#se usuario for master os usuarios criados(master/adm) serão adm de si 
 				elsif current_user.user_type == 1
-					obj.adm_id = current_user.settings(:last_empresa).edited.adm_id	
+					obj.adm_id = current_user.adm_id	
 				#se o usuario for comum os usuarios criados(comuns) serão administrados pelo seu administrador
 				elsif current_user.user_type == 2
 					obj.adm_id = current_user.adm_id
@@ -220,12 +220,17 @@ class ApplicationController < ActionController::Base
 	        format.js { render nothing: true }
    		end
 	end
+	def redirect_login_if_user_nil
+		if current_user.nil?
+			redirect_to root_path
+		end			
+	end
 
 	#seta a empresa atual se não houver nenhuma selecionada
-	def set_current_emp_if_first
+	def set_current_emp_if_first		
 		if current_user.settings(:last_empresa).edited.blank? && lastEmpTable.present?
 			current_user.settings(:last_empresa).edited = lastEmpTable.first
-		end
+		end		
 	end
 
 	protected
@@ -355,9 +360,9 @@ class ApplicationController < ActionController::Base
 		obj = instance_variable_get("@" + controller_name.downcase)
 		itensUser = Array.new
 		if controller_name == "subgrupo"
-			Grupo.all.each do |item|
-				if item.empresas.include?(current_user.settings(:last_empresa).edited) && item.adm_id == current_user.settings(:last_empresa).edited.adm_id
-					itensUser << item
+			Grupo.all.each do |item|				
+				if item.empresas.include?(current_user.settings(:last_empresa).edited) && item.adm_id == current_user.settings(:last_empresa).edited.adm_id					
+					itensUser << item					
 				end
 			end
 		end

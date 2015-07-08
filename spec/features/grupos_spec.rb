@@ -4,21 +4,21 @@ RSpec.feature "Grupos", type: :feature, :js => true do
    
     scenario 'listar grupos' do					
 		abro_pagina 'grupos'
-		consigo_ver 'GrupoTeste'		
+		consigo_ver 'GRUPOS'		
 	end
 	
 	scenario 'validar campos em branco do grupo' do
 		abro_pagina 'grupos'
 		clico_link 'Novo'
-		clico_botao 'Gravar'
+		clico_botao 'Salvar'
 		consigo_ver	'Descricao não pode ficar em branco'
 	end
 	
 	scenario 'adicionar grupo' do		
 		abro_pagina 'grupos'
 		clico_link 'Novo'
-		preencho_campo_com 'grupo[descricao]', 'GrupoTeste2'
-		clico_botao 'Gravar'
+		preencho_campo_com 'descricao', 'GrupoTeste2'
+		clico_botao 'Salvar'
 		consigo_ver 'GrupoTeste2' 
 	end
 
@@ -26,7 +26,7 @@ RSpec.feature "Grupos", type: :feature, :js => true do
 		@grupo = Grupo.find_by(descricao: 'GrupoTeste2')
 		abro_pagina 'grupos'	
 		clico_link 'Editar' + @grupo.id.to_s		
-		preencho_campo_com 'grupo[descricao]', 'GrupoTeste 2'
+		preencho_campo_com 'descricao', 'GrupoTeste 2'
 		clico_botao 'Atualizar'
 		consigo_ver 'GrupoTeste 2'
 	end

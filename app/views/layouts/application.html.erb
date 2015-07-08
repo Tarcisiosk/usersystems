@@ -32,7 +32,7 @@
 			<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 			<meta content="" name="description"/>
 			<meta content="" name="author"/>
-			<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">		
+			<link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
 
 		<%end%>
 	</head>	
@@ -522,7 +522,7 @@
 
 				$scope.data = <%= send_json.to_s.html_safe %>;
 				$scope.mensagens = [];				
-				$scope.grupo_opts = <%=returnItensUsuario.to_json.to_s.html_safe%>;
+				$scope.grupo_opts = <%=returnItensUsuario.to_json.to_s.html_safe%>;				
 				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>;
 				$scope.empresas_total = '';
 
