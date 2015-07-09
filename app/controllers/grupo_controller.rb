@@ -80,7 +80,7 @@ class GrupoController < ApplicationController
 		if data_hash[:empresas].present?
 			data_hash[:empresas].each do |item|
 				if item.present? && item != "false"
-					if Empresa.find(item).adm_id == current_user.settings(:last_empresa).edited.adm_id	
+					if Empresa.find(item).adm_id == current_user.settings(:last_empresa).edited.adm_id
 						array_empresas << Empresa.find(item)
 					end
 				end

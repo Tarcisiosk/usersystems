@@ -31,11 +31,11 @@ class User < AbstractRecord
 
 		devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 	
-		before_save { 
+		before_save{ 
 			self.email = email.downcase 
 			generate_api_key
-
 		}
+
 		validates :fullname, presence: true
 		validates :email, email:true
 		#validates :password, confirmation: true, :on => :create
@@ -45,6 +45,12 @@ class User < AbstractRecord
 		has_attached_file :photo, :storage => :database, :url => "/:attachment/:id/:style/:basename.:extension", :default_url => "../../public/assets/photos/original/missing.png"
 		validates_attachment_size :photo, :less_than => 5.megabytes
 		validates_attachment_content_type :photo, :content_type => ['image/jpeg', 'image/jpg', 'image/png']
+		
+		def self.find_for_authentication(conditions)
+		    user = super
+		    return nil if user.user_type == 2 && user.empresas.count <= 0
+		    user
+		end
 
 		def generate_api_key
 			self.api_key = SecureRandom.hex

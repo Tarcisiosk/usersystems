@@ -22,6 +22,7 @@
         										<div class="typeahead-field" id='tipo'>
 													<label>Tipo de endereço</label>
 													<input type="text" id="tipo" ng-model='enderecoEditar.tipo_endereco' name="tipo" maxlength="20" class='form-control placeholder-no-fix'>
+
 												</div>
 											</div>
 										</div>
@@ -239,42 +240,18 @@
 													<a href="#portlet-config" ng-click="add_blank_end()" data-toggle="modal" class="btn green-meadow pull-right"><i class="fa fa-plus"></i></a>
 														<div class="portlet">
 															<div class="portlet-body">
-																<div ng-repeat="e in data.endereco" >
-																	<div ng-if="$index % 2 == 1">
-																		<div class="row">
-																			<div class="col-md-6">
-																				<div class="portlet box green-haze">
-																					<div class="portlet-title">
-																						<div class="caption">
-																							<i class="fa fa-home"></i>{{e.tipo_endereco}}
-																						</div>
-																						<div class="actions">
-																							<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
-																							<i class="fa fa-pencil"></i> </a>
-																							<a ng-click="delete_end($index)" class="btn red-sunglo btn-sm">
-																							<i class="fa fa-trash-o"></i> </a>
-																						</div>
-																					</div>
-																					<div class="portlet-body">
-																						<div class="scroller" style="height:60px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
-																							<h4>{{e.rua}}, {{e.num_rua}}, {{e.cep}} - {{e.bairro}}, {{e.cidade}}, {{e.uf}}</h4>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div ng-if="$index % 2 == 0">
+																<div class="row">
+																	<div ng-repeat="e in data.endereco" >
 																		<div class="col-md-6">
-																			<div class="portlet box green-haze">
+																			<div class="portlet box grey-cascade">
 																				<div class="portlet-title">
 																					<div class="caption">
 																						<i class="fa fa-home"></i>{{e.tipo_endereco}}
 																					</div>
 																					<div class="actions">
-																						<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
+																						<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn btn-default btn-sm">
 																						<i class="fa fa-pencil"></i> </a>
-																						<a ng-click="delete_end($index)" class="btn red-sunglo btn-sm">
+																						<a ng-click="delete_end($index)" class="btn btn-default btn-sm">
 																						<i class="fa fa-trash-o"></i> </a>
 																					</div>
 																				</div>

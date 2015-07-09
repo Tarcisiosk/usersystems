@@ -45,6 +45,13 @@ ActiveRecord::Schema.define(version: 20150707165237) do
     t.float    "ipi_aliquota"
   end
 
+  create_table "cstpiscofins", force: :cascade do |t|
+    t.integer  "codigo"
+    t.string   "descricao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "empresas", force: :cascade do |t|
     t.string   "razao_social"
     t.string   "nome_fantasia"

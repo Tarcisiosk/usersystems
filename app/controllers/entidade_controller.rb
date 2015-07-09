@@ -96,7 +96,7 @@ class EntidadeController < ApplicationController
 		if data_hash[:tipoentidades].present?
 			data_hash[:tipoentidades].each do |item|
 				if item.present? && item != "false"
-					if Tipoentidade.find(item).adm_id == current_user.adm_id
+					if Tipoentidade.find(item).adm_id == current_user.settings(:last_empresa).edited.adm_id
 						array_tipos << Tipoentidade.find(item)
 					end
 				end

@@ -53,7 +53,7 @@ class TipoentidadeController < ApplicationController
 		@tipoentidade = Tipoentidade.find(params[:id])
 		@tipoentidade.destroy
 		if @tipoentidade.destroy
-				redirect_to tipoentidades_path, notice: " "
+			redirect_to tipoentidades_path, notice: " "
 		end
 	end
 

@@ -96,7 +96,7 @@
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
-						Novo
+						Editar
 					</li>
 				</ul>
 				<div class="col-md-12">
@@ -141,13 +141,13 @@
 								 	<div class="portlet-title ">
 										<div class="caption caption-md">
 											<i class="icon-globe theme-font hide"></i>
-											<span class="caption-subject font-blue-madison bold uppercase">Novo(a) Empresa/Contato</span><i class="fa fa-pencil"></i>
+											<span class="caption-subject font-blue-madison bold uppercase">Editar Empresa/Contato</span><i class="fa fa-pencil"></i>
 										</div>
-										
 										<div class="actions btn-set">
 											<%= link_to "Voltar", entidades_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
-											<button ng-click="save(true)" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
+											<button ng-click="save(true)" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
 										</div>
+										
 									</div>
 									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
 										<ul ng-repeat="m in mensagens">
@@ -230,47 +230,22 @@
 												</form>
 											</div>
 											<div class="tab-pane" id="tab_1_2">
-
 												<form name="form_2" class="css-form" novalidate>
 													<a href="#portlet-config" ng-click="add_blank_end()" data-toggle="modal" class="btn green-meadow pull-right"><i class="fa fa-plus"></i></a>
 														<div class="portlet">
 															<div class="portlet-body">
-																<div ng-repeat="e in data.endereco" >
-																	<div ng-if="$index % 2 == 1">
-																		<div class="row">
-																			<div class="col-md-6">
-																				<div class="portlet box green-haze">
-																					<div class="portlet-title">
-																						<div class="caption">
-																							<i class="fa fa-home"></i>{{e.tipo_endereco}}
-																						</div>
-																						<div class="actions">
-																							<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
-																							<i class="fa fa-pencil"></i> </a>
-																							<a ng-click="delete_end($index)" class="btn red-sunglo btn-sm">
-																							<i class="fa fa-trash-o"></i> </a>
-																						</div>
-																					</div>
-																					<div class="portlet-body">
-																						<div class="scroller" style="height:60px" data-rail-visible="1" data-rail-color="yellow" data-handle-color="#a1b2bd">
-																							<h4>{{e.rua}}, {{e.num_rua}}, {{e.cep}} - {{e.bairro}}, {{e.cidade}}, {{e.uf}}</h4>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div ng-if="$index % 2 == 0">
+																<div class="row">
+																	<div ng-repeat="e in data.endereco" >
 																		<div class="col-md-6">
-																			<div class="portlet box green-haze">
+																			<div class="portlet box grey-cascade">
 																				<div class="portlet-title">
 																					<div class="caption">
 																						<i class="fa fa-home"></i>{{e.tipo_endereco}}
 																					</div>
 																					<div class="actions">
-																						<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn yellow-saffron btn-sm">
+																						<a href="#portlet-config" ng-click="edit_end($index)" data-toggle="modal" class="btn btn-default btn-sm">
 																						<i class="fa fa-pencil"></i> </a>
-																						<a ng-click="delete_end($index)" class="btn red-sunglo btn-sm">
+																						<a ng-click="delete_end($index)" class="btn btn-default btn-sm">
 																						<i class="fa fa-trash-o"></i> </a>
 																					</div>
 																				</div>

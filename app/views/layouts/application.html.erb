@@ -255,13 +255,10 @@
 				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>;
 				$scope.estados_total = <%=returnAllEstados.to_json.to_s.html_safe%>;
 				$scope.enderecoEditar = '';
+				$scope.opt = ["Principal", "Cobrança", "Entrega"];
 				$scope.novo = false;
-				var sug = ["Principal", "Cobrança", "Entrega"];
-				
-				$('#tipo').typeahead({
-					local:sug 
-				});
 
+				
 				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
 				{
 					$scope.data.empresas.push($scope.empresa_atual);
@@ -459,7 +456,6 @@
 						$("#campocnpj").unmask();
 					}
 				}
-
 			}]);
 		<%end%>
 
@@ -475,7 +471,7 @@
 				{
 					$scope.data.empresas.push($scope.empresa_atual);
 				}
-				
+
 				$scope.save = function() 
 				{   		
 					var request;
@@ -547,10 +543,11 @@
 						success: function(data)
 						{
 							$scope.empresas_total = data;
-						}
 
+						}
 					});
-					
+					$scope.data.empresas = [];
+					$scope.data.empresas.push($scope.empresa_atual);
 				}
 				
 				$scope.getEmpresas();
@@ -589,8 +586,9 @@
 						{
 							$scope.data.empresas.splice(indexArray, 1);
 						}
-					console.log($scope.data);
 					}
+					console.log($scope.data.empresas);
+
 				};
 
 			}]);

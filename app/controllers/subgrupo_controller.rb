@@ -72,6 +72,7 @@ class SubgrupoController < ApplicationController
 		data_hash = params[:data].symbolize_keys
 		array_empresas = Array.new
 	
+
 		if data_hash[:empresas].present?
 			data_hash[:empresas].each do |item|
 				if item.present? && item != "false"
@@ -81,7 +82,7 @@ class SubgrupoController < ApplicationController
 				end
 			end
 		end
-				
+	
 		if Subgrupo.where(:id => params[:id]).present? 
 			@subgrupo = Subgrupo.find(params[:id])
 			@subgrupo.descricao = data_hash[:descricao]

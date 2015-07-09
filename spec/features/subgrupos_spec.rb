@@ -4,9 +4,9 @@ RSpec.feature "Subgrupos", type: :feature, :js => true do
 	
 	scenario 'listar subgrupo' do					
 		abro_pagina 'subgrupos'
-		consigo_ver 'SUB-GRUPOS'		
+		consigo_ver 'Sub-Grupos'		
 	end
-=begin
+
 	scenario 'validar campos em branco do subgrupo' do
 		abro_pagina 'subgrupos'
 		clico_link 'Novo'
@@ -38,5 +38,5 @@ RSpec.feature "Subgrupos", type: :feature, :js => true do
 		clico_ok_alerta
 		nao_consigo_ver 'SubGrupoTeste 2'
 	end	
-=end	
+	
 end

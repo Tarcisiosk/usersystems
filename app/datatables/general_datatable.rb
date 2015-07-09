@@ -49,20 +49,20 @@ class GeneralDatatable < ApplicationController
 			if @current_user.user_type == 0 || @current_user.user_type == 1
 				if record.try(:adm_id)
 					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
-						columns.each_with_index do |item, index|
-							data_array[index] = record.send(item)
-						end
-						actions.each_with_index do |item, index|
-							item[:id] = record.id
-							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name), :method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
-						end
-						final_array << (data_array << links_array.join(""))
-					end	
-				else
-				#if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
-					# || record.is_a?(Subgrupo)
-					if record.is_a?(Entidade) || record.is_a?(Grupo)
-						if record.empresas.include?(current_user.settings(:last_empresa).edited)
+						if record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo)
+							if record.empresas.include?(current_user.settings(:last_empresa).edited)
+								columns.each_with_index do |item, index|					
+									data_array[index] = record.send(item)
+								end
+								actions.each_with_index do |item, index|
+									item[:id] = record.id
+									links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+								end
+								final_array << (data_array << links_array.join(""))
+							else
+								record = nil
+							end 
+						else
 							columns.each_with_index do |item, index|					
 								data_array[index] = record.send(item)
 							end
@@ -71,27 +71,27 @@ class GeneralDatatable < ApplicationController
 								links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
 							end
 							final_array << (data_array << links_array.join(""))
-						else
-							record = nil
-						end 
+						end
 					else
-						columns.each_with_index do |item, index|					
-							data_array[index] = record.send(item)
-						end
-						actions.each_with_index do |item, index|
-							item[:id] = record.id
-							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
-						end
-						final_array << (data_array << links_array.join(""))
+						record = nil
 					end
+				else
+					columns.each_with_index do |item, index|					
+						data_array[index] = record.send(item)
+					end
+					actions.each_with_index do |item, index|
+						item[:id] = record.id
+						links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+					end
+					final_array << (data_array << links_array.join(""))
 				end
-				#else	
-				#	record = nil
-				#end
+
 			#usuario comum
 			else
 				if record.adm_id == @current_user.adm_id || record.adm_id == @current_user.id
-					if @current_user.empresas.include?(record) && record.is_a?(Empresa) 
+
+					#se o dado for uma empresa verifica se o usuario tem acesso a ela
+					if record.is_a?(Empresa) && @current_user.empresas.include?(record) 
 						columns.each_with_index do |item, index|					
 							data_array[index] = record.send(item)
 						end
@@ -100,8 +100,9 @@ class GeneralDatatable < ApplicationController
 							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id => item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
 						end
 						final_array << (data_array << links_array.join(""))
-
-					elsif record.is_a?(User) && record.user_type == 2
+				
+					#se o dado for usuario e for comum, envia!
+					elsif record.is_a?(User) && @current_user.settings(:last_empresa).edited.users.include?(record) && record.user_type == 2
 						columns.each_with_index do |item, index|					
 							data_array[index] = record.send(item)
 						end
@@ -110,16 +111,34 @@ class GeneralDatatable < ApplicationController
 							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=>item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
 						end
 						final_array << (data_array << links_array.join(""))
-
+					
+					#...se for entidade, grupo ou subgrupo é filtrado pela empresa atual, senão só vai..
 					else
-						columns.each_with_index do |item, index|					
-							data_array[index] = record.send(item)
-						end
-						actions.each_with_index do |item, index|
-							item[:id] = record.id
-							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id =>item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
-						end
-						final_array << (data_array << links_array.join(""))
+						if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
+							if record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo)
+								if record.empresas.include?(current_user.settings(:last_empresa).edited)
+									columns.each_with_index do |item, index|					
+										data_array[index] = record.send(item)
+									end
+									actions.each_with_index do |item, index|
+										item[:id] = record.id
+										links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+									end
+									final_array << (data_array << links_array.join(""))
+								else
+									record = nil
+								end 
+							else
+								columns.each_with_index do |item, index|					
+									data_array[index] = record.send(item)
+								end
+								actions.each_with_index do |item, index|
+									item[:id] = record.id
+									links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+								end
+								final_array << (data_array << links_array.join(""))
+							end
+						end	
 					end
 				else	
 					record = nil

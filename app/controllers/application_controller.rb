@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 	protect_from_forgery with: :null_session, only: Proc.new { |c| c.request.format.json? }
 
 	before_action :configure_permitted_parameters, if: :devise_controller?
-	#before_action :require_master_or_adm_acess, only: [:destroy]
+	#after_action :has_emp, only: [:create]
 
 	after_action :save_user_empresa, only: [:update]
 	after_action :setAdmin, only: [:create, :save_angular]	
@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
 	def after_sign_in_path_for(resource)
 		'/index'
 	end
-	
+
 	def render_validation_errors(model)
 	  render :json => { :errors => model.errors }, status: 422
 	end
@@ -56,6 +56,7 @@ class ApplicationController < ActionController::Base
 										 				    :nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'}, 
 										 				    :usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
 				       :mainadministracao =>{:label=>'Administração', :cadastros =>{:label=>'Cadastros', :estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'}}}}
+		
 		if current_user.user_type != 0
 			menuBuilder.except!(:mainadministracao)
 		end									 				    
@@ -67,7 +68,6 @@ class ApplicationController < ActionController::Base
 							subvalue.each  do |optkey, optvalue|
 								if optvalue.is_a?(Hash)
 									if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao(optvalue[:acao]))
-										puts "ACESSOS DISPONIVELS: #{optvalue[:acao]}"
 									else
 										subvalue.except!(optkey)
 									end
@@ -100,36 +100,45 @@ class ApplicationController < ActionController::Base
 #	end
 
 	#seta adm para itens criados
-	def setAdmin		
+	def setAdmin
+		obj = instance_variable_get("@" + controller_name.downcase)
+
 		if controller_name != "sessions"
-			obj = instance_variable_get("@" + controller_name.downcase)
-			if controller_name == "user"
-				#se usuario for master os usuarios criados(master/adm) serão adm de si 
-				if current_user.user_type == 0
-					obj.adm_id = obj.id					
-				#se usuario for adm os usuarios criados(comuns) serão administrados pelo criador 
-				elsif current_user.user_type == 1
-					obj.adm_id = current_user.id
-				#se o usuario for comum os usuarios criados(comuns) serão administrados pelo seu administrador
-				else
-					obj.adm_id = current_user.adm_id
-				end
-			else
-				if current_user.user_type == 0					
-					if obj.attributes.key?('adm_id')
+
+			#se usuario for master os usuarios criados(master/adm) serão adm de si 
+			if current_user.user_type == 0					
+				if obj.attributes.key?('adm_id')
+					if obj.is_a?(User)
+						obj.adm_id = obj.id			
+					else
 						obj.adm_id = current_user.settings(:last_empresa).edited.adm_id						
 					end
-				#se usuario for master os usuarios criados(master/adm) serão adm de si 
-				elsif current_user.user_type == 1
-					obj.adm_id = current_user.adm_id	
-				#se o usuario for comum os usuarios criados(comuns) serão administrados pelo seu administrador
-				elsif current_user.user_type == 2
-					obj.adm_id = current_user.adm_id
+				end
+
+			elsif current_user.user_type == 1
+				if obj.attributes.key?('adm_id')
+					if obj.is_a?(User) || obj.is_a?(Empresa)
+						obj.adm_id = current_user.adm_id			
+					else
+						obj.adm_id = current_user.settings(:last_empresa).edited.adm_id						
+					end
+				end
+
+			#se o usuario for comum os usuarios criados(comuns) serão administrados pelo seu administrador
+			elsif current_user.user_type == 2
+				if obj.attributes.key?('adm_id')
+					if obj.is_a?(User) || obj.is_a?(Empresa)
+						obj.adm_id = current_user.adm_id			
+					else
+						obj.adm_id = current_user.settings(:last_empresa).edited.adm_id						
+					end
 				end
 			end
+			
 			if obj.save
 				obj.save!
 			end
+		
 		end
 	end
 
@@ -161,7 +170,9 @@ class ApplicationController < ActionController::Base
 					obj.empresas.each_with_index  do |item ,index|
 						item.users.delete(obj)
 					end
+					obj.settings(:last_empresa).edited = nil
 					obj.empresas.clear
+
 				elsif controller_name == "empresa"
 					#user
 					obj.users.each_with_index  do |item ,index|
@@ -176,7 +187,6 @@ class ApplicationController < ActionController::Base
 
 					if obj.adm_id == item.adm_id
 						if controller_name == "user"
-						
 							if index == 0
 								obj.empresas.clear
 								item.users.delete(obj)
@@ -193,6 +203,7 @@ class ApplicationController < ActionController::Base
 							obj.users << @@checked_empresas[index]
 						end
 
+						obj.settings(:last_empresa).edited = nil
 						obj.save!
 						item.save!
 					end
@@ -441,23 +452,6 @@ class ApplicationController < ActionController::Base
 				end
 			end
 		end
-	end
-
-	#seta o adm_id do master igual ao adm_id do obj enquanto ele estiver sendo editado
-	def setMasterAdmin
-		obj = instance_variable_get("@" + controller_name.downcase)
-		#se o usuario for master e estiver editando um usuario qualquer o adm_id do master será igual ao adm_id do usuario editado
-		if current_user.user_type == 0
-			current_user.adm_id = obj.adm_id
-		end	
-	end
-
-	#retorna papra o adm_id original do master
-	def backMasterAdmin
-		if current_user.user_type == 0
-			current_user.adm_id = (current_user.id).to_s
-		end
-		current_user.save!
 	end
 	#fim autenticações e permissões
 
