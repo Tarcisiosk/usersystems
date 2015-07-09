@@ -20,20 +20,18 @@ class EmpresaController < ApplicationController
 	end
 
 	def create
-		if current_user.id == 1
-			redirect_to root_path, notice: "Você não tem permissão para isso!"
-		else
-			@empresa = Empresa.new(empresa_params)
-			respond_to do |format|
-				if @empresa.save
-					format.html { redirect_to empresas_path, notice: ' ' }
-					format.json { render :show, status: :created, location: @empresa }
-				else
-					format.html { render :new }
-					format.json { render json: @empresa.errors, status: :unprocessable_entity }
-				end
+		
+		@empresa = Empresa.new(empresa_params)
+		respond_to do |format|
+			if @empresa.save
+				format.html { redirect_to empresas_path, notice: ' ' }
+				format.json { render :show, status: :created, location: @empresa }
+			else
+				format.html { render :new }
+				format.json { render json: @empresa.errors, status: :unprocessable_entity }
 			end
 		end
+		current_user.settings(:last_empresa).edited = @empresa
 	end
 
 	def edit

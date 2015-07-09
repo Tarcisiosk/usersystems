@@ -61,9 +61,14 @@
 									</div>
 									<div class="portlet-body">
 										<div class="form-group">
+											<%if current_user.settings(:last_empresa).edited != nil %>
 											<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-											<label class="control-label ">Descrição</label>
-											<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+												<label class="control-label ">Descrição</label>
+												<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+											
+											<%else%>
+												<span class="caption-subject font-red bold uppercase">Crie uma empresa antes de criar um grupo.</span><br><br>
+											<%end%>
 										</div>
 									</div>
 								</div>

@@ -131,7 +131,7 @@
 								<div class="form-group">
 									<div class="checkbox-list">
 										<div ng-repeat="t in tipos_total" >
-											<input type="checkbox" ng-click="getValue($event, $index, 2)" ng-checked='data.tipoentidades.indexOf(t.id) > -1' value='{{t.id}}' class="checkboxes" > {{ t.descricao }}</input>
+											<input type="checkbox" id="tipo2" name="tipo2"  ng-click="getValue($event, $index, 2)" ng-checked='data.tipoentidades.indexOf(t.id) > -1' value='{{t.id}}' class="checkboxes" > {{ t.descricao }}</input>
 										</div>
 									</div>
 								</div>
