@@ -10,13 +10,14 @@ class ClassificacaofiscalController < ApplicationController
 	end
 
 	def new
-		@classificacaofiscal = Classificacaofiscal.new
+		@classificacaofiscal = Classificacaofiscal.new(pis_aliquota: 0, cofins_aliquota: 0, ii_aliquota: 0, ipi_aliquota: 0)
 		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao")
 		@ipicst = Ipicst.all.select("id","codigo","descricao")
-		@estado = Estado.all.select("id","descricao","diferimento").order("descricao")
+		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
 		@icmsclassificacaofiscal = Array.new
 		@estado.each do |est|
-			@icmsclassificacaofiscal << Icmsclassificacaofiscal.new(estado_id: est.id,diferimento: est.diferimento,icmsst: false, reducaomva: false)
+			@icmsclassificacaofiscal << Icmsclassificacaofiscal.new(estado_id: est.id,reducaobasecalculo: 0,diferimento: est.diferimento,
+			aliquota: est.icms_interno,icmsst: false, mva: 0,reducaomva: false)
 		end	
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		render :edit

@@ -13,16 +13,8 @@ RSpec.feature "Classificacaofiscals", type: :feature, :js => true do
 		consigo_ver 'Codigo ncm não pode ficar em branco
 					Descricao não pode ficar em branco
 					Pis cst não pode ficar em branco
-					Pis aliquota deve ter um valor numérico
-					Pis aliquota não pode ficar em branco
 					Cofins cst não pode ficar em branco
-					Cofins aliquota deve ter um valor numérico
-					Cofins aliquota não pode ficar em branco
-					Ii aliquota deve ter um valor numérico
-					Ii aliquota não pode ficar em branco
-					Ipi cst não pode ficar em branco
-					Ipi aliquota deve ter um valor numérico
-					Ipi aliquota não pode ficar em branco'
+					Ipi cst não pode ficar em branco'
 	end	
 
 	scenario 'validar campos de um icms da classificacao fiscal' do 
@@ -30,6 +22,8 @@ RSpec.feature "Classificacaofiscals", type: :feature, :js => true do
 		clico_link 'Novo'
 		clico_link 'tabicmsclassificacaofiscal'
 		clico_primeiro_link 'editarIcms'
+		preencho_campo_com 'reducaobasecalculo', ''
+		preencho_campo_com 'aliquota',''
 		clico_botao 'Salvar'
 		consigo_ver 'Reducaobasecalculo não pode ficar em branco
 					Reducaobasecalculo deve ter um valor numérico

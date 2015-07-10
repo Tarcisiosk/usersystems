@@ -55,8 +55,8 @@ class ApplicationController < ActionController::Base
 										 				    :empresas =>{:label=> 'Empresas', :path => '/empresas', :acao =>'empresa#index'}, 
 										 				    :nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'}, 
 										 				    :usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
-				       :mainadministracao =>{:label=>'Administração', :cadastros =>{:label=>'Cadastros', :estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'}}}}
-		
+				       :mainadministracao =>{:label=>'Administração', :cadastros =>{:label=>'Cadastros', :estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'},
+				       																					 :icmsinterestadual =>{:label =>'ICMS Interestadual', :path=>'/icmsinterestadual', :acao=>'icmsinterestadual#index'}}}}
 		if current_user.user_type != 0
 			menuBuilder.except!(:mainadministracao)
 		end									 				    

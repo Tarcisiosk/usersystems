@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150707165237) do
+ActiveRecord::Schema.define(version: 20150709131032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,13 +43,6 @@ ActiveRecord::Schema.define(version: 20150707165237) do
     t.float    "ii_aliquota"
     t.integer  "ipi_cst_id"
     t.float    "ipi_aliquota"
-  end
-
-  create_table "cstpiscofins", force: :cascade do |t|
-    t.integer  "codigo"
-    t.string   "descricao"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "empresas", force: :cascade do |t|
@@ -153,6 +146,14 @@ ActiveRecord::Schema.define(version: 20150707165237) do
     t.boolean  "reducaomva"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "icmsinterestaduals", force: :cascade do |t|
+    t.integer  "origem"
+    t.integer  "destino"
+    t.float    "icms"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "ipicsts", force: :cascade do |t|

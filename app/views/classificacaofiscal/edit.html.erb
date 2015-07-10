@@ -307,7 +307,7 @@
 				</form>			
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn default" data-dismiss="modal">Voltar</button>				
+				<button ng-click="cleanIcms()" type="button" class="btn default" data-dismiss="modal">Voltar</button>				
 				<button ng-click="saveIcms()" type="button" class="btn blue">Salvar</button>
 			</div>
 		</div>
@@ -329,6 +329,7 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	$scope.estados = <%= @estado.to_json.html_safe=%>;
 	$scope.modalidadebcicmssts = <%= @modalidadebcicmsst.to_json.html_safe=%>;
 	$scope.icmsclassificacaofiscal = <%= @icmsclassificacaofiscal.to_json.html_safe=%>;	
+	$scope.icmsCFAtual = {};
 
 	$('[name="codigo_ncm"]').mask("?9999.99.99");
 	$('[name="codigo_ex"]').mask("?99");
@@ -375,7 +376,8 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	}
 
 	$scope.setIcmsCF = function(id){			
-		$scope.indexIcmsCF = $scope.indexIcmsCFPorEstado(id);				
+		$scope.indexIcmsCF = $scope.indexIcmsCFPorEstado(id);
+		angular.copy($scope.icmsclassificacaofiscal[$scope.indexIcmsCF],$scope.icmsCFAtual);					
 		if($scope.icmsclassificacaofiscal[$scope.indexIcmsCF].icmsst == false){
 			$('span', $('#uniform-icmsst')).removeClass("checked");
 			$('#icmsst').removeAttr("checked");
@@ -395,6 +397,11 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	$scope.limparMensagensIcms = function(){
 		$scope.mensagensIcms = [];
 	}
+
+	$scope.cleanIcms = function(){		
+		angular.copy($scope.icmsCFAtual,$scope.icmsclassificacaofiscal[$scope.indexIcmsCF]);		
+	}
+
 	$scope.saveIcms = function(){
 		$.ajax({
 			async: false, 

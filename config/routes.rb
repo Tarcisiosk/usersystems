@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'icmsinterestadual/index'
+
  # get 'welcome/index'
 
 	get 'users'  => "user#index", as: :users
@@ -60,6 +62,9 @@ Rails.application.routes.draw do
 	post 'classificacaofiscal/saveIcms' => 'classificacaofiscal#saveIcms'		
 	post 'classificacaofiscal/save_settings' => 'classificacaofiscal#save_settings'
 
+	get 'icmsinterestadual' => "icmsinterestadual#index", as: :icmsinterestaduals
+	post 'icmsinterestadual/saveIcmsinterestadual' => 'icmsinterestadual#saveIcmsinterestadual'		
+
 	get 'nivelacesso' => "nivelacesso#index", as: :nivelacessos
 	get 'nivelacesso/new' => "nivelacesso#new", as: :new_nivelacesso
 	post 'nivelacesso/new'  => 'nivelacesso#create'
@@ -80,6 +85,7 @@ Rails.application.routes.draw do
 	resources :subgrupo, only: [:edit, :destroy, :update, :new, :create]
 	resources :estado, only: [:edit, :destroy, :update, :new, :create] 
 	resources :classificacaofiscal, only: [:edit, :destroy, :update, :new, :create] 
+	resources :icmsinterestadual, only: [:edit, :destroy, :update, :new, :create] 
 	resources :nivelacesso, only: [:edit, :destroy, :update, :new, :create, :configurar]
 	resources :tipoentidade, only: [:edit, :destroy, :update, :new, :create]
 	resources :entidade, only: [:edit, :update, :new, :create, :destroy]

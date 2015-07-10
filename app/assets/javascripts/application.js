@@ -31,6 +31,7 @@
 //= require jquery.uniform.min
 //= require bootbox.min
 //= require bootstrap-select.min
+//= require bootstrap-editable
 //= require select2.min
 //= require jquery.multi-select
 //= require datatable

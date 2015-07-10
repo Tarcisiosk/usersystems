@@ -28,7 +28,7 @@ RSpec.feature "Estados", type: :feature, :js => true do
 	scenario 'adicionar estado' do		
 		abro_pagina 'estados'
 		clico_link 'Novo'
-		preencho_campo_com 'estado[codigo_ibge]', '33'
+		preencho_campo_com 'estado[codigo_ibge]', '1'
 		preencho_campo_com 'estado[uf]', 'TE'
 		preencho_campo_com 'estado[descricao]', 'Test'
 		preencho_campo_com 'estado[icms_interno]', '15'

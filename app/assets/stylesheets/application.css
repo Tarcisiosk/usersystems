@@ -17,6 +17,7 @@
  *= require uniform.default
  *= require bootstrap-switch.min
  *= require bootstrap-fileinput
+ *= require bootstrap-editable
  *= require profile
  *= require tasks
  *= require select2

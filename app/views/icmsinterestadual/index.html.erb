@@ -1,0 +1,126 @@
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container" ng-view ng-controller="IcmsinterestadualCtrl">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+	
+		<!-- END PAGE TITLE -->
+		<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Página Inicial", root_path, 'data-no-turbolink' => true %>
+			  		</li>
+			  		<i class="fa fa-circle"></i>
+					<li class="active">
+						Icms Interestadual
+					</li>
+				</ul>
+				<div class="row">
+					<div class="col-md-12">
+						<!-- BEGIN SAMPLE TABLE PORTLET-->
+						<div class="portlet light">
+
+							<div class="portlet-title">
+								<div ng-if="alert" class="alert alert-success">
+									<strong>Sucesso!</strong> {{msg}}
+								</div>
+								<div class="caption">
+									<i class="fa fa-users font-green-sharp"></i>
+									<span class="caption-subject font-green-sharp bold uppercase">ICMS Interestadual</span>
+								</div>
+								<div class="actions btn-set">									
+									<%= link_to '<i class="fa fa-angle-left"></i> Voltar'.html_safe,root_path, :type => "button",:name => "back",
+									:class => "btn btn-default btn-circle", 'data-no-turbolink' => true %>													
+									<button ng-click="saveIcmsinterestadual()" class="btn green-haze btn-circle"><i class="fa fa-check"></i> Gravar</button>
+								</div>								
+							</div>
+							
+							<div class="portlet-body">								
+								<div>
+									<table class="table table-striped table-bordered table-hover" >
+										<tr>
+											<th>Orig\Dest</th>
+											<th ng-repeat="estado in estados">{{estado.uf}}</th>
+										</tr>
+										<tr ng-repeat="estado in estados">
+											<td><strong>{{estado.uf}}</strong></td>
+											<td ng-repeat="estados in estados">												
+												<input ng-hide="$parent.$index == $index" style="width: 20px;" 
+												name="icmsinterestadual{{$parent.$index}}{{$index}}"
+												type="text" ng-value="getIcmsinterestadual($parent.$index,$index)"
+												ng-blur="addIcmsinterestadual($parent.$index,$index,$event)"/>												
+											</td>											
+										</tr>
+									</table>									
+								</div>
+							</div>
+						</div>
+						<!-- END SAMPLE TABLE PORTLET-->
+					</div>
+				</div>
+				<!-- END PAGE CONTENT INNER -->
+			</div>
+		</div>
+		<!-- END PAGE CONTENT -->
+	</div>
+</div>
+
+<script>
+myApp.controller('IcmsinterestadualCtrl', ['$scope','$timeout', function($scope,$timeout){
+	$scope.estados = <%=@estados.to_json.html_safe=%>;
+	$scope.icmsinterestaduals = <%=@icmsinterestaduals.to_json.html_safe=%>;
+
+	$scope.IcmsinterestadualPorOrigemEDestino = function (origemIndex,destinoIndex){
+		if($scope.icmsinterestaduals.length > 0){
+			for(var index=0;index<$scope.icmsinterestaduals.length;index++){
+				if($scope.icmsinterestaduals[index].origem == $scope.estados[origemIndex].id &&
+					$scope.icmsinterestaduals[index].destino == $scope.estados[destinoIndex].id){
+					return $scope.icmsinterestaduals[index];
+				}
+			}
+		}
+		var icmsinterestado = {'icms':0};		
+		return icmsinterestado;
+	}
+
+	$scope.getIcmsinterestadual = function(origemIndex,destinoIndex){
+		if(origemIndex == destinoIndex){
+			return $scope.estados[origemIndex].icms_interno;
+		}else{
+			return $scope.IcmsinterestadualPorOrigemEDestino(origemIndex,destinoIndex).icms;	
+		}
+		
+	}
+
+	$scope.addIcmsinterestadual = function(origemIndex,destinoIndex,event){
+		if(event.target.value > 0 && origemIndex != destinoIndex){
+			var icmsinterestado = $scope.IcmsinterestadualPorOrigemEDestino(origemIndex,destinoIndex);
+			if(icmsinterestado.icms == 0){
+				$scope.icmsinterestaduals.push({'origem':$scope.estados[origemIndex].id,'destino':$scope.estados[destinoIndex].id,'icms': event.target.value});
+			}else{
+				var index = $scope.icmsinterestaduals.indexOf(icmsinterestado);
+				$scope.icmsinterestaduals[index].origem = $scope.estados[origemIndex].id;
+				$scope.icmsinterestaduals[index].destino = $scope.estados[destinoIndex].id;
+				$scope.icmsinterestaduals[index].icms = event.target.value;
+			}
+		}
+	}
+
+	$scope.saveIcmsinterestadual = function(){
+		$.ajax({
+			async: false, 
+			method: 'post',
+			url: '/icmsinterestadual/saveIcmsinterestadual/',
+			data: {icmsinterestaduals: JSON.stringify($scope.icmsinterestaduals)},
+			success: function(data){
+				$scope.msg = "Os dados foram gravados.";
+				$scope.alert = true;
+				$timeout(function() {$scope.alert = false;}, 2000);									
+			}			
+		});							
+	}
+
+}]);
+</script>
