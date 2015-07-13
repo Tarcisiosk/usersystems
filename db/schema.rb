@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150709131032) do
+ActiveRecord::Schema.define(version: 20150713140452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,13 @@ ActiveRecord::Schema.define(version: 20150709131032) do
     t.float    "ipi_aliquota"
   end
 
+  create_table "cstpiscofins", force: :cascade do |t|
+    t.integer  "codigo"
+    t.string   "descricao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "empresas", force: :cascade do |t|
     t.string   "razao_social"
     t.string   "nome_fantasia"
@@ -71,6 +78,11 @@ ActiveRecord::Schema.define(version: 20150709131032) do
   create_table "empresas_grupos", force: :cascade do |t|
     t.integer "empresa_id"
     t.integer "grupo_id"
+  end
+
+  create_table "empresas_produtos", force: :cascade do |t|
+    t.integer "empresa_id"
+    t.integer "produto_id"
   end
 
   create_table "empresas_subgrupos", force: :cascade do |t|
@@ -177,6 +189,12 @@ ActiveRecord::Schema.define(version: 20150709131032) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "p_photos", force: :cascade do |t|
+    t.integer "produto_id"
+    t.string  "style"
+    t.binary  "file_contents"
+  end
+
   create_table "photos", force: :cascade do |t|
     t.integer "user_id"
     t.string  "style"
@@ -188,6 +206,22 @@ ActiveRecord::Schema.define(version: 20150709131032) do
     t.string   "descricao"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "produtos", force: :cascade do |t|
+    t.string   "descricao"
+    t.string   "codigo"
+    t.float    "preco"
+    t.string   "unidade"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "adm_id"
+    t.integer  "grupo_id"
+    t.integer  "subgrupo_id"
+    t.string   "p_photo_file_name"
+    t.string   "p_photo_content_type"
+    t.integer  "p_photo_file_size"
+    t.datetime "p_photo_updated_at"
   end
 
   create_table "settings", force: :cascade do |t|

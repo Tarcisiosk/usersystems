@@ -4,7 +4,6 @@ class GrupoController < ApplicationController
 				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o grupo e seus subgrupos?'}}]
 	
 	helper_method :send_json
-	helper_method :returnGrupoEmpresas
 
 	def index
 		respond_to do |format|

@@ -45,18 +45,24 @@ class ApplicationController < ActionController::Base
 	def menu
 		menuBuilder = {:maincadastros => {:label=>'Cadastros', 
 										  :tipo_entidade => {:label=>'Empresas e Contatos',
-														 :tipos =>{:label => 'Tipos', :path => '/tipoentidades', :acao =>'tipoentidade#index'}, 
-														 :entidades =>{:label => 'Empresas/Contatos', :path => '/entidades', :acao =>'entidade#index'}}, 
+														 		:tipos =>{:label => 'Tipos', :path => '/tipoentidades', :acao =>'tipoentidade#index'}, 
+																:entidades =>{:label => 'Empresas/Contatos', :path => '/entidades', :acao =>'entidade#index'}}, 
+										  
 										  :cadastros => {:label=>'Produtos', 
-														 :grupos =>{:label => 'Grupos', :path => '/grupos', :acao =>'grupo#index'}, 
-														 :subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'},
-														 :classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}, 
-										  :configuracoes =>{:label=>'Configurações', 
-										 				    :empresas =>{:label=> 'Empresas', :path => '/empresas', :acao =>'empresa#index'}, 
-										 				    :nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'}, 
-										 				    :usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
-				       :mainadministracao =>{:label=>'Administração', :cadastros =>{:label=>'Cadastros', :estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'},
-				       																					 :icmsinterestadual =>{:label =>'ICMS Interestadual', :path=>'/icmsinterestadual', :acao=>'icmsinterestadual#index'}}}}
+														 	:grupos =>{:label => 'Grupos', :path => '/grupos', :acao =>'grupo#index'}, 
+														 	:subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'},
+														 	:classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}}, 
+					   
+					   :configuracoes => {:label=>'Configurações', 
+						 				  
+						 				  :configuracoes => {label:"Cadastros", 
+											 				  	:empresas => {:label=> 'Empresas', :path => '/empresas', :acao =>'empresa#index'}, 
+											 				  	:nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'},
+											 				  	:produtos => {:label=> 'Produtos', :path => '/produtos', :acao =>'produto#index'}, 
+											 				  	:usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
+				       
+				       :mainadministracao => {:label=>'Administração', :cadastros =>{:label=>'Cadastros', :estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'}}}}
+		
 		if current_user.user_type != 0
 			menuBuilder.except!(:mainadministracao)
 		end									 				    
@@ -193,6 +199,8 @@ class ApplicationController < ActionController::Base
 							end
 							item.users << obj
 							obj.empresas << @@checked_empresas[index]
+							obj.settings(:last_empresa).edited = nil
+
 						elsif controller_name == "empresa"
 	
 							if index == 0
@@ -203,7 +211,6 @@ class ApplicationController < ActionController::Base
 							obj.users << @@checked_empresas[index]
 						end
 
-						obj.settings(:last_empresa).edited = nil
 						obj.save!
 						item.save!
 					end

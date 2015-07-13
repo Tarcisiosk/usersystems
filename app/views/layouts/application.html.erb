@@ -244,6 +244,25 @@
 			} 
 		  };
 		});
+
+		myApp.directive("fileread", [function () {
+		    return {
+		        scope: {
+		            fileread: "="
+		        },
+		        link: function (scope, element, attributes) {
+		            element.bind("change", function (changeEvent) {
+		                var reader = new FileReader();
+		                reader.onload = function (loadEvent) {
+		                    scope.$apply(function () {
+		                        scope.fileread = loadEvent.target.result;
+		                    });
+		                }
+		                reader.readAsDataURL(changeEvent.target.files[0]);
+		            });
+		        }
+		    }
+		}]);
 		
 		<%if controller_name == "entidade" && (action_name == "edit"||action_name == "new")%>
 			myApp.controller('EntidadeCtrl', ['$scope', function($scope)
@@ -594,6 +613,137 @@
 			}]);
 		<%end%>
 
+		<%if controller_name == "produto" && (action_name == "edit"||action_name == "new")%>
+			myApp.controller('ProdutoCtrl', ['$scope', function($scope)
+			{
+
+				$scope.data = <%= send_json.to_s.html_safe %>;
+				$scope.mensagens = [];				
+				$scope.grupo_opts = [];
+				$scope.subgrupo_opts = [];				
+				$scope.empresas_total = <%=returnEmpresas.to_json.to_s.html_safe%>;
+				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>;
+
+				console.log($scope.data.p_photo);
+				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
+				{
+					$scope.data.empresas.push($scope.empresa_atual);
+				}
+
+				$scope.getGrupos = function()
+				{
+					$.ajax({
+						async: false,
+						method: 'get',
+						url: '/produtos/empresagrupo/',
+						data: { empresas: $scope.data.empresas },	
+						success: function(data)
+						{
+							$scope.grupo_opts = data;
+							if($scope.grupo_opts.length > 0)
+							{
+								$scope.data.grupo_id = $scope.grupo_opts[0].id;
+							}
+							$scope.getSubGrupos();
+						}
+					});
+				}
+				
+
+				$scope.getSubGrupos = function()
+				{
+					$.ajax({
+						async: false,
+						method: 'get',
+						url: '/produtos/subgrupogrupo/',
+						data: { gid: $scope.data.grupo_id },
+						success: function(data)
+						{
+							$scope.subgrupo_opts = data;
+							if ($scope.subgrupo_opts.length > 0)
+							{
+								$scope.data.subgrupo_id = $scope.subgrupo_opts[0].id;
+							}
+						}
+					});
+				}
+
+				$scope.getGrupos();
+				$scope.getSubGrupos();
+
+				$scope.save = function() 
+				{   		
+					var request;
+					request = $.ajax({
+						async: false,
+						method: 'post',
+						url: '/produtos/save_angular/' + '<%= editingUser.id%>',
+						data: { data: $scope.data },
+						success: function(data)
+						{
+							window.location.replace('/produtos');
+						},
+						error: function (jqXHR, textStatus, errorThrown)
+						{      			     			
+							$scope.mensagens = JSON.parse(jqXHR.responseText);
+						}
+					});
+				}
+
+				$scope.setImage = function()
+				{
+					console.log($scope.data.p_photo);
+				
+				}
+
+				$scope.setImage();
+
+				$scope.getValue = function(event, index) 
+				{
+					if ($scope.data.empresas.indexOf(Number(event.target.value)) <= -1)
+					{
+						$scope.data.empresas.push(Number(event.target.value));
+					}
+					else
+					{
+						var indexArray = $scope.data.empresas.indexOf(Number(event.target.value));
+						if (index > -1) 
+						{
+							$scope.data.empresas.splice(indexArray, 1);
+						}
+					}
+
+				}
+
+				<%if action_name == "new"%>
+					if($scope.grupo_opts.length > 0)
+					{
+						$scope.data.grupo_id = $scope.grupo_opts[0].id;
+					}
+					if ($scope.subgrupo_opts.length > 0)
+					{
+						$scope.data.subgrupo_id = $scope.subgrupo_opts[0].id;
+					}
+				<%end%>
+
+
+				$('#pictureInput').on('change', function(event) {
+					var files = event.target.files;
+					var image = files[0]
+					var reader = new FileReader();
+					reader.onload = function(file) {
+						var img = new Image();
+						console.log(file);
+						img.src = file.target.result;
+						$('#target').html(img);
+					}
+					reader.readAsDataURL(image);
+					console.log(files);
+				});
+
+			}]);
+		<%end%>
+
 		jQuery(document).ready(function() {       	
 			Metronic.init(); // init metronic core components
 			Layout.init(); // init current layout
@@ -636,8 +786,8 @@
 			});
 		});
 
-
 	</script>
+
 		<% flash.each do |key, value| %>
 			<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
 		<% end %>

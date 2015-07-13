@@ -1,0 +1,141 @@
+<div class="page-container" ng-view ng-controller="ProdutoCtrl">
+	<div class="page-head">
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Produtos", produtos_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						Novo
+					</li>
+				</ul>
+
+				<div class="col-md-12">
+					<div class="profile-sidebar" style="width: 250px;">
+						<!-- PORTLET MAIN -->
+
+						<div class="portlet light profile-sidebar-portlet">
+							<center>
+								<div class="fileinput fileinput-new " data-provides="fileinput">
+									<div class="fileinput-preview thumbnail" data-trigger="fileinput" id="target" style="width: 200px; height: 200px;">
+										<%= image_tag p_photo_path(@produto), :height =>'200px;', :width =>'200px;' %>
+									</div>
+									<div>
+										<span class="btn btn-circle blue btn-file"> <i class="fa fa-upload"></i> 
+										   Escolher Imagem <input type="file" id="pictureInput" ng-click="setImage()" fileread="data.p_photo">
+										</span>
+
+									</div>
+								</div>
+							</center>
+							<br>
+						</div>
+
+						<div class="portlet light ">
+							<div class="profile-usertitle-name">
+								 Empresas
+							</div>
+							<div class="profile-desc-text">
+								<div class="form-group">
+									<div class="checkbox-list">
+										<div ng-repeat="x in empresas_total" >
+											<input type="checkbox" ng-click="getValue($event, $index); getGrupos()" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="profile-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet light">
+									<div class="portlet-title tabbable-line">
+										
+										<div class="caption caption-md">
+											<i class="fa fa-plus"></i> <span class="caption-subject font-blue-madison bold uppercase">Novo Produto</span>
+										</div>
+
+										<div class="actions btn-set">
+											<%= link_to "Voltar", produtos_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
+											<button ng-click="save()" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
+										</div>
+									</div>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
+										<ul ng-repeat="m in mensagens">
+											 <li>{{m}}</li>
+										</ul>
+									</div>
+									<div class="portlet-body">
+										<div class="form-group">
+											<div class="row">
+												<div class= "col-md-4">
+													<label class="control-label ">Código</label>
+													<input type="text" name="codigo" ng-model='data.codigo' class='form-control placeholder-no-fix'>
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-12">											
+													<label class="control-label ">Descrição</label>
+													<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label class="control-label ">Grupo</label><br>
+
+													<select ng-model="data.grupo_id" ng-change="getSubGrupos()" class='form-control' ng-options="g.id as g.descricao for g in grupo_opts">
+													</select>
+
+												</div>
+												<div class="col-md-6">
+													<label class="control-label ">Sub-Grupo</label><br>
+
+													<select ng-model="data.subgrupo_id" class='form-control' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
+													</select>
+
+												</div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="row">
+												<div class="col-md-6">
+													<label class="control-label ">Unidade</label>
+													<input type="text" name="descricao" ng-model='data.unidade' class='form-control placeholder-no-fix'>
+												</div>
+												<div class="col-md-6">
+													<label class="control-label ">Preço</label>
+													<div class="input-group">
+														<span class="input-group-addon"> R$ </span>
+														<input type="text" name="descricao" ng-model='data.preco' class='form-control placeholder-no-fix'> 
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>  
+</div>
+
+
+<!-- END PAGE CONTAINER -->

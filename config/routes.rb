@@ -33,6 +33,16 @@ Rails.application.routes.draw do
 	post 'subgrupos/save_angular/:id' => 'subgrupo#save_angular'
 	post 'subgrupos/save_settings' => 'subgrupo#save_settings'
 
+	get 'produtos' => "produto#index", as: :produtos
+	get 'produtos/new' => "produto#new", as: :new_produto
+	post 'produtos/new'  => 'produto#create'
+	get 'produtos/showImg/:id' => 'produto#show_image', as: :p_photo
+	post 'produtos/save_settings' => 'produto#save_settings'
+	get 'produtos/empresagrupo' => "produto#returnEmpresasGrupo"
+	get 'produtos/subgrupogrupo' => "produto#returnSubGrupoGrupo"
+	post 'produtos/save_angular' => 'produto#save_angular'	
+	post 'produtos/save_angular/:id' => 'produto#save_angular'
+
 	get 'tipoentidades' => "tipoentidade#index", as: :tipoentidades
 	get 'tipoentidades/new' => "tipoentidade#new", as: :new_tipoentidade
 	post 'tipoentidades/new'  => 'tipoentidade#create'
@@ -88,6 +98,7 @@ Rails.application.routes.draw do
 	resources :icmsinterestadual, only: [:edit, :destroy, :update, :new, :create] 
 	resources :nivelacesso, only: [:edit, :destroy, :update, :new, :create, :configurar]
 	resources :tipoentidade, only: [:edit, :destroy, :update, :new, :create]
+	resources :produto, only: [:edit, :destroy, :update, :new, :create]
 	resources :entidade, only: [:edit, :update, :new, :create, :destroy]
 	resources :endereco, only: [:edit, :update, :new, :create, :destroy]
 

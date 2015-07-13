@@ -23,6 +23,8 @@ class User < AbstractRecord
 			s.key :columns_entidade, :defaults => {:col => returnDefaults(Entidade::TOTAL_COLUMNS_ENTIDADE)}
 			s.key :columns_estado, :defaults => {:col => returnDefaults(Estado::TOTAL_COLUMNS_ESTADO)}
 			s.key :columns_classificacaofiscal, :defaults => {:col => returnDefaults(Classificacaofiscal::TOTAL_COLUMNS_CLASSIFICACAOFISCAL)}
+			s.key :columns_produto, :defaults => {:col => returnDefaults(Produto::TOTAL_COLUMNS_PRODUTO)}
+
 			s.key :last_empresa
 		end
 
