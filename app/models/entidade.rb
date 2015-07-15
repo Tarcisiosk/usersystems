@@ -147,7 +147,7 @@ class Entidade < AbstractRecord
 	validates :cnpj, uniqueness: true, :if => :cnpj_is_valid
 	validates :insc_estadual, numericality: true, uniqueness: true, length: { in: 0..20}, :allow_blank => true
 	validates :insc_municipal, numericality: true, uniqueness: true, length: { in: 0..20 }, :allow_blank => true
-	validates :email, email:true
+	validates :email, email:true, :allow_blank => true
 	#validates :telefone, presence: false, numericality: true, length: { in: 11..11 }
 	#validates :celular, presence: false, numericality: true, length: { in: 11..11 }
 
