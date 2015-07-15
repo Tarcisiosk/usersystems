@@ -285,6 +285,7 @@
 				
 				$scope.save = function(reload) 
 				{
+					$scope.RemoveMask(2);
 					if($scope.data.tipoentidades.length <= 0 )
 					{
 						bootbox.alert("Escolha no mínimo um tipo de entidade!");
@@ -463,7 +464,8 @@
 						{
 						}
 					}
-				}				
+				}
+
 				$scope.RemoveMask = function(caso)
 				{
 					if(caso == 1)
@@ -623,8 +625,12 @@
 				$scope.subgrupo_opts = [];				
 				$scope.empresas_total = <%=returnEmpresas.to_json.to_s.html_safe%>;
 				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>;
+				$scope.modalidadebcicmssts = <%= @modalidadebcicmsst.to_json.html_safe=%>;
+				$scope.icmsproduto = <%= @icmsproduto.to_json.html_safe=%>;	
+				$scope.estados = <%= @estado.to_json.html_safe=%>;
+				$scope.icmsCFAtual = {};
 
-				console.log($scope.data.p_photo);
+				console.log($scope.estados);
 				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
 				{
 					$scope.data.empresas.push($scope.empresa_atual);
@@ -672,31 +678,33 @@
 				$scope.getSubGrupos();
 
 				$scope.save = function() 
-				{   		
+				{   	
+					Metronic.startPageLoading({animate: true});
+
 					var request;
 					request = $.ajax({
 						async: false,
 						method: 'post',
 						url: '/produtos/save_angular/' + '<%= editingUser.id%>',
-						data: { data: $scope.data },
+						data: { data: $scope.data, icmsproduto: JSON.stringify($scope.icmsproduto) },
 						success: function(data)
 						{
 							window.location.replace('/produtos');
+ 							Metronic.stopPageLoading();
 						},
 						error: function (jqXHR, textStatus, errorThrown)
 						{      			     			
 							$scope.mensagens = JSON.parse(jqXHR.responseText);
-						}
+							Metronic.stopPageLoading();
+ 						}
 					});
 				}
 
 				$scope.setImage = function()
 				{
 					console.log($scope.data.p_photo);
-				
 				}
 
-				$scope.setImage();
 
 				$scope.getValue = function(event, index) 
 				{
@@ -712,7 +720,6 @@
 							$scope.data.empresas.splice(indexArray, 1);
 						}
 					}
-
 				}
 
 				<%if action_name == "new"%>
@@ -740,6 +747,118 @@
 					reader.readAsDataURL(image);
 					console.log(files);
 				});
+
+				$scope.indexIcmsCFPorEstado = function(id){			
+					for(var index=0;index < $scope.icmsproduto.length;index++){
+						if($scope.icmsproduto[index].estado_id == id){
+							return index;
+						}
+					}						
+					return -1;
+				}
+
+				$scope.estadoPorId = function(id){
+					for(var index=0;index < $scope.estados.length;index++){
+						if($scope.estados[index].id == id){
+							return $scope.estados[index];
+						}
+					}
+					return "";
+				}
+
+				$scope.modalidadebcicmsstPorId = function(id){
+					for(var index=0;index < $scope.modalidadebcicmssts.length;index++){
+						if($scope.modalidadebcicmssts[index].id == id){
+							return $scope.modalidadebcicmssts[index];
+						}
+					}
+					return "";
+				}
+					
+				$scope.clickIcmsst = function(event){
+					$scope.icmsproduto[$scope.indexIcmsCF].icmsst = event.target.checked;
+					if(event.target.checked == false){
+						$scope.icmsproduto[$scope.indexIcmsCF].modalidadebcicmsst_id = '';
+						$scope.icmsproduto[$scope.indexIcmsCF].mva = '';
+						$('span', $('#uniform-reducaomva')).removeClass("checked");
+						$('#reducaomva').removeAttr("checked");
+					}		
+				}
+
+				$scope.clickReducaomva = function(event){
+					$scope.icmsproduto[$scope.indexIcmsCF].reducaomva = event.target.checked;
+				}
+
+				$scope.setIcmsCF = function(id){			
+					$scope.indexIcmsCF = $scope.indexIcmsCFPorEstado(id);
+					angular.copy($scope.icmsproduto[$scope.indexIcmsCF],$scope.icmsCFAtual);					
+					if($scope.icmsproduto[$scope.indexIcmsCF].icmsst == false){
+						$('span', $('#uniform-icmsst')).removeClass("checked");
+						$('#icmsst').removeAttr("checked");
+					}else{
+						$('span', $('#uniform-icmsst')).addClass("checked");
+						$('#icmsst').attr("checked");
+					}
+					if($scope.icmsproduto[$scope.indexIcmsCF].reducaomva == false){
+						$('span', $('#uniform-reducaomva')).removeClass("checked");
+						$('#reducaomva').removeAttr("checked");
+					}else{
+						$('span', $('#uniform-reducaomva')).addClass("checked");
+						$('#reducaomva').attr("checked");
+					}													
+				}
+
+				$scope.limparMensagensIcms = function(){
+					$scope.mensagensIcms = [];
+				}
+
+				$scope.cleanIcms = function(){		
+					angular.copy($scope.icmsCFAtual,$scope.icmsproduto[$scope.indexIcmsCF]);		
+				}
+
+
+				$scope.setIcmsCF = function(id){			
+					$scope.indexIcmsCF = $scope.indexIcmsCFPorEstado(id);
+					angular.copy($scope.icmsproduto[$scope.indexIcmsCF],$scope.icmsCFAtual);					
+					if($scope.icmsproduto[$scope.indexIcmsCF].icmsst == false){
+						$('span', $('#uniform-icmsst')).removeClass("checked");
+						$('#icmsst').removeAttr("checked");
+					}else{
+						$('span', $('#uniform-icmsst')).addClass("checked");
+						$('#icmsst').attr("checked");
+					}
+					if($scope.icmsproduto[$scope.indexIcmsCF].reducaomva == false){
+						$('span', $('#uniform-reducaomva')).removeClass("checked");
+						$('#reducaomva').removeAttr("checked");
+					}else{
+						$('span', $('#uniform-reducaomva')).addClass("checked");
+						$('#reducaomva').attr("checked");
+					}													
+				}
+
+				$scope.limparMensagensIcms = function(){
+					$scope.mensagensIcms = [];
+				}
+
+				$scope.cleanIcms = function(){		
+					angular.copy($scope.icmsCFAtual,$scope.icmsproduto[$scope.indexIcmsCF]);		
+				}
+
+				$scope.saveIcms = function(){
+					$.ajax({
+						async: false, 
+						method: 'post',
+						url: '/produtos/saveIcms/',
+						data: {icmsproduto: $scope.icmsproduto[$scope.indexIcmsCF]},
+						success: function(data){
+							$('#popupIcms').modal('toggle');
+							$scope.limparMensagensIcms();
+						},
+						error: function(jqXHR, textStatus, errorThrown){
+							$scope.mensagensIcms = JSON.parse(jqXHR.responseText);
+						}
+					});		
+				}		
 
 			}]);
 		<%end%>

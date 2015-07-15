@@ -155,7 +155,7 @@
 										</div>
 									</div>
 									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
-										<ul ng-repeat="m in mensagens">
+										<ul ng-repeat="m in mensagens track by $index">
 											 <li>{{m}}</li>
 										</ul>
 									</div>

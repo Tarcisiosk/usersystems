@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 	get 'produtos/subgrupogrupo' => "produto#returnSubGrupoGrupo"
 	post 'produtos/save_angular' => 'produto#save_angular'	
 	post 'produtos/save_angular/:id' => 'produto#save_angular'
+	post 'produtos/saveIcms' => 'produto#saveIcms'		
 
 	get 'tipoentidades' => "tipoentidade#index", as: :tipoentidades
 	get 'tipoentidades/new' => "tipoentidade#new", as: :new_tipoentidade

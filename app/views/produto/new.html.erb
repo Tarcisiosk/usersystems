@@ -18,13 +18,13 @@
 				</ul>
 
 				<div class="col-md-12">
-					<div class="profile-sidebar" style="width: 250px;">
+					<div class="profile-sidebar" style="width: 220px;">
 						<!-- PORTLET MAIN -->
 
 						<div class="portlet light profile-sidebar-portlet">
 							<center>
 								<div class="fileinput fileinput-new " data-provides="fileinput">
-									<div class="fileinput-preview thumbnail" data-trigger="fileinput" id="target" style="width: 200px; height: 200px;">
+									<div class="fileinput-preview thumbnail" data-trigger="fileinput" id="target" style="width: 170px; height: 170px;">
 									</div>
 									<div>
 										<span class="btn btn-circle blue btn-file"> <i class="fa fa-upload"></i> 
@@ -74,57 +74,106 @@
 										</ul>
 									</div>
 									<div class="portlet-body">
-										<div class="form-group">
-											<div class="row">
-												<div class= "col-md-4">
-													<label class="control-label ">Código</label>
-													<input type="text" name="codigo" ng-model='data.codigo' class='form-control placeholder-no-fix'>
+										<ul class="nav nav-tabs">
+											<li class="active">
+												<a id="tabgeral" href="#tab_1" data-toggle="tab"> Geral </a>										
+											</li>
+											<li>
+												<a id="tabicmsproduto" href="#tab_2" data-toggle="tab"> ICMS </a>
+											</li>
+										</ul>
+										<div class="tab-content no-space">
+
+										<div class="tab-pane active" id="tab_1">
+											<div class="form-group">
+												<div class="row">
+													<div class= "col-md-4">
+														<label class="control-label ">Código</label>
+														<input type="text" name="codigo" ng-model='data.codigo' class='form-control placeholder-no-fix'>
+													</div>
 												</div>
 											</div>
-										</div>
 
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-12">											
-													<label class="control-label ">Descrição</label>
-													<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+											<div class="form-group">
+												<div class="row">
+													<div class="col-md-12">											
+														<label class="control-label ">Descrição</label>
+														<input type="text" name="descricao_desc" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label class="control-label ">Grupo</label><br>
+											<div class="form-group">
+												<div class="row">
+													<div class="col-md-6">
+														<label class="control-label ">Grupo</label><br>
 
-													<select ng-model="data.grupo_id" ng-change="getSubGrupos()" class='form-control' ng-options="g.id as g.descricao for g in grupo_opts">
-													</select>
+														<select ng-model="data.grupo_id" ng-change="getSubGrupos()" class='form-control' ng-options="g.id as g.descricao for g in grupo_opts">
+														</select>
 
-												</div>
-												<div class="col-md-6">
-													<label class="control-label ">Sub-Grupo</label><br>
+													</div>
+													<div class="col-md-6">
+														<label class="control-label ">Sub-Grupo</label><br>
 
-													<select ng-model="data.subgrupo_id" class='form-control' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
-													</select>
+														<select ng-model="data.subgrupo_id" class='form-control' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
+														</select>
 
+													</div>
 												</div>
 											</div>
-										</div>
 
-										<div class="form-group">
-											<div class="row">
-												<div class="col-md-6">
-													<label class="control-label ">Unidade</label>
-													<input type="text" name="descricao" ng-model='data.unidade' class='form-control placeholder-no-fix'>
-												</div>
-												<div class="col-md-6">
-													<label class="control-label ">Preço</label>
-													<div class="input-group">
-														<span class="input-group-addon"> R$ </span>
-														<input type="text" name="descricao" ng-model='data.preco' class='form-control placeholder-no-fix'> 
+
+											<div class="form-group">
+												<div class="row">
+													<div class="col-md-6">
+														<label class="control-label ">Unidade</label>
+														<input type="text" name="descricao" ng-model='data.unidade' class='form-control placeholder-no-fix'>
+													</div>
+													<div class="col-md-6">
+														<label class="control-label ">Preço</label>
+														<div class="input-group">
+															<span class="input-group-addon"> R$ </span>
+															<input type="text" name="descricao" ng-model='data.preco' class='form-control placeholder-no-fix'> 
+														</div>
 													</div>
 												</div>
 											</div>
 										</div>
+										<div class="tab-pane" id="tab_2">
+											<table class="table table-striped table-bordered table-hover">
+												<thead>
+													<tr>
+														<th>Estado</th>
+														<th>R. BC</th>
+														<th>Dif.</th>
+														<th>Alíquota</th>
+														<th>ICMS ST</th>
+														<th width="190px;">Mod. BC ICMS ST</th>
+														<th>MVA</th>
+														<th>R. MVA</th>	
+														<th>Opções</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="icmscf in icmsproduto">
+														<td>{{estadoPorId(icmscf.estado_id).descricao}}</td>
+														<td>{{icmscf.reducaobasecalculo}}</td>
+														<td>{{icmscf.diferimento}}</td>
+														<td>{{icmscf.aliquota}}</td>
+														<td>
+															<span ng-if="icmscf.icmsst" class="glyphicon glyphicon-ok font-green"/>									
+														</td>
+														<td>{{modalidadebcicmsstPorId(icmscf.modalidadebcicmsst_id).descricao}}</td>
+														<td><span ng-if="icmscf.modalidadebcicmsst_id == '5'">{{icmscf.mva}}</span></td>
+														<td>
+															<span ng-if="icmscf.modalidadebcicmsst_id == '5' && icmscf.reducaomva" 
+																  class="glyphicon glyphicon-ok font-green"/>														
+														</td>
+														<td><a id="editarIcms" ng-click="setIcmsCF(icmscf.estado_id)" class="btn yellow btn-xs" data-toggle="modal" href="#popupIcms">Editar</a></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+
 									</div>
 								</div>
 							</div>
@@ -133,6 +182,98 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<div class="modal fade" id="popupIcms" tabindex="-1" role="basic" aria-hidden="true" >
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">				
+					<h4 class="modal-title">ICMS</h4>
+				</div>
+				<div class="modal-body">
+					<div ng-if="mensagensIcms.length > 0" id="error_explanation" class="Metronic-alerts alert alert-danger">
+						<ul ng-repeat="msg in mensagensIcms">												
+					 		<li>{{msg}}</li>													
+						</ul>
+					</div>
+					<form>				
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="control-label">Redução BC</label>
+								<div class="input-group">
+									<input type="number" name="reducaobasecalculo" ng-model="icmsproduto[indexIcmsCF].reducaobasecalculo" class="form-control placeholder-no-fix"></input>
+									<span class="input-group-addon">%</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="control-label">Diferimento</label>
+								<div class="input-group">
+									<input type="number" name="diferimento" ng-model="icmsproduto[indexIcmsCF].diferimento" class="form-control placeholder-no-fix"></input>
+									<span class="input-group-addon">%</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="control-label">Alíquota</label>
+								<div class="input-group">
+									<input type="number" name="aliquota" ng-model="icmsproduto[indexIcmsCF].aliquota" class="form-control placeholder-no-fix"></input>
+									<span class="input-group-addon">%</span>
+								</div>
+							</div>
+						</div>					
+					</div>
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label class="control-label">ICMS ST</label>														
+								<div>
+									<label>
+										<input id="icmsst" type="checkbox" ng-click="clickIcmsst($event)">
+									</label>
+								</div>													
+							</div>
+						</div>
+						<div class="col-md-9" ng-show="icmsproduto[indexIcmsCF].icmsst">
+							<label class="control-label">Modalidade BC ICMS ST</label>
+							<select name="modalidadebcicmsst_id" class="form-control" ng-model="icmsproduto[indexIcmsCF].modalidadebcicmsst_id"
+									ng-options="value.id as value.codigo+' - '+value.descricao for (key, value) in modalidadebcicmssts">												
+							</select>
+						</div>
+					</div>
+					<div class="row">	
+						<div class="col-md-3">
+							<div ng-show="icmsproduto[indexIcmsCF].icmsst && icmsproduto[indexIcmsCF].modalidadebcicmsst_id == '5'" class="form-group">
+								<label class="control-label">MVA</label>
+								<div class="input-group">
+									<input type="number" name="mva" ng-model="icmsproduto[indexIcmsCF].mva" class="form-control placeholder-no-fix"></input>
+									<span class="input-group-addon">%</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-9">
+							<div ng-show="icmsproduto[indexIcmsCF].icmsst && icmsproduto[indexIcmsCF].modalidadebcicmsst_id == '5'" class="form-group">
+								<label class="control-label">Permite Redução MVA</label>							
+								<div>
+									<label>
+										<input id="reducaomva" ng-click="clickReducaomva($event)" type="checkbox" > 
+									</label>								
+								</div>
+							</div>
+						</div>
+					</div>	
+					</form>			
+				</div>
+				<div class="modal-footer">
+					<button ng-click="cleanIcms()" type="button" class="btn default" data-dismiss="modal">Voltar</button>				
+					<button ng-click="saveIcms()" type="button" class="btn blue">Gravar</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
 	</div>  
 </div>
 

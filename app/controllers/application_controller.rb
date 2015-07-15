@@ -197,7 +197,7 @@ class ApplicationController < ActionController::Base
 								obj.empresas.clear
 								item.users.delete(obj)
 							end
-							item.users << obj
+							#item.users << obj
 							obj.empresas << @@checked_empresas[index]
 							obj.settings(:last_empresa).edited = nil
 
@@ -207,7 +207,7 @@ class ApplicationController < ActionController::Base
 								obj.users.clear
 								item.empresas.delete(obj)
 							end	
-							item.empresas << obj
+							#item.empresas << obj
 							obj.users << @@checked_empresas[index]
 						end
 

@@ -129,7 +129,7 @@ class EntidadeController < ApplicationController
 			end
 		end
 				
-		if Entidade.where(:cnpj => data_hash[:cnpj]).present? 
+		if Entidade.where(:id => params[:id]).present? 
 			@entidade = Entidade.find(params[:id])
 			@entidade.razao_social = data_hash[:razao_social]
 			@entidade.nome_fantasia = data_hash[:nome_fantasia]

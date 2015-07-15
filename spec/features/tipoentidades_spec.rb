@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.feature "Tipoentidades", type: :feature, :js => true do
   	scenario 'listar tipos' do					
 		abro_pagina 'tipoentidades'
-		consigo_ver 'TipoTeste'		
 	end
 	
 	scenario 'validar campos em branco do tipoentidade' do

@@ -23,6 +23,14 @@ class ProdutoController < ApplicationController
 
 	def new
 		@produto = Produto.new
+		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
+		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
+		@icmsproduto = Array.new
+		@estado.each do |est|
+			@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0,
+			aliquota: 0, icmsst: false, mva: 0, reducaomva: false)
+		end	
+
 		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => '', :grupo_id => '', :subgrupo_id => '', :empresas => [], :p_photo => ''}
 
 	end
@@ -42,13 +50,25 @@ class ProdutoController < ApplicationController
 
 	def edit
 		@produto = Produto.find(params[:id]) 
+
+		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")
+		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
+		@icmsproduto = Array.new
+		@estado.each do |est|			
+			@icf = Icmsproduto.where("produto_id = #{@produto.id} and estado_id = #{est.id}").first			
+			if @icf.nil?
+				@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0, aliquota: 0, icmsst: false, mva: 0,reducaomva: false)
+			else
+				@icmsproduto << @icf
+			end	
+		end			
+
 		@@angularActions = {:descricao => @produto.descricao, :codigo => @produto.codigo, :unidade => @produto.unidade, :preco => @produto.preco, :grupo_id => @produto.grupo_id, :subgrupo_id => @produto.subgrupo_id, :empresas => @produto.empresas.ids, :p_photo=> @produto.p_photo}
 
 	end
 
 	def update
 		@produto = Produto.find(params[:id]) 
-		#se usuario a editar for master não permite alterar o tipo / Se o usuario logado não for master não permite mudar o tipo de outros usuarios
 		respond_to do |format|
 			if @produto.update(produto_params)
 				format.html { redirect_to produtos_path, notice: ' ' }
@@ -109,13 +129,37 @@ class ProdutoController < ApplicationController
 	
 		@produto.save
 
-		if @produto.valid?
+
+		if @produto.valid?										
+			JSON.parse(params[:icmsproduto]).each do |icf|					
+				if icf['produto_id'].blank?
+					@icmsproduto = Icmsproduto.new(produto_id: @produto.id,estado_id: icf['estado_id'],
+					reducaobasecalculo: icf['reducaobasecalculo'], diferimento: icf['diferimento'], aliquota: icf['aliquota'], icmsst: icf['icmsst'],
+					modalidadebcicmsst_id: icf['modalidadebcicmsst_id'], mva: icf['mva'], reducaomva: icf['reducaomva'])												
+					@icmsproduto.save
+				end	
+			end	
 			render :index
 		else
 			render json: @produto.errors.full_messages, status: :unprocessable_entity 
 		end
 	end
-	
+
+	def saveIcms
+		@icf = Icmsproduto.new(params.require(:icmsproduto).permit(:id,:produto_id,:estado_id,
+						:reducaobasecalculo,:diferimento,:aliquota,:icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))					
+		unless @icf.produto_id.blank?
+			@icf = Icmsproduto.find(params[:icmsproduto][:id])							
+			@icf.update(params.require(:icmsproduto).permit(:id,:produto_id,:estado_id,
+						:reducaobasecalculo,:diferimento,:aliquota,:icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))	
+		end
+		if @icf.valid?
+			render :index
+		else
+			render json: @icf.errors.full_messages, status: :unprocessable_entity
+		end			
+	end
+
 	def returnEmpresasGrupo
 		empresas_array =  Array.new
 		grupo_array = Array.new
