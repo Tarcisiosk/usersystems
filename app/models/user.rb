@@ -24,6 +24,8 @@ class User < AbstractRecord
 			s.key :columns_estado, :defaults => {:col => returnDefaults(Estado::TOTAL_COLUMNS_ESTADO)}
 			s.key :columns_classificacaofiscal, :defaults => {:col => returnDefaults(Classificacaofiscal::TOTAL_COLUMNS_CLASSIFICACAOFISCAL)}
 			s.key :columns_produto, :defaults => {:col => returnDefaults(Produto::TOTAL_COLUMNS_PRODUTO)}
+			s.key :columns_cfop, :defaults => {:col => returnDefaults(Cfop::TOTAL_COLUMNS_CFOP)}
+			s.key :columns_unidade, :defaults => {:col => returnDefaults(Unidade::TOTAL_COLUMNS_UNIDADE)}
 
 			s.key :last_empresa
 		end

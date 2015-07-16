@@ -23,6 +23,7 @@
 //= require bootstrap.min
 //= require bootstrap-hover-dropdown.min
 //= require jquery.slimscroll.min
+//= require jquery.typeahead
 //= require jquery.blockui.min
 //= require jquery.cokie.min
 //= require jquery.validate.min

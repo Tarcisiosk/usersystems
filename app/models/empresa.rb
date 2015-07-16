@@ -17,6 +17,7 @@ class Empresa < AbstractRecord
   	has_and_belongs_to_many :grupos
   	has_and_belongs_to_many :subgrupos
   	has_and_belongs_to_many :produtos
+	has_and_belongs_to_many :unidades
 
   	before_save {self.cnpj = cnpj.gsub(/<\/?[^>]*>/, '')}
   	#after_save {self.cnpj = cnpj.insert(3, '.'), self.cnpj = cnpj.insert(6, '.'), self.cnpj = cnpj.insert(10, '/'), self.cnpj = cnpj.insert(15, '-')}

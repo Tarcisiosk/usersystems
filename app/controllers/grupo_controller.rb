@@ -95,7 +95,7 @@ class GrupoController < ApplicationController
 				@grupo.empresas << empresa
 			end
 		else
-			@grupo = Grupo.new(descricao: data_hash[:descricao], empresas: array_empresas, adm_id: current_user.adm_id)
+			@grupo = Grupo.new(descricao: data_hash[:descricao], empresas: array_empresas, adm_id: current_user.settings(:last_empresa).edited.adm_id)
 		end
 	
 		@grupo.save

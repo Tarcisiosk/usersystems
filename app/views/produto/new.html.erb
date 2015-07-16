@@ -45,7 +45,7 @@
 								<div class="form-group">
 									<div class="checkbox-list">
 										<div ng-repeat="x in empresas_total" >
-											<input type="checkbox" ng-click="getValue($event, $index); getGrupos()" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
+											<input type="checkbox" ng-click="getValue($event, $index); getGrupos(); getUnidades()" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
 										</div>
 									</div>
 								</div>
@@ -126,7 +126,8 @@
 												<div class="row">
 													<div class="col-md-6">
 														<label class="control-label ">Unidade</label>
-														<input type="text" name="descricao" ng-model='data.unidade' class='form-control placeholder-no-fix'>
+														<select ng-model="data.unidade" name="descricao"  class='form-control' ng-options="u.descricao as u.descricao for u in unidade_opts">
+														</select>
 													</div>
 													<div class="col-md-6">
 														<label class="control-label ">Preço</label>

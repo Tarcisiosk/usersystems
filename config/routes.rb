@@ -38,6 +38,7 @@ Rails.application.routes.draw do
 	post 'produtos/new'  => 'produto#create'
 	get 'produtos/showImg/:id' => 'produto#show_image', as: :p_photo
 	post 'produtos/save_settings' => 'produto#save_settings'
+	get 'produtos/uniempresa' => "produto#returnEmpresasUnidade"
 	get 'produtos/empresagrupo' => "produto#returnEmpresasGrupo"
 	get 'produtos/subgrupogrupo' => "produto#returnSubGrupoGrupo"
 	post 'produtos/save_angular' => 'produto#save_angular'	
@@ -66,6 +67,18 @@ Rails.application.routes.draw do
 	get 'estados/new' => "estado#new", as: :new_estado
 	post 'estados/new' => 'estado#create'
 	post 'estados/save_settings' => 'estado#save_settings'
+
+	get 'cfops' => "cfop#index", as: :cfops
+	get 'cfops/new' => "cfop#new", as: :new_cfop
+	post 'cfops/save_angular' => 'cfop#save_angular'	
+	post 'cfops/save_angular/:id' => 'cfop#save_angular'
+	post 'cfops/save_settings' => 'cfop#save_settings'
+
+	get 'unidades' => "unidade#index", as: :unidades
+	get 'unidades/new' => "unidade#new", as: :new_unidade
+	post 'unidades/save_angular' => 'unidade#save_angular'	
+	post 'unidades/save_angular/:id' => 'unidade#save_angular'
+	post 'unidades/save_settings' => 'unidade#save_settings'
 
 	get 'classificacaofiscal' => "classificacaofiscal#index", as: :classificacaofiscals
 	get 'classificacaofiscal/new' => "classificacaofiscal#new", as: :new_classificacaofiscal
@@ -102,6 +115,8 @@ Rails.application.routes.draw do
 	resources :produto, only: [:edit, :destroy, :update, :new, :create]
 	resources :entidade, only: [:edit, :update, :new, :create, :destroy]
 	resources :endereco, only: [:edit, :update, :new, :create, :destroy]
+	resources :cfop, only: [:edit, :destroy, :new] 
+	resources :unidade, only: [:edit, :destroy, :new] 
 
 
 	devise_for :users

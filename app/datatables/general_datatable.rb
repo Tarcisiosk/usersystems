@@ -25,6 +25,11 @@ class GeneralDatatable < ApplicationController
 					end
 				else
 					subData2 = item
+					if !!subitem == subitem && subitem == true 
+						subData2[subindex] = '<span class="glyphicon glyphicon-ok font-green"/>'
+					elsif !!subitem == subitem  && subitem == false 
+						subData2[subindex] = '<span class="glyphicon glyphicon-remove font-red"/>'
+					end
 				end
 			end
 			data2[index] = subData2
@@ -49,7 +54,7 @@ class GeneralDatatable < ApplicationController
 			if @current_user.user_type == 0 || @current_user.user_type == 1
 				if record.try(:adm_id)
 					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
-						if record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo) || record.is_a?(Produto)
+						if record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo) || record.is_a?(Produto) || record.is_a?(Unidade)
 							if record.empresas.include?(current_user.settings(:last_empresa).edited)
 								columns.each_with_index do |item, index|					
 									data_array[index] = record.send(item)
@@ -115,7 +120,7 @@ class GeneralDatatable < ApplicationController
 					#...se for entidade, grupo ou subgrupo é filtrado pela empresa atual, senão só vai..
 					else
 						if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
-							if record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo) || record.is_a?(Produto)
+							if record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo) || record.is_a?(Produto) || record.is_a?(Unidade)
 
 								if record.empresas.include?(current_user.settings(:last_empresa).edited)
 									columns.each_with_index do |item, index|					

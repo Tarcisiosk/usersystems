@@ -160,6 +160,26 @@ class ProdutoController < ApplicationController
 		end			
 	end
 
+	def returnEmpresasUnidade
+		empresas_array =  Array.new
+		unidade_array = Array.new
+
+		params[:empresas].each do |item|
+			empresas_array << Empresa.find(item)	
+		end	
+
+		Unidade.all.each do |unidade|
+			empresas_array.each do |empresa|
+				if unidade.adm_id == current_user.settings(:last_empresa).edited.adm_id && unidade.empresas.include?(empresa) 
+					unless unidade_array.include?(unidade)
+						unidade_array << unidade
+					end
+				end	
+			end
+		end
+ 		render :json => unidade_array.to_json.to_s.html_safe
+	end
+
 	def returnEmpresasGrupo
 		empresas_array =  Array.new
 		grupo_array = Array.new

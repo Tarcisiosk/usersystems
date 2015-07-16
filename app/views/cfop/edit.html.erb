@@ -1,0 +1,81 @@
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container" ng-view ng-controller="CfopCtrl">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "CFOPS", cfops_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						Editar
+					</li>
+				</ul>
+				<div class="col-md-12">
+					<div class="profile-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet light">
+									<div class="portlet-title tabbable-line">
+										<div class="caption caption-md">
+											<i class="icon-globe theme-font hide"></i>
+												<span class="caption-subject font-blue-madison bold uppercase">Editar CFOP</span>
+											<i class="fa fa-plus"></i>
+										</div>
+										<div class="actions btn-set">
+											<%= link_to "Voltar", cfops_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
+											<button ng-click="save()" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
+										</div>
+									</div>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
+										<ul ng-repeat="m in mensagens">
+											 <li>{{m}}</li>
+										</ul>
+									</div>
+									<div class="portlet-body">
+										<div class="form-group">
+											<div class ="row">
+												<div class="col-md-3">	
+													<label class="control-label ">Código</label>
+													<input type="text"  id="campocod" name="codigo" ng-blur="ApplyMask()" ng-focus="RemoveMask()" maxlength="4" ng-model='data.codigo' class='form-control placeholder-no-fix'>
+												</div>
+												<div class="col-md-9">
+													<label class="control-label ">Descrição</label>
+													<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class= "row">
+												<div class="col-md-12">
+													<label class="control-label ">Devolução</label>
+													<div class="checkbox-list">
+														<input type="checkbox" name="devolucao" ng-model='data.devolucao' class='form-control'>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE CONTENT -->
+	</div>
+</div>  
+
+<script>
+
+</script>

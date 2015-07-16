@@ -274,9 +274,15 @@
 				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>;
 				$scope.estados_total = <%=returnAllEstados.to_json.to_s.html_safe%>;
 				$scope.enderecoEditar = '';
+
+
 				$scope.opt = ["Principal", "Cobrança", "Entrega"];
 				$scope.novo = false;
 
+				//$('#tipo').typeahead({
+				//    order: "desc",
+				//    source: { data: $scope.opt }
+				//});
 				
 				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
 				{
@@ -622,7 +628,8 @@
 				$scope.data = <%= send_json.to_s.html_safe %>;
 				$scope.mensagens = [];				
 				$scope.grupo_opts = [];
-				$scope.subgrupo_opts = [];				
+				$scope.subgrupo_opts = [];
+				$scope.unidade_opts = [];			
 				$scope.empresas_total = <%=returnEmpresas.to_json.to_s.html_safe%>;
 				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>;
 				$scope.modalidadebcicmssts = <%= @modalidadebcicmsst.to_json.html_safe=%>;
@@ -634,6 +641,26 @@
 				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
 				{
 					$scope.data.empresas.push($scope.empresa_atual);
+				}
+
+				$scope.getUnidades = function()
+				{
+					$.ajax({
+						async: false,
+						method: 'get',
+						url: '/produtos/uniempresa/',
+						data: { empresas: $scope.data.empresas },	
+						success: function(data)
+						{
+							$scope.unidade_opts = data;
+							if($scope.unidade_opts.length > 0)
+							{
+								if ($scope.data.unidade == null){
+									$scope.data.unidade = $scope.unidade_opts[0].descricao;
+								}
+							}
+						}
+					});
 				}
 
 				$scope.getGrupos = function()
@@ -655,7 +682,6 @@
 					});
 				}
 				
-
 				$scope.getSubGrupos = function()
 				{
 					$.ajax({
@@ -674,6 +700,7 @@
 					});
 				}
 
+				$scope.getUnidades();
 				$scope.getGrupos();
 				$scope.getSubGrupos();
 
@@ -745,7 +772,6 @@
 						$('#target').html(img);
 					}
 					reader.readAsDataURL(image);
-					console.log(files);
 				});
 
 				$scope.indexIcmsCFPorEstado = function(id){			
@@ -859,6 +885,103 @@
 						}
 					});		
 				}		
+
+			}]);
+		<%end%>
+
+		<%if controller_name == "cfop" && (action_name == "edit"||action_name == "new")%>
+			myApp.controller('CfopCtrl', ['$scope', function($scope)
+			{
+				$scope.data = <%= send_json.to_s.html_safe %>;
+				$scope.mensagens = [];				
+
+				$scope.save = function() 
+				{   		
+					var request;
+					request = $.ajax({
+						async: false,
+						method: 'post',
+						url: '/cfops/save_angular/' + '<%= editingUser.id%>',
+						data: { data: $scope.data },
+						success: function (data)
+						{      			     			
+							window.location.replace('/cfops');
+						},
+						error: function (jqXHR, textStatus, errorThrown)
+						{      			     			
+							$scope.mensagens = JSON.parse(jqXHR.responseText);
+							console.log(jqXHR.responseText);
+						}
+					});
+				}
+
+				$scope.ApplyMask= function(caso)
+				{	
+					if($scope.data.codigo.length == 4)
+					{
+						$("#campocod").mask("9.999");
+					}
+				}
+
+				$scope.RemoveMask = function(caso)
+				{
+					$("#campocod").mask();
+				}
+
+
+			}]);
+		<%end%>
+		
+		<%if controller_name == "unidade" && (action_name == "edit"||action_name == "new")%>
+			myApp.controller('UnidadeCtrl', ['$scope', function($scope)
+			{
+				$scope.data = <%= send_json.to_s.html_safe %>;
+				$scope.mensagens = [];				
+				$scope.empresas_total = <%=returnEmpresas.to_json.to_s.html_safe%>;
+				$scope.empresa_atual = <%=(current_user.settings(:last_empresa).edited).id%>;
+
+				if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
+				{
+					$scope.data.empresas.push($scope.empresa_atual);
+				}
+
+				$scope.save = function() 
+				{   		
+					var request;
+					request = $.ajax({
+						async: false,
+						method: 'post',
+						url: '/unidades/save_angular/' + '<%= editingUser.id%>',
+						data: { data: $scope.data },
+						success: function (data)
+						{      			     			
+							window.location.replace('/unidades');
+						},
+						error: function (jqXHR, textStatus, errorThrown)
+						{      			     			
+							$scope.mensagens = JSON.parse(jqXHR.responseText);
+							console.log(jqXHR.responseText);
+						}
+					});
+				}
+
+				$scope.getValue = function(event, index, caso) 
+				{
+	
+					if ($scope.data.empresas.indexOf(Number(event.target.value)) <= -1)
+					{
+						$scope.data.empresas.push(Number(event.target.value));
+					}
+					else
+					{
+						var indexArray = $scope.data.empresas.indexOf(Number(event.target.value));
+						if (index > -1) 
+						{
+							$scope.data.empresas.splice(indexArray, 1);
+						}
+					}
+					console.log($scope.data);
+				}
 
 			}]);
 		<%end%>

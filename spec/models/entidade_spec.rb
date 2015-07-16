@@ -6,7 +6,7 @@ RSpec.describe Entidade, type: :model do
   	entidade.valid?
   	expect(entidade.errors[:razao_social]).to include("não pode ficar em branco")
   	expect(entidade.errors[:nome_fantasia]).to include("não pode ficar em branco")
-  	expect(entidade.errors[:cnpj]).to include("não pode ficar em branco")
+  	#expect(entidade.errors[:cnpj]).to include("não pode ficar em branco")
   end
 
   it "cnpj com tamanho diferente de 14 é invalido" do
@@ -16,8 +16,8 @@ RSpec.describe Entidade, type: :model do
   end
 
   it "cnpj precisa ser único" do
-    entidade1 = Entidade.new(cnpj:'00000000000001')
-    entidade2 = Entidade.new(cnpj:'00000000000001')
+    entidade1 = Entidade.new(cnpj:'00000000000000')
+    entidade2 = Entidade.new(cnpj:'12345678909')
     entidade2.valid?
     expect(entidade2.errors[:cnpj]).to include("já está em uso")
   end

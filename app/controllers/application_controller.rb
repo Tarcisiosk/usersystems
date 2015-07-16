@@ -28,7 +28,6 @@ class ApplicationController < ActionController::Base
 	helper_method :returnNiveisAcesso
 	helper_method :returnAllEstados
 	helper_method :returnEmpresas
-	helper_method :returnGrupoEmpresas
 
 	@@checked_rows = []
 	@@checked_users = []
@@ -51,6 +50,7 @@ class ApplicationController < ActionController::Base
 										  :cadastros => {:label=>'Produtos', 
 														 	:grupos =>{:label => 'Grupos', :path => '/grupos', :acao =>'grupo#index'}, 
 														 	:subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'},
+	 														:unidades =>{:label => 'Unidades', :path => '/unidades', :acao =>'unidade#index'},
 														 	:classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}}, 
 					   
 					   :configuracoes => {:label=>'Configurações', 
@@ -61,11 +61,15 @@ class ApplicationController < ActionController::Base
 											 				  	:produtos => {:label=> 'Produtos', :path => '/produtos', :acao =>'produto#index'}, 
 											 				  	:usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
 				       
-				       :mainadministracao => {:label=>'Administração', :cadastros =>{:label=>'Cadastros', :estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'}}}}
+				       :mainadministracao => {:label=>'Administração', 
+				       						  :cadastros =>{:label=>'Cadastros', 
+				       						  				:estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'},
+				       						  				:cfop =>{:label =>'CFOP', :path=>'/cfops', :acao=>'cfop#index'}}}}
 		
 		if current_user.user_type != 0
 			menuBuilder.except!(:mainadministracao)
-		end									 				    
+		end	
+
 		if current_user.user_type == 2
 			menuBuilder.each do |hkey, hvalue|
 				if hvalue.is_a?(Hash)
@@ -420,6 +424,12 @@ class ApplicationController < ActionController::Base
 		action = controller_name + "#" + action_name 
 		if controller_name != "sessions" && controller_name != "index" && controller_name != "nivelacesso" && current_user.user_type == 2
 			unless current_user.nivelacesso.acessos.include?(Acesso.find_by_acao(action))
+				redirect_to notAllowed_path
+			end
+		end
+
+		if controller_name == "estado" || controller_name =="cfop"
+			unless current_user.user_type == 0
 				redirect_to notAllowed_path
 			end
 		end

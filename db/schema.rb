@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150713175314) do
+ActiveRecord::Schema.define(version: 20150716161937) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(version: 20150713175314) do
   create_table "acessos_nivelacessos", force: :cascade do |t|
     t.integer "acesso_id"
     t.integer "nivelacesso_id"
+  end
+
+  create_table "cfops", force: :cascade do |t|
+    t.string   "codigo"
+    t.string   "descricao"
+    t.boolean  "devolucao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "classificacaofiscals", force: :cascade do |t|
@@ -88,6 +96,11 @@ ActiveRecord::Schema.define(version: 20150713175314) do
   create_table "empresas_subgrupos", force: :cascade do |t|
     t.integer "empresa_id"
     t.integer "subgrupo_id"
+  end
+
+  create_table "empresas_unidades", force: :cascade do |t|
+    t.integer "empresa_id"
+    t.integer "unidade_id"
   end
 
   create_table "empresas_users", force: :cascade do |t|
@@ -262,6 +275,15 @@ ActiveRecord::Schema.define(version: 20150713175314) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "adm_id"
+  end
+
+  create_table "unidades", force: :cascade do |t|
+    t.string   "abreviacao"
+    t.string   "descricao"
+    t.integer  "adm_id"
+    t.boolean  "fracionado"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
