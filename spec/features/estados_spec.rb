@@ -12,8 +12,7 @@ RSpec.feature "Estados", type: :feature, :js => true do
 		consigo_ver 'Codigo ibge não pode ficar em branco'					 					 
 		consigo_ver	'Uf não pode ficar em branco'
 		consigo_ver	'Descricao não pode ficar em branco'
-		consigo_ver	'Icms interno não pode ficar em branco'
-		consigo_ver	'Diferimento não pode ficar em branco'
+		consigo_ver	'Icms interno não pode ficar em branco'		
 	end
 	scenario 'validar tamanhos dos campos do estado' do
 		abro_pagina 'estados'

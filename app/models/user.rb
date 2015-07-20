@@ -26,7 +26,8 @@ class User < AbstractRecord
 			s.key :columns_produto, :defaults => {:col => returnDefaults(Produto::TOTAL_COLUMNS_PRODUTO)}
 			s.key :columns_cfop, :defaults => {:col => returnDefaults(Cfop::TOTAL_COLUMNS_CFOP)}
 			s.key :columns_unidade, :defaults => {:col => returnDefaults(Unidade::TOTAL_COLUMNS_UNIDADE)}
-
+			s.key :columns_serie, :defaults => {:col => returnDefaults(Serie::TOTAL_COLUMNS_SERIE)}
+			s.key :columns_tipomovimentacao, :defaults => {:col => returnDefaults(Tipomovimentacao::TOTAL_COLUMNS_TIPOMOVIMENTACAO)}
 			s.key :last_empresa
 		end
 

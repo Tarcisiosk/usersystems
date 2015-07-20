@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Entidade, type: :model do
   it "campos vazios é inválido" do
-  	entidade = Entidade.new
+  	entidade = Entidade.new(cnpj: '08294176000500')
   	entidade.valid?
   	expect(entidade.errors[:razao_social]).to include("não pode ficar em branco")
   	expect(entidade.errors[:nome_fantasia]).to include("não pode ficar em branco")
@@ -16,8 +16,8 @@ RSpec.describe Entidade, type: :model do
   end
 
   it "cnpj precisa ser único" do
-    entidade1 = Entidade.new(cnpj:'00000000000000')
-    entidade2 = Entidade.new(cnpj:'12345678909')
+    entidade1 = Entidade.new(cnpj:'88583288000115')
+    entidade2 = Entidade.new(cnpj:'88583288000115')
     entidade2.valid?
     expect(entidade2.errors[:cnpj]).to include("já está em uso")
   end
@@ -29,7 +29,7 @@ RSpec.describe Entidade, type: :model do
   end
 
   it "campos preenchidos corretamente é válido" do
-  	entidade = Entidade.new(razao_social: 'Entidade_teste', nome_fantasia: "Entidade teste", cnpj: '00000000000032')
+  	entidade = Entidade.new(razao_social: 'Entidade_teste', nome_fantasia: "Entidade teste", cnpj: '86602035000116')
   	expect(entidade).to be_valid 
   end  	
 end

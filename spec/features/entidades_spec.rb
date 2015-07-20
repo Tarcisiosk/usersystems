@@ -23,7 +23,7 @@ RSpec.feature "Entidades", type: :feature, :js => true do
 		marco_checkbox 'tipo2'
 		preencho_campo_com 'razao_social', 'EntidadeTeste2'
 		preencho_campo_com 'nome_fantasia', 'EntidadeTeste2'
-		preencho_campo_com 'cnpj', '73573735737357'
+		preencho_campo_com 'cnpj', '70413361000145'
 		clico_botao 'Salvar'
 		consigo_ver 'EntidadeTeste2' 
 	end

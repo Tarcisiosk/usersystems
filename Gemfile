@@ -38,12 +38,12 @@ gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'yaml_dump', github: 'vanboom/yaml_dump'
 gem 'yaml_db'
 # Use ActiveModel has_secure_password
- gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
 
+gem 'aescrypt'
 
 gem 'angular-rails-templates'
 gem 'bower-rails'
-
 
 # Use Unicorn as the app server
 # gem 'unicorn'
@@ -69,3 +69,5 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+

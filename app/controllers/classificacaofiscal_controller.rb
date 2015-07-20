@@ -10,7 +10,7 @@ class ClassificacaofiscalController < ApplicationController
 	end
 
 	def new
-		@classificacaofiscal = Classificacaofiscal.new(pis_aliquota: 0, cofins_aliquota: 0, ii_aliquota: 0, ipi_aliquota: 0)
+		@classificacaofiscal = Classificacaofiscal.new(pis_aliquota: 0, cofins_aliquota: 0, ii_aliquota: 0, ipi_aliquota: 0, adm_id: current_user.settings(:last_empresa).edited.adm_id)
 		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao")
 		@ipicst = Ipicst.all.select("id","codigo","descricao")
 		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
@@ -25,8 +25,7 @@ class ClassificacaofiscalController < ApplicationController
 
 	def save		
 		if params[:classificacaofiscal][:id].blank?
-			@classificacaofiscal = Classificacaofiscal.new(params[:classificacaofiscal].symbolize_keys)
-			@classificacaofiscal.adm_id = current_user.settings(:last_empresa).edited.adm_id		
+			@classificacaofiscal = Classificacaofiscal.new(params[:classificacaofiscal].symbolize_keys)					
 			@classificacaofiscal.save
 		else
 			@classificacaofiscal = Classificacaofiscal.find(params[:classificacaofiscal][:id])

@@ -69,6 +69,7 @@
 
 <script>
 myApp.controller('IcmsinterestadualCtrl', ['$scope','$timeout', function($scope,$timeout){
+	
 	$scope.estados = <%=@estados.to_json.html_safe=%>;
 	$scope.icmsinterestaduals = <%=@icmsinterestaduals.to_json.html_safe=%>;
 

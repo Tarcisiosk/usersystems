@@ -1,0 +1,110 @@
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container" ng-view ng-controller="SerieCtrl">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Séries", series_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						Novo
+					</li>
+				</ul>
+				<div class="col-md-12">
+					<div class="portlet light">
+						<div class="portlet-title tabbable-line">
+							<div class="caption caption-md">
+								<i class="icon-globe theme-font hide"></i>
+									<span class="caption-subject font-blue-madison bold uppercase">Série</span>
+								<i class="fa fa-plus"></i>
+							</div>
+							<div class="actions btn-set">									
+									<%= link_to '<i class="fa fa-angle-left"></i> Voltar'.html_safe,series_path, :type => "button",:name => "back",
+									:class => "btn btn-default btn-circle", 'data-no-turbolink' => true %>													
+									<button ng-click="save()" class="btn green-haze btn-circle"><i class="fa fa-check"></i> Gravar</button>
+							</div>		
+						</div>
+						<div ng-if="mensagens.length > 0" id="error_explanation" class="Metronic-alerts alert alert-danger">
+							<ul ng-repeat="msg in mensagens">												
+						 		<li>{{msg}}</li>													
+							</ul>
+						</div>					
+						<div class="portlet-body">
+							<div class="row">
+								<div class="col-md-2">
+									<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+										<label class="control-label ">Série</label>
+										<input type="text" name="serie" ng-model='serie.serie' class='form-control placeholder-no-fix'></input>
+									</div>
+								</div>							
+								<div class="col-md-4">
+									<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+										<label class="control-label ">Modelo</label>
+										<select class="form-control" name="modelo" ng-model="serie.modelo"
+												ng-options="value.descricao as value.codigo+' - '+value.descricao for (key,value) in modelos">
+											
+										</select>
+									</div>
+								</div>
+													
+								<div class="col-md-2">
+									<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+										<label class="control-label ">Nº última nota fiscal</label>
+										<input type="text" name="ultima_nota_fiscal" ng-model='serie.ultima_nota_fiscal' class='form-control placeholder-no-fix'></input>
+									</div>
+								</div>							
+								<div class="col-md-4">
+									<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+										<label class="control-label ">Ambiente</label>
+										<select class="form-control" name="ambiente" ng-model="serie.ambiente"
+												ng-options="value.descricao as value.codigo+' - '+value.descricao for (key,value) in ambientes">					
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+myApp.controller('SerieCtrl', ['$scope', function($scope){
+	$scope.mensagens = [];
+	$scope.serie = <%= @serie.to_json.html_safe=%>;
+	$scope.modelos =[{'codigo':55,'descricao':'Nota Fiscal Eletrônica'},{'codigo':65,'descricao':'Nota Fiscal de Consumidor Eletrônica'}];
+	$scope.ambientes = [{'codigo':1,'descricao':'Produção'},{'codigo':2,'descricao':'Homologação'}];
+	$('[name="serie"]').mask("?999");
+
+	$scope.save = function(){
+		$.ajax({
+			async: false,
+      		method: 'post',
+      		url: '/series/save/',
+      		data: { serie: $scope.serie},
+      		success: function (data){      			      			
+      			window.location.replace('<%=series_path=%>');
+      		},
+      		error: function (jqXHR, textStatus, errorThrown){      			     			
+      			$scope.mensagens = JSON.parse(jqXHR.responseText);
+
+      		}
+   	 	});
+	}
+}]);
+</script>							

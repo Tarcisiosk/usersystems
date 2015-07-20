@@ -1,0 +1,90 @@
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container" ng-view ng-controller="TipomovimentacaoCtrl">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Tipo de Movimentações", tipomovimentacaos_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						Novo
+					</li>
+				</ul>
+				<div class="col-md-12">
+					<div class="portlet light">
+						<div class="portlet-title tabbable-line">
+							<div class="caption caption-md">
+								<i class="icon-globe theme-font hide"></i>
+									<span class="caption-subject font-blue-madison bold uppercase">Tipo de Movimentações</span>
+								<i class="fa fa-plus"></i>
+							</div>
+							<div class="actions btn-set">									
+									<%= link_to '<i class="fa fa-angle-left"></i> Voltar'.html_safe,tipomovimentacaos_path, :type => "button",:name => "back",
+									:class => "btn btn-default btn-circle", 'data-no-turbolink' => true %>													
+									<button ng-click="save()" class="btn green-haze btn-circle"><i class="fa fa-check"></i> Gravar</button>
+							</div>		
+						</div>
+						<div ng-if="mensagens.length > 0" id="error_explanation" class="Metronic-alerts alert alert-danger">
+							<ul ng-repeat="msg in mensagens">												
+						 		<li>{{msg}}</li>													
+							</ul>
+						</div>					
+						<div class="portlet-body">
+							<div class="row">
+								<div class="col-md-8">
+									<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+										<label class="control-label ">Descrição</label>
+										<input type="text" name="descricao" ng-model='tipomovimentacao.descricao' class='form-control placeholder-no-fix'></input>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+										<label class="control-label ">Tipo</label>
+										<select class="form-control" name="tipo" ng-model="tipomovimentacao.tipo"
+												ng-options="value.descricao as value.codigo+' - '+value.descricao for (key,value) in tipos">					
+										</select>
+									</div>
+								</div>				
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+myApp.controller('TipomovimentacaoCtrl', ['$scope', function($scope){
+	$scope.mensagens = [];
+	$scope.tipomovimentacao = <%= @tipomovimentacao.to_json.html_safe=%>;	
+	$scope.tipos = [{'codigo':1,'descricao':'Entrada'},{'codigo':2,'descricao':'Saída'}];
+
+	$scope.save = function(){
+		$.ajax({
+			async: false,
+      		method: 'post',
+      		url: '/tipomovimentacaos/save/',
+      		data: { tipomovimentacao: $scope.tipomovimentacao},
+      		success: function (data){      			      			
+      			window.location.replace('<%=tipomovimentacaos_path=%>');
+      		},
+      		error: function (jqXHR, textStatus, errorThrown){      			     			
+      			$scope.mensagens = JSON.parse(jqXHR.responseText);
+
+      		}
+   	 	});
+	}
+}]);
+</script>							

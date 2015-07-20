@@ -10,6 +10,5 @@ class Estado < AbstractRecord
 	validates :codigo_ibge, presence: true, numericality: true
 	validates :uf, presence: true, length: { in: 0..2 }
 	validates :descricao, presence: true, length: { in: 0..50 }
-	validates :icms_interno, presence: true 
-	validates :diferimento, presence: true
+	validates :icms_interno, presence: true	
 end

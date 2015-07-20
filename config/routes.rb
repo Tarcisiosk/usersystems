@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-  get 'icmsinterestadual/index'
-
- # get 'welcome/index'
+  # get 'welcome/index'
 
 	get 'users'  => "user#index", as: :users
 	get 'users/new'  => 'user#new', as: :new_user 
@@ -14,7 +12,8 @@ Rails.application.routes.draw do
 
 	get 'empresas'=> "empresa#index", as: :empresas
 	get 'empresas/new' => "empresa#new", as: :new_empresa
-	post 'empresas/new'  => 'empresa#create'
+	post 'empresas/save'  => 'empresa#save'
+	post 'empresas/saveCertificado'  => 'empresa#saveCertificado'
 	post 'empresas/save_settings' => 'empresa#save_settings'
 	post 'empresas/checked_rows' => 'empresa#checked_rows'
 
@@ -97,6 +96,16 @@ Rails.application.routes.draw do
 	post 'nivelacesso/act_acesso/:id' => "nivelacesso#act_acesso"
 	post 'nivelacesso/deact_acesso/:id' => "nivelacesso#deact_acesso"
 
+	get 'series' => "serie#index", as: :series
+	get 'series/new' => "serie#new", as: :new_serie
+	post 'series/save' => 'serie#save'
+	post 'series/save_settings' => 'serie#save_settings'
+
+	get 'tipomovimentacaos' => "tipomovimentacao#index", s: :tipomovimentacaos
+	get 'tipomovimentacaos/new' => "tipomovimentacao#new", as: :new_tipomovimentacao
+	post 'tipomovimentacaos/save' => 'tipomovimentacao#save'
+	post 'tipomovimentacaos/save_settings' => 'tipomovimentacao#save_settings'
+
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	
 	get "index" => 'index#index', as: :index
@@ -117,6 +126,9 @@ Rails.application.routes.draw do
 	resources :endereco, only: [:edit, :update, :new, :create, :destroy]
 	resources :cfop, only: [:edit, :destroy, :new] 
 	resources :unidade, only: [:edit, :destroy, :new] 
+	resources :serie, only: [:edit, :update, :new, :create, :destroy]
+	resources :tipomovimentacao, only: [:edit, :update, :new, :create, :destroy]
+
 
 
 	devise_for :users

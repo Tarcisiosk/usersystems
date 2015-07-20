@@ -18,9 +18,9 @@ RSpec.feature "Empresas", type: :feature, :js => true do
 	scenario 'adicionar empresa' do		
 		abro_pagina_as_adm 'empresas'
 		clico_link 'Novo'
-		preencho_campo_com 'empresa[razao_social]', 'EmpresaTeste2'
-		preencho_campo_com 'empresa[nome_fantasia]', 'EmpresaTeste2'
-		preencho_campo_com 'empresa[cnpj]', '73573735737357'
+		preencho_campo_com 'razao_social', 'EmpresaTeste2'
+		preencho_campo_com 'nome_fantasia', 'EmpresaTeste2'
+		preencho_campo_com 'cnpj', '73573735737357'
 		clico_botao 'Gravar'
 		consigo_ver 'EmpresaTeste2' 
 	end
@@ -29,8 +29,8 @@ RSpec.feature "Empresas", type: :feature, :js => true do
 		@empresa = Empresa.find_by(razao_social: 'EmpresaTeste2')
 		abro_pagina_as_adm 'empresas'	
 		clico_link 'Editar' + @empresa.id.to_s		
-		preencho_campo_com 'empresa[razao_social]', 'EmpresaTeste2'
-		clico_botao 'Atualizar'
+		preencho_campo_com 'razao_social', 'EmpresaTeste2'
+		clico_botao 'Gravar'
 		consigo_ver 'EmpresaTeste2'
 	end
 =begin

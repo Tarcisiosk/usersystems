@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150716161937) do
+ActiveRecord::Schema.define(version: 20150717175938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,18 @@ ActiveRecord::Schema.define(version: 20150716161937) do
   create_table "acessos_nivelacessos", force: :cascade do |t|
     t.integer "acesso_id"
     t.integer "nivelacesso_id"
+  end
+
+  create_table "certificadodigitals", force: :cascade do |t|
+    t.integer  "empresa_id"
+    t.string   "cnpj"
+    t.date     "inicio"
+    t.date     "fim"
+    t.binary   "imagem"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "senha"
+    t.string   "requerente"
   end
 
   create_table "cfops", force: :cascade do |t|
@@ -51,13 +63,6 @@ ActiveRecord::Schema.define(version: 20150716161937) do
     t.float    "ii_aliquota"
     t.integer  "ipi_cst_id"
     t.float    "ipi_aliquota"
-  end
-
-  create_table "cstpiscofins", force: :cascade do |t|
-    t.integer  "codigo"
-    t.string   "descricao"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "empresas", force: :cascade do |t|
@@ -251,6 +256,19 @@ ActiveRecord::Schema.define(version: 20150716161937) do
     t.datetime "p_photo_updated_at"
   end
 
+  create_table "series", force: :cascade do |t|
+    t.integer  "serie"
+    t.string   "modelo"
+    t.integer  "ultima_nota_fiscal"
+    t.string   "ambiente"
+    t.integer  "empresa_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "adm_id"
+  end
+
+  add_index "series", ["empresa_id"], name: "index_series_on_empresa_id", using: :btree
+
   create_table "settings", force: :cascade do |t|
     t.string   "var",         null: false
     t.text     "value"
@@ -275,6 +293,14 @@ ActiveRecord::Schema.define(version: 20150716161937) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "adm_id"
+  end
+
+  create_table "tipomovimentacaos", force: :cascade do |t|
+    t.string   "descricao"
+    t.string   "tipo"
+    t.integer  "adm_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "unidades", force: :cascade do |t|
@@ -314,4 +340,5 @@ ActiveRecord::Schema.define(version: 20150716161937) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "series", "empresas"
 end

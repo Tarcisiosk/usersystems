@@ -58,14 +58,16 @@ class ApplicationController < ActionController::Base
 						 				  :configuracoes => {label:"Cadastros", 
 											 				  	:empresas => {:label=> 'Empresas', :path => '/empresas', :acao =>'empresa#index'}, 
 											 				  	:nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'},
+											 				  	:serie => {:label=> 'Séries', :path => '/series', :acao =>'serie#index'},
+										 				        :tipomovimentacao => {:label=> 'Tipos de Mov.', :path => '/tipomovimentacaos', :acao =>'tipomovimentacao#index'}, 
 											 				  	:produtos => {:label=> 'Produtos', :path => '/produtos', :acao =>'produto#index'}, 
 											 				  	:usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
 				       
 				       :mainadministracao => {:label=>'Administração', 
 				       						  :cadastros =>{:label=>'Cadastros', 
 				       						  				:estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'},
+				       						  				:icmsinterestadual =>{:label =>'ICMS Interestadual', :path=>'/icmsinterestadual', :acao=>'icmsinterestadual#index'},
 				       						  				:cfop =>{:label =>'CFOP', :path=>'/cfops', :acao=>'cfop#index'}}}}
-		
 		if current_user.user_type != 0
 			menuBuilder.except!(:mainadministracao)
 		end	
@@ -169,7 +171,7 @@ class ApplicationController < ActionController::Base
 	end
 
 	#salva empresas na quais usuario comum tem acesso
-	def save_user_empresa
+	def save_user_empresa		
 		obj = instance_variable_get("@" + controller_name.downcase)
 		ActiveRecord::Base.transaction do
 
@@ -204,19 +206,16 @@ class ApplicationController < ActionController::Base
 							#item.users << obj
 							obj.empresas << @@checked_empresas[index]
 							obj.settings(:last_empresa).edited = nil
-
 						elsif controller_name == "empresa"
-	
 							if index == 0
 								obj.users.clear
 								item.empresas.delete(obj)
 							end	
 							#item.empresas << obj
 							obj.users << @@checked_empresas[index]
-						end
-
-						obj.save!
+						end				
 						item.save!
+						obj.save!									
 					end
 				end
 			end
@@ -349,7 +348,7 @@ class ApplicationController < ActionController::Base
 				end
 			end
 		end
-		default_content.compact
+		default_content.compact		
 	end
 
 	#usuario a ser editado
