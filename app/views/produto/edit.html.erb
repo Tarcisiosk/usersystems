@@ -1,4 +1,5 @@
-<div class="page-container" ng-view ng-controller="ProdutoCtrl">
+<div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>'>
+
 	<div class="page-head">
 		<div class="page-content">
 			<div class="container">
@@ -156,7 +157,7 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr ng-repeat="icmscf in icmsproduto">
+													<tr ng-repeat="icmscf in icmsproduto ">
 														<td>{{estadoPorId(icmscf.estado_id).descricao}}</td>
 														<td>{{icmscf.reducaobasecalculo}}</td>
 														<td>{{icmscf.diferimento}}</td>

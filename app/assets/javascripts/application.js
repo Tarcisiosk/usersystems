@@ -54,4 +54,4 @@
 //= require table-managed
 //= require angular
 //= require_tree .
-
+//

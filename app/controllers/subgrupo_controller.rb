@@ -65,7 +65,8 @@ class SubgrupoController < ApplicationController
 	end
 
 	def send_json
-		return @@angularActions.to_json
+		puts "OLha só : #{@@angularActions}"
+ 		render :json => @@angularActions.to_json.to_s.html_safe
 	end
 
 	def save_angular
@@ -113,7 +114,7 @@ class SubgrupoController < ApplicationController
 		@grupo.empresas.each do |item|
 			empresas_array << item
 		end
- 		render :json => empresas_array.to_json.to_s.html_safe
+ 		render :json => (empresas_array.sort!).to_json.to_s.html_safe
 	end
 
 	def subgrupo_params

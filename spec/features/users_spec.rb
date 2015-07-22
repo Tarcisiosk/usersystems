@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.feature "Users", type: :feature, :js => true do
  	scenario 'listar usuarios' do					
-		abro_pagina 'users'
+		abro_pagina_as_adm 'users'
 		consigo_ver 'USUÁRIOS'		
 	end
 
 	scenario 'validar campos em branco do usuario' do
-		abro_pagina 'users'
+		abro_pagina_as_adm 'users'
 		clico_link 'Novo'
 		clico_botao 'Gravar'
 		consigo_ver	'Email não pode ficar em branco'

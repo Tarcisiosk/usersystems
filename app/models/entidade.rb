@@ -59,10 +59,10 @@ class Entidade < AbstractRecord
 			digito_final = (digito_um.to_s + digito_dois.to_s).to_i
 			
 			if digitoverificador.join("").to_i == digito_final
-				puts "CPF VALIDO!"
+				#puts "CPF VALIDO!"
 				return true
 			else
-				puts "CPF INVALIDO!"
+				#puts "CPF INVALIDO!"
 				errors.add(:cnpj, "/ Cpf não é válido")
 				return false
 			end
@@ -120,10 +120,10 @@ class Entidade < AbstractRecord
 			digito_final = (digito_um.to_s + digito_dois.to_s).to_i
 
 			if digitoverificador.join("").to_i == digito_final
-				puts "CPF VALIDO!"
+				#puts "CPF VALIDO!"
 				return true
 			else
-				puts "CPF INVALIDO!"
+				#puts "CPF INVALIDO!"
 				errors.add(:cnpj, "/ Cpf não é válido")
 				return false
 			end

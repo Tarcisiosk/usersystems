@@ -36,7 +36,7 @@ class CfopController < ApplicationController
 	end
 
 	def send_json
-		return @@angularActions.to_json
+ 		render :json => @@angularActions.to_json.to_s.html_safe
 	end
 
 	def save_angular

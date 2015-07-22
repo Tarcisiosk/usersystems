@@ -111,7 +111,7 @@ class UserController < ApplicationController
 			end
 			@user.n_acesso = @user.nivelacesso.descricao
 			#puts "ACESSO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #{@user.n_acesso}"
-			@user.save!
+			@user.save
 		end
 	end
 
