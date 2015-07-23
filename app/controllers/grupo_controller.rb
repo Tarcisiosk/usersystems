@@ -85,14 +85,18 @@ class GrupoController < ApplicationController
 				end
 			end
 		end
-				
+
+		array_empresas.uniq
+
 		if Grupo.where(:id => params[:id]).present? 
 			@grupo = Grupo.find(params[:id])
 			@grupo.descricao = data_hash[:descricao]
 			@grupo.empresas.clear
 
 			array_empresas.each do |empresa|
-				@grupo.empresas << empresa
+				if !@grupo.empresas.include?(empresa)
+					@grupo.empresas << empresa
+				end
 			end
 		else
 			@grupo = Grupo.new(descricao: data_hash[:descricao], empresas: array_empresas, adm_id: current_user.settings(:last_empresa).edited.adm_id)

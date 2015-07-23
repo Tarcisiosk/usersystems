@@ -91,7 +91,9 @@ class SubgrupoController < ApplicationController
 			@subgrupo.empresas.clear
 
 			array_empresas.each do |empresa|
-				@subgrupo.empresas << empresa
+				if !@subgrupo.empresas.include?(empresa)
+					@subgrupo.empresas << empresa
+				end
 			end
 		else
 			@subgrupo = Subgrupo.new(descricao: data_hash[:descricao], grupo_id: data_hash[:grupo_id], empresas: array_empresas, adm_id: current_user.adm_id)

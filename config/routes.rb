@@ -20,14 +20,18 @@ Rails.application.routes.draw do
 	get 'grupos' => "grupo#index", as: :grupos
 	get 'grupos/new' => "grupo#new", as: :new_grupo
 	post 'grupos/new'  => 'grupo#create'
+	get 'grupos/get_json' => "grupo#send_json"
+	get 'grupos/get_empresa' => "grupo#returnEmpresas"
 	post 'grupos/save_angular' => 'grupo#save_angular'	
 	post 'grupos/save_angular/:id' => 'grupo#save_angular'
 	post 'grupos/save_settings' => 'grupo#save_settings'
 
 	get 'subgrupos' => "subgrupo#index", as: :sub_grupos
 	get 'subgrupos/new' => "subgrupo#new", as: :new_sub_grupo
-	get 'subgrupos/grupoempresa/:id' => "subgrupo#returnGrupoEmpresas"
 	post 'subgrupos/new'  => 'subgrupo#create'
+	get 'subgrupos/grupoempresa/:id' => "subgrupo#returnGrupoEmpresas"
+	get 'subgrupos/get_json' => "subgrupo#send_json"
+	get 'subgrupos/get_itens' => "subgrupo#returnItensUsuario"
 	post 'subgrupos/save_angular' => 'subgrupo#save_angular'	
 	post 'subgrupos/save_angular/:id' => 'subgrupo#save_angular'
 	post 'subgrupos/save_settings' => 'subgrupo#save_settings'
@@ -40,6 +44,8 @@ Rails.application.routes.draw do
 	get 'produtos/uniempresa' => "produto#returnEmpresasUnidade"
 	get 'produtos/empresagrupo' => "produto#returnEmpresasGrupo"
 	get 'produtos/subgrupogrupo' => "produto#returnSubGrupoGrupo"
+	get 'produtos/get_json' => "produto#send_json"
+	get 'produtos/get_empresa' => "produto#returnEmpresas"
 	post 'produtos/save_angular' => 'produto#save_angular'	
 	post 'produtos/save_angular/:id' => 'produto#save_angular'
 	post 'produtos/saveIcms' => 'produto#saveIcms'		
@@ -52,6 +58,10 @@ Rails.application.routes.draw do
 	get 'entidades'=> "entidade#index", as: :entidades
 	get 'entidades/new' => "entidade#new", as: :new_entidade
 	post 'entidades/new' => 'entidade#create'
+	get 'entidades/get_json' => "entidade#send_json"
+	get 'entidades/get_itens' => "entidade#returnItensUsuario"
+	get 'entidades/get_empresa' => "entidade#returnEmpresas"
+	get 'entidades/get_estado' => "entidade#returnAllEstados"
 	post 'entidades/save_settings' => 'entidade#save_settings'
 	post 'entidades/save_angular' => 'entidade#save_angular'
 	post 'entidades/save_angular/:id' => 'entidade#save_angular'
@@ -69,12 +79,15 @@ Rails.application.routes.draw do
 
 	get 'cfops' => "cfop#index", as: :cfops
 	get 'cfops/new' => "cfop#new", as: :new_cfop
+	get 'cfops/get_json' => "cfop#send_json"
 	post 'cfops/save_angular' => 'cfop#save_angular'	
 	post 'cfops/save_angular/:id' => 'cfop#save_angular'
 	post 'cfops/save_settings' => 'cfop#save_settings'
 
 	get 'unidades' => "unidade#index", as: :unidades
 	get 'unidades/new' => "unidade#new", as: :new_unidade
+	get 'unidades/get_json' => "unidade#send_json"
+	get 'unidades/get_empresa' => "unidade#returnEmpresas"
 	post 'unidades/save_angular' => 'unidade#save_angular'	
 	post 'unidades/save_angular/:id' => 'unidade#save_angular'
 	post 'unidades/save_settings' => 'unidade#save_settings'

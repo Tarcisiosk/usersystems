@@ -143,11 +143,15 @@ class EntidadeController < ApplicationController
 			@entidade.tipoentidades.clear
 
 			array_empresas.each do |empresa|
-				@entidade.empresas << empresa
+				if !@entidade.empresas.include?(empresa)
+					@entidade.empresas << empresa
+				end
 			end
 
 			array_tipos.each do |tipo|
-				@entidade.tipoentidades << tipo
+				if !@entidade.tipoentidades.include?(tipo)
+					@entidade.tipoentidades << tipo
+				end
 			end
 			
 		else

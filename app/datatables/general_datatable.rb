@@ -52,9 +52,9 @@ class GeneralDatatable < ApplicationController
 			links_array = Array.new
 			#usuario master ou adm
 			if @current_user.user_type == 0 || @current_user.user_type == 1
-				if record.try(:adm_id) == nil
+				if record.try(:adm_id)
 					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
-						if record.try(:empresas)
+						if record.try(:empresas) == nil
 							columns.each_with_index do |item, index|					
 								data_array[index] = record.send(item)
 							end

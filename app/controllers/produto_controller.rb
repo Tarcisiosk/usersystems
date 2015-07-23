@@ -119,9 +119,10 @@ class ProdutoController < ApplicationController
 				@produto.p_photo = data_hash[:p_photo]
 			end
 			@produto.empresas.clear
-
 			array_empresas.each do |empresa|
-				@produto.empresas << empresa
+				if !@produto.empresas.include?(empresa)
+					@produto.empresas << empresa
+				end
 			end
 		else
 			@produto = Produto.new(descricao: data_hash[:descricao], codigo: data_hash[:codigo], unidade: data_hash[:unidade], preco: data_hash[:preco], grupo_id: data_hash[:grupo_id], subgrupo_id: data_hash[:subgrupo_id] , p_photo: data_hash[:p_photo], empresas: array_empresas, adm_id: current_user.adm_id)

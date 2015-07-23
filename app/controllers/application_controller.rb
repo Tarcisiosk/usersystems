@@ -254,6 +254,56 @@ class ApplicationController < ActionController::Base
 		end		
 	end
 
+	#retorna eestados
+	def returnAllEstados
+		estados = Array.new
+		Estado.all.each do |item|
+			estados << item
+		end
+		render :json => estados.to_json.to_s.html_safe
+	end
+
+	//#retorna empresas
+	def returnEmpresas
+		empresas = Array.new
+		Empresa.all.each do |item|
+			if item.adm_id == current_user.settings(:last_empresa).edited.adm_id
+				empresas << item
+			end
+		end
+		render :json =>(empresas.sort!).to_json.to_s.html_safe
+	end
+
+	#retorna items que pertencem/sao acessiveis ao usuario
+	def returnItensUsuario
+		obj = instance_variable_get("@" + controller_name.downcase)
+		itensUser = Array.new
+		if controller_name == "subgrupo"
+			Grupo.all.each do |item|				
+				if item.empresas.include?(current_user.settings(:last_empresa).edited) && item.adm_id == current_user.settings(:last_empresa).edited.adm_id					
+					itensUser << item					
+				end
+			end
+		end
+		if controller_name == "entidade"
+			Tipoentidade.all.each do |item|
+				if current_user.user_type != 0
+					if item.adm_id == current_user.settings(:last_empresa).edited.adm_id || item.adm_id == current_user.id
+						itensUser << item
+					end
+				else
+					if item.adm_id == obj.adm_id || item.adm_id == current_user.settings(:last_empresa).edited.adm_id
+						itensUser << item
+					end
+				end
+			end
+		end
+		respond_to do |format|
+   			format.js { render :json => itensUser.to_json.to_s.html_safe }
+    		format.html { return itensUser }
+   		end
+	end
+
 	protected
 	#configurações das tables e dados enviados.
 	#colunas ativas
@@ -356,52 +406,6 @@ class ApplicationController < ActionController::Base
 		obj = instance_variable_get("@" + controller_name.downcase)
 	end
 	
-	#retorna eestados
-	def returnAllEstados
-		estados = Array.new
-		Estado.all.each do |item|
-			estados << item
-		end
-		return estados
-	end
-
-	//#retorna empresas
-	def returnEmpresas
-		empresas = Array.new
-		Empresa.all.each do |item|
-			if item.adm_id == current_user.settings(:last_empresa).edited.adm_id
-				empresas << item
-			end
-		end
-		return empresas.sort!
-	end
-
-	#retorna items que pertencem/sao acessiveis ao usuario
-	def returnItensUsuario
-		obj = instance_variable_get("@" + controller_name.downcase)
-		itensUser = Array.new
-		if controller_name == "subgrupo"
-			Grupo.all.each do |item|				
-				if item.empresas.include?(current_user.settings(:last_empresa).edited) && item.adm_id == current_user.settings(:last_empresa).edited.adm_id					
-					itensUser << item					
-				end
-			end
-		end
-		if controller_name == "entidade"
-			Tipoentidade.all.each do |item|
-				if current_user.user_type != 0
-					if item.adm_id == current_user.settings(:last_empresa).edited.adm_id || item.adm_id == current_user.id
-						itensUser << item
-					end
-				else
-					if item.adm_id == obj.adm_id || item.adm_id == current_user.settings(:last_empresa).edited.adm_id
-						itensUser << item
-					end
-				end
-			end
-		end
-		return itensUser
-	end
 
 	#retorna niveis de acesso
 	def returnNiveisAcesso

@@ -61,7 +61,9 @@ class UnidadeController < ApplicationController
 			@unidade.empresas.clear
 			
 			array_empresas.each do |empresa|
-				@unidade.empresas << empresa
+				if !@unidade.empresas.include?(empresa)
+					@unidade.empresas << empresa
+				end
 			end
 
 		else
