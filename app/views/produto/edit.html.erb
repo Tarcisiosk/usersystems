@@ -1,4 +1,4 @@
-<div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>'>
+<div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>'>
 
 	<div class="page-head">
 		<div class="page-content">
@@ -47,7 +47,7 @@
 								<div class="form-group">
 									<div class="checkbox-list">
 										<div ng-repeat="x in empresas_total" >
-											<input type="checkbox" ng-click="getValue($event, $index); getGrupos(); getUnidades()" ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
+											<input type="checkbox" ng-click="getValue($event, $index); getGrupos(); getUnidades(); " ng-disabled="x.id == empresa_atual" ng-checked="x.id == empresa_atual || data.empresas.indexOf(x.id) > -1" value='{{x.id}}' class="checkboxes"> {{ x.nome_fantasia }} </input>
 										</div>
 									</div>
 								</div>
@@ -77,11 +77,17 @@
 									</div>
 									<div class="portlet-body">
 										<ul class="nav nav-tabs">
-											<li class="active">
+												<li class="active">
 												<a id="tabgeral" href="#tab_1" data-toggle="tab"> Geral </a>										
 											</li>
 											<li>
-												<a id="tabicmsproduto" href="#tab_2" data-toggle="tab"> ICMS </a>
+												<a id="tabfiscal" href="#tab_2" data-toggle="tab"> Fiscal </a>
+											</li>
+											<li ng-show="data.personalizado">
+												<a id="tabimposto" href="#tab_3" data-toggle="tab"> Impostos </a>
+											</li>
+											<li ng-show="data.personalizado">
+												<a id="tabicmsproduto" href="#tab_4" data-toggle="tab"> ICMS </a>
 											</li>
 										</ul>
 										<div class="tab-content no-space">
@@ -109,14 +115,14 @@
 													<div class="col-md-6">
 														<label class="control-label ">Grupo</label><br>
 
-														<select ng-model="data.grupo_id" ng-change="getSubGrupos()" class='form-control' ng-options="g.id as g.descricao for g in grupo_opts">
+														<select id="grupoDrop" ng-model="data.grupo_id" ng-change="getSubGrupos()" class='select2-container form-control select2me' ng-options="g.id as g.descricao for g in grupo_opts">
 														</select>
 
 													</div>
 													<div class="col-md-6">
 														<label class="control-label ">Sub-Grupo</label><br>
 
-														<select ng-model="data.subgrupo_id" class='form-control' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
+														<select ng-model="data.subgrupo_id" class='select2-container form-control select2me' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
 														</select>
 
 													</div>
@@ -128,7 +134,7 @@
 												<div class="row">
 													<div class="col-md-6">
 														<label class="control-label ">Unidade</label>
-														<select ng-model="data.unidade" name="descricao"  class='form-control' ng-options="u.descricao as u.descricao for u in unidade_opts">
+														<select ng-model="data.unidade" name="descricao"  class='select2-container form-control select2me' ng-options="u.descricao as u.descricao for u in unidade_opts">
 														</select>
 													</div>
 													<div class="col-md-6">
@@ -142,6 +148,106 @@
 											</div>
 										</div>
 										<div class="tab-pane" id="tab_2">
+											<div class="form-group">
+												<label class="control-label ">Classificação Fiscal</label>
+												<select ng-model="data.classificacaofiscal_id" ng-disabled="data.personalizado" class='select2-container form-control select2me'>
+												    <option ng-repeat="cf in classfisc_opts" ng-selected="cf.id == data.classificacaofiscal_id" value="{{cf.id}}">{{cf.codigo_ncm}} - {{cf.descricao}}</option>
+												 </select><br><br>
+												<input type="checkbox" ng-model="data.personalizado"> Configurações Fiscais Personalizadas </input>
+											</div>
+										</div>
+										<div class="tab-pane" id="tab_3">
+											<div class="portlet-body">
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<h3 class="panel-title">PIS/COFINS</h3>
+													</div>
+													<div class="panel-body">													
+											 			<div class="row">
+											 				<div class="col-md-10">
+											 					<div class="form-group">
+											 						<label class="control-label">CST (PIS)</label>
+																	<select name="pis_cst_id" class="form-control" ng-model="data.pis_cst_id"
+																			ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in piscofinscsts">				
+																	</select>
+											 					</div>	
+											 				</div>
+											 				<div class="col-md-2">
+											 					<div class="form-group">
+											 						<label class="control-label">Alíquota (PIS)</label>
+											 						<div class="input-group">
+																		<input type="number" name="pis_aliquota" ng-model="data.pis_aliquota" class="form-control placeholder-no-fix"></input>
+																		<span class="input-group-addon">%</span>
+																	</div>									 						
+											 					</div>
+											 				</div>
+											 			</div>
+											 			<div class="row">
+											 				<div class="col-md-10">
+											 					<div class="form-group">
+											 						<label class="control-label">CST (COFINS)</label>
+																	<select name="cofins_cst_id" class="form-control" ng-model="data.cofins_cst_id"
+																			ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in piscofinscsts">											
+																	</select>
+											 					</div>	
+											 				</div>
+											 				<div class="col-md-2">
+											 					<div class="form-group">
+											 						<label class="control-label">Alíquota (COFINS)</label>
+											 						<div class="input-group">
+																		<input type="number" name="cofins_aliquota" ng-model="data.cofins_aliquota" class="form-control placeholder-no-fix"></input>
+																		<span class="input-group-addon">%</span>
+																	</div>									 						
+											 					</div>
+											 				</div>
+											 			</div>										 			
+													</div>
+												</div>
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<h3 class="panel-title"> Imposto Sobre a Importação de Produtos Estrangeiros (II)</h3>
+													</div>
+													<div class="panel-body">
+														<div class="col-md-2">
+												 			<div class="form-group">
+												 				<label class="control-label">Alíquota (II)</label>
+												 				<div class="input-group">
+																	<input type="number" name="ii_aliquota" ng-model="data.ii_aliquota" class="form-control placeholder-no-fix"></input>
+																	<span class="input-group-addon">%</span>
+																</div>									 						
+												 			</div>
+											 			</div>
+													</div>
+												</div>	
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<h3 class="panel-title">Imposto Sobre Produtos Industrializados (IPI)</h3>
+													</div>
+													<div class="panel-body">
+											 			<div class="row">
+											 				<div class="col-md-10">
+											 					<div class="form-group">
+											 						<label class="control-label">CST (IPI)</label>
+																	<select name="ipi_cst_id" class="form-control" ng-model="data.ipi_cst_id"
+																			ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in ipicsts">				
+																	</select>
+											 					</div>	
+											 				</div>
+											 				<div class="col-md-2">
+											 					<div class="form-group">
+											 						<label class="control-label">Alíquota (IPI)</label>
+											 						<div class="input-group">
+																		<input type="number" name="ipi_aliquota" ng-model="data.ipi_aliquota" class="form-control placeholder-no-fix"></input>
+																		<span class="input-group-addon">%</span>
+																	</div>									 						
+											 					</div>
+											 				</div>
+											 			</div>
+													</div>
+												</div>												
+											</div>
+										</div>
+										<div class="tab-pane" id="tab_4">
 											<table class="table table-striped table-bordered table-hover">
 												<thead>
 													<tr>

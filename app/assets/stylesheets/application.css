@@ -21,6 +21,7 @@
  *= require profile
  *= require tasks
  *= require select2
+ *= require select2.full
  *= require jquery.typeahead
  *= require dataTables.scroller.min
  *= require dataTables.colReorder.min

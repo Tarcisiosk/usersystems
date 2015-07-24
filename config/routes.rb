@@ -46,6 +46,7 @@ Rails.application.routes.draw do
 	get 'produtos/subgrupogrupo' => "produto#returnSubGrupoGrupo"
 	get 'produtos/get_json' => "produto#send_json"
 	get 'produtos/get_empresa' => "produto#returnEmpresas"
+	get 'produtos/get_class' => "produto#returnClassFisc"
 	post 'produtos/save_angular' => 'produto#save_angular'	
 	post 'produtos/save_angular/:id' => 'produto#save_angular'
 	post 'produtos/saveIcms' => 'produto#saveIcms'		

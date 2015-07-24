@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717175938) do
+ActiveRecord::Schema.define(version: 20150723175647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -252,8 +252,8 @@ ActiveRecord::Schema.define(version: 20150717175938) do
     t.string   "codigo"
     t.float    "preco"
     t.string   "unidade"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.integer  "adm_id"
     t.integer  "grupo_id"
     t.integer  "subgrupo_id"
@@ -261,6 +261,15 @@ ActiveRecord::Schema.define(version: 20150717175938) do
     t.string   "p_photo_content_type"
     t.integer  "p_photo_file_size"
     t.datetime "p_photo_updated_at"
+    t.boolean  "personalizado"
+    t.integer  "classificacaofiscal_id"
+    t.integer  "pis_cst_id"
+    t.float    "pis_aliquota"
+    t.integer  "cofins_cst_id"
+    t.float    "cofins_aliquota"
+    t.float    "ii_aliquota"
+    t.integer  "ipi_cst_id"
+    t.float    "ipi_aliquota"
   end
 
   create_table "series", force: :cascade do |t|

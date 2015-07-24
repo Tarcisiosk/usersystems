@@ -34,6 +34,8 @@
 //= require bootstrap-select.min
 //= require bootstrap-editable
 //= require select2.min
+//= require select2
+
 //= require jquery.multi-select
 //= require datatable
 //= require jquery.dataTables.min

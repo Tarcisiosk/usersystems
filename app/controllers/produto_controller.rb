@@ -24,6 +24,8 @@ class ProdutoController < ApplicationController
 	def new
 		@produto = Produto.new
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
+		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao")	
+		@ipicst = Ipicst.all.select("id","codigo","descricao")
 		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
 		@icmsproduto = Array.new
 		@estado.each do |est|
@@ -31,7 +33,7 @@ class ProdutoController < ApplicationController
 			aliquota: 0, icmsst: false, mva: 0, reducaomva: false)
 		end	
 
-		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => '', :grupo_id => '', :subgrupo_id => '', :empresas => [], :p_photo => ''}
+		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => '', :grupo_id => '', :subgrupo_id => '', :empresas => [], :p_photo => '', :pis_cst_id => '', :pis_aliquota => '', :cofins_cst_id => '', :cofins_aliquota => '', :ii_aliquota => '', :ipi_cst_id => '', :ipi_aliquota => '', :classificacaofiscal_id => '', :personalizado => false }
 
 	end
 
@@ -50,20 +52,21 @@ class ProdutoController < ApplicationController
 
 	def edit
 		@produto = Produto.find(params[:id]) 
-
+		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao")
+		@ipicst = Ipicst.all.select("id","codigo","descricao")
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")
 		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
 		@icmsproduto = Array.new
 		@estado.each do |est|			
 			@icf = Icmsproduto.where("produto_id = #{@produto.id} and estado_id = #{est.id}").first			
 			if @icf.nil?
-				@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0, aliquota: 0, icmsst: false, mva: 0,reducaomva: false)
+				@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0, aliquota: 0, icmsst: false, mva: 0, reducaomva: false)
 			else
 				@icmsproduto << @icf
 			end	
 		end			
 
-		@@angularActions = {:descricao => @produto.descricao, :codigo => @produto.codigo, :unidade => @produto.unidade, :preco => @produto.preco, :grupo_id => @produto.grupo_id, :subgrupo_id => @produto.subgrupo_id, :empresas => @produto.empresas.ids, :p_photo=> @produto.p_photo}
+		@@angularActions = {:descricao => @produto.descricao, :codigo => @produto.codigo, :unidade => @produto.unidade, :preco => @produto.preco, :grupo_id => @produto.grupo_id, :subgrupo_id => @produto.subgrupo_id, :empresas => @produto.empresas.ids, :p_photo=> @produto.p_photo, :classificacaofiscal_id => @produto.classificacaofiscal_id, :pis_cst_id => @produto.pis_cst_id, :pis_aliquota => @produto.pis_aliquota, :cofins_cst_id => @produto.cofins_cst_id, :cofins_aliquota => @produto.cofins_aliquota, :ii_aliquota => @produto.ii_aliquota, :ipi_cst_id => @produto.ipi_cst_id, :ipi_aliquota => @produto.ipi_aliquota, :personalizado => @produto.personalizado }
 
 	end
 
@@ -114,6 +117,15 @@ class ProdutoController < ApplicationController
 			@produto.preco = data_hash[:preco]
 			@produto.grupo_id = data_hash[:grupo_id]
 			@produto.subgrupo_id = data_hash[:subgrupo_id]
+			@produto.personalizado = data_hash[:personalizado]
+			@produto.pis_cst_id = data_hash[:pis_cst_id]
+ 			@produto.pis_aliquota = data_hash[:pis_aliquota]
+			@produto.cofins_cst_id = data_hash[:cofins_cst_id]
+			@produto.cofins_aliquota = data_hash[:cofins_aliquota]
+			@produto.ii_aliquota = data_hash[:ii_aliquota]
+			@produto.ipi_cst_id = data_hash[:ipi_cst_id]
+			@produto.ipi_aliquota = data_hash[:ipi_aliquota]
+			@produto.classificacaofiscal_id = data_hash[:classificacaofiscal_id]
 
 			if data_hash[:p_photo] != @produto.p_photo.to_s
 				@produto.p_photo = data_hash[:p_photo]
@@ -125,7 +137,7 @@ class ProdutoController < ApplicationController
 				end
 			end
 		else
-			@produto = Produto.new(descricao: data_hash[:descricao], codigo: data_hash[:codigo], unidade: data_hash[:unidade], preco: data_hash[:preco], grupo_id: data_hash[:grupo_id], subgrupo_id: data_hash[:subgrupo_id] , p_photo: data_hash[:p_photo], empresas: array_empresas, adm_id: current_user.adm_id)
+			@produto = Produto.new(descricao: data_hash[:descricao], codigo: data_hash[:codigo], unidade: data_hash[:unidade], preco: data_hash[:preco], grupo_id: data_hash[:grupo_id], subgrupo_id: data_hash[:subgrupo_id] , p_photo: data_hash[:p_photo], empresas: array_empresas, personalizado: data_hash[:personalizado], pis_cst_id: data_hash[:pis_cst_id], pis_aliquota: data_hash[:pis_aliquota], cofins_cst_id: data_hash[:cofins_cst_id], cofins_aliquota: data_hash[:cofins_aliquota], ii_aliquota: data_hash[:ii_aliquota], ipi_cst_id: data_hash[:ipi_cst_id], ipi_aliquota: data_hash[:ipi_aliquota], classificacaofiscal_id: data_hash[:classificacaofiscal_id], adm_id: current_user.adm_id)
 		end
 	
 		@produto.save
@@ -182,23 +194,39 @@ class ProdutoController < ApplicationController
 	end
 
 	def returnEmpresasGrupo
-		empresas_array =  Array.new
-		grupo_array = Array.new
+		grupo_opts = Array.new
+		empresas_array = Array.new
+		
+		params[:empresas].each do |emp|
+			empresas_array << Empresa.find(emp)
+		end
 
-		params[:empresas].each do |item|
-			empresas_array << Empresa.find(item)	
-		end	
+		empresas_array.uniq!
 
-		Grupo.all.each do |grupo|
-			empresas_array.each do |empresa|
-				if grupo.adm_id == current_user.settings(:last_empresa).edited.adm_id && grupo.empresas.include?(empresa) 
-					unless grupo_array.include?(grupo)
-						grupo_array << grupo
+		empresas_array.each do |emp|
+			empresas_array.each do |emp2|
+				if empresas_array.length > 1
+					if emp != emp2
+						grupo_opts = (emp.grupos.all & emp2.grupos.all)
 					end
-				end	
+				else
+					grupo_opts = emp.grupos
+				end
 			end
 		end
- 		render :json => grupo_array.to_json.to_s.html_safe
+
+		grupo_opts.each do |grupo|
+			empresas_array.each do |empresa|
+				if !grupo.empresas.include?(empresa)
+					grupo_opts = []
+				end
+			end
+		end
+
+		grupo_opts.uniq
+
+
+ 		render :json => grupo_opts.to_json.to_s.html_safe
 	end
 
 	def returnSubGrupoGrupo
@@ -213,7 +241,7 @@ class ProdutoController < ApplicationController
 	end
 	
 	def produto_params
-		params.require(:produto).permit(:descricao, :codigo, :unidade, :preco, :p_photo, :empresas, :grupo_id, :subgrupo_id, :adm_id)
+		params.require(:produto).permit(:descricao, :codigo, :unidade, :preco, :p_photo, :empresas, :grupo_id, :subgrupo_id, :personalizado, :pis_cst_id, :pis_aliquota, :cofins_cst_id, :cofins_aliquota, :ii_aliquota, :ipi_cst_id, :ipi_aliquota,:adm_id )
 	end
 
 	def produto_actions

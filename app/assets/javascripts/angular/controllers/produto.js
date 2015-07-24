@@ -1,19 +1,19 @@
 myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 {
-
 	$scope.data = [];
 	$scope.mensagens = [];				
 	$scope.grupo_opts = [];
 	$scope.subgrupo_opts = [];
-	$scope.unidade_opts = [];			
+	$scope.unidade_opts = [];
+	$scope.classfisc_opts = [];			
 	$scope.empresas_total = [];
+	$scope.piscofinscsts = JSON.parse($('#EditingObjId').attr("pis"));
+	$scope.ipicsts = JSON.parse($('#EditingObjId').attr("ipi"));
 	$scope.empresa_atual = $('#EditingObjId').attr("empresa_atual");
 	$scope.modalidadebcicmssts = JSON.parse($('#EditingObjId').attr("modalidade"));
 	$scope.icmsproduto = JSON.parse($('#EditingObjId').attr("icmsproduto"));
 	$scope.estados = JSON.parse($('#EditingObjId').attr("estados"));
 	$scope.icmsCFAtual = {};
-
-	console.log($scope.icmsproduto);
 
 	$scope.getData = function() 
 	{
@@ -40,15 +40,14 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 			}
 		});
 	}
-	
+
 	$scope.getData();
 	$scope.getEmpresas();
-	
 	if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
 	{
 		$scope.data.empresas.push($scope.empresa_atual);
 	}
-
+	
 	$scope.getUnidades = function()
 	{
 		$.ajax({
@@ -65,6 +64,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 						$scope.data.unidade = $scope.unidade_opts[0].descricao;
 					}
 				}
+
 			}
 		});
 	}
@@ -84,6 +84,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 					$scope.data.grupo_id = $scope.grupo_opts[0].id;
 				}
 				$scope.getSubGrupos();
+
 			}
 		});
 	}
@@ -106,9 +107,23 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 		});
 	}
 
+	$scope.getClassFisc = function()
+	{
+		$.ajax({
+			async: false,
+			method: 'get',
+			url: '/produtos/get_class/',
+			success: function(data)
+			{
+				$scope.classfisc_opts = data;
+			}
+		});
+	}
+
 	$scope.getUnidades();
 	$scope.getGrupos();
 	$scope.getSubGrupos();
+	$scope.getClassFisc();
 
 	$scope.save = function() 
 	{   	
@@ -135,7 +150,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 
 	$scope.setImage = function()
 	{
-		console.log($scope.data.p_photo);
+		console.log($scope.data);
 	}
 
 
@@ -153,6 +168,8 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 				$scope.data.empresas.splice(indexArray, 1);
 			}
 		}
+				//$("#grupoDrop").val($scope.data.grupo_id.toString()).trigger("change");
+
 	}
 
 	if($scope.data.descricao == '')
@@ -173,7 +190,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 		var reader = new FileReader();
 		reader.onload = function(file) {
 			var img = new Image();
-			console.log(file);
+			//console.log(file);
 			img.src = file.target.result;
 			$('#target').html(img);
 		}

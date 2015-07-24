@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
 	helper_method :returnItensUsuario
 	helper_method :returnNiveisAcesso
 	helper_method :returnAllEstados
+	helper_method :returnClassFisc
 	helper_method :returnEmpresas
 
 	@@checked_rows = []
@@ -51,6 +52,7 @@ class ApplicationController < ActionController::Base
 														 	:grupos =>{:label => 'Grupos', :path => '/grupos', :acao =>'grupo#index'}, 
 														 	:subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'},
 	 														:unidades =>{:label => 'Unidades', :path => '/unidades', :acao =>'unidade#index'},
+										 				  	:produtos => {:label=> 'Produtos', :path => '/produtos', :acao =>'produto#index'}, 
 														 	:classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}}, 
 					   
 					   :configuracoes => {:label=>'Configurações', 
@@ -60,7 +62,6 @@ class ApplicationController < ActionController::Base
 											 				  	:nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'},
 											 				  	:serie => {:label=> 'Séries', :path => '/series', :acao =>'serie#index'},
 										 				        :tipomovimentacao => {:label=> 'Tipos de Mov.', :path => '/tipomovimentacaos', :acao =>'tipomovimentacao#index'}, 
-											 				  	:produtos => {:label=> 'Produtos', :path => '/produtos', :acao =>'produto#index'}, 
 											 				  	:usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
 				       
 				       :mainadministracao => {:label=>'Administração', 
@@ -241,6 +242,7 @@ class ApplicationController < ActionController::Base
 	        format.js { render nothing: true }
    		end
 	end
+
 	def redirect_login_if_user_nil
 		if current_user.nil?
 			redirect_to root_path
@@ -254,6 +256,17 @@ class ApplicationController < ActionController::Base
 		end		
 	end
 
+	#retorna classificação Fiscaç
+	def returnClassFisc
+		classFisc = Array.new
+		Classificacaofiscal.all.each do |cf|
+			if cf.adm_id == current_user.adm_id
+				classFisc << cf
+			end
+		end
+		render :json =>(classFisc.sort_by{|e| e[:descricao]}).to_json.to_s.html_safe
+	end
+
 	#retorna eestados
 	def returnAllEstados
 		estados = Array.new
@@ -263,7 +276,7 @@ class ApplicationController < ActionController::Base
 		render :json => estados.to_json.to_s.html_safe
 	end
 
-	//#retorna empresas
+	#retorna empresas
 	def returnEmpresas
 		empresas = Array.new
 		Empresa.all.each do |item|
@@ -271,7 +284,7 @@ class ApplicationController < ActionController::Base
 				empresas << item
 			end
 		end
-		render :json =>(empresas.sort!).to_json.to_s.html_safe
+		render :json =>(empresas.sort_by{|e| e[:nome_fantasia]}).to_json.to_s.html_safe
 	end
 
 	#retorna items que pertencem/sao acessiveis ao usuario
