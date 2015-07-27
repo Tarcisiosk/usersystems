@@ -26,6 +26,8 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 				$scope.data = data;
 			}
 		});
+		console.log($scope.data);
+
 	}
 
 	$scope.getEmpresas = function() 
@@ -87,6 +89,8 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 
 			}
 		});
+		console.log($scope.data);
+
 	}
 	
 	$scope.getSubGrupos = function()
@@ -105,6 +109,8 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 				}
 			}
 		});
+		console.log($scope.data);
+
 	}
 
 	$scope.getClassFisc = function()
@@ -124,7 +130,6 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 	$scope.getGrupos();
 	$scope.getSubGrupos();
 	$scope.getClassFisc();
-
 	$scope.save = function() 
 	{   	
 		Metronic.startPageLoading({animate: true});

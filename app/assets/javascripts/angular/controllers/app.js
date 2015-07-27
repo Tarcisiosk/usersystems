@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp',[]); 
+var myApp = angular.module('myApp',['ngSanitize', 'ui.select']); 
 
 //diretiva para somente numeros
 myApp.directive('numbersOnly', function(){

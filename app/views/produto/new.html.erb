@@ -1,4 +1,5 @@
 <div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>'>
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css">
 
 	<div class="page-head">
 		<div class="page-content">
@@ -114,15 +115,27 @@
 													<div class="col-md-6">
 														<label class="control-label ">Grupo</label><br>
 
-														<select ng-model="data.grupo_id" ng-change="getSubGrupos()" id="G" class='select2-container form-control select2me' ng-options="g.id as g.descricao for g in grupo_opts">
-														</select>
+														<!--<select id="grupoDrop" ng-model="data.grupo_id" ng-change="getSubGrupos()" class='select2-container form-control select2me' ng-options="g.id as g.descricao for g in grupo_opts">
+														</select> -->
+														<ui-select ng-model="data.grupo_id"  theme="bootstrap" ng-change="getSubGrupos()">
+												            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.descricao}}</ui-select-match>
+												            <ui-select-choices repeat="g.id as g in grupo_opts | filter: $select.search">
+												              <span ng-bind-html="g.descricao "></span>
+												            </ui-select-choices>
+												        </ui-select>
 
 													</div>
 													<div class="col-md-6">
 														<label class="control-label ">Sub-Grupo</label><br>
 
-														<select ng-model="data.subgrupo_id" id="SG" class='select2-container form-control select2me' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
-														</select>
+														<!--<select ng-model="data.subgrupo_id" class='select2-container form-control select2me' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
+														</select>-->
+														<ui-select ng-model="data.subgrupo_id" theme="bootstrap">
+												            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.descricao}}</ui-select-match>
+												            <ui-select-choices repeat="sg.id as sg in subgrupo_opts | filter: $select.search">
+												              <span ng-bind-html="sg.descricao "></span>
+												            </ui-select-choices>
+												        </ui-select>
 
 													</div>
 												</div>

@@ -13,15 +13,15 @@
  *= require_self 
  *= require font-awesome.min
  *= require simple-line-icons.min
- *= require bootstrap.min
  *= require uniform.default
+ *= require select
+ *= require bootstrap.min
  *= require bootstrap-switch.min
  *= require bootstrap-fileinput
  *= require bootstrap-editable
  *= require profile
  *= require tasks
  *= require select2
- *= require select2.full
  *= require jquery.typeahead
  *= require dataTables.scroller.min
  *= require dataTables.colReorder.min

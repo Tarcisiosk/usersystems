@@ -1,5 +1,4 @@
 <div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>'>
-
 	<div class="page-head">
 		<div class="page-content">
 			<div class="container">
@@ -26,7 +25,9 @@
 							<center>
 								<div class="fileinput fileinput-new " data-provides="fileinput">
 									<div class="fileinput-preview thumbnail" data-trigger="fileinput" id="target" style="width: 170px; height: 170px;">
-										<%= image_tag p_photo_path(@produto), :height =>'170px;', :width =>'170px;' %>									
+										<%if @produto.p_photo.present?%>
+											<%= image_tag p_photo_path(@produto), :height =>'170px;', :width =>'170px;' %>
+										<%end%>									
 									</div>
 									<div>
 										<span class="btn btn-circle blue btn-file"> <i class="fa fa-upload"></i> 
@@ -115,15 +116,27 @@
 													<div class="col-md-6">
 														<label class="control-label ">Grupo</label><br>
 
-														<select id="grupoDrop" ng-model="data.grupo_id" ng-change="getSubGrupos()" class='select2-container form-control select2me' ng-options="g.id as g.descricao for g in grupo_opts">
-														</select>
+														<!--<select id="grupoDrop" ng-model="data.grupo_id" ng-change="getSubGrupos()" class='select2-container form-control select2me' ng-options="g.id as g.descricao for g in grupo_opts">
+														</select> -->
+														<ui-select ng-model="data.grupo_id"  theme="bootstrap" ng-change="getSubGrupos()">
+												            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.descricao}}</ui-select-match>
+												            <ui-select-choices repeat="g.id as g in grupo_opts | filter: $select.search">
+												              <span ng-bind-html="g.descricao "></span>
+												            </ui-select-choices>
+												        </ui-select>
 
 													</div>
 													<div class="col-md-6">
 														<label class="control-label ">Sub-Grupo</label><br>
 
-														<select ng-model="data.subgrupo_id" class='select2-container form-control select2me' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
-														</select>
+														<!--<select ng-model="data.subgrupo_id" class='select2-container form-control select2me' ng-options="sg.id as sg.descricao for sg in subgrupo_opts">
+														</select>-->
+														<ui-select ng-model="data.subgrupo_id" theme="bootstrap">
+												            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.descricao}}</ui-select-match>
+												            <ui-select-choices repeat="sg.id as sg in subgrupo_opts | filter: $select.search">
+												              <span ng-bind-html="sg.descricao "></span>
+												            </ui-select-choices>
+												        </ui-select>
 
 													</div>
 												</div>
@@ -134,8 +147,16 @@
 												<div class="row">
 													<div class="col-md-6">
 														<label class="control-label ">Unidade</label>
-														<select ng-model="data.unidade" name="descricao"  class='select2-container form-control select2me' ng-options="u.descricao as u.descricao for u in unidade_opts">
+														<select ng-model="data.unidade" name="descricao"  class=' form-control select2me' ng-options="u.descricao as u.descricao for u in unidade_opts">
 														</select>
+
+														<!--<ui-select ng-model="data.unidade" theme="bootstrap">
+												            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.descricao}}</ui-select-match>
+												            <ui-select-choices repeat="u.descricao as u in unidade_opts | filter: $select.search">
+												              <span ng-bind-html="u.descricao "></span>
+												            </ui-select-choices>
+												        </ui-select>-->
+
 													</div>
 													<div class="col-md-6">
 														<label class="control-label ">Preço</label>
