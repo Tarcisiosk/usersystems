@@ -64,6 +64,10 @@ class ApplicationController < ActionController::Base
 										 				        :tipomovimentacao => {:label=> 'Tipos de Mov.', :path => '/tipomovimentacaos', :acao =>'tipomovimentacao#index'}, 
 											 				  	:usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
 				       
+				       :mainmovimentacoes => {:label=>'Movimentações', 
+				       						  :cadastros =>{:label=>'Movimentações', 
+				       						  				:estado =>{:label =>'Movimentos', :path=>'/movimentoms', :acao=>'movimentom#index'}}},
+
 				       :mainadministracao => {:label=>'Administração', 
 				       						  :cadastros =>{:label=>'Cadastros', 
 				       						  				:estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'},

@@ -1,6 +1,5 @@
 <div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>'>
-	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css">
-
+		
 	<div class="page-head">
 		<div class="page-content">
 			<div class="container">
@@ -153,7 +152,7 @@
 														<label class="control-label ">Preço</label>
 														<div class="input-group">
 															<span class="input-group-addon"> R$ </span>
-															<input type="text" name="descricao" ng-model='data.preco' class='form-control placeholder-no-fix'> 
+															<input type="text" name="money" ng-model='data.preco' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 												</div>

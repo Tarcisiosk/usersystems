@@ -120,6 +120,17 @@ Rails.application.routes.draw do
 	post 'tipomovimentacaos/save' => 'tipomovimentacao#save'
 	post 'tipomovimentacaos/save_settings' => 'tipomovimentacao#save_settings'
 
+
+	get 'movimentoms' => "movimentom#index", as: :movimentoms
+	get 'movimentoms/new' => "movimentom#new", as: :new_movimentom
+	post 'movimentoms/new'  => 'movimentom#create'
+	get 'movimentoms/get_json' => "movimentom#send_json"
+	post 'movimentoms/save_angular' => 'movimentom#save_angular'	
+	post 'movimentoms/save_angular/:id' => 'movimentom#save_angular'
+	post 'movimentoms/save_settings' => 'movimentom#save_settings'
+	get 'movimentoms/get_entidades' => "movimentom#returnEntidadeMovimentos"
+	get 'movimentoms/get_produtos' => "movimentom#returnProdutosMovimentos"
+
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	
 	get "index" => 'index#index', as: :index
@@ -142,6 +153,7 @@ Rails.application.routes.draw do
 	resources :unidade, only: [:edit, :destroy, :new] 
 	resources :serie, only: [:edit, :update, :new, :create, :destroy]
 	resources :tipomovimentacao, only: [:edit, :update, :new, :create, :destroy]
+	resources :movimentom, only: [:edit, :update, :new, :create, :destroy]
 
 
 

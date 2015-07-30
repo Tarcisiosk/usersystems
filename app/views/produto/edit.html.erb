@@ -1,4 +1,6 @@
 <div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>'>
+	
+	
 	<div class="page-head">
 		<div class="page-content">
 			<div class="container">
@@ -78,17 +80,17 @@
 									</div>
 									<div class="portlet-body">
 										<ul class="nav nav-tabs">
-												<li class="active">
-												<a id="tabgeral" href="#tab_1" data-toggle="tab"> Geral </a>										
+											<li class="active">
+												<a id="tabgeral" href="#tab_1" ncheck="true" data-toggle="tab"> Geral </a>										
 											</li>
 											<li>
-												<a id="tabfiscal" href="#tab_2" data-toggle="tab"> Fiscal </a>
+												<a id="tabfiscal" href="#tab_2" ncheck="true" data-toggle="tab"> Fiscal </a>
 											</li>
 											<li ng-show="data.personalizado">
-												<a id="tabimposto" href="#tab_3" data-toggle="tab"> Impostos </a>
+												<a id="tabimposto" href="#tab_3" ncheck="true" data-toggle="tab"> Impostos </a>
 											</li>
 											<li ng-show="data.personalizado">
-												<a id="tabicmsproduto" href="#tab_4" data-toggle="tab"> ICMS </a>
+												<a id="tabicmsproduto" href="#tab_4" ncheck="true" data-toggle="tab"> ICMS </a>
 											</li>
 										</ul>
 										<div class="tab-content no-space">
@@ -162,7 +164,7 @@
 														<label class="control-label ">Preço</label>
 														<div class="input-group">
 															<span class="input-group-addon"> R$ </span>
-															<input type="text" name="descricao" ng-model='data.preco' class='form-control placeholder-no-fix'> 
+															<input type="text" name="money" ng-model='data.preco' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 												</div>

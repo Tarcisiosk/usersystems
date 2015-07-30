@@ -1,0 +1,259 @@
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Movimentos", movimentoms_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						Novo
+					</li>
+				</ul>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="portlet light">
+							<div class="portlet-title tabbable-line">
+								<div class="caption caption-md">
+									<i class="icon-globe theme-font hide"></i>
+										<span class="caption-subject font-blue-madison bold uppercase">Novo Movimento</span>
+									<i class="fa fa-plus"></i>
+								</div>
+								<div class="actions btn-set">
+									<%= link_to "Voltar", movimentoms_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
+									<button ng-click="save()" class="btn green-meadow btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
+								</div>
+							</div>
+							<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
+								<ul ng-repeat="m in mensagens">
+									 <li>{{m}}</li>
+								</ul>
+							</div>
+							<form name="form_1" class="css-form" novalidate>
+								<div class="portlet-body">
+									<div class="row">
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="control-label ">Data</label>
+
+												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+												<input type="text" name="data" ng-model='data.data' id="date" class="form-control form-control-inline input-medium date-picker" size="16">
+												<!--<span class="help-block"> Select date </span>-->
+											</div>
+										</div>
+										<div class="col-md-9">
+
+											<div class="form-group">
+												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+												<label class="control-label ">Cliente</label>
+												<ui-select autofocus ng-model="data.entidade_id"  theme="bootstrap">
+										            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>
+										            <ui-select-choices repeat="e.id as e in entidade_opts | filter: $select.search">
+										              <span ng-bind-html="e.nome_fantasia "></span>
+										            </ui-select-choices>
+										        </ui-select>
+											</div>
+										</div>
+									</div>
+
+									<div class ="row">
+										<div class="col-md-12">
+											<div class="portlet">
+												<div class="portlet-title">
+													<div class="caption">
+														Itens
+													</div>
+													<div class="actions">
+														<a class="btn btn-default btn-sm" ncheck href="#portlet-config" ng-click="setFocus()"data-toggle="modal">
+														<i class="fa fa-plus"></i> Adicionar </a>
+													</div>
+												</div>
+												<div class="portlet-body">
+													<div class="table-container">
+														<table class="table table-striped table-bordered table-hover" id="datatable_orders">
+															<thead>
+																<tr role="row">
+																	<th width="40%">
+																		Produto
+																	</th>
+																	<th width="15%">
+																		Preço
+																	</th>
+																	<th width="15%">
+																		Quantidade
+																	</th>
+																	<th width="20%">
+																		Total
+																	</th>
+																	<th width="10%">
+																		Ações
+																	</th>
+																</tr>
+															</thead>
+															<tbody >
+																<tr ng-repeat="p in produtos_choosen">
+																	<td>{{p.descricao}}</td>
+																	<td>{{p.preco }}</td>
+																	<td>{{p.qtde }}</td>
+																	<td>{{p.qtde * p.preco}} </td>
+																	<td> 
+																		<a ncheck href="#portlet-config_edit" ng-click="edit_produto($index)" data-toggle="modal" class="btn yellow btn-sm"> <i class="fa fa-pencil"></i> </a>
+																		<a ng-click="delete_produto($index)" class="btn red btn-sm"><i class="fa fa-trash-o"></i></a>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="well">
+												<div class="row static-info ">
+													<div class="col-md-7 name">
+														 Quantidade de Itens:
+													</div>
+													<div class="col-md-5 value">
+														{{total.qtde}}
+													</div>
+												</div>
+												<div class="row static-info ">
+													<div class="col-md-7 name">
+														 Valor total:
+													</div>
+													<div class="col-md-5 value">
+														{{total.valor}}
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+
+		<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" id="end_form">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h4 class="modal-title">Adicionar produto</h4>
+					</div>
+					<div class="modal-body" >
+						<div class="row">
+							<div class="col-md-7">
+								<div class="form-group">
+									<div class="typeahead-container">
+										<div class="typeahead-field" id='tipo'>
+											<label>Produto</label>
+											<ui-select ng-model="produto_selected" on-select="setProdutoSelected($item)" theme="bootstrap">
+									            <ui-select-match allow-clear="true">{{$select.selected.descricao}}</ui-select-match>
+									            <ui-select-choices repeat="p in produto_opts | filter: $select.search" refresh="refreshProdutos($select.search)" refresh-delay="0">
+									              	<div ng-bind-html="p.descricao | highlight: $select.search"></div>
+									              	 <small>
+									              	 	<!--<img src='/produtos/showImg/{{p.id}}' width="30px;" height="30px;" > -->
+												        Cod: {{p.codigo}}
+												        Preço: {{p.preco}}
+												        Un: {{p.unidade}}
+												    </small>
+									            </ui-select-choices>
+									        </ui-select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label class="control-label ">Quantidade</label>
+									<div class="input-group">
+										<!--<span class="input-group-addon"><i class="fa fa-cubes"></i></span>-->
+										<input type="text" name="descricao" ng-model='produto_selected.qtde' class='form-control placeholder-no-fix'> 
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="control-label ">Preço</label>
+									<div class="input-group">
+										<span class="input-group-addon"> R$ </span>
+										<input type="text" name="descricao" ng-model='produto_selected.preco' class='form-control placeholder-no-fix'> 
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div class="modal-footer">
+						<button type="button" ng-disabled="!produto_selected.qtde || produto_selected.qtde <= 0 || produto_selected.preco <= 0 || !produto_selected.descricao" ng-click="addProduto(produto_selected); setTotal();" class="btn blue" data-dismiss="modal">Adicionar</button>
+						<button type="button"  ng-click="set_novo()" class="btn default" data-dismiss="modal">Cancelar</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div> 
+		<div class="modal fade" id="portlet-config_edit" data-backdrop="static" data-keyboard="false" tabindex="-2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" id="end_form">
+					<div class="modal-header">
+						<h4 class="modal-title">Editar produto</h4>
+					</div>
+					<div class="modal-body" >
+						<div class="row">
+							<div class="col-md-7">
+								<div class="form-group">
+									<div class="typeahead-container">
+										<div class="typeahead-field" id='tipo'>
+											<label>Produto</label>
+											<input type="text" name="descricao" disabled="true" ng-model='produto_selected.descricao' class='form-control placeholder-no-fix'> 
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label class="control-label ">Quantidade</label>
+									<div class="input-group">
+										<!--<span class="input-group-addon"><i class="fa fa-cubes"></i></span>-->
+										<input type="text" name="descricao" ng-model='produto_selected.qtde' class='form-control placeholder-no-fix'> 
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="control-label ">Preço</label>
+									<div class="input-group">
+										<span class="input-group-addon"> R$ </span>
+										<input type="text" name="descricao" ng-model='produto_selected.preco' class='form-control placeholder-no-fix'> 
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div class="modal-footer">
+						<button type="button" ng-disabled="!produto_selected.qtde || produto_selected.qtde <= 0 || produto_selected.preco <= 0 || !produto_selected.descricao" ng-click="setTotal();" class="btn blue" data-dismiss="modal">Salvar</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div> 
+		<!-- END PAGE CONTENT -->
+	</div>
+</div>  

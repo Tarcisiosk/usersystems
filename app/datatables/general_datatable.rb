@@ -23,6 +23,12 @@ class GeneralDatatable < ApplicationController
 					else
 						subData2 = item
 					end
+				elsif @klass.name == "Movimentom"
+					if subitem.is_a?(Integer)
+						subData2[subindex] = Entidade.find_by(id: subitem).nome_fantasia
+					else
+						subData2 = item
+					end
 				else
 					subData2 = item
 					if !!subitem == subitem && subitem == true 

@@ -28,6 +28,8 @@ class User < AbstractRecord
 			s.key :columns_unidade, :defaults => {:col => returnDefaults(Unidade::TOTAL_COLUMNS_UNIDADE)}
 			s.key :columns_serie, :defaults => {:col => returnDefaults(Serie::TOTAL_COLUMNS_SERIE)}
 			s.key :columns_tipomovimentacao, :defaults => {:col => returnDefaults(Tipomovimentacao::TOTAL_COLUMNS_TIPOMOVIMENTACAO)}
+			s.key :columns_movimentom, :defaults => {:col => returnDefaults(Movimentom::TOTAL_COLUMNS_MOVIMENTOM)}
+
 			s.key :last_empresa
 		end
 

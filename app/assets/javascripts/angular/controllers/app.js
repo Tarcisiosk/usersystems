@@ -112,6 +112,7 @@ jQuery(document).ready(function() {
 	TableManaged.init();
 	ComponentsDropdowns.init();
 	Demo.init(); // init demo features		
+    ComponentsPickers.init();
 
 	var options = 
 	{
@@ -119,6 +120,10 @@ jQuery(document).ready(function() {
 		denoteDirtyOptions: true,
 		trimText:true,
 	};
+
+	$('#date').datepicker({
+      dateFormat: 'dd-mm-yy'
+	});
 
 	$('form').dirtyFields(options);
 

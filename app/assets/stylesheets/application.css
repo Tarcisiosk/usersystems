@@ -28,6 +28,7 @@
  *= require dataTables.colVis
  *= require dataTables.colVis.min
  *= require dataTables.bootstrap
+ *= require datepicker3
  *= require typeahead
  *= require error
  *= require login-soft

@@ -20,8 +20,10 @@
 //= require jquery.maskedinput
 //= require jquery-migrate.min
 //= require jquery-ui.min
+//= require jquery.maskMoney.min
 //= require bootstrap.min
 //= require bootstrap-hover-dropdown.min
+//= require bootstrap-datepicker
 //= require jquery.slimscroll.min
 //= require jquery.typeahead
 //= require jquery.blockui.min
@@ -50,6 +52,7 @@
 //= require layout
 //= require demo
 //= require components-dropdowns
+//= require components-pickers
 //= require login-soft
 //= require table-managed
 //= require angular
