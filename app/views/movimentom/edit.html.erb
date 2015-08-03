@@ -56,7 +56,7 @@
 											<div class="form-group">
 												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 												<label class="control-label ">Cliente</label>
-												<ui-select autofocus ng-model="data.entidade_id"  theme="bootstrap">
+												<ui-select ng-model="data.entidade_id"  theme="bootstrap">
 										            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>
 										            <ui-select-choices repeat="e.id as e in entidade_opts | filter: $select.search">
 										              <span ng-bind-html="e.nome_fantasia "></span>
@@ -73,8 +73,8 @@
 													<div class="caption">
 														Itens
 													</div>
-													<div class="actions">
-														<a class="btn btn-default btn-sm"  ncheck href="#portlet-config" ng-click="setFocus()"data-toggle="modal">
+													<div class="actions"> 
+														<a class="btn btn-default btn-sm"  ncheck href="#portlet-config" ng-click="setFocusInput()" data-toggle="modal">
 														<i class="fa fa-plus"></i> Adicionar </a>
 													</div>
 												</div>
@@ -86,8 +86,8 @@
 																	<th  width="45%">
 																		Produto
 																	</th>
-																	<th style="text-align:center" width="8%">
-																		Quantidade
+																	<th style="text-align:center" width="5%">
+																		Qtde
 																	</th >
 																	<th style="text-align:center" width="8%">
 																		Preço
@@ -101,11 +101,11 @@
 																</tr>
 															</thead>
 															<tbody >
-																<tr ng-repeat="p in produtos_choosen">
+																<tr ng-repeat="p in produtos_choosen track by p.codigo">
 																	<td>{{p.codigo}} - {{p.descricao}}</td>
-																	<td align="right">{{p.qtde }}</td>
-																	<td name="money" align="right">{{p.preco }}</td>
-																	<td align="right">{{p.qtde * p.preco}} </td>
+																	<td align="right">{{p.qtde}}</td>
+																	<td align="right" >{{(p.preco * 1).toFixed(2) }}</td>
+																	<td align="right" >{{(p.qtde * p.preco).toFixed(2)}}</td>
 																	<td align="center"> 
 																		<a ncheck href="#portlet-config_edit" ng-click="edit_produto($index)" data-toggle="modal" class="btn yellow btn-sm"> <i class="fa fa-pencil"></i> </a>
 																		<a ng-click="delete_produto($index)" class="btn red btn-sm"><i class="fa fa-trash-o"></i></a>
@@ -117,22 +117,24 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-4">
-											<div class="well">
+										<div class="col-md-5 pull-right">
+											<div class="well  ">
 												<div class="row static-info ">
 													<div class="col-md-7 name">
 														 Quantidade de Itens:
 													</div>
-													<div class="col-md-5 value">
-														{{total.qtde}}
+													<div class="col-md-5 value" align="right">
+														{{data.totalquantidade}}
 													</div>
 												</div>
 												<div class="row static-info ">
 													<div class="col-md-7 name">
 														 Valor total:
 													</div>
-													<div class="col-md-5 value">
-														{{total.valor}}
+													<div class="col-md-5 value" id="total" align="right">
+														<div class="totalys" style="display: block;">
+															{{data.totalvalor.toFixed(2)}}
+														</div>
 													</div>
 												</div>
 											</div>
@@ -143,15 +145,13 @@
 						</div>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 
-		<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal fade" id="portlet-config" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content" id="end_form">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
 						<h4 class="modal-title">Adicionar produto</h4>
 					</div>
 					<div class="modal-body" >
@@ -161,7 +161,7 @@
 									<div class="typeahead-container">
 										<div class="typeahead-field" id='tipo'>
 											<label>Produto</label>
-											<ui-select ng-model="produto_selected" on-select="setProdutoSelected($item)" theme="bootstrap">
+											<ui-select reset-search-input="true" id="produto" focus-on='setFocus' ng-model="produto_selected" on-select="setProdutoSelected($item); NextField()" theme="bootstrap">
 									            <ui-select-match allow-clear="true">{{$select.selected.descricao}}</ui-select-match>
 									            <ui-select-choices repeat="p in produto_opts | filter: $select.search" refresh="refreshProdutos($select.search)" refresh-delay="0">
 									              	<div ng-bind-html="p.descricao | highlight: $select.search"></div>
@@ -182,7 +182,7 @@
 									<label class="control-label ">Quantidade</label>
 									<div class="input-group">
 										<!--<span class="input-group-addon"><i class="fa fa-cubes"></i></span>-->
-										<input type="text" name="descricao" ng-model='produto_selected.qtde' class='form-control placeholder-no-fix'> 
+										<input type="text" id="qtde" ng-model='produto_selected.qtde' class='form-control placeholder-no-fix'> 
 									</div>
 								</div>
 							</div>
@@ -200,7 +200,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" ng-disabled="!produto_selected.qtde || produto_selected.qtde <= 0 || produto_selected.preco <= 0 || !produto_selected.descricao" ng-click="addProduto(produto_selected); setTotal();" class="btn blue" data-dismiss="modal">Adicionar</button>
-						<button type="button"  ng-click="set_novo()" class="btn default" data-dismiss="modal">Cancelar</button>
+						<button type="button"  ng-click=" " class="btn default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>
 				<!-- /.modal-content -->
@@ -220,7 +220,7 @@
 									<div class="typeahead-container">
 										<div class="typeahead-field" id='tipo'>
 											<label>Produto</label>
-											<input type="text" name="descricao" disabled="true" ng-model='produto_selected.descricao' class='form-control placeholder-no-fix'> 
+											<input type="text"  disabled="true" ng-model='produto_selected.descricao' class='form-control placeholder-no-fix'> 
 										</div>
 									</div>
 								</div>
@@ -239,7 +239,7 @@
 									<label class="control-label ">Preço</label>
 									<div class="input-group">
 										<span class="input-group-addon"> R$ </span>
-										<input type="text" name="descricao" ng-model='produto_selected.preco' class='form-control placeholder-no-fix'> 
+										<input type="text" name="money" ng-model='produto_selected.preco' class='form-control placeholder-no-fix'> 
 									</div>
 								</div>
 							</div>

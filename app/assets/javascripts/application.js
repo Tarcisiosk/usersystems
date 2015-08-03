@@ -18,6 +18,7 @@
 //
 //= require jquery.min
 //= require jquery.maskedinput
+//= require jquery.mask.min
 //= require jquery-migrate.min
 //= require jquery-ui.min
 //= require jquery.maskMoney.min

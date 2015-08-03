@@ -17,7 +17,7 @@ class MovimentomController < ApplicationController
 
 	def new
 		@movimentom = Movimentom.new
-		@@angularActions = {:data => '', :entidade_id => '', :produtos_list => ''}
+		@@angularActions = {:data => '', :entidade_id => '', :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
 
 	end
 
@@ -36,7 +36,7 @@ class MovimentomController < ApplicationController
 
 	def edit
 		@movimentom = Movimentom.find(params[:id]) 
-		@@angularActions = {:data => @movimentom.data, :entidade_id => @movimentom.entidade_id, :produtos_list => @movimentom.produtos_list}
+		@@angularActions = {:data => @movimentom.data.strftime("%d/%m/%Y"), :entidade_id => @movimentom.entidade_id, :produtos_list => @movimentom.produtos_list, :totalvalor => @movimentom.totalvalor, :totalquantidade => @movimentom.totalquantidade}
 
 	end
 
@@ -74,8 +74,10 @@ class MovimentomController < ApplicationController
 			@movimentom.data = data_hash[:data]
 			@movimentom.entidade_id = data_hash[:entidade_id]
 			@movimentom.produtos_list = data_hash[:produtos_list]
+			@movimentom.totalvalor = data_hash[:totalvalor]
+			@movimentom.totalquantidade = data_hash[:totalquantidade]
 		else
-			@movimentom = Movimentom.new(data: data_hash[:data], entidade_id: data_hash[:entidade_id], produtos_list: data_hash[:produtos_list], adm_id: current_user.settings(:last_empresa).edited.adm_id)
+			@movimentom = Movimentom.new(data: data_hash[:data], entidade_id: data_hash[:entidade_id], produtos_list: data_hash[:produtos_list], totalvalor: data_hash[:totalvalor], totalquantidade: data_hash[:totalquantidade], adm_id: current_user.settings(:last_empresa).edited.adm_id)
 		end
 	
 		@movimentom.save
