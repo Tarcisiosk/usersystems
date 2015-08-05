@@ -116,6 +116,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.edit_produto = function(index)
 	{
 		$scope.produto_selected = $scope.produtos_choosen[index];
+		$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
 	}
 
 	$scope.delete_produto = function(index)
@@ -141,14 +142,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.data.totalquantidade += parseFloat($scope.produtos_choosen[i].qtde);
 			$scope.data.totalvalor += parseFloat($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde);
 		}
-		
-	
-
-		// setTimeout(function(){
-		// 	$(".money").mask('#.##0,00', {reverse: true});
-  //   	}, 2);
-
-	
+		$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
 	}
 	
 	$scope.setTotal();
