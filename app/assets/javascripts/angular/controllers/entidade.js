@@ -36,7 +36,6 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 			}
 		});
 	}
-	console.log($scope.tipos_total);
 
 	$scope.getEmpresas = function() 
 	{
@@ -67,6 +66,8 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 	$scope.getItensUsuario();
 	$scope.getEmpresas();
 	$scope.getEstados();
+	
+	console.log($scope.tipos_total);
 
 	if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
 	{
