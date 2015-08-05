@@ -57,7 +57,7 @@
 												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 												<label class="control-label ">Cliente</label>
 												<ui-select ng-model="data.entidade_id"  theme="bootstrap">
-										            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>
+										            <ui-select-match allow-clear="false" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>
 										            <ui-select-choices repeat="e.id as e in entidade_opts | filter: $select.search">
 										              <span ng-bind-html="e.nome_fantasia "></span>
 										            </ui-select-choices>
@@ -162,7 +162,7 @@
 										<div class="typeahead-field" id='tipo'>
 											<label>Produto</label>
 											<ui-select reset-search-input="true" id="produto" focus-on='setFocus' ng-model="produto_selected" on-select="setProdutoSelected($item); NextField()" theme="bootstrap">
-									            <ui-select-match allow-clear="true">{{$select.selected.descricao}}</ui-select-match>
+									            <ui-select-match allow-clear="false">{{$select.selected.descricao}}</ui-select-match>
 									            <ui-select-choices repeat="p in produto_opts | filter: $select.search" refresh="refreshProdutos($select.search)" refresh-delay="0">
 									              	<div ng-bind-html="p.descricao | highlight: $select.search"></div>
 									              	 <small>

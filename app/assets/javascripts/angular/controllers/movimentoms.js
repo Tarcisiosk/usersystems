@@ -142,7 +142,14 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.data.totalquantidade += parseFloat($scope.produtos_choosen[i].qtde);
 			$scope.data.totalvalor += parseFloat($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde);
 		}
+		
+	
 
+		// setTimeout(function(){
+		// 	$(".money").mask('#.##0,00', {reverse: true});
+  //   	}, 2);
+
+	
 	}
 	
 	$scope.setTotal();
@@ -152,7 +159,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		var request;
 		request = $.ajax({
 			async: false,
-			method: 'post',
+ 			method: 'post',
 			url: '/movimentoms/save_angular/' + $('#EditingObjId').attr("data"),
 			data: { data: $scope.data },
 			success: function (data)

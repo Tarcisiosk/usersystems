@@ -57,7 +57,7 @@
 												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 												<label class="control-label ">Cliente</label>
 												<ui-select ng-model="data.entidade_id"  theme="bootstrap">
-										            <ui-select-match allow-clear="true" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>
+										            <ui-select-match allow-clear="false" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>
 										            <ui-select-choices repeat="e.id as e in entidade_opts | filter: $select.search">
 										              <span ng-bind-html="e.nome_fantasia "></span>
 										            </ui-select-choices>
@@ -104,8 +104,8 @@
 																<tr ng-repeat="p in produtos_choosen track by p.codigo">
 																	<td>{{p.codigo}} - {{p.descricao}}</td>
 																	<td align="right">{{p.qtde}}</td>
-																	<td align="right" >{{(p.preco * 1).toFixed(2) }}</td>
-																	<td align="right" >{{(p.qtde * p.preco).toFixed(2)}}</td>
+																	<td align="right" ><div class="money">{{(p.preco * 1).toFixed(2) }}</div></td>
+																	<td align="right" ><div class="money" >{{(p.qtde * p.preco).toFixed(2)}}</div></td>
 																	<td align="center"> 
 																		<a ncheck href="#portlet-config_edit" ng-click="edit_produto($index)" data-toggle="modal" class="btn yellow btn-sm"> <i class="fa fa-pencil"></i> </a>
 																		<a ng-click="delete_produto($index)" class="btn red btn-sm"><i class="fa fa-trash-o"></i></a>
@@ -117,25 +117,19 @@
 												</div>
 											</div>
 										</div>
-										<div class="col-md-5 pull-right">
+										<div class="col-md-4 pull-right">
 											<div class="well  ">
 												<div class="row static-info ">
 													<div class="col-md-7 name">
 														 Quantidade de Itens:
 													</div>
-													<div class="col-md-5 value" align="right">
-														{{data.totalquantidade}}
-													</div>
+													<b class="money"><div class="col-md-3" align="right">{{data.totalquantidade}}</div></b>
 												</div>
 												<div class="row static-info ">
-													<div class="col-md-7 name">
+													<div class="col-md-8 name">
 														 Valor total:
 													</div>
-													<div class="col-md-5 value" id="total" align="right">
-														<div class="totalys" style="display: block;">
-															{{data.totalvalor.toFixed(2)}}
-														</div>
-													</div>
+													<b class="money" model-view-value="true"><div class="col-md-3" align="right">{{data.totalvalor.toFixed(2)}}</div></b>
 												</div>
 											</div>
 										</div>
@@ -162,7 +156,7 @@
 										<div class="typeahead-field" id='tipo'>
 											<label>Produto</label>
 											<ui-select reset-search-input="true" id="produto" focus-on='setFocus' ng-model="produto_selected" on-select="setProdutoSelected($item); NextField()" theme="bootstrap">
-									            <ui-select-match allow-clear="true">{{$select.selected.descricao}}</ui-select-match>
+									            <ui-select-match allow-clear="false">{{$select.selected.descricao}}</ui-select-match>
 									            <ui-select-choices repeat="p in produto_opts | filter: $select.search" refresh="refreshProdutos($select.search)" refresh-delay="0">
 									              	<div ng-bind-html="p.descricao | highlight: $select.search"></div>
 									              	 <small>
