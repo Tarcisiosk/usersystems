@@ -40,6 +40,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			success: function(data)
 			{
 				$scope.entidade_opts = data;
+				$scope.data.entidade_id = data[0].id;
 			},
 			error: function()
 			{      			     			

@@ -309,7 +309,7 @@ class ApplicationController < ActionController::Base
 						itensUser << item
 					end
 				else
-					if item.adm_id == obj.adm_id || item.adm_id == current_user.settings(:last_empresa).edited.adm_id
+					if item.adm_id == current_user.settings(:last_empresa).edited.adm_id
 						itensUser << item
 					end
 				end

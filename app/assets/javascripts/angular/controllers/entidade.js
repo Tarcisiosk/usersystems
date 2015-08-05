@@ -33,6 +33,8 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 			success: function(data)
 			{
 				$scope.tipos_total = JSON.parse(data);
+					console.log(data);
+
 			}
 		});
 	}
