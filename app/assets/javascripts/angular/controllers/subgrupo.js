@@ -28,7 +28,8 @@ myApp.controller('SubgrupoCtrl', ['$scope', function($scope)
 			url: '/subgrupos/get_itens',
 			success: function(data)
 			{
-				$scope.grupo_opts = data;
+				$scope.grupo_opts = JSON.parse(data);
+
 			}
 		});
 	}
@@ -67,7 +68,7 @@ myApp.controller('SubgrupoCtrl', ['$scope', function($scope)
 	
 	$scope.getEmpresas();
 
-	console.log($scope.grupo_opts);
+
 	// console.log($scope.empresas_total);
 
 	$scope.save = function() 
