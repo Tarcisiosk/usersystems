@@ -104,8 +104,8 @@
 																<tr ng-repeat="p in produtos_choosen track by p.codigo">
 																	<td>{{p.codigo}} - {{p.descricao}}</td>
 																	<td align="right">{{p.qtde}}</td>
-																	<td align="right" ><div class="money">{{ p.preco | currency:"" }}</div></td>
-																	<td align="right" ><div class="money" >{{(p.qtde * p.preco) | currency:"R$" }}</div></td>
+																	<td align="right" ><div class="money">{{ p.preco | currency: "" }}</div></td>
+																	<td align="right" ><div class="money" >{{(p.qtde * p.preco) | currency: "" }}</div></td>
 																	<td align="center"> 
 																		<a ncheck href="#portlet-config_edit" ng-click="edit_produto($index)" data-toggle="modal" class="btn yellow btn-sm"> <i class="fa fa-pencil"></i> </a>
 																		<a ng-click="delete_produto($index)" class="btn red btn-sm"><i class="fa fa-trash-o"></i></a>
