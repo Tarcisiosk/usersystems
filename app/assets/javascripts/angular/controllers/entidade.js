@@ -36,6 +36,7 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 			}
 		});
 	}
+	console.log($scope.tipos_total);
 
 	$scope.getEmpresas = function() 
 	{
