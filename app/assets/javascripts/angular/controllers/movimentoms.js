@@ -84,7 +84,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{		
 		$scope.produto_selected = {}
 	    setTimeout(function(){
-	    	console.log("VAI");
   				$scope.$broadcast('setFocus');
           }, 500);
 	   
