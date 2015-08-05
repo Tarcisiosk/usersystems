@@ -32,7 +32,7 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 			url: '/entidades/get_itens',
 			success: function(data)
 			{
-				$scope.tipos_total = data;
+				$scope.tipos_total = JSON.parse(data);
 			}
 		});
 	}
@@ -66,7 +66,7 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 	$scope.getItensUsuario();
 	$scope.getEmpresas();
 	$scope.getEstados();
-	
+
 	console.log($scope.tipos_total);
 
 	if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)

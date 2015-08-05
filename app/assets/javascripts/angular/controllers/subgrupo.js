@@ -29,7 +29,6 @@ myApp.controller('SubgrupoCtrl', ['$scope', function($scope)
 			success: function(data)
 			{
 				$scope.grupo_opts = JSON.parse(data);
-
 			}
 		});
 	}
