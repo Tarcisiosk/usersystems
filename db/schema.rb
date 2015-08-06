@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150731170135) do
+ActiveRecord::Schema.define(version: 20150806135521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,6 +281,10 @@ ActiveRecord::Schema.define(version: 20150731170135) do
     t.float    "ii_aliquota"
     t.integer  "ipi_cst_id"
     t.float    "ipi_aliquota"
+    t.float    "frete"
+    t.float    "desconto"
+    t.float    "seguro"
+    t.float    "outros"
   end
 
   create_table "series", force: :cascade do |t|
