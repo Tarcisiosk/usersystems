@@ -313,6 +313,6 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 			}
 		});		
 	}		
-	$("[name='money']").maskMoney({ allowNegative: false, thousands:'', decimal:'.', affixesStay: false});
+	//$("[name='money']").maskMoney({ allowNegative: false, thousands:'', decimal:'.', affixesStay: true});
 
 }]);

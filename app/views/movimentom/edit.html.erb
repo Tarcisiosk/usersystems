@@ -122,7 +122,7 @@
 																	<td align="right" >{{ p.outros | customCurrency }}</td>
 																	<td align="right">{{p.qtde}}</td>
 																	<td align="right" >{{ p.preco | customCurrency }}</td>
-																	<td align="right" >{{(p.preco * p.qtde) | customCurrency }}</td>
+																	<td align="right" >{{(((p.preco * 1) * p.qtde ) + (p.frete * 1) + (p.seguro * 1) + (p.outros * 1) - (p.desconto * 1))  | customCurrency }}</td>
 																	<td align="center"> 
 																		<a ncheck href="#portlet-config_edit" ng-click="edit_produto($index)" data-toggle="modal" class="btn yellow btn-sm"> <i class="fa fa-pencil"></i> </a>
 																		<a ng-click="delete_produto($index)" class="btn red btn-sm"><i class="fa fa-trash-o"></i></a>

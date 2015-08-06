@@ -141,6 +141,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 	$scope.setTotal = function()
 	{	
+
 		$scope.data.totalquantidade = 0;
 		$scope.data.totalvalor = 0;
 		$scope.totalpreco = 0;
@@ -166,6 +167,9 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	
 	$scope.setTotal();
 
+	$scope.calcRatio = function()
+	{	
+	}
 	$scope.save = function() 
 	{   		
 		var request;
@@ -184,8 +188,10 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			}
 		});
 	}
-
 	
+	//$("[name='money']").mask("#.##0,00", {reverse: true});
+	//$("[name='money']").maskMoney({ allowNegative: false, thousands:'0', decimal:',', affixesStay: true, reverse: true});
+
 
  	$(':input').keydown(function (e) {
     	if (e.which === 13) {
