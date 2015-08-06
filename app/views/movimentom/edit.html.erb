@@ -44,7 +44,7 @@
 									<div class="row">
 										<div class="col-md-3">
 											<div class="form-group">
-												<label class="control-label ">Data</label>
+												<label class="control-label ">Data de Emissão</label>
 
 												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 												<input type="text" name="data" ng-model='data.data' id="datepicker" data-date-format="dd/mm/yyyy" class="form-control form-control-inline input-medium date-picker" size="16">
@@ -142,6 +142,46 @@
 													</div>
 													<div class="col-md-4 value" align="right">
 														{{data.totalquantidade}}
+													</div>
+												</div>
+												<div class="row static-info ">
+													<div class="col-md-8 name">
+														 Valor total itens:
+													</div>
+													<div class="col-md-4 value" align="right">
+														 {{totalpreco| customCurrency : "R$" }}
+													</div>
+												</div>
+												<div class="row static-info ">
+													<div class="col-md-8 name">
+														 Valor total frete:
+													</div>
+													<div class="col-md-4 value" align="right">
+														 {{totalfrete | customCurrency : "R$" }}
+													</div>
+												</div>
+												<div class="row static-info ">
+													<div class="col-md-8 name">
+														 Valor total desconto:
+													</div>
+													<div class="col-md-4 value" align="right">
+														 {{totaldesconto | customCurrency : "R$" }}
+													</div>
+												</div>
+												<div class="row static-info ">
+													<div class="col-md-8 name">
+														 Valor total seguro:
+													</div>
+													<div class="col-md-4 value" align="right">
+														 {{totalseguro | customCurrency : "R$" }}
+													</div>
+												</div>
+												<div class="row static-info ">
+													<div class="col-md-8 name">
+														 Valor total outros:
+													</div>
+													<div class="col-md-4 value" align="right">
+														 {{totaloutros | customCurrency : "R$" }}
 													</div>
 												</div>
 												<div class="row static-info ">

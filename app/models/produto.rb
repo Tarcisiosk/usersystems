@@ -3,7 +3,11 @@ class Produto < AbstractRecord
 	TOTAL_COLUMNS_PRODUTO = [{:sTitle => 'Descrição', :data_name => 'descricao', :bDefault => true}, 	
 						  	  {:sTitle => 'Código', :data_name => 'codigo', :bDefault => true},
 						      {:sTitle => 'Preço', :data_name => 'preco', :bDefault => false},
-						  	  {:sTitle => 'Unidade', :data_name => 'unidade', :bDefault => false}]
+						  	  {:sTitle => 'Unidade', :data_name => 'unidade', :bDefault => false},
+						  	  {:sTitle => 'Frete', :data_name => 'frete', :bDefault => false},
+						  	  {:sTitle => 'Desconto', :data_name => 'desconto', :bDefault => false},
+						  	  {:sTitle => 'Seguro', :data_name => 'seguro', :bDefault => false},
+						  	  {:sTitle => 'Outros', :data_name => 'outros', :bDefault => false}]
 
 
 	has_and_belongs_to_many :empresas

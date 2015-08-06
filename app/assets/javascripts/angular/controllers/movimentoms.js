@@ -6,7 +6,13 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.produto_opts = [];
 	$scope.produtos_choosen = [];
 	$scope.produto_selected = {};
+	$scope.totalpreco = 0;
+	$scope.totalfrete = 0;
+	$scope.totaldesconto = 0;
+	$scope.totalseguro = 0;
+	$scope.totaloutros = 0;
 	$scope.empresa_atual =  $('#EditingObjId').attr("empresa_atual");
+
 	$scope.getData = function() 
 	{
 		$.ajax({
@@ -137,12 +143,24 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{	
 		$scope.data.totalquantidade = 0;
 		$scope.data.totalvalor = 0;
+		$scope.totalpreco = 0;
+		$scope.totalfrete = 0;
+		$scope.totaldesconto = 0;
+		$scope.totalseguro = 0;
+		$scope.totaloutros = 0;
+		
 		var i = 0;
 		for(i = 0; i < $scope.produtos_choosen.length; i++)
 		{
 			$scope.data.totalquantidade += parseFloat($scope.produtos_choosen[i].qtde);
-			$scope.data.totalvalor += parseFloat($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde);
+			//$scope.data.totalvalor += parseFloat($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde);
+			$scope.totalpreco += parseFloat($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde);
+			$scope.totalfrete += parseFloat($scope.produtos_choosen[i].frete);
+			$scope.totaldesconto += parseFloat($scope.produtos_choosen[i].desconto);
+			$scope.totalseguro += parseFloat($scope.produtos_choosen[i].seguro);
+			$scope.totaloutros += parseFloat($scope.produtos_choosen[i].outros);
 		}
+		$scope.data.totalvalor = ($scope.totalpreco + $scope.totalfrete + $scope.totalseguro + $scope.totaloutros) - $scope.totaldesconto;
 		$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
 	}
 	
