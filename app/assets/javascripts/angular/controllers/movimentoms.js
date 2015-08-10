@@ -12,12 +12,16 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.produto_opts = [];
 	$scope.produtos_choosen = [];
 	$scope.produto_selected = {};
+	$scope.isEditing = false;
 	$scope.totalpreco = 0;
 	$scope.totalfrete = 0;
 	$scope.totaldesconto = 0;
 	$scope.totalseguro = 0;
 	$scope.totaloutros = 0;
+	$scope.totalipi = 0;
+	$scope.basecalculo = 0;
 	$scope.empresa_atual =  $('#EditingObjId').attr("empresa_atual");
+	$scope.ipicsts = JSON.parse($('#EditingObjId').attr("ipi"));
 
 	$scope.getData = function() 
 	{
@@ -82,6 +86,17 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.getData();	
 	$scope.getEntidades();
 
+	$scope.setIpi = function()
+	{
+		if($scope.produto_selected.ipi_cst_id != 1)
+		{
+			$scope.produto_selected.ipi_aliquota = 0;
+		}
+		$scope.basecalculo = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + ($scope.produto_selected.frete * 1) + ($scope.produto_selected.seguro * 1) + ($scope.produto_selected.outros * 1) - ($scope.produto_selected.desconto * 1);
+		$scope.totalipi = $scope.basecalculo * ($scope.produto_selected.ipi_aliquota/100).toFixed(2);
+		$("[name='alt']").effect( "pulsate", {times:1}, 1000 );
+	}
+
 	$scope.refreshProdutos = function(input) {
 	    if(input.length < 2 )
 	    {
@@ -107,6 +122,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		setTimeout(function(){
            $("#qtde").focus();
         }, 2);
+        $scope.setIpi();
 		
 	}
 
@@ -130,6 +146,12 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{
 		$scope.produto_selected = $scope.produtos_choosen[index];
 		$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
+		$scope.isEditing = true;
+	}
+
+	$scope.endEdit = function()
+	{
+		$scope.isEditing = false;
 	}
 
 	$scope.delete_produto = function(index)
