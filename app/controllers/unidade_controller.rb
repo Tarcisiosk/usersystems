@@ -19,7 +19,7 @@ class UnidadeController < ApplicationController
 	def new
 		@unidade = Unidade.new
 		@@angularActions = {:abreviacao=>'', :descricao => '', :fracionado => false, :empresas => []}
-
+		render :edit
 	end
 
 	def edit

@@ -19,7 +19,7 @@ class GrupoController < ApplicationController
 	def new
 		@grupo = Grupo.new
 		@@angularActions = {:descricao => '', :empresas => []}
-
+		render :edit
 	end
 
 	def create

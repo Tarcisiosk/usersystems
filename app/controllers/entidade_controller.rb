@@ -23,6 +23,7 @@ class EntidadeController < ApplicationController
 		@@angularActions = {:razao_social => '', :nome_fantasia => '', :cnpj => '', :insc_estadual => '', :insc_municipal => '', :email =>'' , :telefone =>'' , :celular =>'' , 
 						:tipoentidades => [], :empresas => [],
 						:endereco => []}
+		render :edit
 	end
 
 	def create

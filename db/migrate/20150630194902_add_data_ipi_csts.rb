@@ -1,7 +1,7 @@
 class AddDataIpiCsts < ActiveRecord::Migration
   def change
   	unless Ipicst.exists?(codigo: "0")
-      @ipicst = Ipicst.new(:codigo => "0", :descricao => "Entrada com Recuperação de Crédito")
+      @ipicst = Ipicst.new(:codigo => "0", :descricao => "Entrada Tributada")
       @ipicst.save
     end
     unless Ipicst.exists?(codigo: "1")

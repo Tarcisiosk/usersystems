@@ -19,7 +19,7 @@ class CfopController < ApplicationController
 	def new
 		@cfop = Cfop.new
 		@@angularActions = {:codigo=>'', :descricao => '', :devolucao => false}
-
+		render :edit
 	end
 
 	def edit

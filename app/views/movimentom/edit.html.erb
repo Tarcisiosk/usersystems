@@ -17,7 +17,7 @@
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
-						Editar
+						<%= t"#{action_name}" %>
 					</li>
 				</ul>
 				<div class="row">
@@ -26,12 +26,12 @@
 							<div class="portlet-title tabbable-line">
 								<div class="caption caption-md">
 									<i class="icon-globe theme-font hide"></i>
-										<span class="caption-subject font-blue-madison bold uppercase">Editar Movimento</span>
+										<span class="caption-subject font-blue-madison bold uppercase">	<%= t"#{action_name}" %> Movimento</span>
 									<i class="fa fa-plus"></i>
 								</div>
 								<div class="actions btn-set">
 									<%= link_to "Voltar", movimentoms_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
-									<button ng-click="save()" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
+									<button ng-click="save()" class="btn btn-default btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
 								</div>
 							</div>
 							<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
@@ -135,7 +135,14 @@
 											</div>
 										</div>
 										<div class="col-md-4 pull-right">
-											<div class="well">
+											<div class="row">
+												<div class="col-md-12">
+											<div class="actions">  
+												<a class="btn btn-default btn-xs pull-right" ncheck ng-click="preCalcRatio()" href="#portlet-config_edit_values"  data-toggle="modal">
+												<i class="fa fa-pencil"></i> Editar</a><br>
+											</div></div></div>
+
+											<div class="well ">
 												<div class="row static-info">
 													<div class="col-md-8 name">
 														 Quantidade de Itens:
@@ -152,7 +159,7 @@
 														 {{totalpreco| customCurrency : "R$" }}
 													</div>
 												</div>
-												<div class="row static-info ">
+												<div class="row static-info " ng-show="totalfrete > 0">
 													<div class="col-md-8 name">
 														 Valor total frete:
 													</div>
@@ -160,7 +167,7 @@
 														 {{totalfrete | customCurrency : "R$" }}
 													</div>
 												</div>
-												<div class="row static-info ">
+												<div class="row static-info " ng-show="totaldesconto > 0">
 													<div class="col-md-8 name">
 														 Valor total desconto:
 													</div>
@@ -168,7 +175,7 @@
 														 {{totaldesconto | customCurrency : "R$" }}
 													</div>
 												</div>
-												<div class="row static-info ">
+												<div class="row static-info " ng-show="totalseguro > 0">
 													<div class="col-md-8 name">
 														 Valor total seguro:
 													</div>
@@ -176,7 +183,7 @@
 														 {{totalseguro | customCurrency : "R$" }}
 													</div>
 												</div>
-												<div class="row static-info ">
+												<div class="row static-info " ng-show="totaloutros > 0">
 													<div class="col-md-8 name">
 														 Valor total outros:
 													</div>
@@ -211,80 +218,98 @@
 					</div>
 					<div class="modal-body" >
 						<div class="row">
-							<div class="col-md-7">
-								<div class="form-group">
-									<div class="typeahead-container">
-										<div class="typeahead-field" id='tipo'>
-											<label>Produto</label>
-											<ui-select reset-search-input="true" id="produto" focus-on='setFocus' ng-model="produto_selected" on-select="setProdutoSelected($item); NextField()" theme="bootstrap">
-									            <ui-select-match allow-clear="false">{{$select.selected.descricao}}</ui-select-match>
-									            <ui-select-choices repeat="p in produto_opts | filter: $select.search" refresh="refreshProdutos($select.search)" refresh-delay="0">
-									              	<div ng-bind-html="p.descricao | highlight: $select.search"></div>
-									              	 <small>
-									              	 	<!--<img src='/produtos/showImg/{{p.id}}' width="30px;" height="30px;" > -->
-												        Cod: {{p.codigo}}
-												        Preço: {{p.preco | customCurrency}}
-												        Un: {{p.unidade}}
-												    </small>
-									            </ui-select-choices>
-									        </ui-select>
+							<div class="col-md-12">
+								<div class="col-md-7">
+									<div class="form-group">
+										<div class="typeahead-container">
+											<div class="typeahead-field" id='tipo'>
+												<label>Produto</label>
+												<ui-select reset-search-input="true" id="produto" focus-on='setFocus' ng-model="produto_selected" on-select="setProdutoSelected($item); NextField()" theme="bootstrap">
+										            <ui-select-match allow-clear="false">{{$select.selected.descricao}}</ui-select-match>
+										            <ui-select-choices repeat="p in produto_opts | filter: $select.search" refresh="refreshProdutos($select.search)" refresh-delay="0">
+										              	<div ng-bind-html="p.descricao | highlight: $select.search"></div>
+										              	 <small>
+										              	 	<!--<img src='/produtos/showImg/{{p.id}}' width="30px;" height="30px;" > -->
+													        Cod: {{p.codigo}}
+													        Preço: {{p.preco | customCurrency}}
+													        Un: {{p.unidade}}
+													    </small>
+										            </ui-select-choices>
+										        </ui-select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group">
+										<label class="control-label ">Quantidade</label>
+										<div class="input-group">
+											<!--<span class="input-group-addon"><i class="fa fa-cubes"></i></span>-->
+											<input type="text" id="qtde" ng-model='produto_selected.qtde' class='form-control placeholder-no-fix'> 
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group">
+										<label class="control-label ">Preço</label>
+										<div class="input-group">
+											<span class="input-group-addon"> R$ </span>
+											<input type="text" name="money" ng-model='produto_selected.preco' class='form-control placeholder-no-fix'> 
+										</div>
+									</div>
+								</div>
+
+								<div class="portlet">
+									<div class="portlet-title">
+										<div class="tools">
+											<a href="javascript:;" class="expand"> </a>
+										</div>
+									</div>
+									<div class="portlet-body form" style="display: none;">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-body">
+													<h4>Outras Informações</h4>
+												</div>
+											</div>
+										</div>
+									
+										<div class="col-md-3">
+											<div class="form-group ">
+												<label class="control-label ">Frete</label>
+												<div class="input-group">
+													<input type="text" name="money" ng-model='produto_selected.frete' class='form-control placeholder-no-fix'> 
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="control-label ">Desconto</label>
+												<div class="input-group">
+													<input type="text" name="money" ng-model='produto_selected.desconto' class='form-control placeholder-no-fix'> 
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="control-label ">Seguro</label>
+												<div class="input-group">
+													<input type="text" name="money" ng-model='produto_selected.seguro' class='form-control placeholder-no-fix'> 
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="form-group">
+												<label class="control-label ">Outros</label>
+												<div class="input-group">
+													<input type="text" name="money" ng-model='produto_selected.outros' class='form-control placeholder-no-fix'> 
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-md-2">
-								<div class="form-group">
-									<label class="control-label ">Quantidade</label>
-									<div class="input-group">
-										<!--<span class="input-group-addon"><i class="fa fa-cubes"></i></span>-->
-										<input type="text" id="qtde" ng-model='produto_selected.qtde' class='form-control placeholder-no-fix'> 
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label class="control-label ">Preço</label>
-									<div class="input-group">
-										<span class="input-group-addon"> R$ </span>
-										<input type="text" name="money" ng-model='produto_selected.preco' class='form-control placeholder-no-fix'> 
-									</div>
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="form-group">
-									<label class="control-label ">Frete</label>
-									<div class="input-group">
-										<input type="text" name="money" ng-model='produto_selected.frete' class='form-control placeholder-no-fix'> 
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label class="control-label ">Desconto</label>
-									<div class="input-group">
-										<input type="text" name="money" ng-model='produto_selected.desconto' class='form-control placeholder-no-fix'> 
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label class="control-label ">Seguro</label>
-									<div class="input-group">
-										<input type="text" name="money" ng-model='produto_selected.seguro' class='form-control placeholder-no-fix'> 
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label class="control-label ">Outros</label>
-									<div class="input-group">
-										<input type="text" name="money" ng-model='produto_selected.outros' class='form-control placeholder-no-fix'> 
-									</div>
-								</div>
-							</div>
 						</div>
-						
 					</div>
 					<div class="modal-footer">
 						<button type="button" ng-disabled="!produto_selected.qtde || produto_selected.qtde <= 0 || produto_selected.preco <= 0 || !produto_selected.descricao" ng-click="addProduto(produto_selected); setTotal();" class="btn blue" data-dismiss="modal">Adicionar</button>
@@ -370,6 +395,58 @@
 					<div class="modal-footer">
 						<button type="button" ng-disabled="!produto_selected.qtde || produto_selected.qtde <= 0 || produto_selected.preco <= 0 || !produto_selected.descricao" ng-click="setTotal();" class="btn blue" data-dismiss="modal">Salvar</button>
 						<button type="button"  ng-click="set_novo()" class="btn default" data-dismiss="modal">Cancelar</button>
+
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+		</div>
+		<div class="modal fade" id="portlet-config_edit_values" data-backdrop="static" data-keyboard="false" tabindex="-3" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" id="end_form">
+					<div class="modal-header">
+						<h4 class="modal-title">Editar Valores</h4>
+					</div>
+					<div class="modal-body" >
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="control-label ">Frete total</label>
+									<div class="input-group">
+										<input type="text" name="money" ng-model='totalfrete' class='form-control placeholder-no-fix'> 
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="control-label ">Desconto total</label>
+									<div class="input-group">
+										<input type="text" name="money" ng-model='totaldesconto' class='form-control placeholder-no-fix'> 
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="control-label ">Seguro  total</label>
+									<div class="input-group">
+										<input type="text" name="money" ng-model='totalseguro' class='form-control placeholder-no-fix'> 
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="control-label ">Outros</label>
+									<div class="input-group">
+										<input type="text" name="money" ng-model='totaloutros' class='form-control placeholder-no-fix'> 
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					<div class="modal-footer">
+						<button type="button"  ng-click="calcRatio()" class="btn blue" data-dismiss="modal">Salvar</button>
+						<button type="button"  ng-click="cancelRatio()" class="btn default" data-dismiss="modal">Cancelar</button>
 
 					</div>
 				</div>

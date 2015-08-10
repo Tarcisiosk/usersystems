@@ -15,6 +15,16 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 	$scope.estados = JSON.parse($('#EditingObjId').attr("estados"));
 	$scope.icmsCFAtual = {};
 
+	$scope.printVal = function()
+	{	
+		if($scope.data.ipi_cst_id != 1)
+		{
+			$scope.data.ipi_aliquota = 0;
+		}
+		console.log($scope.data.ipi_cst_id);
+		console.log($scope.data.ipi_aliquota);
+	}
+
 	$scope.getData = function() 
 	{
 		$.ajax({

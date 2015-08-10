@@ -18,7 +18,7 @@ class MovimentomController < ApplicationController
 	def new
 		@movimentom = Movimentom.new
 		@@angularActions = {:data => '', :entidade_id => '', :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
-
+		render :edit
 	end
 
 	def create

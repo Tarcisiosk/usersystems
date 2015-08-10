@@ -15,7 +15,8 @@
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
-						Editar
+						<%= t"#{action_name}" %>
+
 					</li>
 				</ul>
 
@@ -65,12 +66,12 @@
 									<div class="portlet-title tabbable-line">
 										
 										<div class="caption caption-md">
-											<i class="fa fa-plus"></i> <span class="caption-subject font-blue-madison bold uppercase">Editar Produto</span>
+											<i class="fa fa-plus"></i> <span class="caption-subject font-blue-madison bold uppercase"><%= t"#{action_name}" %> Produto</span>
 										</div>
 
 										<div class="actions btn-set">
 											<%= link_to "Voltar", produtos_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
-											<button ng-click="save()" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
+											<button ng-click="save()" class="btn btn-default btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
 										</div>
 									</div>
 									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
@@ -279,7 +280,7 @@
 											 				<div class="col-md-10">
 											 					<div class="form-group">
 											 						<label class="control-label">CST (IPI)</label>
-																	<select name="ipi_cst_id" class="form-control" ng-model="data.ipi_cst_id"
+																	<select name="ipi_cst_id" class="form-control" ng-change="printVal()" ng-model="data.ipi_cst_id"
 																			ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in ipicsts">				
 																	</select>
 											 					</div>	
@@ -288,7 +289,7 @@
 											 					<div class="form-group">
 											 						<label class="control-label">Alíquota (IPI)</label>
 											 						<div class="input-group">
-																		<input type="number" name="ipi_aliquota" ng-model="data.ipi_aliquota" class="form-control placeholder-no-fix"></input>
+																		<input type="number" name="ipi_aliquota" ng-disabled="data.ipi_cst_id != 1" ng-model="data.ipi_aliquota" class="form-control placeholder-no-fix"></input>
 																		<span class="input-group-addon">%</span>
 																	</div>									 						
 											 					</div>

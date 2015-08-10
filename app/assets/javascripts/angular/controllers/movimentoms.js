@@ -1,5 +1,11 @@
 myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 {
+	var auxfrete = $scope.totalfrete;
+	var auxdesconto = $scope.totaldesconto;
+	var auxseguro = $scope.totalseguro;
+	var auxoutros = $scope.totaloutros;
+
+
 	$scope.data = [];
 	$scope.mensagens = [];	
 	$scope.entidade_opts = [];
@@ -167,9 +173,119 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	
 	$scope.setTotal();
 
+	$scope.preCalcRatio = function()
+	{
+		auxfrete = $scope.totalfrete;
+		auxdesconto = $scope.totaldesconto;
+		auxseguro = $scope.totalseguro;
+		auxoutros = $scope.totaloutros;
+	}
+
+	$scope.cancelRatio = function()
+	{
+		$scope.totalfrete = auxfrete;
+		$scope.totaldesconto = auxdesconto;
+		$scope.totalseguro = auxseguro;
+		$scope.totaloutros = auxoutros; 
+	}
+
 	$scope.calcRatio = function()
 	{	
+		var i = 0;
+		var ratio = 0;
+		var total = 0;
+		var dif = 0;
+		var rounder = [];
+
+		if($scope.totalfrete != auxfrete)
+		{
+			for(i = 0; i < $scope.produtos_choosen.length; i++)
+			{
+				ratio = ($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde) / $scope.totalpreco;
+				$scope.produtos_choosen[i].frete = ($scope.totalfrete * ratio).toFixed(2);
+				rounder.push($scope.produtos_choosen[i].frete );
+			}
+			$.each(rounder,function() {
+			    total += (this * 1);
+			}); 			
+			if (total != $scope.totalfrete)
+			{
+				dif = ($scope.totalfrete - total).toFixed(2);
+				$scope.produtos_choosen[$scope.produtos_choosen.length-1].frete = (($scope.produtos_choosen[$scope.produtos_choosen.length-1].frete * 1) + (dif * 1)).toFixed(2);
+			}
+		}
+
+		ratio = 0;
+		total = 0;
+		dif = 0;
+		rounder = [];
+		
+		if($scope.totaldesconto != auxdesconto)
+		{
+			for(i = 0; i < $scope.produtos_choosen.length; i++)
+			{
+				ratio = ($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde) / $scope.totalpreco;
+				$scope.produtos_choosen[i].desconto = ($scope.totaldesconto * ratio).toFixed(2);
+				rounder.push($scope.produtos_choosen[i].desconto );
+			}
+			$.each(rounder,function() {
+			    total += (this * 1);
+			}); 			
+			if (total != $scope.totaldesconto)
+			{
+				dif = ($scope.totaldesconto - total).toFixed(2);
+				$scope.produtos_choosen[$scope.produtos_choosen.length-1].desconto = (($scope.produtos_choosen[$scope.produtos_choosen.length-1].desconto * 1) + (dif * 1)).toFixed(2);
+			}
+		}
+		
+		ratio = 0;
+		total = 0;
+		dif = 0;
+		rounder = [];
+
+		if($scope.totalseguro != auxseguro)
+		{
+			for(i = 0; i < $scope.produtos_choosen.length; i++)
+			{
+				ratio = ($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde) / $scope.totalpreco;
+				$scope.produtos_choosen[i].seguro = ($scope.totalseguro * ratio).toFixed(2);
+				rounder.push($scope.produtos_choosen[i].seguro);
+			}
+			$.each(rounder,function() {
+			    total += (this * 1);
+			}); 			
+			if (total != $scope.totalseguro)
+			{
+				dif = ($scope.totalseguro - total).toFixed(2);
+				$scope.produtos_choosen[$scope.produtos_choosen.length-1].seguro = (($scope.produtos_choosen[$scope.produtos_choosen.length-1].seguro * 1) + (dif * 1)).toFixed(2);
+			}
+		}
+
+		ratio = 0;
+		total = 0;
+		dif = 0;
+		rounder = [];
+
+		if($scope.totaloutros != auxoutros)
+		{
+			for(i = 0; i < $scope.produtos_choosen.length; i++)
+			{
+				ratio = ($scope.produtos_choosen[i].preco * $scope.produtos_choosen[i].qtde) / $scope.totalpreco;
+				$scope.produtos_choosen[i].outros = ($scope.totaloutros * ratio).toFixed(2);
+				rounder.push($scope.produtos_choosen[i].outros);
+			}
+			$.each(rounder,function() {
+			    total += (this * 1);
+			}); 			
+			if (total != $scope.totaloutros)
+			{
+				dif = ($scope.totaloutros - total).toFixed(2);
+				$scope.produtos_choosen[$scope.produtos_choosen.length-1].outros = (($scope.produtos_choosen[$scope.produtos_choosen.length-1].outros * 1) + (dif * 1)).toFixed(2);
+			}
+		}
+		$scope.setTotal();
 	}
+
 	$scope.save = function() 
 	{   		
 		var request;
@@ -189,14 +305,17 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		});
 	}
 	
-	//$("[name='money']").mask("#.##0,00", {reverse: true});
-	//$("[name='money']").maskMoney({ allowNegative: false, thousands:'0', decimal:',', affixesStay: true, reverse: true});
-
-
- 	$(':input').keydown(function (e) {
+	$(':input').keydown(function (e) {
     	if (e.which === 13) {
          	var index = $(':input').index(this) + 1;
          	$(':input').eq(index).focus();
      	}
  	});
+
+ 	// $("[name='collapsor']").click(function(){
+  //       $(".collapse").collapse('toggle');
+  //   });
+	//$("[name='money']").mask("#.##0,00", {reverse: true});
+	//$("[name='money']").maskMoney({ allowNegative: false, thousands:'0', decimal:',', affixesStay: true, reverse: true});
+
 }]);

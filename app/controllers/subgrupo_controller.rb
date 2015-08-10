@@ -20,7 +20,7 @@ class SubgrupoController < ApplicationController
 	def new
 		@subgrupo = Subgrupo.new
 		@@angularActions = {:descricao => '',:grupo_id =>'', :empresas => []}
-
+		render :edit
 	end
 
 	def create

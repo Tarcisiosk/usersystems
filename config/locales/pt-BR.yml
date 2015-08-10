@@ -1,5 +1,6 @@
 pt-BR:
-
+    new: 'Novo'
+    edit: 'Editar'
     # formatos de data e hora
     date:
         formats:

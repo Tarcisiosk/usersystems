@@ -96,7 +96,7 @@
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
-						Editar
+						<%= t"#{action_name}" %>
 					</li>
 				</ul>
 				<div class="col-md-12">
@@ -141,11 +141,11 @@
 								 	<div class="portlet-title ">
 										<div class="caption caption-md">
 											<i class="icon-globe theme-font hide"></i>
-											<span class="caption-subject font-blue-madison bold uppercase">Editar Empresa/Contato</span><i class="fa fa-pencil"></i>
+											<span class="caption-subject font-blue-madison bold uppercase"><%= t"#{action_name}" %> Empresa/Contato</span><i class="fa fa-pencil"></i>
 										</div>
 										<div class="actions btn-set">
 											<%= link_to "Voltar", entidades_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
-											<button ng-click="save(true)" class="btn yellow btn-circle"><i class="fa fa-check"></i> Atualizar</button><br>
+											<button ng-click="save(true)" class="btn btn-default btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
 										</div>
 										
 									</div>

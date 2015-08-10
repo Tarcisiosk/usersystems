@@ -156,7 +156,7 @@
 										 				<div class="col-md-10">
 										 					<div class="form-group">
 										 						<label class="control-label">CST (IPI)</label>
-																<select name="ipi_cst_id" class="form-control" ng-model="classificacaofiscal.ipi_cst_id"
+																<select name="ipi_cst_id" class="form-control" ng-change="printVal()" ng-model="classificacaofiscal.ipi_cst_id"
 																		ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in ipicsts">				
 																</select>
 										 					</div>	
@@ -165,7 +165,7 @@
 										 					<div class="form-group">
 										 						<label class="control-label">Alíquota (IPI)</label>
 										 						<div class="input-group">
-																	<input type="number" name="ipi_aliquota" ng-model="classificacaofiscal.ipi_aliquota" class="form-control placeholder-no-fix"></input>
+																	<input type="number" name="ipi_aliquota" ng-disabled="classificacaofiscal.ipi_cst_id != 1" ng-model="classificacaofiscal.ipi_aliquota" class="form-control placeholder-no-fix"></input>
 																	<span class="input-group-addon">%</span>
 																</div>									 						
 										 					</div>
@@ -334,6 +334,17 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	$('[name="codigo_ncm"]').mask("?9999.99.99");
 	$('[name="codigo_ex"]').mask("?99");
 
+
+	$scope.printVal = function()
+	{	
+		if($scope.classificacaofiscal.ipi_cst_id != 1)
+		{
+			$scope.classificacaofiscal.ipi_aliquota = 0;
+		}
+		console.log($scope.classificacaofiscal.ipi_cst_id);
+		console.log($scope.classificacaofiscal.ipi_aliquota);
+	}
+
 	$scope.indexIcmsCFPorEstado = function(id){			
 		for(var index=0;index < $scope.icmsclassificacaofiscal.length;index++){
 			if($scope.icmsclassificacaofiscal[index].estado_id == id){
@@ -403,6 +414,7 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	}
 
 	$scope.saveIcms = function(){
+
 		$.ajax({
 			async: false, 
 			method: 'post',
@@ -419,6 +431,7 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	}	
 	
 	$scope.save = function(){
+		
 		$.ajax({
 			async: false,
       		method: 'post',
