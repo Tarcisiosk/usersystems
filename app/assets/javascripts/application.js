@@ -55,6 +55,7 @@
 //= require table-managed.min
 //= require angular
 //= require angular-sanitize.min
+//= require angular-input-masks-standalone.min
 //= require select.min
 //= require_tree .
 //

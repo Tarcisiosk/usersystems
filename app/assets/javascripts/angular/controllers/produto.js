@@ -17,7 +17,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 
 	$scope.printVal = function()
 	{	
-		if($scope.data.ipi_cst_id != 1)
+		if($scope.data.ipi_cst_id != 8)
 		{
 			$scope.data.ipi_aliquota = 0;
 		}

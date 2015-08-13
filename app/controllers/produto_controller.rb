@@ -122,14 +122,25 @@ class ProdutoController < ApplicationController
 			@produto.grupo_id = data_hash[:grupo_id]
 			@produto.subgrupo_id = data_hash[:subgrupo_id]
 			@produto.personalizado = data_hash[:personalizado]
-			@produto.pis_cst_id = data_hash[:pis_cst_id]
- 			@produto.pis_aliquota = data_hash[:pis_aliquota]
-			@produto.cofins_cst_id = data_hash[:cofins_cst_id]
-			@produto.cofins_aliquota = data_hash[:cofins_aliquota]
-			@produto.ii_aliquota = data_hash[:ii_aliquota]
-			@produto.ipi_cst_id = data_hash[:ipi_cst_id]
-			@produto.ipi_aliquota = data_hash[:ipi_aliquota]
-			@produto.classificacaofiscal_id = data_hash[:classificacaofiscal_id]
+			if @produto.personalizado == true
+				@produto.pis_cst_id = data_hash[:pis_cst_id]
+	 			@produto.pis_aliquota = data_hash[:pis_aliquota]
+				@produto.cofins_cst_id = data_hash[:cofins_cst_id]
+				@produto.cofins_aliquota = data_hash[:cofins_aliquota]
+				@produto.ii_aliquota = data_hash[:ii_aliquota]
+				@produto.ipi_cst_id = data_hash[:ipi_cst_id]
+				@produto.ipi_aliquota = data_hash[:ipi_aliquota]
+			else
+				@produto.classificacaofiscal_id = data_hash[:classificacaofiscal_id]
+				cf = Classificacaofiscal.find(data_hash[:classificacaofiscal_id])
+				@produto.pis_cst_id = cf.pis_cst_id
+	 			@produto.pis_aliquota = cf.pis_aliquota
+				@produto.cofins_cst_id = cf.cofins_cst_id
+				@produto.cofins_aliquota = cf.cofins_aliquota
+				@produto.ii_aliquota = cf.ii_aliquota
+				@produto.ipi_cst_id = cf.ipi_cst_id
+				@produto.ipi_aliquota = cf.ipi_aliquota
+			end
 
 			if data_hash[:p_photo] != @produto.p_photo.to_s
 				@produto.p_photo = data_hash[:p_photo]

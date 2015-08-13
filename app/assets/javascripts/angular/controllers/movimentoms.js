@@ -4,21 +4,26 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	var auxdesconto = $scope.totaldesconto;
 	var auxseguro = $scope.totalseguro;
 	var auxoutros = $scope.totaloutros;
-
+	var auxproduto = $scope.produto_selected;
+	var auxindex = 0;
 
 	$scope.data = [];
-	$scope.mensagens = [];	
+	$scope.mensagens = [];
+	$scope.lbl = 'Expandir';	
 	$scope.entidade_opts = [];
 	$scope.produto_opts = [];
 	$scope.produtos_choosen = [];
 	$scope.produto_selected = {};
 	$scope.isEditing = false;
+
 	$scope.totalpreco = 0;
 	$scope.totalfrete = 0;
 	$scope.totaldesconto = 0;
 	$scope.totalseguro = 0;
 	$scope.totaloutros = 0;
 	$scope.totalipi = 0;
+	$scope.valoripi = 0;
+
 	$scope.basecalculo = 0;
 	$scope.empresa_atual =  $('#EditingObjId').attr("empresa_atual");
 	$scope.ipicsts = JSON.parse($('#EditingObjId').attr("ipi"));
@@ -88,15 +93,61 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 	$scope.setIpi = function()
 	{
-		if($scope.produto_selected.ipi_cst_id != 1)
+		var auxbc = $scope.produto_selected.basecalculo;
+
+		if($scope.produto_selected.calcFrete == undefined)
 		{
-			$scope.produto_selected.ipi_aliquota = 0;
+			$scope.produto_selected.calcFrete = 1;
 		}
-		$scope.basecalculo = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + ($scope.produto_selected.frete * 1) + ($scope.produto_selected.seguro * 1) + ($scope.produto_selected.outros * 1) - ($scope.produto_selected.desconto * 1);
-		$scope.totalipi = $scope.basecalculo * ($scope.produto_selected.ipi_aliquota/100).toFixed(2);
-		$("[name='alt']").effect( "pulsate", {times:1}, 1000 );
+		if($scope.produto_selected.calcDesconto == undefined)
+		{
+			$scope.produto_selected.calcDesconto = 1;
+		}
+		if($scope.produto_selected.calcSeguro == undefined)
+		{
+			$scope.produto_selected.calcSeguro = 1;
+		}
+		if($scope.produto_selected.calcOutros == undefined)
+		{
+			$scope.produto_selected.calcOutros = 1;
+		}
+
+		if( $scope.produto_selected.ipi_cst_id == 8 )
+		{
+			$scope.produto_selected.basecalculo = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + ($scope.produto_selected.frete * $scope.produto_selected.calcFrete) + ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguro) + ($scope.produto_selected.outros * $scope.produto_selected.calcOutros) - ($scope.produto_selected.desconto * $scope.produto_selected.calcDesconto);
+			$scope.produto_selected.valoripi = $scope.produto_selected.basecalculo * ($scope.produto_selected.ipi_aliquota/100).toFixed(2);
+		}
+		//saida tributada com aliquota zero
+		if( $scope.produto_selected.ipi_cst_id == 9)
+		{
+			$scope.produto_selected.basecalculo = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + ($scope.produto_selected.frete * $scope.produto_selected.calcFrete) + ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguro) + ($scope.produto_selected.outros * $scope.produto_selected.calcOutros) - ($scope.produto_selected.desconto * $scope.produto_selected.calcDesconto);
+			$scope.produto_selected.ipi_aliquota = 0;
+			$scope.produto_selected.valoripi = 0;
+		}
+		//outras saidas...
+		if( $scope.produto_selected.ipi_cst_id != 8 && $scope.produto_selected.ipi_cst_id != 9)
+		{
+			$scope.produto_selected.basecalculo = 0;
+		}
+
+		if($scope.produto_selected.basecalculo != auxbc)
+		{
+			$("[name='alt']").effect( "pulsate", {times:1}, 1000 );
+		}
+
 	}
 
+	$scope.changelbl = function()
+	{
+		if($scope.lbl == 'Expandir')
+		{
+			$scope.lbl = 'Retrair';
+		}else
+		{
+			$scope.lbl = 'Expandir';
+		}
+	}
+	
 	$scope.refreshProdutos = function(input) {
 	    if(input.length < 2 )
 	    {
@@ -145,13 +196,22 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.edit_produto = function(index)
 	{
 		$scope.produto_selected = $scope.produtos_choosen[index];
+		auxproduto = $scope.produto_selected; 
+		auxindex = index;
 		$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
 		$scope.isEditing = true;
 	}
 
+
 	$scope.endEdit = function()
 	{
 		$scope.isEditing = false;
+	}
+
+	$scope.cancelEdit = function()
+	{
+		$scope.produto_selected = auxproduto;
+		$scope.produtos_choosen[auxindex] = auxproduto;
 	}
 
 	$scope.delete_produto = function(index)
@@ -177,7 +237,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		$scope.totaldesconto = 0;
 		$scope.totalseguro = 0;
 		$scope.totaloutros = 0;
-		
+		$scope.totalipi = 0;
+
 		var i = 0;
 		for(i = 0; i < $scope.produtos_choosen.length; i++)
 		{
@@ -188,8 +249,9 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.totaldesconto += parseFloat($scope.produtos_choosen[i].desconto);
 			$scope.totalseguro += parseFloat($scope.produtos_choosen[i].seguro);
 			$scope.totaloutros += parseFloat($scope.produtos_choosen[i].outros);
+			$scope.totalipi += parseFloat($scope.produtos_choosen[i].valoripi);
 		}
-		$scope.data.totalvalor = ($scope.totalpreco + $scope.totalfrete + $scope.totalseguro + $scope.totaloutros) - $scope.totaldesconto;
+		$scope.data.totalvalor = ($scope.totalpreco + $scope.totalfrete + $scope.totalseguro + $scope.totaloutros + $scope.totalipi) - $scope.totaldesconto;
 		$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
 	}
 	
@@ -334,10 +396,12 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
      	}
  	});
 
- 	// $("[name='collapsor']").click(function(){
-  //       $(".collapse").collapse('toggle');
-  //   });
-	//$("[name='money']").mask("#.##0,00", {reverse: true});
-	//$("[name='money']").maskMoney({ allowNegative: false, thousands:'0', decimal:',', affixesStay: true, reverse: true});
-
+	$('#pop').popover({
+	    html: 'true',
+		placement: 'top',
+		content: function() {
+	      return $("#popover-content").html();
+	    }
+	});
+ 	
 }]);

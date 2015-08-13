@@ -38,7 +38,7 @@ class MovimentomController < ApplicationController
 
 	def edit
 		@movimentom = Movimentom.find(params[:id]) 
-		@ipicst = Ipicst.all.select("id","codigo","descricao")
+		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
 
 		@@angularActions = {:data => @movimentom.data.strftime("%d/%m/%Y"), :entidade_id => @movimentom.entidade_id, :produtos_list => @movimentom.produtos_list, :totalvalor => @movimentom.totalvalor, :totalquantidade => @movimentom.totalquantidade}
 

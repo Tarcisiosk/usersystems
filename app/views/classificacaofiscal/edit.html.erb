@@ -165,7 +165,7 @@
 										 					<div class="form-group">
 										 						<label class="control-label">Alíquota (IPI)</label>
 										 						<div class="input-group">
-																	<input type="number" name="ipi_aliquota" ng-disabled="classificacaofiscal.ipi_cst_id != 1" ng-model="classificacaofiscal.ipi_aliquota" class="form-control placeholder-no-fix"></input>
+																	<input type="number" name="ipi_aliquota" ng-disabled="classificacaofiscal.ipi_cst_id != 8" ng-model="classificacaofiscal.ipi_aliquota" class="form-control placeholder-no-fix"></input>
 																	<span class="input-group-addon">%</span>
 																</div>									 						
 										 					</div>
@@ -337,7 +337,7 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 
 	$scope.printVal = function()
 	{	
-		if($scope.classificacaofiscal.ipi_cst_id != 1)
+		if($scope.classificacaofiscal.ipi_cst_id != 8)
 		{
 			$scope.classificacaofiscal.ipi_aliquota = 0;
 		}
