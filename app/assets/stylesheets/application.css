@@ -28,6 +28,8 @@
  *= require dataTables.colVis
  *= require dataTables.colVis.min
  *= require dataTables.bootstrap
+ *= require responsive.bootstrap.min
+ *= require responsive.dataTables.min
  *= require datepicker3
  *= require typeahead
  *= require error

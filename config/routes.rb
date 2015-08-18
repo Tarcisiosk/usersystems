@@ -130,6 +130,7 @@ Rails.application.routes.draw do
 	post 'movimentoms/save_settings' => 'movimentom#save_settings'
 	get 'movimentoms/get_entidades' => "movimentom#returnEntidadeMovimentos"
 	get 'movimentoms/get_produtos' => "movimentom#returnProdutosMovimentos"
+	get 'movimentoms/get_icms/:id' => "movimentom#returnIcms"
 
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	

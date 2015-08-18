@@ -17,8 +17,8 @@ class MovimentomController < ApplicationController
 
 	def new
 		@movimentom = Movimentom.new
-		@ipicst = Ipicst.all.select("id","codigo","descricao")
-
+		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
+		@icmscst = Icmscst.all.select("id", "codigo", "descricao")
 		@@angularActions = {:data => '', :entidade_id => '', :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
 		render :edit
 	end
@@ -39,7 +39,7 @@ class MovimentomController < ApplicationController
 	def edit
 		@movimentom = Movimentom.find(params[:id]) 
 		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
-
+		@icmscst = Icmscst.all.select("id", "codigo", "descricao")
 		@@angularActions = {:data => @movimentom.data.strftime("%d/%m/%Y"), :entidade_id => @movimentom.entidade_id, :produtos_list => @movimentom.produtos_list, :totalvalor => @movimentom.totalvalor, :totalquantidade => @movimentom.totalquantidade}
 
 	end
@@ -119,6 +119,18 @@ class MovimentomController < ApplicationController
  		render :json => produtos_array.to_json.to_s.html_safe
 	end
 
+	def returnIcms		
+		@produto = Produto.find(params[:id])
+		@estado = Estado.find_by_uf(params[:uf])
+
+		if @produto.personalizado
+			icms = Icmsproduto.where(produto_id: params[:id], estado_id: @estado.id)
+		else
+			icms = Classificacaofiscal.find(@produto.classificacaofiscal_id).icmsclassificacaofiscals.where(classificacaofiscal_id: @produto.classificacaofiscal_id, estado_id: @estado.id)
+		end
+		render :json => icms.to_json.to_s.html_safe
+	end
+	
 	def movimentom_params
 		params.require(:movimentom).permit(:data, :entidade_id, :adm_id)
 	end

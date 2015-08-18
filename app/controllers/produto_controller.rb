@@ -159,7 +159,7 @@ class ProdutoController < ApplicationController
 
 
 		if @produto.valid?										
-			JSON.parse(params[:icmsproduto]).each do |icf|					
+			JSON.parse(params[:icmsprodutos]).each do |icf|					
 				if icf['produto_id'].blank?
 					@icmsproduto = Icmsproduto.new(produto_id: @produto.id,estado_id: icf['estado_id'],
 					reducaobasecalculo: icf['reducaobasecalculo'], diferimento: icf['diferimento'], aliquota: icf['aliquota'], icmsst: icf['icmsst'],

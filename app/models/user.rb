@@ -55,7 +55,11 @@ class User < AbstractRecord
 		
 		def self.find_for_authentication(conditions)
 		    user = super
-		    return nil if user.user_type == 2 && user.empresas.count <= 0
+		    if user != nil
+		    	return nil if user.user_type == 2 && user.empresas.count <= 0
+		    else
+				return nil
+		    end
 		    user
 		end
 

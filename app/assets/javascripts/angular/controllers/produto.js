@@ -140,28 +140,8 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 	$scope.getGrupos();
 	$scope.getSubGrupos();
 	$scope.getClassFisc();
-	$scope.save = function() 
-	{   	
-		Metronic.startPageLoading({animate: true});
 
-		var request;
-		request = $.ajax({
-			async: false,
-			method: 'post',
-			url: '/produtos/save_angular/' +  $('#EditingObjId').attr("data"),
-			data: { data: $scope.data, icmsproduto: JSON.stringify($scope.icmsproduto) },
-			success: function(data)
-			{
-				window.location.replace('/produtos');
-					Metronic.stopPageLoading();
-			},
-			error: function (jqXHR, textStatus, errorThrown)
-			{      			     			
-				$scope.mensagens = JSON.parse(jqXHR.responseText);
-				Metronic.stopPageLoading();
-				}
-		});
-	}
+	
 
 	$scope.setImage = function()
 	{
@@ -324,5 +304,27 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 		});		
 	}		
 	//$("[name='money']").maskMoney({ allowNegative: false, thousands:'', decimal:'.', affixesStay: true});
+	
+	$scope.save = function() 
+	{   	
+		Metronic.startPageLoading({animate: true});
 
+		var request;
+		request = $.ajax({
+			async: false,
+			method: 'post',
+			url: '/produtos/save_angular/' +  $('#EditingObjId').attr("data"),
+			data: { data: $scope.data, icmsprodutos: JSON.stringify($scope.icmsproduto) },
+			success: function(data)
+			{
+				window.location.replace('/produtos');
+					Metronic.stopPageLoading();
+			},
+			error: function (jqXHR, textStatus, errorThrown)
+			{      			     			
+				$scope.mensagens = JSON.parse(jqXHR.responseText);
+				Metronic.stopPageLoading();
+				}
+		});
+	}
 }]);

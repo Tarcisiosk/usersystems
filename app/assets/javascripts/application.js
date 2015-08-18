@@ -44,6 +44,7 @@
 //= require dataTables.scroller.min
 //= require dataTables.colVis.min
 //= require dataTables.bootstrap.min
+//= require dataTables.responsive.min
 //= require handlebars.min
 //= require typeahead.bundle.min
 //= require metronic.min

@@ -9,9 +9,8 @@ class Produto < AbstractRecord
 						  	  {:sTitle => 'Seguro', :data_name => 'seguro', :bDefault => false},
 						  	  {:sTitle => 'Outros', :data_name => 'outros', :bDefault => false}]
 
-
 	has_and_belongs_to_many :empresas
-	
+
 	validates :descricao, presence: true
 	validates :codigo, presence:true, uniqueness: true
 

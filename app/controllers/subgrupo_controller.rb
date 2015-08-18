@@ -65,7 +65,6 @@ class SubgrupoController < ApplicationController
 	end
 
 	def send_json
-		puts "OLha só : #{@@angularActions}"
  		render :json => @@angularActions.to_json.to_s.html_safe
 	end
 

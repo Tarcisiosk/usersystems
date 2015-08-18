@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150812131739) do
+ActiveRecord::Schema.define(version: 20150813182757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -183,6 +183,13 @@ ActiveRecord::Schema.define(version: 20150812131739) do
     t.boolean  "reducaomva"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "icmscsts", force: :cascade do |t|
+    t.integer  "codigo"
+    t.string   "descricao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "icmsinterestaduals", force: :cascade do |t|
