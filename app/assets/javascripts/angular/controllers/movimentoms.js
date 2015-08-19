@@ -4,7 +4,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	var auxdesconto = $scope.totaldesconto;
 	var auxseguro = $scope.totalseguro;
 	var auxoutros = $scope.totaloutros;
-	var auxproduto = $scope.produto_selected;
+	var auxproduto = [];
 	var auxindex = 0;
 
 	$scope.data = [];
@@ -13,7 +13,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.entidade_opts = [];
 	$scope.produto_opts = [];
 	$scope.produtos_choosen = [];
-	$scope.produto_selected = {};
+	$scope.produto_selected = [];
 	$scope.isEditing = false;
 	$scope.totalpreco = 0;
 	$scope.totalfrete = 0;
@@ -27,7 +27,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 	$scope.basecalculo = 0;
 	$scope.empresa_atual = JSON.parse($('#EditingObjId').attr("empresa_atual"));
-	$scope.estado_atual =  $scope.empresa_atual.uf;
+	$scope.estado_atual = $scope.empresa_atual.uf;
 	$scope.ipicsts = JSON.parse($('#EditingObjId').attr("ipi"));
 	$scope.icmscsts = JSON.parse($('#EditingObjId').attr("icms"));
 
@@ -94,6 +94,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			success: function(data)
 			{
 				$scope.produto_opts = data;
+				$scope.produto_selected.icms_aliquota = $scope.icmsProdutoSelected.aliquota;
+
 			},
 			error: function()
 			{      			     			
@@ -127,7 +129,11 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.setIpi = function()
 	{
 		var auxbc = $scope.produto_selected.basecalculoIpi;
-
+		
+		if($scope.produto_selected.valoripi == undefined)
+		{
+			$scope.produto_selected.valoripi = 0;
+		}
 
 		if( $scope.produto_selected.ipi_cst_id == 8 )
 		{
@@ -151,6 +157,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.produto_selected.ipi_aliquota = 0;
 			$scope.produto_selected.valoripi = 0;
 		}
+
 		//outras saidas...
 		if( $scope.produto_selected.ipi_cst_id != 8 && $scope.produto_selected.ipi_cst_id != 9)
 		{
@@ -163,18 +170,13 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		}
 	}
 
-	$scope.calcIcms = function()
-	{
-		$scope.produto_selected.icms_aliquota = $scope.icmsProdutoSelected.aliquota;
-	}
-
 	$scope.setIcms = function()
 	{
 		var auxbcicms = $scope.produto_selected.basecalculoIcms;
 
-		if($scope.produto_selected.valoripi == undefined)
+		if($scope.produto_selected.valoricms == undefined)
 		{
-			$scope.produto_selected.valoripi = 0;
+			$scope.produto_selected.valoricms = 0;
 		}
 
 		//tributado integralmente
@@ -226,17 +228,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$("[name='alticms']").effect( "pulsate", {times:1}, 500 );
 		}
 	}
-
-	$scope.changelbl = function()
-	{
-		if($scope.lbl == 'Expandir')
-		{
-			$scope.lbl = 'Retrair';
-		}else
-		{
-			$scope.lbl = 'Expandir';
-		}
-	}
 	
 	$scope.refreshProdutos = function(input) {
 	    if(input.length < 2 )
@@ -251,13 +242,18 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 	$scope.setFocusInput = function()
 	{		
-		$scope.produto_selected = {}
-	    setTimeout(function(){
+		$scope.produto_selected = []
+		setTimeout(function(){
   				$scope.$broadcast('setFocus');
-          }, 500);
+        }, 500);
 	   
 	}
-	
+
+	$scope.setProdutoSelected = function(item)
+	{
+		$scope.produto_selected = item;
+	}
+
 	$scope.NextField = function()
 	{
 		setTimeout(function(){
@@ -269,44 +265,61 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 	$scope.addProduto = function(produto)
 	{	
-		var pos = $scope.produtos_choosen.map(function(e) { return e.descricao; }).indexOf($scope.produto_selected.descricao);
-		if(pos <= -1)
-		{
-			$scope.produtos_choosen.push(produto);
-			$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
+		if($scope.isEditing == false){
+			var pos = $scope.produtos_choosen.map(function(e) { return e.descricao; }).indexOf($scope.produto_selected.descricao);
+			if(pos <= -1)
+			{
+				$scope.produtos_choosen.push(produto);
+				$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
+			}
 		}
 	}
 	
 	$scope.edit_produto = function(index)
 	{
-		$scope.produto_selected = $scope.produtos_choosen[index];
-		auxproduto = $scope.produto_selected; 
-		auxindex = index;
-		$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
 		$scope.isEditing = true;
+		$scope.produto_selected = $scope.produtos_choosen[index];
+		auxproduto = JSON.parse($scope.data.produtos_list)[index]; 
+		auxindex = index;
 
-		$scope.produto_selected.calcFreteIpi = $scope.produtos_choosen[index].calcFreteIpi;
-		$scope.produto_selected.calcDescontoIpi = $scope.produtos_choosen[index].calcDescontoIpi;
-		$scope.produto_selected.calcSeguroIpi = $scope.produtos_choosen[index].calcSeguroIpi;
-		$scope.produto_selected.calcOutrosIpi = $scope.produtos_choosen[index].calcOutrosIpi;
-		
 		console.log($scope.produto_selected.calcFreteIpi);
 		console.log($scope.produto_selected.calcDescontoIpi);
 		console.log($scope.produto_selected.calcSeguroIpi);
 		console.log($scope.produto_selected.calcOutrosIpi);
+
 	}
 
+	$scope.saveProduto = function(produto)
+	{
+		if($scope.isEditing == true)
+		{
+			$scope.produtos_choosen[auxindex] = produto;
+		}
+		$scope.setTotal();
+		$scope.setIpi();
+		$scope.setIcms();
+		$scope.endEdit();
+	}
+
+	$scope.cancelEdit = function()
+	{		
+		if($scope.isEditing == true)
+		{
+			$scope.produtos_choosen[auxindex] = auxproduto;
+		}
+		$scope.setTotal();
+		$scope.setIpi();
+		$scope.setIcms();
+		$scope.endEdit();
+	}
 
 	$scope.endEdit = function()
 	{
 		$scope.isEditing = false;
+		auxproduto = [];
+		auxindex = 0;
 	}
 
-	$scope.cancelEdit = function()
-	{
-		$scope.produto_selected = auxproduto;
-		$scope.produtos_choosen[auxindex] = auxproduto;
-	}
 
 	$scope.delete_produto = function(index)
 	{
@@ -467,7 +480,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		}
 
 		$scope.setTotal();
-		console.log($scope.produtos_choosen);
 	}
 
 	$scope.save = function() 
@@ -489,17 +501,35 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		});
 	}
 	
+
+	$scope.changelbl = function()
+	{
+		if($scope.lbl == 'Expandir')
+		{
+			$scope.lbl = 'Retrair';
+		}else
+		{
+			$scope.lbl = 'Expandir';
+		}
+	}
+
 	$(':input').keydown(function (e) {
     	if (e.which === 13) {
          	var index = $(':input').index(this) + 1;
          	$(':input').eq(index).focus();
      	}
- 	});
+ 	}); 		
+
 	
 
 
  	$(document).ready(function() {
  	
+		if($scope.data.data == "")
+		{
+			 $('#datepicker').datepicker('setDate', 'today');
+		}
+
 		function format (d)  {
 		    // `d` is the original data object for the row
 		    return'<div class="col-md-4">' + 
@@ -536,7 +566,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	            row.child.hide();
 	            tr.removeClass('shown');
 	        }
-	        else {
+	        else 
+	        {
 	            row.child( format(row.data()) ).show();
 	            tr.addClass('shown');
 	        }
