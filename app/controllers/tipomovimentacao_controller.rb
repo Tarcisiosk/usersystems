@@ -9,7 +9,7 @@ class TipomovimentacaoController < ApplicationController
   end
 
   def new
-  	@tipomovimentacao = Tipomovimentacao.new(adm_id: current_user.settings(:last_empresa).edited.adm_id)
+  	@tipomovimentacao = Tipomovimentacao.new(adm_id: current_user.settings(:last_empresa).edited.adm_id,empresa_id:current_user.settings(:last_empresa).edited.id)
   	render :edit
   end
 

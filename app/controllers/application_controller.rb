@@ -53,21 +53,22 @@ class ApplicationController < ActionController::Base
 														 	:subgrupos =>{:label => 'Sub-Grupos', :path => '/subgrupos', :acao =>'subgrupo#index'},
 	 														:unidades =>{:label => 'Unidades', :path => '/unidades', :acao =>'unidade#index'},
 										 				  	:produtos => {:label=> 'Produtos', :path => '/produtos', :acao =>'produto#index'}, 
-														 	:classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}}, 
-					   
-					   :configuracoes => {:label=>'Configurações', 
+														 	:classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}},	   
+				       
+				       :mainmovimentacoes => {:label=>'Movimentações', 
+				       						  :cadastros =>{:label=>'Movimentações', 
+				       						  				:estado =>{:label =>'Movimentos', :path=>'/movimentoms', :acao=>'movimentom#index'}}},
+				       :mainfinanceiro => {:label=>'Financeiro',
+				       					   :cadastros=>{:label=>'Cadastros',
+				       					   				:planocontas =>{:label=>'Plano de Contas', :path=>'/planocontas', :acao =>'planoconta#index'}}},
+				       :configuracoes => {:label=>'Configurações', 
 						 				  
 						 				  :configuracoes => {label:"Cadastros", 
 											 				  	:empresas => {:label=> 'Empresas', :path => '/empresas', :acao =>'empresa#index'}, 
 											 				  	:nivelacesso => {:label=> 'Nivel Acesso', :path => '/nivelacesso', :acao =>'nivelacesso#index'},
 											 				  	:serie => {:label=> 'Séries', :path => '/series', :acao =>'serie#index'},
 										 				        :tipomovimentacao => {:label=> 'Tipos de Mov.', :path => '/tipomovimentacaos', :acao =>'tipomovimentacao#index'}, 
-											 				  	:usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},
-				       
-				       :mainmovimentacoes => {:label=>'Movimentações', 
-				       						  :cadastros =>{:label=>'Movimentações', 
-				       						  				:estado =>{:label =>'Movimentos', :path=>'/movimentoms', :acao=>'movimentom#index'}}},
-
+											 				  	:usuarios =>{:label=> 'Usuários', :path => '/users', :acao=>'user#index'}}},					   				 
 				       :mainadministracao => {:label=>'Administração', 
 				       						  :cadastros =>{:label=>'Cadastros', 
 				       						  				:estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'},

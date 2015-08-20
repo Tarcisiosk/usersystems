@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150813182757) do
+ActiveRecord::Schema.define(version: 20150818134811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,13 +63,6 @@ ActiveRecord::Schema.define(version: 20150813182757) do
     t.float    "ii_aliquota"
     t.integer  "ipi_cst_id"
     t.float    "ipi_aliquota"
-  end
-
-  create_table "cstpiscofins", force: :cascade do |t|
-    t.integer  "codigo"
-    t.string   "descricao"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "empresas", force: :cascade do |t|
@@ -265,6 +258,16 @@ ActiveRecord::Schema.define(version: 20150813182757) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "planoconta", force: :cascade do |t|
+    t.string   "codigo"
+    t.string   "descricao"
+    t.integer  "planoconta_id"
+    t.integer  "adm_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.integer  "empresa_id"
+  end
+
   create_table "produtos", force: :cascade do |t|
     t.string   "descricao"
     t.string   "codigo"
@@ -339,6 +342,7 @@ ActiveRecord::Schema.define(version: 20150813182757) do
     t.integer  "adm_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "empresa_id"
   end
 
   create_table "unidades", force: :cascade do |t|
