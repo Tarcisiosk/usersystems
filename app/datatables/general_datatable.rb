@@ -29,11 +29,6 @@ class GeneralDatatable < ApplicationController
 					else
 						subData2 = item
 					end
-					if subitem.is_a?(Date)
-					  puts "#{subitem}"
-					  subData2[subindex] = subitem.strftime("%d/%m/%Y")
-					end					
-
 				else
 					subData2 = item
 					if !!subitem == subitem && subitem == true 
@@ -42,6 +37,11 @@ class GeneralDatatable < ApplicationController
 						subData2[subindex] = '<span class="glyphicon glyphicon-remove font-red"/>'
 					end
 				end
+
+				if subitem.is_a?(Date)
+					puts "#{subitem}"
+					subData2[subindex] = subitem.strftime("%d/%m/%Y")
+				end	
 			end
 			data2[index] = subData2
 		end

@@ -21,8 +21,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.totalseguro = 0;
 	$scope.totaloutros = 0;
 	$scope.totalipi = 0;
-	$scope.totalicms = 0;
-
+	$scope.totalicms = 0
 	$scope.icmsProdutoSelected = ''; 
 
 	$scope.basecalculo = 0;
@@ -30,17 +29,9 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.estado_atual = $scope.empresa_atual.uf;
 	$scope.ipicsts = JSON.parse($('#EditingObjId').attr("ipi"));
 	$scope.icmscsts = JSON.parse($('#EditingObjId').attr("icms"));
+	$scope.modalidadebcicmssts = JSON.parse($('#EditingObjId').attr("modalidade"));
 
-	$scope.produto_selected.calcFreteIpi = 1;
-	$scope.produto_selected.calcDescontoIpi = 1;
-	$scope.produto_selected.calcSeguroIpi = 1;
-	$scope.produto_selected.calcOutrosIpi = 1;
-
-	$scope.produto_selected.calcFreteIcms = 1;
-	$scope.produto_selected.calcIpiIcms = 1;
-	$scope.produto_selected.calcDescontoIcms = 1;
-	$scope.produto_selected.calcSeguroIcms = 1;
-	$scope.produto_selected.calcOutrosIcms = 1;
+	
 
 	$scope.getData = function() 
 	{
@@ -126,103 +117,315 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.getData();	
 	$scope.getEntidades();
 
+	$scope.setEdited = function(i)
+	{
+		
+		if($scope.produto_selected.wasIpiEdited == undefined)
+		{
+			$scope.produto_selected.wasIpiEdited = false;
+		}
+		if($scope.produto_selected.wasIcmsEdited == undefined)
+		{
+			$scope.produto_selected.wasIcmsEdited = false;
+		}
+		//ipi
+		if(i == 0)
+		{
+			if($scope.produto_selected.wasIpiEdited == false)
+			{
+				$scope.produto_selected.wasIpiEdited = true;
+			}
+					console.log($scope.produto_selected.wasIpiEdited);
+
+			// else
+			// {
+			// 	$scope.produto_selected.wasIpiEdited == false;
+			// }
+		}
+		//icms
+		else if(i == 1)
+		{
+			if($scope.produto_selected.wasIcmsEdited == false)
+			{
+				$scope.produto_selected.wasIcmsEdited = true;
+			}
+					console.log($scope.produto_selected.wasIcmsEdited);
+
+			// else
+			// {
+			// 	$scope.produto_selected.wasIcmsEdited == false;
+			// }
+		}
+	}
+	
+	$scope.calcBcIpi = function()
+	{
+		$scope.produto_selected.basecalculoIpi = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
+														 ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIpi) + 
+														 ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIpi) + 
+														 ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIpi) - 
+														 ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIpi);
+
+		$scope.produto_selected.valoripi = $scope.produto_selected.basecalculoIpi * ($scope.produto_selected.ipi_aliquota/100).toFixed(2);
+	}
+
 	$scope.setIpi = function()
 	{
 		var auxbc = $scope.produto_selected.basecalculoIpi;
-		
+
+		if($scope.produto_selected.wasIpiEdited == undefined)
+		{
+			$scope.produto_selected.wasIpiEdited = false;
+		}
+		if($scope.produto_selected.wasIcmsEdited == undefined)
+		{
+			$scope.produto_selected.wasIcmsEdited = false;
+		}
+		if($scope.produto_selected.calcFreteIpi == undefined)
+		{
+			$scope.produto_selected.calcFreteIpi = 1;
+		}
+		if($scope.produto_selected.calcDescontoIpi == undefined)
+		{
+			$scope.produto_selected.calcDescontoIpi = 1;
+		}
+		if($scope.produto_selected.calcSeguroIpi == undefined)
+		{
+			$scope.produto_selected.calcSeguroIpi = 1;
+		}
+		if($scope.produto_selected.calcOutrosIpi == undefined)
+		{
+			$scope.produto_selected.calcOutrosIpi = 1;
+		}
 		if($scope.produto_selected.valoripi == undefined)
 		{
 			$scope.produto_selected.valoripi = 0;
 		}
 
-		if( $scope.produto_selected.ipi_cst_id == 8 )
+		if(!$scope.produto_selected.wasIpiEdited)
 		{
-			$scope.produto_selected.basecalculoIpi = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
-													 ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIpi) + 
-													 ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIpi) + 
-													 ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIpi) - 
-													 ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIpi);
+			if( $scope.produto_selected.ipi_cst_id == 8 )
+			{
+				$scope.produto_selected.basecalculoIpi = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
+														 ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIpi) + 
+														 ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIpi) + 
+														 ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIpi) - 
+														 ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIpi);
 
-			$scope.produto_selected.valoripi = $scope.produto_selected.basecalculoIpi * ($scope.produto_selected.ipi_aliquota/100).toFixed(2);		
+				$scope.produto_selected.valoripi = $scope.produto_selected.basecalculoIpi * ($scope.produto_selected.ipi_aliquota/100).toFixed(2);		
+			}
+			//saida tributada com aliquota zero
+			if( $scope.produto_selected.ipi_cst_id == 9)
+			{
+				$scope.produto_selected.basecalculoIpi = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
+														 ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIpi) + 
+														 ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIpi) + 
+														 ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIpi) - 
+														 ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIpi);
+
+				$scope.produto_selected.ipi_aliquota = 0;
+				$scope.produto_selected.valoripi = 0;
+			}
+
+			//outras saidas...
+			if( $scope.produto_selected.ipi_cst_id != 8 && $scope.produto_selected.ipi_cst_id != 9)
+			{
+				$scope.produto_selected.basecalculoIpi = 0;
+			}
 		}
-		//saida tributada com aliquota zero
-		if( $scope.produto_selected.ipi_cst_id == 9)
+		else
 		{
-			$scope.produto_selected.basecalculoIpi = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
-													 ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIpi) + 
-													 ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIpi) + 
-													 ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIpi) - 
-													 ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIpi);
-
-			$scope.produto_selected.ipi_aliquota = 0;
-			$scope.produto_selected.valoripi = 0;
+			if( $scope.produto_selected.ipi_cst_id == 8 )
+			{
+				$scope.produto_selected.valoripi = $scope.produto_selected.basecalculoIpi * ($scope.produto_selected.ipi_aliquota/100).toFixed(2);		
+			}
+			if($scope.produto_selected.ipi_cst_id == 9)
+			{
+				$scope.produto_selected.ipi_aliquota = 0;
+				$scope.produto_selected.valoripi = 0;
+			}
+			if( $scope.produto_selected.ipi_cst_id != 8 && $scope.produto_selected.ipi_cst_id != 9)
+			{
+				$scope.produto_selected.basecalculoIpi = 0;
+			}
 		}
-
-		//outras saidas...
-		if( $scope.produto_selected.ipi_cst_id != 8 && $scope.produto_selected.ipi_cst_id != 9)
-		{
-			$scope.produto_selected.basecalculoIpi = 0;
-		}
+		
 
 		if($scope.produto_selected.basecalculoIpi != auxbc)
 		{
-			$("[name='alt']").effect( "pulsate", {times:1}, 500 );
+			$("[name='alt']").effect( "pulsate", {times:1}, 100 );
 		}
+	}
+
+	$scope.calcBcIcms = function()
+	{
+		$scope.produto_selected.basecalculoIcms = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
+														  ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIcms) + 
+														  ($scope.produto_selected.valoripi * $scope.produto_selected.calcIpiIcms) + 
+														  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
+														  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
+														  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
 	}
 
 	$scope.setIcms = function()
 	{
 		var auxbcicms = $scope.produto_selected.basecalculoIcms;
-
+	
+		if($scope.produto_selected.wasIpiEdited == undefined)
+		{
+			$scope.produto_selected.wasIpiEdited = false;
+		}
+		if($scope.produto_selected.wasIcmsEdited == undefined)
+		{
+			$scope.produto_selected.wasIcmsEdited = false;
+		}
 		if($scope.produto_selected.valoricms == undefined)
 		{
 			$scope.produto_selected.valoricms = 0;
 		}
-
-		//tributado integralmente
-		if( $scope.produto_selected.icms_cst_id == 1 )
+		if($scope.produto_selected.calcIpiIcms == undefined)
 		{
-			$scope.produto_selected.basecalculoIcms = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
-													  ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIcms) + 
-													  ($scope.produto_selected.valoripi * $scope.produto_selected.calcIpiIcms) + 
-													  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
-													  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
-													  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
-			
-			if($scope.produto_selected.icms_aliquota == undefined)
+			$scope.produto_selected.calcIpiIcms = 1;
+		}
+		if($scope.produto_selected.calcFreteIcms == undefined)
+		{
+			$scope.produto_selected.calcFreteIcms = 1;
+		}
+		if($scope.produto_selected.calcDescontoIcms == undefined)
+		{
+			$scope.produto_selected.calcDescontoIcms = 1;
+		}
+		if($scope.produto_selected.calcSeguroIcms == undefined)
+		{
+			$scope.produto_selected.calcSeguroIcms = 1;
+		}
+		if( $scope.produto_selected.calcOutrosIcms== undefined)
+		{
+			$scope.produto_selected.calcOutrosIcms = 1;
+		}
+		
+
+
+		if($scope.isEditing == false)
+		{
+			if(!$scope.produto_selected.wasIcmsEdited)
 			{
-				$scope.produto_selected.icms_aliquota = $scope.icmsProdutoSelected.aliquota;
+				if($scope.icmsProdutoSelected.aliquota > 0)
+				{	
+					//00
+					if($scope.icmsProdutoSelected.reducaobasecalculo == 0 && $scope.icmsProdutoSelected.diferimento == 0  && $scope.icmsProdutoSelected.icmsst == false)
+					{
+						$scope.produto_selected.icms_cst_id = 1;
+					}
+					//51
+					else if($scope.icmsProdutoSelected.reducaobasecalculo == 0 && $scope.icmsProdutoSelected.diferimento > 0  && $scope.icmsProdutoSelected.icmsst == false)
+					{
+						$scope.produto_selected.icms_cst_id = 8;
+					}
+					//10
+					else if($scope.icmsProdutoSelected.reducaobasecalculo == 0  && $scope.icmsProdutoSelected.icmsst == true)
+					{
+						$scope.produto_selected.icms_cst_id = 2;
+					}
+					//20
+					else if($scope.icmsProdutoSelected.reducaobasecalculo > 0  && $scope.icmsProdutoSelected.icmsst == false)
+					{
+						$scope.produto_selected.icms_cst_id = 3;
+					}
+					//70
+					else if($scope.icmsProdutoSelected.reducaobasecalculo > 0  && $scope.icmsProdutoSelected.icmsst == true)
+					{
+						$scope.produto_selected.icms_cst_id = 10;
+					}
+				}
+				else
+				{
+					//30
+					if($scope.icmsProdutoSelected.icmsst == true)
+					{
+						$scope.produto_selected.icms_cst_id = 4;
+					}
+					//40				
+					else if($scope.icmsProdutoSelected.icmsst == false)
+					{
+						$scope.produto_selected.icms_cst_id = 5;
+					}
+				}
 			}
-			
-			$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
-
 		}
-		else if ($scope.produto_selected.icms_cst_id == 5 ||  $scope.produto_selected.icms_cst_id == 6 || 
-				 $scope.produto_selected.icms_cst_id == 7 ||  $scope.produto_selected.icms_cst_id == 9)
+
+		if(!$scope.produto_selected.wasIcmsEdited)
 		{
-			$scope.produto_selected.basecalculoIcms = 0;
-			$scope.produto_selected.icms_aliquota = 0;
-			$scope.produto_selected.valoricms = 0;
-		}
+			//tributado integralmente
+			if( $scope.produto_selected.icms_cst_id == 1 )
+			{
+				$scope.produto_selected.basecalculoIcms = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
+														  ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIcms) + 
+														  ($scope.produto_selected.valoripi * $scope.produto_selected.calcIpiIcms) + 
+														  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
+														  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
+														  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
+				
+				if($scope.produto_selected.icms_aliquota == undefined)
+				{
+					$scope.produto_selected.icms_aliquota = $scope.icmsProdutoSelected.aliquota;
+				}
+				
+				$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
 
+			}
+			else if ($scope.produto_selected.icms_cst_id == 5 ||  $scope.produto_selected.icms_cst_id == 6 ||
+					 $scope.produto_selected.icms_cst_id == 7 ||  $scope.produto_selected.icms_cst_id == 9)
+			{
+				$scope.produto_selected.basecalculoIcms = 0;
+				$scope.produto_selected.icms_aliquota = 0;
+				$scope.produto_selected.valoricms = 0;
+			}
+
+			else
+			{
+				$scope.produto_selected.basecalculoIcms = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
+														  ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIcms) + 
+														  ($scope.produto_selected.valoripi * $scope.produto_selected.calcIpiIcms) + 
+														  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
+														  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
+														  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
+				
+				if($scope.produto_selected.valoricms == 0 || $scope.produto_selected.valoricms == undefined)
+				{
+					$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
+				}
+
+				$scope.produto_selected.icms_aliquota = 0;
+				$scope.produto_selected.valoricms = 0;
+			}
+		}
 		else
 		{
-			$scope.produto_selected.basecalculoIcms = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
-													  ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIcms) + 
-													  ($scope.produto_selected.valoripi * $scope.produto_selected.calcIpiIcms) + 
-													  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
-													  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
-													  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
-			
-			if($scope.produto_selected.valoricms == 0 || $scope.produto_selected.valoricms == undefined)
+			if($scope.produto_selected.icms_cst_id == 1 )
 			{
+				$scope.icmsProdutoSelected.icmsst == false
 				$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
 			}
-
-			$scope.produto_selected.icms_aliquota = 0;
-			$scope.produto_selected.valoricms = 0;
+			else if($scope.produto_selected.icms_cst_id == 2 || $scope.produto_selected.icms_cst_id == 4 || $scope.produto_selected.icms_cst_id == 10)
+			{
+				$scope.icmsProdutoSelected.icmsst == true;
+			}
+			else if ($scope.produto_selected.icms_cst_id == 5 ||  $scope.produto_selected.icms_cst_id == 6 ||
+					 $scope.produto_selected.icms_cst_id == 7 ||  $scope.produto_selected.icms_cst_id == 9)
+			{
+				$scope.icmsProdutoSelected.icmsst == false
+				$scope.produto_selected.basecalculoIcms = 0;
+				$scope.produto_selected.icms_aliquota = 0;
+				$scope.produto_selected.valoricms = 0;
+			}
+			else
+			{
+				$scope.icmsProdutoSelected.icmsst == false
+				$scope.produto_selected.icms_aliquota = 0;
+				$scope.produto_selected.valoricms = 0;
+			}
 		}
-
 		if($scope.produto_selected.basecalculoIcms != auxbcicms)
 		{
 			$("[name='alticms']").effect( "pulsate", {times:1}, 500 );
@@ -243,6 +446,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.setFocusInput = function()
 	{		
 		$scope.produto_selected = []
+
+
 		setTimeout(function(){
   				$scope.$broadcast('setFocus');
         }, 500);
@@ -260,7 +465,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
            $("#qtde").focus();
         }, 2);
         $scope.setIpi();
-		
 	}
 
 	$scope.addProduto = function(produto)
@@ -277,16 +481,11 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	
 	$scope.edit_produto = function(index)
 	{
+
 		$scope.isEditing = true;
 		$scope.produto_selected = $scope.produtos_choosen[index];
 		auxproduto = JSON.parse($scope.data.produtos_list)[index]; 
 		auxindex = index;
-
-		console.log($scope.produto_selected.calcFreteIpi);
-		console.log($scope.produto_selected.calcDescontoIpi);
-		console.log($scope.produto_selected.calcSeguroIpi);
-		console.log($scope.produto_selected.calcOutrosIpi);
-
 	}
 
 	$scope.saveProduto = function(produto)
@@ -295,9 +494,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		{
 			$scope.produtos_choosen[auxindex] = produto;
 		}
-		$scope.setTotal();
-		$scope.setIpi();
-		$scope.setIcms();
 		$scope.endEdit();
 	}
 
@@ -307,17 +503,19 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		{
 			$scope.produtos_choosen[auxindex] = auxproduto;
 		}
-		$scope.setTotal();
-		$scope.setIpi();
-		$scope.setIcms();
+		
 		$scope.endEdit();
 	}
 
 	$scope.endEdit = function()
 	{
-		$scope.isEditing = false;
 		auxproduto = [];
 		auxindex = 0;
+		// $scope.setIpi();
+		// $scope.setIcms();
+		$scope.setTotal();
+		$scope.isEditing = false;
+
 	}
 
 
@@ -532,26 +730,26 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 		function format (d)  {
 		    // `d` is the original data object for the row
-		    return'<div class="col-md-4">' + 
-		    '<table  class="table table-hover"  class="display" border="0" style="padding-left:200px;">'+
-		        '<tr>'+
-		            '<td><b>Frete:</b></td>'+
-		            '<td align="right">'+ d[2] +'</td>'+
-		        '</tr>'+
-		        '<tr>'+
-		            '<td><b>Seguro:</b></td>'+
-		            '<td align="right">'+ d[4] +'</td>'+
-		        '</tr>'+
-		        '<tr>'+
-		            '<td><b>Outros:</b></td>'+
-		            '<td align="right">'+ d[5] +'</td>'+
-		        '</tr>'+
-		        '<tr>'+
-		            '<td><b>Desconto:</b></td>'+
-		            '<td align="right">'+ d[3] +'</td>'+
-		        '</tr>'+
-		    '</table>'+
-		    '</div>'
+		    return '<div class="col-md-8">' + 
+						'<table  class="table table-hover"  class="display" border="0" style="padding-left:200px;">'+
+							'<tr>'+
+				    	        '<td><b>Frete:</b></td>'+
+					            '<td align="right">'+ d[2] +'</td>'+
+					        '</tr>'+
+					        '<tr>'+
+					            '<td><b>Seguro:</b></td>'+
+					            '<td align="right">'+ d[4] +'</td>'+
+					        '</tr>'+
+					        '<tr>'+
+					            '<td><b>Outros:</b></td>'+
+					            '<td align="right">'+ d[5] +'</td>'+
+					        '</tr>'+
+					        '<tr>'+
+					            '<td><b>Desconto:</b></td>'+
+					            '<td align="right">'+ d[3] +'</td>'+
+					        '</tr>'+
+					   	'</table>'+
+			    	'</div>'
 		}
 
 	 	var table = $('#produtos').DataTable({

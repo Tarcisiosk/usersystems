@@ -17,6 +17,8 @@ class MovimentomController < ApplicationController
 
 	def new
 		@movimentom = Movimentom.new
+		
+		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
 		@icmscst = Icmscst.all.select("id", "codigo", "descricao")
 		@@angularActions = {:data => '', :entidade_id => '', :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
@@ -38,8 +40,9 @@ class MovimentomController < ApplicationController
 
 	def edit
 		@movimentom = Movimentom.find(params[:id]) 
+		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
-		@icmscst = Icmscst.all.select("id", "codigo", "descricao")
+		@icmscst = Icmscst.all.select("id", "codigo", "descricao").order(id: :asc)
 		@@angularActions = {:data => @movimentom.data.strftime("%d/%m/%Y"), :entidade_id => @movimentom.entidade_id, :produtos_list => @movimentom.produtos_list, :totalvalor => @movimentom.totalvalor, :totalquantidade => @movimentom.totalquantidade}
 
 	end
