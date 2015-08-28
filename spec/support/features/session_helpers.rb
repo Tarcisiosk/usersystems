@@ -31,7 +31,7 @@ module Features
 
     def clico_link(value)
     	click_link value
-    end	
+    end	    
     def clico_primeiro_link(value)
       first(:link,value).click
     end
@@ -59,6 +59,12 @@ module Features
     end
     def marco_checkbox(checkbox)
       page.execute_script("$('##{checkbox}').click()")      
-    end 
+    end
+    def escolho_radio(radio)
+      choose(radio)
+    end  
+    def ajax_call_delete(value)
+      page.execute_script("$.ajax({type:'DELETE',url:'#{value}'})")
+    end
   end  
 end    

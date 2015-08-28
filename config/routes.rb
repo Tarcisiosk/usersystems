@@ -132,6 +132,12 @@ Rails.application.routes.draw do
 	get 'movimentoms/get_produtos' => "movimentom#returnProdutosMovimentos"
 	get 'movimentoms/get_icms/:id' => "movimentom#returnIcms"
 	get 'movimentoms/get_icmsinterestadual' => "movimentom#returnIcmsInterEstadual"
+
+	get 'planocontas' => "planoconta#index", as: :planocontas
+	get 'planocontas/new' => "planoconta#new", as: :new_planoconta
+	post 'planocontas/save' => 'planoconta#save'		
+	post 'planoconta/save_settings' => 'planoconta#save_settings'
+
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	
 	get "index" => 'index#index', as: :index
@@ -155,6 +161,7 @@ Rails.application.routes.draw do
 	resources :serie, only: [:edit, :update, :new, :create, :destroy]
 	resources :tipomovimentacao, only: [:edit, :update, :new, :create, :destroy]
 	resources :movimentom, only: [:edit, :update, :new, :create, :destroy]
+	resources :planoconta, only: [:edit, :update, :new, :create, :destroy]
 
 
 
