@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>'
+<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' cliente='<%=@cliente.to_json.html_safe%>'>
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 			<!-- END PAGE TITLE -->
@@ -46,26 +46,24 @@
 											<div class="form-group">
 												<label class="control-label ">Data de Emissão</label>
 
-												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 												<input type="text" name="data" ng-model='data.data' id="datepicker" data-date-format="dd/mm/yyyy" class="form-control form-control-inline input-medium date-picker" size="16">
-												<!--<span class="help-block"> Select date </span>-->
 											</div>
 										</div>
-										<div class="col-md-9">
-
+										<div class="col-md-6">
 											<div class="form-group">
-												<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 												<label class="control-label ">Cliente</label>
-												<ui-select ng-model="data.entidade_id"  name="entidade" theme="bootstrap">
+												<ui-select ng-model="data.entidade_id" on-select="setEntidadeSelected($item); setCheckboxes('consumidorfinal', data.consumidor_final)" name="entidade" theme="bootstrap" >
 										            <ui-select-match allow-clear="false" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>
 										            <ui-select-choices repeat="e.id as e in entidade_opts | filter: $select.search">
 										              <span ng-bind-html="e.nome_fantasia "></span>
 										            </ui-select-choices>
-										        </ui-select>
+										        </ui-select><br>
+										       	
+										       	<input type="checkbox" ng-disabled='isDisabled'  id='consumidorfinal' ng-click="setCheckboxes('consumidorfinal', data.consumidor_final)" ng-model="data.consumidor_final"> Consumidor Final </input><br>
 											</div>
 										</div>
+									
 									</div>
-
 									<div class ="row">
 										<div class="col-md-12">
 											<div class="portlet">
@@ -84,7 +82,6 @@
 															<thead>
 																<tr role="row">
 																	<th width="2%" align="center" class="no-sort">
-
 																	</th>
 																	<th  width="37%">
 																		Produto
@@ -105,7 +102,7 @@
 																		Qtde
 																	</th >
 																	<th style="text-align:center" width="7%">
-																		Preço
+																		Valor Un.
 																	</th >
 																	<th style="text-align:center" width="7%">
 																		IPI
@@ -137,7 +134,7 @@
 																	<td align="right">{{ p.valoricms | currency : ""}}</td>
 																	<td align="right">{{(((p.preco * 1) * p.qtde ) + (p.frete * 1) + (p.seguro * 1) + (p.outros * 1) + (p.valoripi * 1) - (p.desconto * 1))  | currency : ""}}</td>
 																	<td align="center"> 
-																		<a ncheck href="#portlet-config" ng-click="edit_produto($index); getIcms(p.id);" data-toggle="modal" class="btn yellow btn-sm"> <i class="fa fa-pencil"></i> </a>
+																		<a ncheck href="#portlet-config" ng-click="edit_produto($index); getIcms(p.id, false); getIcms(p.id, true); verifyInter(); preSetCheckbox();" data-toggle="modal" class="btn yellow btn-sm"> <i class="fa fa-pencil"></i> </a>
 																		<a ng-click="delete_produto($index)" class="btn red btn-sm"><i class="fa fa-trash-o"></i></a>
 																	</td>
 																</tr>
@@ -155,21 +152,20 @@
 												<i class="fa fa-pencil"></i> Editar</a><br>
 											</div></div></div>
 
-											<div class="well " style="font-family:Lucida console; font-size:30;">
+											<div class="well " style="font-family:Lucida console;">
 												<div class="row static-info">
 													<div class="col-md-8 name" >
 														 Quantidade de Itens:
 													</div>
-													<div class="col-md-4 value"   align="right">
+													<div class="col-md-4 "   align="right">
 														{{data.totalquantidade}}
 													</div>
 												</div>
-												
 												<div class="row static-info"  ng-show="totalfrete > 0">
 													<div class="col-md-6 name" >
 														 Total frete:
 													</div>
-													<div class="col-md-6 value"  align="right">
+													<div class="col-md-6 "  style="color: blue;" align="right">
 														{{totalfrete | currency : "R$" }} (+)
 													</div>
 												</div>
@@ -177,7 +173,7 @@
 													<div class="col-md-6 name" >
 														 Total desconto:
 													</div>
-													<div class="col-md-6 value"  align="right">
+													<div class="col-md-6 "  style="color: red;" align="right">
 														{{totaldesconto | currency : "R$" }} (-)
 													</div>
 												</div>
@@ -185,7 +181,7 @@
 													<div class="col-md-6 name"  >
 														 Total seguro:
 													</div>
-													<div class="col-md-6 value"  align="right">
+													<div class="col-md-6 "  style="color: blue;" align="right">
 														 {{totalseguro | currency : "R$" }} (+)
 													</div>
 												</div>
@@ -193,7 +189,7 @@
 													<div class="col-md-6 name" >
 														 Total outros:
 													</div>
-													<div class="col-md-6 value"  align="right">
+													<div class="col-md-6 "  style="color: blue;" align="right">
 														 {{totaloutros | currency : "R$" }} (+)
 													</div>
 												</div>
@@ -201,15 +197,15 @@
 													<div class="col-md-6 name" >
 														 Total IPI:
 													</div>
-													<div class="col-md-6 value"  align="right">
+													<div class="col-md-6 " style="color: blue;" align="right">
 														 {{totalipi | currency : "R$" }} (+)
 													</div>
 												</div>
-												<div class="row static-info " ng-show="totalicms > 0">
+												<div class="row static-info" ng-show="totalicms > 0">
 													<div class="col-md-6 name" >
 														 Total ICMS:
 													</div>
-													<div class="col-md-6 value"  align="right">
+													<div class="col-md-6"   style="color: blue;" align="right">
 														 {{totalicms | currency : "R$" }}
 													</div>
 												</div>
@@ -217,7 +213,7 @@
 													<div class="col-md-6 name">
 														 Total Líquido:
 													</div>
-													<div class="col-md-6 value" style="color: red;"  align="right">
+													<div class="col-md-6 value" align="right">
 														{{totalpreco| currency : "R$" }}
 													</div>
 												</div>
@@ -225,7 +221,7 @@
 													<div class="col-md-6 name" >
 														 Total:
 													</div>
-													<div class="col-md-6 value" style="color: red;" align="right">
+													<div class="col-md-6 value" align="right">
 														 {{data.totalvalor | currency : "R$" }}
 													</div>
 												</div>
@@ -250,24 +246,33 @@
 						<div ng-show="isEditing == true">
 							<h4 class="modal-title">Editar Produto</h4>
 						</div>
-
 					</div>
 					<div class="modal-body" >
 						<div class="row">
 							<div class="col-md-12">
-								<div class="col-md-7">
+								<div class="col-md-6">
 									<div class="form-group">
 										<div class="typeahead-container">
 											<div class="typeahead-field" id='tipo'>
-												<label>Produto</label>
-												<ui-select reset-search-input="true" ng-disable="isEditing==true" id="produto" focus-on='setFocus' ng-model="produto_selected" on-select="setProdutoSelected($item); NextField(); getIcms(produto_selected.id)" theme="bootstrap">
+												<label class="control-label ">Produto </label>
+												<div class="btn-group">
+													<div class="dropup">
+														<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true" data-toggle="tooltip" title="Clique para alterar descrição do produto"> <i class="fa fa-pencil"></i> </a>
+														<ul class="dropdown-menu" aria-labelledby="Descrição" role="menu">
+															<li>
+													        	<input type="text" class='form-control placeholder-no-fix' ng-model="produto_selected.descricao"> 
+															</li>
+														</ul>
+													</div>
+												</div>
+												<ui-select reset-search-input="true" ng-disable="isEditing==true" id="produto" focus-on='setFocus' ng-model="produto_selected" on-select="setProdutoSelected($item); NextField(); getIcms(produto_selected.id, false);  getIcms(produto_selected.id, true); verifyInter()" theme="bootstrap">
 										            <ui-select-match allow-clear="true">{{$select.selected.descricao}}</ui-select-match>
 										            <ui-select-choices repeat="p in produto_opts | filter: $select.search" refresh="refreshProdutos($select.search)" refresh-delay="0">
 										              	<div ng-bind-html="p.descricao | highlight: $select.search"></div>
 										              	 <small>
 										              	 	<!--<img src='/produtos/showImg/{{p.id}}' width="30px;" height="30px;" > -->
 													        Cod: {{p.codigo}}
-													        Preço: {{p.preco | customCurrency}}
+													        Valor Un.: {{p.preco | customCurrency}}
 													        Un: {{p.unidade}}
 													    </small>
 										            </ui-select-choices>
@@ -276,21 +281,19 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-md-2">
+								<div class="col-md-3">
 									<div class="form-group">
 										<label class="control-label ">Quantidade</label>
 										<div class="input-group">
-											<!--<span class="input-group-addon"><i class="fa fa-cubes"></i></span>-->
-											<input type="text" id="qtde" ng-blur="setIpi(); setIcms()" ng-model='produto_selected.qtde' class='form-control placeholder-no-fix'> 
+											<input type="text" id="qtde" ng-blur="setIpi(); setIcms(); setIcmsst()" ng-model='produto_selected.qtde' class='form-control placeholder-no-fix'> 
 										</div>
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group">
-										<label class="control-label ">Preço</label>
+										<label class="control-label ">Valor Un.</label>
 										<div class="input-group">
-											<span class="input-group-addon"> R$ </span>
-											<input type="text" name="money" ng-blur="setIpi(); setIcms()" ui-number-mask="2" ng-model='produto_selected.preco' class='form-control placeholder-no-fix'> 
+											<input type="text" name="money" ng-blur="setIpi(); setIcms(); setIcmsst()" ui-number-mask="2" ng-model='produto_selected.preco' class='form-control placeholder-no-fix'> 
 										</div>
 									</div>
 								</div>
@@ -308,52 +311,48 @@
 												<div class="row">
 													<div class="col-md-12">
 														<div class="form-body">
-															<h4>Outras Informações</h4>
+															<h4>Outras Informações/Impostos</h4>
 														</div>
 													</div>
 												</div>
 												<div class="col-md-3">
 													<label class="control-label ">Frete</label>
 													<div class="input-group">
-														<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms();" ng-model='produto_selected.frete' class='form-control placeholder-no-fix'> 
+														<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setEdited(2); setIpi(); setIcms(); setIcmsst()" ng-model='produto_selected.frete' class='form-control placeholder-no-fix'> 
 													</div>
 												</div>
 												<div class="col-md-3">
 													<label class="control-label ">Desconto</label>
 													<div class="input-group">
-														<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms();" ng-model='produto_selected.desconto' class='form-control placeholder-no-fix'> 
+														<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setEdited(2); setIpi(); setIcms(); setIcmsst()" ng-model='produto_selected.desconto' class='form-control placeholder-no-fix'> 
 													</div>
 												</div>
 												<div class="col-md-3">
 													<label class="control-label ">Seguro</label>
 													<div class="input-group">
-														<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms();" ng-model='produto_selected.seguro' class='form-control placeholder-no-fix'> 
+														<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setEdited(2); setIpi(); setIcms(); setIcmsst()" ng-model='produto_selected.seguro' class='form-control placeholder-no-fix'> 
 													</div>
 												</div>
 												<div class="col-md-3">
 													<label class="control-label ">Outros</label>
 													<div class="input-group">
-														<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms();" ng-model='produto_selected.outros' class='form-control placeholder-no-fix'> 
+														<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setEdited(2); setIpi(); setIcms(); setIcmsst()" ng-model='produto_selected.outros' class='form-control placeholder-no-fix'> 
 													</div>
 												</div>
 											</div>
 										</div>
+
 										<h4 class="form-section"></h4>
-										<h4>Impostos</h4>
 
 										<ul class="nav nav-tabs">
 											<li>
-												<a href="#portlet_tab1" data-toggle="tab">
-												IPI </a>
+												<a href="#portlet_tab1" data-toggle="tab"> IPI </a>
 											</li>
 											<li>
-												<a href="#portlet_tab2" data-toggle="tab">
-												ICMS </a>
+												<a href="#portlet_tab2" data-toggle="tab"> ICMS </a>
 											</li>
-											 <!--ng-show="icmsProdutoSelected.icmsst == true"-->
 											<li>
-												<a href="#portlet_tab3"  data-toggle="tab" ng-show="produto_selected.icms_cst_id == 2 || produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 10">
-												ICMS ST </a>
+												<a href="#portlet_tab3"  data-toggle="tab" ng-show="produto_selected.icms_cst_id == 2 || produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 10"> ICMS ST </a>
 											</li>
 										</ul>
 										<div class="tab-content">
@@ -362,27 +361,28 @@
 													<div class="row">
 														<div class="col-md-7">
 															<label class="control-label ">Situação tributária</label>
-															<select name="ipi_cst_id" class="form-control" ng-change="calcBcIpi(); setIpi();  setIcms();" ng-model="produto_selected.ipi_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in ipicsts">				
+															<select name="ipi_cst_id" class="form-control" ng-change="calcBcIpi(); setIpi();  setIcms();  setIcmsst()" ng-model="produto_selected.ipi_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in ipicsts">				
 															</select>
 														</div>
 
 														<div class="col-md-5">
 															<label class="control-label ">Base de Cálculo</label> 
 															<div class="btn-group">
-																<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"  data-close-others="true"> <i class="fa fa-cog"></i> </a>
+																<div class="dropup">
+																	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"  data-close-others="true"> <i class="fa fa-cog"></i> </a>
+																	<ul class="dropdown-menu pull-right" role="menu">
+																		<li>
 
-																<ul class="dropdown-menu pull-right" role="menu">
-																	<li>
-
-																		<input type="checkbox" ng-model="produto_selected.calcFreteIpi" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms();"  ng-true-value='1' ng-false-value='0' class="checkboxes">Frete</input><br>
-															        	
-															        	<input type="checkbox" ng-model="produto_selected.calcDescontoIpi" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms();" ng-true-value='1' ng-false-value='0' class="checkboxes"> Desconto </input><br>
-															        	
-															        	<input type="checkbox" ng-model="produto_selected.calcSeguroIpi" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms();" ng-true-value='1' ng-false-value='0' class="checkboxes"> Seguro </input><br>
-															        	
-															        	<input type="checkbox" ng-model="produto_selected.calcOutrosipi" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms();" ng-true-value='1' ng-false-value='0' class="checkboxes"> Outros </input><br>
-																	</li>
-																</ul>
+																			<input type="checkbox" ng-model="produto_selected.calcFreteIpi" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms(); setIcmsst()"  ng-true-value='1' ng-false-value='0' class="checkboxes" id='freteipi' ng-click="setCheckboxes('freteipi', produto_selected.calcFreteIpi)" >Frete</input><br>
+																        	
+																        	<input type="checkbox" ng-model="produto_selected.calcDescontoIpi" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' class="checkboxes" id='descontoipi' ng-click="setCheckboxes('descontoipi', produto_selected.calcDescontoIpi)"> Desconto </input><br>
+																        	
+																        	<input type="checkbox" ng-model="produto_selected.calcSeguroIpi" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' class="checkboxes" id='seguroipi' ng-click="setCheckboxes('seguroipi', produto_selected.calcSeguroIpi)"> Seguro </input><br>
+																        	
+																        	<input type="checkbox" ng-model="produto_selected.calcOutrosipi" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' class="checkboxes" id='outrosipi' ng-click="setCheckboxes('outrosipi', produto_selected.calcOutrosipi)"> Outros </input><br>
+																		</li>
+																	</ul>
+																</div>
 															</div>
 															
 															<div class="input-group">
@@ -397,7 +397,7 @@
 															<label class="control-label ">Aliquota(%)</label>
 															<div class="input-group">
 																 <!--ng-show="produto_selected.ipi_cst_id != 8"-->
-																<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setIpi(); setIcms(); "  ng-model='produto_selected.ipi_aliquota' class='form-control placeholder-no-fix'> 
+																<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0); setEdited(1); setEdited(2); setIpi(); setIcms(); setIcmsst()"  ng-model='produto_selected.ipi_aliquota' class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
 														<div class="col-md-4">
@@ -415,7 +415,7 @@
 													<div class="row">
 														<div class="col-md-7">
 															<label class="control-label ">Situação tributária</label>
-															<select name="icms_cst_id" class="form-control" ng-change="setEdited(1); calcBcIcms(); setIcms(); " ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmscsts">				
+															<select name="icms_cst_id" class="form-control" ng-change="setEdited(1); calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmscsts">				
 															</select>
 														</div>
 														<div class="col-md-5" ng-hide="produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
@@ -423,21 +423,22 @@
 															<label class="control-label ">Base de Cálculo</label> 
 
 															<div class="btn-group">
-																<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
+																<div class="dropup">
+																	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
+																	<ul class="dropdown-menu pull-right" role="menu">
+																		<li>
+																			<input type="checkbox" ng-model="produto_selected.calcIpiIcms" ng-change="calcBcIcms(); setIcms()" ng-true-value='1' ng-false-value='0' id='ipiicms' ng-click="setCheckboxes('ipiicms', produto_selected.calcIpiIcms)" > IPI </input><br>
 
-																<ul class="dropdown-menu pull-right" role="menu">
-																	<li>
-																		<input type="checkbox" ng-model="produto_selected.calcIpiIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> IPI </input><br>
-
-																		<input type="checkbox" ng-model="produto_selected.calcFreteIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> Frete </input><br>
-															        	
-															        	<input type="checkbox" ng-model="produto_selected.calcDescontoIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> Desconto </input><br>
-															        	
-															        	<input type="checkbox" ng-model="produto_selected.calcSeguroIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> Seguro </input><br>
-															        	
-															        	<input type="checkbox" ng-model="produto_selected.calcOutrosIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> Outros </input><br>
-																	</li>
-																</ul>
+																			<input type="checkbox" ng-model="produto_selected.calcFreteIcms" ng-change="calcBcIcms(); setIcms()" ng-true-value='1' ng-false-value='0' id='freteicms' ng-click="setCheckboxes('freteicms', produto_selected.calcFreteIcms)" > Frete </input><br>
+																        	
+																        	<input type="checkbox" ng-model="produto_selected.calcDescontoIcms" ng-change="calcBcIcms(); setIcms()" ng-true-value='1' ng-false-value='0' id='descontoicms' ng-click="setCheckboxes('descontoicms', produto_selected.calcDescontoIcms)" > Desconto </input><br>
+																        	
+																        	<input type="checkbox" ng-model="produto_selected.calcSeguroIcms" ng-change="calcBcIcms(); setIcms()" ng-true-value='1' ng-false-value='0' id='seguroicms' ng-click="setCheckboxes('seguroicms', produto_selected.calcSeguroIcms)" > Seguro </input><br>
+																        	
+																        	<input type="checkbox" ng-model="produto_selected.calcOutrosIcms" ng-change="calcBcIcms(); setIcms()" ng-true-value='1' ng-false-value='0' id='outrosicms' ng-click="setCheckboxes('outrosicms', produto_selected.calcOutrosIcms)" > Outros </input><br>
+																		</li>
+																	</ul>
+																</div>
 															</div>
 															<div class="input-group">
 																<!--ng-show="produto_selected.icms_cst_id != 1"-->
@@ -464,21 +465,19 @@
 												</div>
 											</div>
 
-											<div class="tab-pane" id="portlet_tab3" ng-show="produto_selected.icms_cst_id == 2 || produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 10">
+											<div class="tab-pane" id="portlet_tab3" >
 												<div class="row">
-
 													<div class="col-md-9">
 														<label class="control-label">Modalidade BC ICMS ST</label>
 														<select name="modalidadebcicmsst_id" class="form-control" ng-model="icmsProdutoSelected.modalidadebcicmsst_id"
 															ng-options="value.id as value.codigo + ' - ' +value.descricao for (key, value) in modalidadebcicmssts">
-
-														</select>
+														</select><br>
 													</div>	
 													<div class="col-md-3">
-														<div class="form-group" ng-show="icmsProdutoSelected.modalidadebcicmsst_id == 5">
+														<div class="form-group" on-select="getIcms(produto_selected.id, true); setIcmsst()" ng-show="icmsProdutoSelected.modalidadebcicmsst_id == 5">
 															<label class="control-label">MVA</label>
 															<div class="input-group">
-																<input type="number" name="mva" ng-model="icmsProdutoSelected.mva" class="form-control placeholder-no-fix"></input>
+																<input type="number" name="mva" ng-model="icmsProdutoSelected.mva" ng-change="calcBcIcmsst();" class="form-control placeholder-no-fix"></input>
 																<span class="input-group-addon">%</span>
 															</div>
 														</div>
@@ -489,51 +488,51 @@
 														<div class="form-group" ng-show="icmsProdutoSelected.modalidadebcicmsst_id == 5">
 															<label class="control-label">Permite Redução MVA</label>							
 															<label>
-																<input id="reducaomva"  ng-model="icmsProdutoSelected.reducaomva" type="checkbox" > 
+																<input id="reducaomva" ng-click="setCheckboxes('reducaomva', icmsProdutoSelected.reducaomva)" ng-model="icmsProdutoSelected.reducaomva" type="checkbox" > 
 															</label>								
 														</div>
 													</div>
-
 												</div>
 												<div class="row">
-													<div class="col-md-4" ng-hide="produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
+													<div class="col-md-4" >
 
 														<label class="control-label ">Base de Cálculo</label> 
-
 														<div class="btn-group">
-															<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
+															<div class="dropup">
+																<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
+																<ul class="dropdown-menu pull-right" role="menu">
+																	<li>
+																		<input type="checkbox" ng-model="produto_selected.calcIpiIcmsst" ng-change="calcBcIcmsst(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='ipiicmsst' ng-click="setCheckboxes('ipiicmsst', produto_selected.calcIpiIcmsst)" > IPI </input><br>
 
-															<ul class="dropdown-menu pull-right" role="menu">
-																<li>
-																	<input type="checkbox" ng-model="produto_selected.calcIpiIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> IPI </input><br>
-
-																	<input type="checkbox" ng-model="produto_selected.calcFreteIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> Frete </input><br>
-														        	
-														        	<input type="checkbox" ng-model="produto_selected.calcDescontoIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> Desconto </input><br>
-														        	
-														        	<input type="checkbox" ng-model="produto_selected.calcSeguroIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> Seguro </input><br>
-														        	
-														        	<input type="checkbox" ng-model="produto_selected.calcOutrosIcms" ng-change="setIcms()" ng-true-value='1' ng-false-value='0'> Outros </input><br>
-																</li>
-															</ul>
+																		<input type="checkbox" ng-model="produto_selected.calcFreteIcmsst" ng-change="calcBcIcmsst(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='freteicmsst' ng-click="setCheckboxes('freteicmsst', produto_selected.calcFreteIcmsst)" > Frete </input><br>
+															        	
+															        	<input type="checkbox" ng-model="produto_selected.calcDescontoIcmsst" ng-change="calcBcIcmsst(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='descontoicmsst' ng-click="setCheckboxes('descontoicmsst', produto_selected.calcDescontoIcmsst)" > Desconto </input><br>
+															        	
+															        	<input type="checkbox" ng-model="produto_selected.calcSeguroIcmsst" ng-change="calcBcIcmsst(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='descontoicms' ng-click="setCheckboxes('descontoicms', produto_selected.calcDescontoIcms)" > Seguro </input><br>
+															        	
+															        	<input type="checkbox" ng-model="produto_selected.calcOutrosIcmsst" ng-change="calcBcIcmsst(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='outrosicmsst' ng-click="setCheckboxes('outrosicmsst', produto_selected.calcOutrosIcmsst)" > Outros </input><br>
+																	</li>
+																</ul>
+															</div>
 														</div>
+
 														<div class="input-group">
 															<!--ng-show="produto_selected.icms_cst_id != 1"-->
-															<input type="text" name="alticms" ui-number-mask="2" ng-change="setIcms(); setEdited(1);" ng-model='produto_selected.basecalculoIcms' class='form-control placeholder-no-fix'> 
+															<input type="text" name="alticmsst" ui-number-mask="2" ng-change="setIcmsst(); setEdited(2);" ng-model='produto_selected.basecalculoIcmsst' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 
-													<div class="col-md-4"  ng-hide="produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9"> 
+													<div class="col-md-4" > 
 														<label class="control-label ">Aliquota(%)</label>
 														<div class="input-group">
 															<!-- ng-show="produto_selected.icms_cst_id != 1" -->
-															<input type="text" name="money" ng-change="setIcms(); setEdited(1);" ui-number-mask="2" ng-model='produto_selected.icms_aliquota' class='form-control placeholder-no-fix'> 
+															<input type="text" name="money" ng-change="setIcmsst(); setEdited(2);" ui-number-mask="2" ng-model='produto_selected.icmsst_aliquota' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
-													<div class="col-md-4" ng-hide="produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
-														<label class="control-label ">Valor ICMS</label>
+													<div class="col-md-4">
+														<label class="control-label ">Valor ICMS ST</label>
 														<div class="input-group">
-															<input type="text" name="alticms" ng-change="setIcms(); setEdited(1);" ui-number-mask="2" ng-model='produto_selected.valoricms' class='form-control placeholder-no-fix'> 
+															<input type="text" name="alticms" ng-change="setIcmsst(); setEdited(2);" ui-number-mask="2" ng-model='produto_selected.valoricmsst' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 												</div>	
@@ -546,14 +545,10 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" ng-disabled="!produto_selected.qtde || produto_selected.qtde <= 0 || produto_selected.preco <= 0 || !produto_selected.descricao" ng-click="addProduto(produto_selected); saveProduto(produto_selected);" class="btn blue" data-dismiss="modal">Salvar</button>
-
 						<button type="button" ng-click="cancelEdit(); " class="btn default" data-dismiss="modal">Cancelar</button>
-					
 					</div>
 				</div>
-				<!-- /.modal-content -->
 			</div>
-			<!-- /.modal-dialog -->
 		</div> 
 	
 		<div class="modal fade" id="portlet-config_edit_values" data-backdrop="static" data-keyboard="false" tabindex="-3" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -602,12 +597,9 @@
 					<div class="modal-footer">
 						<button type="button" ng-click="calcRatio();" class="btn blue" data-dismiss="modal">Salvar</button>
 						<button type="button" ng-click="cancelRatio()" class="btn default" data-dismiss="modal">Cancelar</button>
-
 					</div>
 				</div>
-				<!-- /.modal-content -->
 			</div>
-			<!-- /.modal-dialog -->
 		</div> 
 		<!-- END PAGE CONTENT -->
 	</div>

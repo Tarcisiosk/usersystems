@@ -13,6 +13,6 @@ class IcmsinterestadualController < ApplicationController
   			@Icmsinterestadual.update(iie)
   		end	
   	end	
-  	render :index	
+    render :json => Icmsinterestadual.all.to_json.to_s.html_safe
   end
 end

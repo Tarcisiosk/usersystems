@@ -29,7 +29,7 @@ RSpec.describe Entidade, type: :model do
   end
 
   it "campos preenchidos corretamente é válido" do
-  	entidade = Entidade.new(razao_social: 'Entidade_teste', nome_fantasia: "Entidade teste", cnpj: '86602035000116')
+  	entidade = Entidade.new(razao_social: 'Entidade_teste', nome_fantasia: "Entidade teste", cnpj: '86602035000116', insc_estadual: '0000014515', insct_municipal:'0000015414')
   	expect(entidade).to be_valid 
   end  	
 end

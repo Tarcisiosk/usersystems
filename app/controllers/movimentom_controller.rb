@@ -17,11 +17,11 @@ class MovimentomController < ApplicationController
 
 	def new
 		@movimentom = Movimentom.new
-		
+		@cliente = ''
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
 		@icmscst = Icmscst.all.select("id", "codigo", "descricao")
-		@@angularActions = {:data => '', :entidade_id => '', :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
+		@@angularActions = {:data => '', :entidade_id => '', :consumidor_final => false, :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
 		render :edit
 	end
 
@@ -40,10 +40,11 @@ class MovimentomController < ApplicationController
 
 	def edit
 		@movimentom = Movimentom.find(params[:id]) 
+		@cliente = Entidade.find(@movimentom.entidade_id)
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
 		@icmscst = Icmscst.all.select("id", "codigo", "descricao").order(id: :asc)
-		@@angularActions = {:data => @movimentom.data.strftime("%d/%m/%Y"), :entidade_id => @movimentom.entidade_id, :produtos_list => @movimentom.produtos_list, :totalvalor => @movimentom.totalvalor, :totalquantidade => @movimentom.totalquantidade}
+		@@angularActions = {:data => @movimentom.data.strftime("%d/%m/%Y"), :entidade_id => @movimentom.entidade_id, :consumidor_final => @movimentom.consumidor_final, :produtos_list => @movimentom.produtos_list, :totalvalor => @movimentom.totalvalor, :totalquantidade => @movimentom.totalquantidade}
 
 	end
 
@@ -83,8 +84,9 @@ class MovimentomController < ApplicationController
 			@movimentom.produtos_list = data_hash[:produtos_list]
 			@movimentom.totalvalor = data_hash[:totalvalor]
 			@movimentom.totalquantidade = data_hash[:totalquantidade]
+			@movimentom.consumidor_final = data_hash[:consumidorfinal];
 		else
-			@movimentom = Movimentom.new(data: data_hash[:data], entidade_id: data_hash[:entidade_id], produtos_list: data_hash[:produtos_list], totalvalor: data_hash[:totalvalor], totalquantidade: data_hash[:totalquantidade], adm_id: current_user.settings(:last_empresa).edited.adm_id)
+			@movimentom = Movimentom.new(data: data_hash[:data], entidade_id: data_hash[:entidade_id], consumidor_final: data_hash[:consumidorfinal] ,produtos_list: data_hash[:produtos_list], totalvalor: data_hash[:totalvalor], totalquantidade: data_hash[:totalquantidade], adm_id: current_user.settings(:last_empresa).edited.adm_id)
 		end
 	
 		@movimentom.save
@@ -122,15 +124,29 @@ class MovimentomController < ApplicationController
  		render :json => produtos_array.to_json.to_s.html_safe
 	end
 
-	def returnIcms		
+	def returnIcms
 		@produto = Produto.find(params[:id])
-		@estado = Estado.find_by_uf(params[:uf])
+		
+		if params[:ent] == 'true'
+			@estado = Estado.find_by_uf(Endereco.find( Entidade.find(params[:ent_id]).enderecos.first.id ).uf)
+			puts "ESTADO DO CLIENTE DESSA PORRA É!!!!!!!!!!!: #{@estado}"
+		else
 
+			@estado = Estado.find_by_uf(params[:uf])
+			puts "ESTADO DA EMPRESA DESSA PORRA É!!!!!!!!!!!: #{@estado}"
+		end
+		
 		if @produto.personalizado
 			icms = Icmsproduto.where(produto_id: params[:id], estado_id: @estado.id)
 		else
 			icms = Classificacaofiscal.find(@produto.classificacaofiscal_id).icmsclassificacaofiscals.where(classificacaofiscal_id: @produto.classificacaofiscal_id, estado_id: @estado.id)
 		end
+		render :json => icms.to_json.to_s.html_safe
+	end
+	
+	def returnIcmsInterEstadual
+		icms = Icmsinterestadual.where(origem: params[:or], destino: params[:dest])
+
 		render :json => icms.to_json.to_s.html_safe
 	end
 	

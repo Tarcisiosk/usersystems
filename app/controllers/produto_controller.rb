@@ -27,13 +27,15 @@ class ProdutoController < ApplicationController
 		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao")	
 		@ipicst = Ipicst.all.select("id","codigo","descricao")
 		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
+		@oroduto = Origem.all.select("id", "codigo", "descricao")
+
 		@icmsproduto = Array.new
 		@estado.each do |est|
 			@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0,
 			aliquota: 0, icmsst: false, mva: 0, reducaomva: false)
 		end	
 
-		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => 0, :frete => 0, :desconto => 0, :seguro => 0, :outros => 0, :grupo_id => '', :subgrupo_id => '', :empresas => [], :p_photo => '', :pis_cst_id => '', :pis_aliquota => '', :cofins_cst_id => '', :cofins_aliquota => '', :ii_aliquota => '', :ipi_cst_id => '', :ipi_aliquota => '', :classificacaofiscal_id => '', :personalizado => false }
+		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => 0, :frete => 0, :desconto => 0, :seguro => 0, :outros => 0, :grupo_id => '', :origem_id => 1, :subgrupo_id => '', :empresas => [], :p_photo => '', :pis_cst_id => '', :pis_aliquota => '', :cofins_cst_id => '', :cofins_aliquota => '', :ii_aliquota => '', :ipi_cst_id => '', :ipi_aliquota => '', :classificacaofiscal_id => '', :personalizado => false }
 		render :edit
 	end
 
@@ -54,6 +56,8 @@ class ProdutoController < ApplicationController
 		@produto = Produto.find(params[:id]) 
 		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao")
 		@ipicst = Ipicst.all.select("id","codigo","descricao")
+		@origem = Origem.all.select("id", "codigo", "descricao")
+
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")
 		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
 		@icmsproduto = Array.new
@@ -66,7 +70,7 @@ class ProdutoController < ApplicationController
 			end	
 		end			
 
-		@@angularActions = {:descricao => @produto.descricao, :codigo => @produto.codigo, :unidade => @produto.unidade, :preco => @produto.preco, :frete =>  @produto.frete, :desconto =>  @produto.desconto, :seguro =>  @produto.seguro, :outros =>  @produto.outros, :grupo_id => @produto.grupo_id, :subgrupo_id => @produto.subgrupo_id, :empresas => @produto.empresas.ids, :p_photo=> @produto.p_photo, :classificacaofiscal_id => @produto.classificacaofiscal_id, :pis_cst_id => @produto.pis_cst_id, :pis_aliquota => @produto.pis_aliquota, :cofins_cst_id => @produto.cofins_cst_id, :cofins_aliquota => @produto.cofins_aliquota, :ii_aliquota => @produto.ii_aliquota, :ipi_cst_id => @produto.ipi_cst_id, :ipi_aliquota => @produto.ipi_aliquota, :personalizado => @produto.personalizado }
+		@@angularActions = {:descricao => @produto.descricao, :codigo => @produto.codigo, :unidade => @produto.unidade, :preco => @produto.preco, :frete =>  @produto.frete, :desconto =>  @produto.desconto, :seguro =>  @produto.seguro, :outros =>  @produto.outros, :grupo_id => @produto.grupo_id, :origem_id => @produto.origem_id, :subgrupo_id => @produto.subgrupo_id, :empresas => @produto.empresas.ids, :p_photo=> @produto.p_photo, :classificacaofiscal_id => @produto.classificacaofiscal_id, :pis_cst_id => @produto.pis_cst_id, :pis_aliquota => @produto.pis_aliquota, :cofins_cst_id => @produto.cofins_cst_id, :cofins_aliquota => @produto.cofins_aliquota, :ii_aliquota => @produto.ii_aliquota, :ipi_cst_id => @produto.ipi_cst_id, :ipi_aliquota => @produto.ipi_aliquota, :personalizado => @produto.personalizado }
 
 	end
 
@@ -122,6 +126,8 @@ class ProdutoController < ApplicationController
 			@produto.grupo_id = data_hash[:grupo_id]
 			@produto.subgrupo_id = data_hash[:subgrupo_id]
 			@produto.personalizado = data_hash[:personalizado]
+			@produto.origem_id = data_hash[:origem_id]
+
 			if @produto.personalizado == true
 				@produto.pis_cst_id = data_hash[:pis_cst_id]
 	 			@produto.pis_aliquota = data_hash[:pis_aliquota]
@@ -152,11 +158,10 @@ class ProdutoController < ApplicationController
 				end
 			end
 		else
-			@produto = Produto.new(descricao: data_hash[:descricao], codigo: data_hash[:codigo], unidade: data_hash[:unidade], preco: data_hash[:preco], frete: data_hash[:frete], desconto: data_hash[:desconto], seguro: data_hash[:seguro], outros: data_hash[:outros], grupo_id: data_hash[:grupo_id], subgrupo_id: data_hash[:subgrupo_id] , p_photo: data_hash[:p_photo], empresas: array_empresas, personalizado: data_hash[:personalizado], pis_cst_id: data_hash[:pis_cst_id], pis_aliquota: data_hash[:pis_aliquota], cofins_cst_id: data_hash[:cofins_cst_id], cofins_aliquota: data_hash[:cofins_aliquota], ii_aliquota: data_hash[:ii_aliquota], ipi_cst_id: data_hash[:ipi_cst_id], ipi_aliquota: data_hash[:ipi_aliquota], classificacaofiscal_id: data_hash[:classificacaofiscal_id], adm_id: current_user.adm_id)
+			@produto = Produto.new(descricao: data_hash[:descricao], codigo: data_hash[:codigo], unidade: data_hash[:unidade], preco: data_hash[:preco], frete: data_hash[:frete], desconto: data_hash[:desconto], seguro: data_hash[:seguro], outros: data_hash[:outros], grupo_id: data_hash[:grupo_id], subgrupo_id: data_hash[:subgrupo_id] , origem_id: data_hash[:origem_id], p_photo: data_hash[:p_photo], empresas: array_empresas, personalizado: data_hash[:personalizado], pis_cst_id: data_hash[:pis_cst_id], pis_aliquota: data_hash[:pis_aliquota], cofins_cst_id: data_hash[:cofins_cst_id], cofins_aliquota: data_hash[:cofins_aliquota], ii_aliquota: data_hash[:ii_aliquota], ipi_cst_id: data_hash[:ipi_cst_id], ipi_aliquota: data_hash[:ipi_aliquota], classificacaofiscal_id: data_hash[:classificacaofiscal_id], adm_id: current_user.adm_id)
 		end
 	
 		@produto.save
-
 
 		if @produto.valid?										
 			JSON.parse(params[:icmsprodutos]).each do |icf|					

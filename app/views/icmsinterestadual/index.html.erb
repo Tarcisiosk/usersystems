@@ -96,11 +96,17 @@ myApp.controller('IcmsinterestadualCtrl', ['$scope','$timeout', function($scope,
 	}
 
 	$scope.addIcmsinterestadual = function(origemIndex,destinoIndex,event){
-		if(event.target.value > 0 && origemIndex != destinoIndex){
+		if(event.target.value >= 0 && origemIndex != destinoIndex){
 			var icmsinterestado = $scope.IcmsinterestadualPorOrigemEDestino(origemIndex,destinoIndex);
-			if(icmsinterestado.icms == 0){
+			if(icmsinterestado.icms == 0)
+			{
+				console.log($scope.icmsinterestaduals);
 				$scope.icmsinterestaduals.push({'origem':$scope.estados[origemIndex].id,'destino':$scope.estados[destinoIndex].id,'icms': event.target.value});
-			}else{
+			}
+			else
+			{
+								console.log($scope.icmsinterestaduals);
+
 				var index = $scope.icmsinterestaduals.indexOf(icmsinterestado);
 				$scope.icmsinterestaduals[index].origem = $scope.estados[origemIndex].id;
 				$scope.icmsinterestaduals[index].destino = $scope.estados[destinoIndex].id;
@@ -116,9 +122,12 @@ myApp.controller('IcmsinterestadualCtrl', ['$scope','$timeout', function($scope,
 			url: '/icmsinterestadual/saveIcmsinterestadual/',
 			data: {icmsinterestaduals: JSON.stringify($scope.icmsinterestaduals)},
 			success: function(data){
+				console.log(data);
+				$scope.icmsinterestaduals = data;
 				$scope.msg = "Os dados foram gravados.";
 				$scope.alert = true;
-				$timeout(function() {$scope.alert = false;}, 2000);									
+				$timeout(function() {$scope.alert = false;}, 2000);	
+
 			}			
 		});							
 	}

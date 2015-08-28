@@ -1,4 +1,4 @@
-<div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>'>
+<div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>' origem='<%=@origem.to_json.html_safe%>'>
 	
 	
 	<div class="page-head">
@@ -201,10 +201,20 @@
 										</div>
 										<div class="tab-pane" id="tab_2">
 											<div class="form-group">
-												<label class="control-label ">Classificação Fiscal</label>
-												<select ng-model="data.classificacaofiscal_id" ng-disabled="data.personalizado" class='select2-container form-control select2me'>
-												    <option ng-repeat="cf in classfisc_opts" ng-selected="cf.id == data.classificacaofiscal_id" value="{{cf.id}}">{{cf.codigo_ncm}} - {{cf.descricao}}</option>
-												 </select><br><br>
+												<div class="row">
+											 		<div class="col-md-6">
+														<label class="control-label">Origem</label>
+														<select ng-model="data.origem_id" class='select2-container form-control select2me'>
+														    <option ng-repeat="o in origens" ng-selected="o.id == data.origem_id" value="{{o.id}}"> {{o.codigo}} - {{o.descricao}}</option>
+														 </select><br><br>
+													</div>
+											 		<div class="col-md-6">
+														<label class="control-label " ng-hide="data.personalizado">Classificação Fiscal</label>
+														<select ng-model="data.classificacaofiscal_id" ng-hide="data.personalizado" ng-disable="data.personalizado" class='select2-container form-control select2me'>
+														    <option ng-repeat="cf in classfisc_opts" ng-selected="cf.id == data.classificacaofiscal_id" value="{{cf.id}}">{{cf.codigo_ncm}} - {{cf.descricao}}</option>
+														 </select>
+													</div>
+												</div>
 												<input type="checkbox" ng-model="data.personalizado"> Configurações Fiscais Personalizadas </input>
 											</div>
 										</div>

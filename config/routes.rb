@@ -131,7 +131,7 @@ Rails.application.routes.draw do
 	get 'movimentoms/get_entidades' => "movimentom#returnEntidadeMovimentos"
 	get 'movimentoms/get_produtos' => "movimentom#returnProdutosMovimentos"
 	get 'movimentoms/get_icms/:id' => "movimentom#returnIcms"
-
+	get 'movimentoms/get_icmsinterestadual' => "movimentom#returnIcmsInterEstadual"
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	
 	get "index" => 'index#index', as: :index

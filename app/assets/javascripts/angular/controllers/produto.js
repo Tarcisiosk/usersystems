@@ -9,6 +9,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 	$scope.empresas_total = [];
 	$scope.piscofinscsts = JSON.parse($('#EditingObjId').attr("pis"));
 	$scope.ipicsts = JSON.parse($('#EditingObjId').attr("ipi"));
+	$scope.origens = JSON.parse($('#EditingObjId').attr("origem"));
 	$scope.empresa_atual = $('#EditingObjId').attr("empresa_atual");
 	$scope.modalidadebcicmssts = JSON.parse($('#EditingObjId').attr("modalidade"));
 	$scope.icmsproduto = JSON.parse($('#EditingObjId').attr("icmsproduto"));

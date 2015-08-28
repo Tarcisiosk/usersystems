@@ -161,6 +161,10 @@ class EntidadeController < ApplicationController
 									 enderecos: array_enderecos, tipoentidades: array_tipos, adm_id: current_user.adm_id)
 		end
 	
+		if @entidade.insc_estadual == '' || @entidade.cnpj.mb_chars.length < 14
+			@entidade.insc_estadual = 'ISENTO'
+		end
+		
 		@entidade.enderecos = array_enderecos
 		@entidade.save
 
