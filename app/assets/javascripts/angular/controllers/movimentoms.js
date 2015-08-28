@@ -74,6 +74,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			success: function(data)
 			{
 				$scope.entidade_opts = data;
+				$scope.entidade_selected = data[0];
+				
 				if($scope.data.entidade_id == undefined)
 				{
 					$scope.data.entidade_id = data[0].id;

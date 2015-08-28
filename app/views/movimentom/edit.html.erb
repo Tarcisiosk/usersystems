@@ -257,7 +257,7 @@
 												<label class="control-label ">Produto </label>
 												<div class="btn-group">
 													<div class="dropup">
-														<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true" data-toggle="tooltip" title="Clique para alterar descrição do produto"> <i class="fa fa-pencil"></i> </a>
+														<a href="javascript:;" ncheck class="dropdown-toggle" data-toggle="dropdown" data-close-others="true" data-toggle="tooltip" title="Clique para alterar descrição do produto"> <i class="fa fa-pencil"></i> </a>
 														<ul class="dropdown-menu" aria-labelledby="Descrição" role="menu">
 															<li>
 													        	<input type="text" class='form-control placeholder-no-fix' ng-model="produto_selected.descricao"> 
@@ -301,7 +301,7 @@
 								<div class="portlet">
 									<div class="portlet-title">
 										<div class="tools">
-											<label class="control-label">{{lbl}}</label> <a href="javascript:;" ng-click="changelbl()" class="expand"> </a>
+											<label class="control-label">{{lbl}}</label> <a href="javascript:;" ncheck ng-click="changelbl()" class="expand"> </a>
 										</div>
 									</div>
 
@@ -346,13 +346,13 @@
 
 										<ul class="nav nav-tabs">
 											<li>
-												<a href="#portlet_tab1" data-toggle="tab"> IPI </a>
+												<a href="#portlet_tab1" ncheck data-toggle="tab"> IPI </a>
 											</li>
 											<li>
-												<a href="#portlet_tab2" data-toggle="tab"> ICMS </a>
+												<a href="#portlet_tab2" ncheck data-toggle="tab"> ICMS </a>
 											</li>
 											<li>
-												<a href="#portlet_tab3"  data-toggle="tab" ng-show="produto_selected.icms_cst_id == 2 || produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 10"> ICMS ST </a>
+												<a href="#portlet_tab3" ncheck  data-toggle="tab" ng-show="produto_selected.icms_cst_id == 2 || produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 10"> ICMS ST </a>
 											</li>
 										</ul>
 										<div class="tab-content">
@@ -369,7 +369,7 @@
 															<label class="control-label ">Base de Cálculo</label> 
 															<div class="btn-group">
 																<div class="dropup">
-																	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"  data-close-others="true"> <i class="fa fa-cog"></i> </a>
+																	<a href="javascript:;" ncheck class="dropdown-toggle" data-toggle="dropdown"  data-close-others="true"> <i class="fa fa-cog"></i> </a>
 																	<ul class="dropdown-menu pull-right" role="menu">
 																		<li>
 
@@ -424,7 +424,7 @@
 
 															<div class="btn-group">
 																<div class="dropup">
-																	<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
+																	<a href="javascript:;" ncheck class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
 																	<ul class="dropdown-menu pull-right" role="menu">
 																		<li>
 																			<input type="checkbox" ng-model="produto_selected.calcIpiIcms" ng-change="calcBcIcms(); setIcms()" ng-true-value='1' ng-false-value='0' id='ipiicms' ng-click="setCheckboxes('ipiicms', produto_selected.calcIpiIcms)" > IPI </input><br>
