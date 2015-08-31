@@ -27,7 +27,7 @@ class ProdutoController < ApplicationController
 		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao")	
 		@ipicst = Ipicst.all.select("id","codigo","descricao")
 		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
-		@oroduto = Origem.all.select("id", "codigo", "descricao")
+		@origem = Origem.all.select("id", "codigo", "descricao")
 
 		@icmsproduto = Array.new
 		@estado.each do |est|
