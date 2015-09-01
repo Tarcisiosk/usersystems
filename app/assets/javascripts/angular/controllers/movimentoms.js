@@ -21,7 +21,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.totalseguro = 0;
 	$scope.totaloutros = 0;
 	$scope.totalipi = 0;
-	$scope.totalicms = 0;''
+	$scope.totalicms = 0;
 	$scope.basecalculo = 0;
 
 	$scope.interEstadual = false;
@@ -37,7 +37,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.ipicsts = JSON.parse($('#EditingObjId').attr("ipi"));
 	$scope.icmscsts = JSON.parse($('#EditingObjId').attr("icms"));
 	$scope.modalidadebcicmssts = JSON.parse($('#EditingObjId').attr("modalidade"));
-
+	$scope.valormva = 0;
 	$scope.isDisabled = false;
 	$scope.isNew = true;
 
@@ -238,7 +238,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				$('span', $('#uniform-' + id)).addClass("checked");
 				$(id).attr("checked");
 			}
-		
 			if(id == 'consumidorfinal')
 			{
 				if($scope.isDisabled == false)
@@ -332,9 +331,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 												 ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIpi) - 
 												 ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIpi);
 		}
-
 		$scope.produto_selected.valoripi = $scope.produto_selected.basecalculoIpi * ($scope.produto_selected.ipi_aliquota/100).toFixed(2);
-	
 	}
 
 	//seta os valores do IPI
@@ -342,23 +339,17 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{
 		var auxbc = $scope.produto_selected.basecalculoIpi;
 		$scope.verifyUndefined();
-
-		
 		if( $scope.produto_selected.ipi_cst_id == 8 )
 		{
 			$scope.calcBcIpi();
 		}
-
 		//outras saidas...
 		if( $scope.produto_selected.ipi_cst_id != 8)
 		{
-
 			$scope.produto_selected.ipi_aliquota = 0;
 			$scope.produto_selected.valoripi = 0;
 			$scope.produto_selected.basecalculoIpi = 0;
 		}
-		
-
 		if($scope.produto_selected.basecalculoIpi != auxbc)
 		{
 			$("[name='alt']").effect( "pulsate", {times:1}, 100 );
@@ -368,23 +359,29 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	//calcula base de calculo do ICMS
 	$scope.calcBcIcms = function()
 	{
-		console.log($scope.icmsProdutoSelected);
 		if(!$scope.produto_selected.wasIcmsEdited)
 		{
 			$scope.produto_selected.basecalculoIcms = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
-												  ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIcms) + 
-												  ($scope.produto_selected.valoripi * $scope.produto_selected.calcIpiIcms) + 
-												  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
-												  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
-												  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
+													  ($scope.produto_selected.frete * $scope.produto_selected.calcFreteIcms) + 
+													  ($scope.produto_selected.valoripi * $scope.produto_selected.calcIpiIcms) + 
+													  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
+													  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
+													  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
 		}
-		
 		$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
-		
 		if($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 10)
 		{
 			var red = $scope.produto_selected.basecalculoIcms * ($scope.icmsProdutoSelected.reducaobasecalculo/100);
 			$scope.produto_selected.valoricms = ($scope.produto_selected.basecalculoIcms - red) * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
+		}
+		//com diferimento
+		if( $scope.produto_selected.icms_cst_id == 8)
+		{
+			$scope.produto_selected.valoricmsdiferido = $scope.produto_selected.valoricms - ($scope.produto_selected.valoricms * ($scope.icmsProdutoSelected.diferimento/100));
+			if($scope.produto_selected.valoricmsdiferido < 0)
+			{
+				$scope.produto_selected.valoricmsdiferido = 0;
+			}
 		}
 	}
 
@@ -392,9 +389,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.setIcms = function()
 	{
 		var auxbcicms = $scope.produto_selected.basecalculoIcms;
-			
 		$scope.verifyUndefined();
-
 		//para puxar o icms :)
 		if($scope.isEditing == false && $scope.isNew)
 		{
@@ -457,8 +452,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.produto_selected.icms_cst_id == 10 ||  $scope.produto_selected.icms_cst_id == 11)
 		{
 			$scope.calcBcIcms();
-			
-
 			if($scope.produto_selected.icms_aliquota == undefined)
 			{
 				$scope.produto_selected.icms_aliquota = $scope.icmsProdutoSelected.aliquota;
@@ -468,6 +461,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				$scope.produto_selected.icms_aliquota = $scope.aliqInterEstadual;
 			}
 			$scope.aliqPelaOrigem();
+			
 		}	
 		//40/41/50/60
 		else if ($scope.produto_selected.icms_cst_id == 5 ||  $scope.produto_selected.icms_cst_id == 6 ||
@@ -482,7 +476,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		{
 			$scope.produto_selected.icms_aliquota = 0;
 			$scope.produto_selected.valoricms = 0;
-			$scope.calcBcIcms();
+			$scope.produto_selected.basecalculoIcms = 0;
 		}
 
 		if($scope.produto_selected.basecalculoIcms != auxbcicms)
@@ -493,7 +487,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 	//calcula base de calculo ICMSST
 	$scope.calcBcIcmsst = function()
-	{
+	{	
 		if(!$scope.produto_selected.wasIcmsstEdited)
 		{
 			$scope.produto_selected.icmsst_aliquota = $scope.icmsEntidadeSelected.aliquota;
@@ -503,9 +497,18 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 												  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcmsst) + 
 												  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcmsst) - 
 												  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcmsst);
-			$scope.produto_selected.basecalculoIcmsst += $scope.produto_selected.basecalculoIcmsst * ($scope.icmsProdutoSelected.mva/100);		
+			$scope.valormva = $scope.produto_selected.basecalculoIcmsst * ($scope.icmsProdutoSelected.mva/100);
+			$scope.produto_selected.basecalculoIcmsst += $scope.valormva;
+
 		}
 		$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - $scope.produto_selected.valoricms;
+		
+		if ($scope.produto_selected.icms_cst_id == 4)
+		{
+			$scope.produto_selected.valoricmsst	= ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - 
+												  (($scope.produto_selected.basecalculoIcmsst - $scope.valormva) * 
+												  $scope.icmsProdutoSelected.aliquotafinscalculo/100).toFixed(2);
+		}
 	}
 
 	//seta os valores ICMSST
@@ -529,8 +532,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	//atualiza a aliquota do icms de acordo com a origem
 	$scope.aliqPelaOrigem = function()
 	{
-		if($scope.data.consumidor_final == false && $scope.interEstadual == true && 
-		   $scope.produto_selected.origem_id != 1 &&  $scope.produto_selected.origem_id != 5 &&  $scope.produto_selected.origem_id != 6)
+		if($scope.data.consumidor_final == false && $scope.interEstadual == true && $scope.produto_selected.origem_id != 1 && 
+		  $scope.produto_selected.origem_id != 5 &&  $scope.produto_selected.origem_id != 6)
 		{
 			$scope.produto_selected.icms_aliquota = 4;
 		} 
@@ -553,10 +556,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.setFocusInput = function()
 	{		
 		$scope.produto_selected = []
-		setTimeout(function(){
-  				$scope.$broadcast('setFocus');
-        }, 500);
-	   
+		setTimeout(function(){ $scope.$broadcast('setFocus');}, 500);
 	}
 
 	//seta o produto selecionado
@@ -569,9 +569,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	//pula para o prox campo
 	$scope.NextField = function()
 	{
-		setTimeout(function(){
-           $("#qtde").focus();
-        }, 2);
+		setTimeout(function(){ $("#qtde").focus(); }, 2);
         $scope.setIpi();
 	}
 
@@ -591,7 +589,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	//edita o produto
 	$scope.edit_produto = function(index)
 	{
-
 		$scope.isEditing = true;
 		$scope.produto_selected = $scope.produtos_choosen[index];
 		auxproduto = JSON.parse($scope.data.produtos_list)[index]; 
@@ -614,8 +611,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		if($scope.isEditing == true)
 		{
 			$scope.produtos_choosen[auxindex] = auxproduto;
-		}
-		
+		}	
 		$scope.endEdit();
 	}
 
@@ -632,20 +628,17 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.delete_produto = function(index)
 	{
 		var deleteEnd = window.confirm('Voce deseja excluir esse produto?');
-
 		if (deleteEnd) 
 		{
 			$scope.produtos_choosen.splice(index, 1);    
 		}
 		$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
-
 		$scope.setTotal();
 	}
 
 	//seta os valores totais
 	$scope.setTotal = function()
 	{	
-
 		$scope.data.totalquantidade = 0;
 		$scope.data.totalvalor = 0;
 		$scope.totalpreco = 0;
@@ -668,7 +661,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.totaloutros += parseFloat($scope.produtos_choosen[i].outros);
 			$scope.totalipi += parseFloat($scope.produtos_choosen[i].valoripi);
 			$scope.totalicms += parseFloat($scope.produtos_choosen[i].valoricms);
-
 		}
 
 		$scope.data.totalvalor = ($scope.totalpreco + $scope.totalfrete + $scope.totalseguro + $scope.totaloutros + $scope.totalipi) - $scope.totaldesconto;
@@ -703,7 +695,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		var total = 0;
 		var dif = 0;
 		var rounder = [];
-
 		if($scope.totalfrete != auxfrete)
 		{
 			for(i = 0; i < $scope.produtos_choosen.length; i++)
@@ -800,7 +791,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		if($scope.lbl == 'Expandir')
 		{
 			$scope.lbl = 'Retrair';
-		}else
+		}
+		else
 		{
 			$scope.lbl = 'Expandir';
 		}
@@ -863,7 +855,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		{
 			$scope.produto_selected.calcSeguroIcms = 1;
 		}
-		if( $scope.produto_selected.calcOutrosIcms== undefined)
+		if($scope.produto_selected.calcOutrosIcms== undefined)
 		{
 			$scope.produto_selected.calcOutrosIcms = 1;
 		}
@@ -888,7 +880,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		{
 			$scope.produto_selected.calcSeguroIcmsst = 1;
 		}
-		if( $scope.produto_selected.calcOutrosIcmsst == undefined)
+		if($scope.produto_selected.calcOutrosIcmsst == undefined)
 		{
 			$scope.produto_selected.calcOutrosIcmsst = 1;
 		}
@@ -966,5 +958,4 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	        }
 	    });
 	});
-
 }]);

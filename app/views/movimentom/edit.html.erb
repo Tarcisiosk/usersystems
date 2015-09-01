@@ -415,7 +415,7 @@
 															<select name="icms_cst_id" class="form-control" ng-change="calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmscsts">				
 															</select>
 														</div>
-														<div class="col-md-5" ng-hide="produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
+														<div class="col-md-5" ng-hide="produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
 
 															<label class="control-label ">Base de Cálculo</label> 
 
@@ -452,18 +452,40 @@
 																<input type="text" name="money" ng-change="setEdited(2, true); setIcms(); setIcmsst()" ui-number-mask="2" ng-model="icmsProdutoSelected.reducaobasecalculo" class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
+														<div class="col-md-3" ng-hide="produto_selected.icms_cst_id != 8"> 
+															<label class="control-label ">Diferimento(%)</label>
+															<div class="input-group">
+																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
+																<input type="text" name="money" ng-change="setIcms(); setIcmsst()" ui-number-mask="2" ng-model='icmsProdutoSelected.diferimento' class='form-control placeholder-no-fix'> 
+															</div>
+														</div>
 
-														<div class="col-md-3"  ng-hide="produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9"> 
+														<div class="col-md-3"  ng-hide="produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9"> 
 															<label class="control-label ">Aliquota(%)</label>
 															<div class="input-group">
 																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
 																<input type="text" name="money" ng-change="setIcms(); setIcmsst()" ui-number-mask="2" ng-model='produto_selected.icms_aliquota' class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
-														<div class="col-md-4" ng-hide="produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
+
+														<div class="col-md-6"  ng-show="produto_selected.icms_cst_id == 4"> 
+															<label class="control-label ">Aliquota para fins de Calculo(%)</label>
+															<div class="input-group">
+																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
+																<input type="text" name="money" ng-change="setIcmsst()" ui-number-mask="2" ng-model='icmsProdutoSelected.aliquotafinscalculo' class='form-control placeholder-no-fix'> 
+															</div>
+														</div>
+
+														<div class="col-md-3" ng-hide="produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
 															<label class="control-label ">Valor ICMS</label>
 															<div class="input-group">
 																<input type="text" name="alticms" ng-change="setIcmsst()" ui-number-mask="2" ng-model='produto_selected.valoricms' class='form-control placeholder-no-fix'> 
+															</div>
+														</div>
+														<div class="col-md-3" ng-hide="produto_selected.icms_cst_id != 8">
+															<label class="control-label ">Valor ICMS Dif.</label>
+															<div class="input-group">
+																<input type="text" name="alticms" ng-change="setIcmsst()" ui-number-mask="2" ng-model='produto_selected.valoricmsdiferido' class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
 													</div>

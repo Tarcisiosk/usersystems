@@ -185,6 +185,7 @@
 														<th>Redução BC</th>
 														<th>Diferimento</th>
 														<th>Alíquota</th>
+														<th>Alíquota Fins Calculo</th>
 														<th>ICMS ST</th>
 														<th>Modalidade BC ICMS ST</th>
 														<th>MVA</th>
@@ -198,6 +199,8 @@
 														<td>{{icmscf.reducaobasecalculo}}</td>
 														<td>{{icmscf.diferimento}}</td>
 														<td>{{icmscf.aliquota}}</td>
+														<td>{{icmscf.aliquotafinscalculo}}</td>
+
 														<td>
 															<span ng-if="icmscf.icmsst" class="glyphicon glyphicon-ok font-green"/>									
 														</td>
@@ -237,7 +240,7 @@
 				</div>
 				<form>				
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">Redução BC</label>
 							<div class="input-group">
@@ -246,7 +249,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">Diferimento</label>
 							<div class="input-group">
@@ -255,11 +258,20 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">Alíquota</label>
 							<div class="input-group">
 								<input type="number" name="aliquota" ng-model="icmsclassificacaofiscal[indexIcmsCF].aliquota" class="form-control placeholder-no-fix"></input>
+								<span class="input-group-addon">%</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Alíquota para fins de Calculo</label>
+							<div class="input-group">
+								<input type="number" name="aliquotafc" ng-model="icmsclassificacaofiscal[indexIcmsCF].aliquotafinscalculo" class="form-control placeholder-no-fix"></input>
 								<span class="input-group-addon">%</span>
 							</div>
 						</div>

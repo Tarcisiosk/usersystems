@@ -32,7 +32,7 @@ class ProdutoController < ApplicationController
 		@icmsproduto = Array.new
 		@estado.each do |est|
 			@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0,
-			aliquota: 0, icmsst: false, mva: 0, reducaomva: false)
+			aliquota: 0, aliquotafinscalculo:0, icmsst: false, mva: 0, reducaomva: false)
 		end	
 
 		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => 0, :frete => 0, :desconto => 0, :seguro => 0, :outros => 0, :grupo_id => '', :origem_id => 1, :subgrupo_id => '', :empresas => [], :p_photo => '', :pis_cst_id => '', :pis_aliquota => '', :cofins_cst_id => '', :cofins_aliquota => '', :ii_aliquota => '', :ipi_cst_id => '', :ipi_aliquota => '', :classificacaofiscal_id => '', :personalizado => false }
@@ -64,7 +64,7 @@ class ProdutoController < ApplicationController
 		@estado.each do |est|			
 			@icf = Icmsproduto.where("produto_id = #{@produto.id} and estado_id = #{est.id}").first			
 			if @icf.nil?
-				@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0, aliquota: 0, icmsst: false, mva: 0, reducaomva: false)
+				@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0, aliquota: 0, aliquotafinscalculo: 0, icmsst: false, mva: 0, reducaomva: false)
 			else
 				@icmsproduto << @icf
 			end	
@@ -167,7 +167,7 @@ class ProdutoController < ApplicationController
 			JSON.parse(params[:icmsprodutos]).each do |icf|					
 				if icf['produto_id'].blank?
 					@icmsproduto = Icmsproduto.new(produto_id: @produto.id,estado_id: icf['estado_id'],
-					reducaobasecalculo: icf['reducaobasecalculo'], diferimento: icf['diferimento'], aliquota: icf['aliquota'], icmsst: icf['icmsst'],
+					reducaobasecalculo: icf['reducaobasecalculo'], diferimento: icf['diferimento'], aliquota: icf['aliquota'], aliquotafinscalculo: icf['aliquotafinscalculo'], icmsst: icf['icmsst'],
 					modalidadebcicmsst_id: icf['modalidadebcicmsst_id'], mva: icf['mva'], reducaomva: icf['reducaomva'])												
 					@icmsproduto.save
 				end	
@@ -179,12 +179,12 @@ class ProdutoController < ApplicationController
 	end
 
 	def saveIcms
-		@icf = Icmsproduto.new(params.require(:icmsproduto).permit(:id,:produto_id,:estado_id,
-						:reducaobasecalculo,:diferimento,:aliquota,:icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))					
+		@icf = Icmsproduto.new(params.require(:icmsproduto).permit(:id, :produto_id, :estado_id,
+											:reducaobasecalculo, :diferimento, :aliquota, :aliquotafinscalculo, :icmsst, :modalidadebcicmsst_id, :mva, :reducaomva))					
 		unless @icf.produto_id.blank?
 			@icf = Icmsproduto.find(params[:icmsproduto][:id])							
 			@icf.update(params.require(:icmsproduto).permit(:id,:produto_id,:estado_id,
-						:reducaobasecalculo,:diferimento,:aliquota,:icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))	
+						:reducaobasecalculo,:diferimento,:aliquota, :aliquotafinscalculo, :icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))	
 		end
 		if @icf.valid?
 			render :index

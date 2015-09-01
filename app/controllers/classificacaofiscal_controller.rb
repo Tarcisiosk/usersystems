@@ -16,8 +16,8 @@ class ClassificacaofiscalController < ApplicationController
 		@estado = Estado.all.select("id","descricao","diferimento","icms_interno").order("descricao")
 		@icmsclassificacaofiscal = Array.new
 		@estado.each do |est|
-			@icmsclassificacaofiscal << Icmsclassificacaofiscal.new(estado_id: est.id,reducaobasecalculo: 0,diferimento: est.diferimento,
-			aliquota: est.icms_interno,icmsst: false, mva: 0,reducaomva: false)
+			@icmsclassificacaofiscal << Icmsclassificacaofiscal.new(estado_id: est.id,reducaobasecalculo: 0, diferimento: est.diferimento,
+			aliquota: est.icms_interno, aliquotafinscalculo: est.icms_interno, icmsst: false, mva: 0,reducaomva: false)
 		end	
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		render :edit
@@ -36,7 +36,7 @@ class ClassificacaofiscalController < ApplicationController
 				JSON.parse(params[:icmsclassificacaofiscals]).each do |icf|					
 					if icf['classificacaofiscal_id'].blank?
 						@icmsclassificacaofiscal = Icmsclassificacaofiscal.new(classificacaofiscal_id: @classificacaofiscal.id,estado_id: icf['estado_id'],
-						reducaobasecalculo: icf['reducaobasecalculo'], diferimento: icf['diferimento'], aliquota: icf['aliquota'], icmsst: icf['icmsst'],
+						reducaobasecalculo: icf['reducaobasecalculo'], diferimento: icf['diferimento'], aliquota: icf['aliquota'], aliquotafinscalculo: icf['aliquotafinscalculo'], icmsst: icf['icmsst'],
 						modalidadebcicmsst_id: icf['modalidadebcicmsst_id'], mva: icf['mva'], reducaomva: icf['reducaomva'])												
 						@icmsclassificacaofiscal.save
 					end	
@@ -52,11 +52,11 @@ class ClassificacaofiscalController < ApplicationController
 
 	def saveIcms
 		@icf = Icmsclassificacaofiscal.new(params.require(:icmsclassificacaofiscal).permit(:id,:classificacaofiscal_id,:estado_id,
-						:reducaobasecalculo,:diferimento,:aliquota,:icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))					
+						:reducaobasecalculo,:diferimento,:aliquota, :aliquotafinscalculo, :icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))					
 		unless @icf.classificacaofiscal_id.blank?
 			@icf = Icmsclassificacaofiscal.find(params[:icmsclassificacaofiscal][:id])							
-			@icf.update(params.require(:icmsclassificacaofiscal).permit(:id,:classificacaofiscal_id,:estado_id,
-						:reducaobasecalculo,:diferimento,:aliquota,:icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))	
+			@icf.update(params.require(:icmsclassificacaofiscal).permit(:id, :classificacaofiscal_id, :estado_id,
+									   :reducaobasecalculo, :diferimento, :aliquota, :aliquotafinscalculo, :icmsst, :modalidadebcicmsst_id, :mva, :reducaomva))	
 		end
 		if @icf.valid?
 			render :index
@@ -75,7 +75,7 @@ class ClassificacaofiscalController < ApplicationController
 		@estado.each do |est|			
 			@icf = Icmsclassificacaofiscal.where("classificacaofiscal_id = #{@classificacaofiscal.id} and estado_id = #{est.id}").first			
 			if @icf.nil?
-				@icmsclassificacaofiscal << Icmsclassificacaofiscal.new(estado_id: est.id,diferimento: est.diferimento,icmsst: false, reducaomva: false)				
+				@icmsclassificacaofiscal << Icmsclassificacaofiscal.new(estado_id: est.id, diferimento: est.diferimento, icmsst: false, reducaomva: false)				
 			else
 				@icmsclassificacaofiscal << @icf
 			end	
