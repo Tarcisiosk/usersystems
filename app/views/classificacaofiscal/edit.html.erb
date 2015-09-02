@@ -342,9 +342,11 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	$scope.modalidadebcicmssts = <%= @modalidadebcicmsst.to_json.html_safe=%>;
 	$scope.icmsclassificacaofiscal = <%= @icmsclassificacaofiscal.to_json.html_safe=%>;	
 	$scope.icmsCFAtual = {};
-
-	$('[name="codigo_ncm"]').mask("?9999.99.99");
-	$('[name="codigo_ex"]').mask("?99");
+	
+	angular.element(document).ready(function () {
+		$('[name="codigo_ncm"]').mask("9999.99.99");
+		$('[name="codigo_ex"]').mask("99");
+	});	
 
 
 	$scope.printVal = function()
