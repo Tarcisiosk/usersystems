@@ -130,6 +130,8 @@ class MovimentomController < ApplicationController
 		if params[:ent] == 'true'
 			if Entidade.find(params[:ent_id]).enderecos
 				@estado = Estado.find_by_uf(Endereco.find( Entidade.find(params[:ent_id]).enderecos.first.id ).uf)
+			else
+				@estado = Estado.find_by_uf(params[:uf])
 			end
 		else
 			@estado = Estado.find_by_uf(params[:uf])
