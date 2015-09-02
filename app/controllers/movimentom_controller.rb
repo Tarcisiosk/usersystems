@@ -115,7 +115,7 @@ class MovimentomController < ApplicationController
 		produtos_array =  Array.new
 
 		Produto.all.each do |produto|
-			if produto.adm_id == current_user.settings(:last_empresa).edited.adm_id
+			if produto.adm_id == current_user.settings(:last_empresa).edited.adm_id && (produto.personalizado == true || produto.classificacaofiscal_id >= 1) && produto.empresas.include?(current_user.settings(:last_empresa).edited)
 				unless produtos_array.include?(produto)
 					produtos_array << produto
 				end
@@ -129,11 +129,8 @@ class MovimentomController < ApplicationController
 		
 		if params[:ent] == 'true'
 			@estado = Estado.find_by_uf(Endereco.find( Entidade.find(params[:ent_id]).enderecos.first.id ).uf)
-			puts "ESTADO DO CLIENTE DESSA PORRA É!!!!!!!!!!!: #{@estado}"
 		else
-
 			@estado = Estado.find_by_uf(params[:uf])
-			puts "ESTADO DA EMPRESA DESSA PORRA É!!!!!!!!!!!: #{@estado}"
 		end
 		
 		if @produto.personalizado

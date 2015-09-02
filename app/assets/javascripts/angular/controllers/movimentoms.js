@@ -54,7 +54,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				$scope.data = data;
 			},
 			error: function()
-			{      			     			
+			{	
 				alert('ué');
 			}
 		});
@@ -86,8 +86,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				//set entidade selecionada de acordo com a salva no banco de dados
 				for(var i = 0; i < $scope.entidade_opts.length; i++)
 				{
-				  	if($scope.entidade_opts[i].id == $scope.data.entidade_id)
-				 	{
+					if($scope.entidade_opts[i].id == $scope.data.entidade_id)
+					{
 						$scope.entidade_selected = $scope.entidade_opts[i];
 					}
 				}
@@ -109,7 +109,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				}
 			},
 			error: function()
-			{      			     			
+			{
 				alert('ué');
 			}
 		});
@@ -172,10 +172,17 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			dataType: 'json',
 			success: function(data)
 			{
-				$scope.aliqInterEstadual = data[0].icms;
+				if(data[0] != undefined)
+				{
+					$scope.aliqInterEstadual = data[0].icms;
+				}
+				else
+				{
+					$scope.aliqInterEstadual = 0;
+				}
 			},
 			error: function()
-			{      			     			
+			{
 				alert('ué');
 			}
 		});	
@@ -186,19 +193,19 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 	//salva
 	$scope.save = function() 
-	{   		
+	{
 		var request;
 		request = $.ajax({
 			async: false,
- 			method: 'post',
+			method: 'post',
 			url: '/movimentoms/save_angular/' + $('#EditingObjId').attr("data"),
 			data: { data: $scope.data },
 			success: function (data)
-			{      			     			
+			{
 				window.location.replace('/movimentoms');
 			},
 			error: function (jqXHR, textStatus, errorThrown)
-			{      			     			
+			{
 				$scope.mensagens = JSON.parse(jqXHR.responseText);
 			}
 		});
@@ -369,15 +376,31 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 													  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
 		}
 		$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
+		
 		if($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 10)
 		{
-			var red = $scope.produto_selected.basecalculoIcms * ($scope.icmsProdutoSelected.reducaobasecalculo/100);
+			if($scope.produto_selected.reducaobc == undefined)
+			{
+				$scope.produto_selected.reducaobc = $scope.icmsProdutoSelected.reducaobasecalculo;
+			}
+			var red = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.reducaobc/100);
 			$scope.produto_selected.valoricms = ($scope.produto_selected.basecalculoIcms - red) * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
+			
+			if($scope.produto_selected.valoricms < 0)
+			{
+				$scope.produto_selected.valoricms = 0;
+			}
 		}
+
 		//com diferimento
 		if( $scope.produto_selected.icms_cst_id == 8)
 		{
-			$scope.produto_selected.valoricmsdiferido = $scope.produto_selected.valoricms - ($scope.produto_selected.valoricms * ($scope.icmsProdutoSelected.diferimento/100));
+			if($scope.produto_selected.diferimento == undefined)
+			{
+				$scope.produto_selected.diferimento = $scope.icmsProdutoSelected.diferimento;
+			}
+			$scope.produto_selected.valoricmsdiferido = ($scope.produto_selected.valoricms * ($scope.produto_selected.diferimento/100));
+			
 			if($scope.produto_selected.valoricmsdiferido < 0)
 			{
 				$scope.produto_selected.valoricmsdiferido = 0;
@@ -447,9 +470,9 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		}
 
 		//tributado integralmente - 00/10/20/51/70/90
-		if( $scope.produto_selected.icms_cst_id == 1 ||  $scope.produto_selected.icms_cst_id == 2 ||
-			$scope.produto_selected.icms_cst_id == 3 ||  $scope.produto_selected.icms_cst_id == 8 ||
-			$scope.produto_selected.icms_cst_id == 10 ||  $scope.produto_selected.icms_cst_id == 11)
+		if( $scope.produto_selected.icms_cst_id == 1 || $scope.produto_selected.icms_cst_id == 2 ||
+			$scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 8 ||
+			$scope.produto_selected.icms_cst_id == 10 || $scope.produto_selected.icms_cst_id == 11)
 		{
 			$scope.calcBcIcms();
 			if($scope.produto_selected.icms_aliquota == undefined)
@@ -464,8 +487,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			
 		}	
 		//40/41/50/60
-		else if ($scope.produto_selected.icms_cst_id == 5 ||  $scope.produto_selected.icms_cst_id == 6 ||
-				 $scope.produto_selected.icms_cst_id == 7 ||  $scope.produto_selected.icms_cst_id == 9)
+		else if ($scope.produto_selected.icms_cst_id == 5 || $scope.produto_selected.icms_cst_id == 6 ||
+				 $scope.produto_selected.icms_cst_id == 7 || $scope.produto_selected.icms_cst_id == 9)
 		{
 			$scope.produto_selected.basecalculoIcms = 0;
 			$scope.produto_selected.icms_aliquota = 0;
@@ -499,15 +522,20 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 												  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcmsst);
 			$scope.valormva = $scope.produto_selected.basecalculoIcmsst * ($scope.icmsProdutoSelected.mva/100);
 			$scope.produto_selected.basecalculoIcmsst += $scope.valormva;
-
 		}
+
 		$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - $scope.produto_selected.valoricms;
 		
 		if ($scope.produto_selected.icms_cst_id == 4)
 		{
+			if($scope.produto_selected.aliquotafins == undefined)
+			{
+				$scope.produto_selected.aliquotafins = $scope.icmsProdutoSelected.aliquotafinscalculo;
+			}
+
 			$scope.produto_selected.valoricmsst	= ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - 
 												  (($scope.produto_selected.basecalculoIcmsst - $scope.valormva) * 
-												  $scope.icmsProdutoSelected.aliquotafinscalculo/100).toFixed(2);
+												  $scope.produto_selected.aliquotafins/100).toFixed(2);
 		}
 	}
 
@@ -533,7 +561,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.aliqPelaOrigem = function()
 	{
 		if($scope.data.consumidor_final == false && $scope.interEstadual == true && $scope.produto_selected.origem_id != 1 && 
-		  $scope.produto_selected.origem_id != 5 &&  $scope.produto_selected.origem_id != 6)
+		  $scope.produto_selected.origem_id != 5 && $scope.produto_selected.origem_id != 6)
 		{
 			$scope.produto_selected.icms_aliquota = 4;
 		} 
@@ -542,14 +570,14 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	//Atualiza produtos
 	$scope.refreshProdutos = function(input) 
 	{
-	    if(input.length < 2 )
-	    {
+		if(input.length < 2 )
+		{
 			$scope.produto_opts = [];
-	    }
-	    else
-	    {	
-	    	$scope.getProdutos();
-	    }
+		}
+		else
+		{	
+			$scope.getProdutos();
+		}
 	}
 
 	//foco no campo quando abrir tela de produtos
@@ -570,7 +598,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.NextField = function()
 	{
 		setTimeout(function(){ $("#qtde").focus(); }, 2);
-        $scope.setIpi();
+		$scope.setIpi();
 	}
 
 	//add produto
@@ -704,8 +732,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				rounder.push($scope.produtos_choosen[i].frete );
 			}
 			$.each(rounder,function() {
-			    total += (this * 1);
-			}); 			
+				total += (this * 1);
+			});
 			if (total != $scope.totalfrete)
 			{
 				dif = ($scope.totalfrete - total).toFixed(2);
@@ -727,8 +755,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				rounder.push($scope.produtos_choosen[i].desconto );
 			}
 			$.each(rounder,function() {
-			    total += (this * 1);
-			}); 			
+				total += (this * 1);
+			});
 			if (total != $scope.totaldesconto)
 			{
 				dif = ($scope.totaldesconto - total).toFixed(2);
@@ -750,8 +778,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				rounder.push($scope.produtos_choosen[i].seguro);
 			}
 			$.each(rounder,function() {
-			    total += (this * 1);
-			}); 			
+				total += (this * 1);
+			}); 
 			if (total != $scope.totalseguro)
 			{
 				dif = ($scope.totalseguro - total).toFixed(2);
@@ -773,8 +801,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				rounder.push($scope.produtos_choosen[i].outros);
 			}
 			$.each(rounder,function() {
-			    total += (this * 1);
-			}); 			
+				total += (this * 1);
+			});
 			if (total != $scope.totaloutros)
 			{
 				dif = ($scope.totaloutros - total).toFixed(2);
@@ -896,20 +924,20 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	//pula para prox input caso teclado enter
 	$(':input').keydown(function (e) 
 	{
-    	if (e.which === 13) {
-         	var index = $(':input').index(this) + 1;
-         	$(':input').eq(index).focus();
-     	}
- 	}); 		
+		if (e.which === 13) {
+			var index = $(':input').index(this) + 1;
+			$(':input').eq(index).focus();
+		}
+	});
 
 	function isNumeric(num)
 	{
-    	return !isNaN(num)
+		return !isNaN(num)
 	}
 
- 	$(document).ready(function() 
- 	{
- 		//seta data para hoje
+	$(document).ready(function() 
+	{
+		//seta data para hoje
 		if($scope.data.data == "")
 		{
 			 $('#datepicker').datepicker('setDate', 'today');
@@ -917,45 +945,45 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 		//informações dentro da row dos produtos
 		function format (d)  {
-		    // `d` is the original data object for the row
-		    return '<div class="col-md-5">' + 
+			// `d` is the original data object for the row
+			return '<div class="col-md-5">' + 
 						'<table class="table table-hover"  border="0">'+
 							'<tr>'+
-				    	        '<td><b>Frete:</b></td>'+
-				    	        '<td><b>Seguro:</b></td>'+
-					            '<td><b>Outros:</b></td>'+
-					            '<td><b>Desconto:</b></td>'+
-					        '</tr>'+
-					        '<tr>'+
-					        	'<td style="color: blue;">'+ '+ ' +  d[2] +'</td>'+
-					            '<td style="color: blue;">'+ '+ ' + d[4] +'</td>'+
-					        	'<td style="color: blue;">'+ '+ ' + d[5] +'</td>'+
-					            '<td style="color: red;">'+ '- ' + d[3] +'</td>'+
-					        '</tr>'+
-					   	'</table>'+
-			    	'</div>'
+								'<td><b>Frete:</b></td>'+
+								'<td><b>Seguro:</b></td>'+
+								'<td><b>Outros:</b></td>'+
+								'<td><b>Desconto:</b></td>'+
+							'</tr>'+
+							'<tr>'+
+								'<td style="color: blue;">'+ '+ ' +  d[2] +'</td>'+
+								'<td style="color: blue;">'+ '+ ' + d[4] +'</td>'+
+								'<td style="color: blue;">'+ '+ ' + d[5] +'</td>'+
+								'<td style="color: red;">'+ '- ' + d[3] +'</td>'+
+							'</tr>'+
+						'</table>'+
+					'</div>'
 		}
 
 		//datatable
-	 	var table = $('#produtos').DataTable({
-	 		  "bSort" : false,
-	 		  "iDisplayLength": 100,
-	 	});
+		var table = $('#produtos').DataTable({
+			  "bSort" : false,
+			  "iDisplayLength": 100,
+		});
 
-    	//funcao para verificacao de mostrar ou nao os detalhes do produto
-	 	$('#produtos tbody').on('click', 'td.details-control', function () {
-	        var tr = $(this).closest('tr');
-	        var row = table.row( tr );
-	        if (row.child.isShown()) {
-	            // This row is already open - close it
-	            row.child.hide();
-	            tr.removeClass('shown');
-	        }
-	        else 
-	        {
-	            row.child( format(row.data()) ).show();
-	            tr.addClass('shown');
-	        }
-	    });
+		//funcao para verificacao de mostrar ou nao os detalhes do produto
+		$('#produtos tbody').on('click', 'td.details-control', function () {
+			var tr = $(this).closest('tr');
+			var row = table.row( tr );
+			if (row.child.isShown()) {
+				// This row is already open - close it
+				row.child.hide();
+				tr.removeClass('shown');
+			}
+			else 
+			{
+				row.child( format(row.data()) ).show();
+				tr.addClass('shown');
+			}
+		});
 	});
 }]);

@@ -394,7 +394,7 @@
 															<label class="control-label ">Aliquota(%)</label>
 															<div class="input-group">
 																 <!--ng-show="produto_selected.ipi_cst_id != 8"-->
-																<input type="text" name="money" ui-number-mask="2" ng-change="setIpi(); setIcms(); setIcmsst()" ng-model='produto_selected.ipi_aliquota' class='form-control placeholder-no-fix'> 
+																<input type="text" name="money" ui-number-mask="2" ng-change="setEdited(0, true); setEdited(1, true); setEdited(2, true); setIpi(); setIcms(); setIcmsst()" ng-model='produto_selected.ipi_aliquota' class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
 														<div class="col-md-4" ng-show="produto_selected.ipi_cst_id == 8 || produto_selected.ipi_cst_id == 9">
@@ -449,14 +449,14 @@
 															<label class="control-label">Red. Base de Calculo(%)</label>
 															<div class="input-group">
 																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
-																<input type="text" name="money" ng-change="setEdited(2, true); setIcms(); setIcmsst()" ui-number-mask="2" ng-model="icmsProdutoSelected.reducaobasecalculo" class='form-control placeholder-no-fix'> 
+																<input type="text" name="money" ng-change="setEdited(2, true); setIcms(); setIcmsst()" ui-number-mask="2" ng-model="produto_selected.reducaobc" class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
 														<div class="col-md-3" ng-hide="produto_selected.icms_cst_id != 8"> 
 															<label class="control-label ">Diferimento(%)</label>
 															<div class="input-group">
 																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
-																<input type="text" name="money" ng-change="setIcms(); setIcmsst()" ui-number-mask="2" ng-model='icmsProdutoSelected.diferimento' class='form-control placeholder-no-fix'> 
+																<input type="text" name="money" ng-change="setEdited(0, true); setEdited(1, true); setEdited(2, true); setIcms(); setIcmsst()" ui-number-mask="2" ng-model='produto_selected.diferimento' class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
 
@@ -464,7 +464,7 @@
 															<label class="control-label ">Aliquota(%)</label>
 															<div class="input-group">
 																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
-																<input type="text" name="money" ng-change="setIcms(); setIcmsst()" ui-number-mask="2" ng-model='produto_selected.icms_aliquota' class='form-control placeholder-no-fix'> 
+																<input type="text" name="money" ng-change="setEdited(0, true); setEdited(1, true); setEdited(2, true); setIcms(); setIcmsst()" ui-number-mask="2" ng-model='produto_selected.icms_aliquota' class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
 
@@ -472,7 +472,7 @@
 															<label class="control-label ">Aliquota para fins de Calculo(%)</label>
 															<div class="input-group">
 																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
-																<input type="text" name="money" ng-change="setIcmsst()" ui-number-mask="2" ng-model='icmsProdutoSelected.aliquotafinscalculo' class='form-control placeholder-no-fix'> 
+																<input type="text" name="money" ng-change="setIcmsst()" ui-number-mask="2" ng-model='produto_selected.aliquotafins' class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
 
