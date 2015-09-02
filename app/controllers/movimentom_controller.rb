@@ -146,7 +146,11 @@ class MovimentomController < ApplicationController
 	end
 	
 	def returnIcmsInterEstadual
-		icms = Icmsinterestadual.where(origem: params[:or], destino: params[:dest])
+		if Icmsinterestadual.where(origem: params[:or], destino: params[:dest])
+			icms = Icmsinterestadual.where(origem: params[:or], destino: params[:dest])
+		else
+			icms = Classificacaofiscal.find(@produto.classificacaofiscal_id).icmsclassificacaofiscals.where(classificacaofiscal_id: @produto.classificacaofiscal_id)
+		end
 		render :json => icms.to_json.to_s.html_safe
 	end
 	
