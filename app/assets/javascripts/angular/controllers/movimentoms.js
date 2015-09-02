@@ -231,47 +231,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		}
 	}
 
-	$scope.setCheckboxes = function(id, varCheck)
-	{
-		if(id == 'consumidorfinal' || id == 'reducaomva') 
-		{
-			if(varCheck == false)
-			{
-				$('span', $('#uniform-' + id)).removeClass("checked");
-				$(id).removeAttr("checked");
-			}
-			else
-			{
-				$('span', $('#uniform-' + id)).addClass("checked");
-				$(id).attr("checked");
-			}
-			if(id == 'consumidorfinal')
-			{
-				if($scope.isDisabled == false)
-				{
-					$('#uniform-' + id).removeClass("disabled");
-				}
-				else
-				{
-					$('#uniform-' + id).addClass("disabled");
-				}
-			}
-		}
-		else
-		{
-			if(varCheck == 0)
-			{
-				$('span', $('#uniform-' + id)).removeClass("checked");
-				$(id).removeAttr("checked");
-			}
-			else
-			{
-				$('span', $('#uniform-' + id)).addClass("checked");
-				$(id).attr("checked");
-			}
-		}
-	}
-
 	$scope.preSetCheckbox = function()
 	{
 		$scope.setCheckboxes('freteipi', $scope.produto_selected.calcFreteIpi);
@@ -912,6 +871,47 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		if($scope.icmsProdutoSelected == undefined)
 		{
 			$scope.getIcms($scope.produto_selected.id, false);
+		}
+	}
+
+	$scope.setCheckboxes = function(id, varCheck)
+	{
+		if(id == 'consumidorfinal' || id == 'reducaomva') 
+		{
+			if(varCheck == false)
+			{
+				$('span', $('#uniform-' + id)).removeClass("checked");
+				$(id).removeAttr("checked");
+			}
+			else
+			{
+				$('span', $('#uniform-' + id)).addClass("checked");
+				$(id).attr("checked");
+			}
+			if(id == 'consumidorfinal')
+			{
+				// if($scope.isDisabled == false)
+				// {
+				// 	$('#uniform-' + id).removeClass("disabled");
+				// }
+				// else
+				// {
+				// 	$('#uniform-' + id).addClass("disabled");
+				// }
+			}
+		}
+		else
+		{
+			if(varCheck == 0)
+			{
+				$('span', $('#uniform-' + id)).removeClass("checked");
+				$(id).removeAttr("checked");
+			}
+			else
+			{
+				$('span', $('#uniform-' + id)).addClass("checked");
+				$(id).attr("checked");
+			}
 		}
 	}
 
