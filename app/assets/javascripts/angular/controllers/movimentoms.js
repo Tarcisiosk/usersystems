@@ -269,7 +269,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				$('span', $('#uniform-' + id)).addClass("checked");
 				$(id).attr("checked");
 			}
-		
 		}
 	}
 
@@ -417,7 +416,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		if($scope.isEditing == false && $scope.isNew)
 		{
 			console.log($scope.icmsProdutoSelected);
-
 			if($scope.icmsProdutoSelected.aliquota > 0)
 			{	
 				//00 - Trib. Integralmente
@@ -523,9 +521,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.valormva = $scope.produto_selected.basecalculoIcmsst * ($scope.icmsProdutoSelected.mva/100);
 			$scope.produto_selected.basecalculoIcmsst += $scope.valormva;
 		}
-
 		$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - $scope.produto_selected.valoricms;
-		
 		if ($scope.produto_selected.icms_cst_id == 4)
 		{
 			if($scope.produto_selected.aliquotafins == undefined)
@@ -533,7 +529,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				$scope.produto_selected.aliquotafins = $scope.icmsProdutoSelected.aliquotafinscalculo;
 			}
 
-			$scope.produto_selected.valoricmsst	= ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - 
+			$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - 
 												  (($scope.produto_selected.basecalculoIcmsst - $scope.valormva) * 
 												  $scope.produto_selected.aliquotafins/100).toFixed(2);
 		}

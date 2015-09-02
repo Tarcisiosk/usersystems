@@ -31,8 +31,8 @@ class ProdutoController < ApplicationController
 
 		@icmsproduto = Array.new
 		@estado.each do |est|
-			@icmsproduto << Icmsproduto.new(estado_id: est.id, reducaobasecalculo: 0,diferimento: 0,
-			aliquota: 0, aliquotafinscalculo:0, icmsst: false, mva: 0, reducaomva: false)
+			@icmsproduto << Icmsproduto.new(estado_id: est.id,reducaobasecalculo: 0, diferimento: est.diferimento,
+			aliquota: est.icms_interno, aliquotafinscalculo: est.icms_interno, icmsst: false, mva: 0,reducaomva: false)
 		end	
 
 		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => 0, :frete => 0, :desconto => 0, :seguro => 0, :outros => 0, :grupo_id => '', :origem_id => 1, :subgrupo_id => '', :empresas => [], :p_photo => '', :pis_cst_id => '', :pis_aliquota => '', :cofins_cst_id => '', :cofins_aliquota => '', :ii_aliquota => '', :ipi_cst_id => '', :ipi_aliquota => '', :classificacaofiscal_id => '', :personalizado => false }
@@ -245,7 +245,6 @@ class ProdutoController < ApplicationController
 
 		grupo_opts.uniq
 
-
  		render :json => grupo_opts.to_json.to_s.html_safe
 	end
 
@@ -275,7 +274,6 @@ class ProdutoController < ApplicationController
 
 			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('produto#destroy'))
 				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o produto?'}}]
-			
 			else
 				@@actions = []
 				act_columns_final.tap(&:pop)
@@ -285,5 +283,4 @@ class ProdutoController < ApplicationController
 									 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o produto?'}}]
 		end
 	end 
-
 end

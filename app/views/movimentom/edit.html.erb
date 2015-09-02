@@ -427,12 +427,12 @@
 																			<input type="checkbox" ng-model="produto_selected.calcIpiIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='ipiicms' ng-click="setCheckboxes('ipiicms', produto_selected.calcIpiIcms)" > IPI </input><br>
 
 																			<input type="checkbox" ng-model="produto_selected.calcFreteIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='freteicms' ng-click="setCheckboxes('freteicms', produto_selected.calcFreteIcms)" > Frete </input><br>
-																        	
-																        	<input type="checkbox" ng-model="produto_selected.calcDescontoIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='descontoicms' ng-click="setCheckboxes('descontoicms', produto_selected.calcDescontoIcms)" > Desconto </input><br>
-																        	
-																        	<input type="checkbox" ng-model="produto_selected.calcSeguroIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='seguroicms' ng-click="setCheckboxes('seguroicms', produto_selected.calcSeguroIcms)" > Seguro </input><br>
-																        	
-																        	<input type="checkbox" ng-model="produto_selected.calcOutrosIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='outrosicms' ng-click="setCheckboxes('outrosicms', produto_selected.calcOutrosIcms)" > Outros </input><br>
+																			
+																			<input type="checkbox" ng-model="produto_selected.calcDescontoIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='descontoicms' ng-click="setCheckboxes('descontoicms', produto_selected.calcDescontoIcms)" > Desconto </input><br>
+																			
+																			<input type="checkbox" ng-model="produto_selected.calcSeguroIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='seguroicms' ng-click="setCheckboxes('seguroicms', produto_selected.calcSeguroIcms)" > Seguro </input><br>
+																			
+																			<input type="checkbox" ng-model="produto_selected.calcOutrosIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='outrosicms' ng-click="setCheckboxes('outrosicms', produto_selected.calcOutrosIcms)" > Outros </input><br>
 																		</li>
 																	</ul>
 																</div>
@@ -441,7 +441,6 @@
 																<!--ng-show="produto_selected.icms_cst_id != 1"-->
 																<input type="text" name="alticms" ui-number-mask="2" ng-change="setEdited(2, true); setIcms(); setIcmsst(); setEdited(1, true); " ng-model='produto_selected.basecalculoIcms' class='form-control placeholder-no-fix'> 
 															</div>
-
 														</div>
 													</div><br>
 													<div class="row">
@@ -517,7 +516,6 @@
 												</div>
 												<div class="row">
 													<div class="col-md-4" >
-
 														<label class="control-label ">Base de Cálculo</label> 
 														<div class="btn-group">
 															<div class="dropup">
@@ -527,7 +525,7 @@
 																		<input type="checkbox" ng-model="produto_selected.calcIpiIcmsst" ng-change="setEdited(2, false); calcBcIcmsst(); setIcmsst();" ng-true-value='1' ng-false-value='0' id='ipiicmsst' ng-click="setCheckboxes('ipiicmsst', produto_selected.calcIpiIcmsst)" > IPI </input><br>
 
 																		<input type="checkbox" ng-model="produto_selected.calcFreteIcmsst" ng-change="setEdited(2, false); calcBcIcmsst(); setIcmsst();" ng-true-value='1' ng-false-value='0' id='freteicmsst' ng-click="setCheckboxes('freteicmsst', produto_selected.calcFreteIcmsst)" > Frete </input><br>
-															        	
+																		
 															        	<input type="checkbox" ng-model="produto_selected.calcDescontoIcmsst" ng-change="setEdited(2, false); calcBcIcmsst(); setIcmsst();" ng-true-value='1' ng-false-value='0' id='descontoicmsst' ng-click="setCheckboxes('descontoicmsst', produto_selected.calcDescontoIcmsst)" > Desconto </input><br>
 															        	
 															        	<input type="checkbox" ng-model="produto_selected.calcSeguroIcmsst" ng-change="setEdited(2, false); calcBcIcmsst(); setIcmsst();" ng-true-value='1' ng-false-value='0' id='seguroicmsst' ng-click="setCheckboxes('seguroicmsst', produto_selected.calcSeguroIcmsst)" > Seguro </input><br>
@@ -599,7 +597,7 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label class="control-label ">Seguro  total</label>
+									<label class="control-label ">Seguro total</label>
 									<div class="input-group">
 										<input type="text" name="money" ui-number-mask="2" ng-model='totalseguro' class='form-control placeholder-no-fix'> 
 									</div>

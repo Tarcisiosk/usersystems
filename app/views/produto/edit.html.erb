@@ -209,7 +209,7 @@
 														 </select><br><br>
 													</div>
 											 		<div class="col-md-6">
-														<label class="control-label " ng-hide="data.personalizado">Classificação Fiscal</label>
+														<label class="control-label">Classificação Fiscal</label>
 														<select ng-model="data.classificacaofiscal_id" ng-hide="data.personalizado" ng-disable="data.personalizado" class='select2-container form-control select2me'>
 														    <option ng-repeat="cf in classfisc_opts" ng-selected="cf.id == data.classificacaofiscal_id" value="{{cf.id}}">{{cf.codigo_ncm}} - {{cf.descricao}}</option>
 														 </select>

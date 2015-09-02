@@ -29,7 +29,9 @@
 			<%elsif controller_name == 'unidade'%>
 				<title>MASTERCOM | UNIDADES </title>
 			<%elsif controller_name == 'classificacaofiscal'%>
-				<title>MASTERCOM | CLASSIFICAÇÕES FISCAIS </title>		
+				<title>MASTERCOM | CLASSIFICAÇÕES FISCAIS </title>
+			<%elsif controller_name == 'movimentom'%>
+				<title>MASTERCOM | MOVIMENTOS </title>				
 			<%else%>
 				<title>MASTERCOM</title>
 			<%end%>
@@ -38,14 +40,12 @@
 			<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 			<meta content="" name="description"/>
 			<meta content="" name="author"/>
-			<link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">	
-
+			<link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
 		<%end%>
 	</head>	
 	<body ng-app='myApp'>	
 	<%if current_user.try(:id)%>
 	<div class="page-header">
-
 	<!-- BEGIN HEADER TOP -->
 	<div class="page-header-top">
 		<div class="container">
@@ -104,11 +104,11 @@
 			<div class="hor-menu ">
 				<ul class="nav navbar-nav">
 					<li>
-						<a data-no-turbolink="true" check href="/"> Página Inicial</a>
+						<a data-no-turbolink="true" check href="/">Página Inicial</a>
 					</li>
 					<% menu.each do |hkey, hvalue|%>
 						<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
-							<a data-hover="megamenu-dropdown" data-close-others="true"  ncheck data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"> <%= hvalue[:label]%> <i class="fa fa-angle-down"></i></a>
+							<a data-hover="megamenu-dropdown" data-close-others="true" ncheck data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"> <%= hvalue[:label]%> <i class="fa fa-angle-down"></i></a>
 							<ul class="dropdown-menu">
 								<li>
 									<div class="mega-menu-content">
@@ -153,7 +153,6 @@
 								<a id="empresa_menu_dropdown" data-hover="megamenu" data-close-others="true" href="javascript:;" class="dropdown-toggle">
 								<i class="icon-briefcase"></i> <%=current_user.settings(:last_empresa).edited.nome_fantasia%> </a>
 							<%end%>
-							
 						<%else%>
 							
 						<%end%>
@@ -177,7 +176,6 @@
 	<!-- END HEADER MENU -->
 </div>	
 <%end%>
-	
 	<% flash.each do |key, value| %>
 		<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
 	<% end %>

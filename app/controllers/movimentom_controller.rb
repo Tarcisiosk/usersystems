@@ -115,7 +115,7 @@ class MovimentomController < ApplicationController
 		produtos_array =  Array.new
 
 		Produto.all.each do |produto|
-			if produto.adm_id == current_user.settings(:last_empresa).edited.adm_id && (produto.personalizado == true || produto.classificacaofiscal_id >= 1) && produto.empresas.include?(current_user.settings(:last_empresa).edited)
+			if produto.adm_id == current_user.settings(:last_empresa).edited.adm_id && produto.classificacaofiscal_id >= 1 && produto.empresas.include?(current_user.settings(:last_empresa).edited)
 				unless produtos_array.include?(produto)
 					produtos_array << produto
 				end
@@ -143,7 +143,6 @@ class MovimentomController < ApplicationController
 	
 	def returnIcmsInterEstadual
 		icms = Icmsinterestadual.where(origem: params[:or], destino: params[:dest])
-
 		render :json => icms.to_json.to_s.html_safe
 	end
 	
@@ -156,7 +155,6 @@ class MovimentomController < ApplicationController
 			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#destroy'))
 				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
 				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o movimentom?'}}]
-
 			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#edit'))
 				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
 
@@ -172,5 +170,4 @@ class MovimentomController < ApplicationController
 				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o movimentom?'}}]
 		end
 	end 
-
 end

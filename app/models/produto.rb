@@ -13,11 +13,7 @@ class Produto < AbstractRecord
 
 	validates :descricao, presence: true
 	validates :codigo, presence:true, uniqueness: true
-	validates :classificacaofiscal_id, presence:true, :if => :condition_testing?
-
-	def condition_testing?
-	    return !self.personalizado
-	end
+	validates :classificacaofiscal_id, presence:true
 	
 	has_attached_file :p_photo, :storage => :database, :url => "/:attachment/:id/:style/:basename.:extension", :default_url => "../../public/assets/photos/original/missing.png"
 	validates_attachment_size :p_photo, :less_than => 3.megabytes
