@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container" ng-view ng-controller="PlanocontaCtrl">
+<div class="page-container" ng-view ng-controller="PlanocontaCtrl" ng-cloak="">
 	<input type="hidden" id="planoconta" value="<%=@planoconta.to_json%>"/>	
 	<input type="hidden" id="nivel1" value="<%=@nivel1%>"/>
 	<input type="hidden" id="pai" value="<%=@pai.to_json%>"/>

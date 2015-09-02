@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' cliente='<%=@cliente.to_json.html_safe%>'>
+<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' cliente='<%=@cliente.to_json.html_safe%>' ng-cloak="">
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 			<!-- END PAGE TITLE -->

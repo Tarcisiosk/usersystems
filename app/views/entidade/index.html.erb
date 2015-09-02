@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container">
+<div class="page-container" ng-cloak="">
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 	
@@ -105,6 +105,28 @@
 		</div>
 		<!-- END PAGE CONTENT -->
 	</div>
+	
+	<div class="modal fade bs-modal-sm" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h4 class="modal-title">Outras Opções</h4>
+				</div>
+				<div class="modal-body">
+					<div class="list-group">	
+						<a class="list-group-item" id="contacorrente"><i class="fa fa-bank"></i> Conta Corrente </a>						
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn default" data-dismiss="modal">Fechar</button>					
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
 </div>	
 
 <script>
@@ -112,6 +134,7 @@ jQuery(document).ready(function()
 {       
 	var btnsave = document.getElementById('btnsave');
 	btnsave.onclick = save;
+	var idEntidade;
 
 	function save() 
 	{
@@ -139,9 +162,13 @@ jQuery(document).ready(function()
 	function show_restricted_alert()
 	{
 		bootbox.alert("Você não tem permissão para isso!");	
-	} 	
+	} 
 
-
+	$(document).on("click",".settings",function(){		
+		idEntidade = $(this).attr('id').replace("Settings","").trim();
+	});
+	$("#contacorrente").click(function(){
+		window.location.replace("/contacorrentes?entidade="+idEntidade);
+	});
 });
-
 </script>

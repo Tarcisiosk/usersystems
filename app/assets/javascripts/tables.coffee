@@ -12,7 +12,7 @@ jQuery ->
                     responsive: true
                     bAutoWidth: true
                     bProcessing: true
-                    bServerSide: true
+                    bServerSide: true                                    
                     aoColumns: json.aaColumns )
         $().ready ->
           $('#Ativas').click ->

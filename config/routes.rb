@@ -1,4 +1,5 @@
-Rails.application.routes.draw do
+Rails.application.routes.draw do  
+
   # get 'welcome/index'
 
 	get 'users'  => "user#index", as: :users
@@ -67,6 +68,7 @@ Rails.application.routes.draw do
 	post 'entidades/save_angular' => 'entidade#save_angular'
 	post 'entidades/save_angular/:id' => 'entidade#save_angular'
 	get 'entidades/add_end' => "entidade#add_form"
+	get 'entidades/configurar/:id' => "entidades#configurar"
 
 	get 'enderecos'=> "endereco#index", as: :enderecos
 	get 'enderecos/new' => "endereco#new", as: :new_endereco
@@ -136,7 +138,15 @@ Rails.application.routes.draw do
 	get 'planocontas' => "planoconta#index", as: :planocontas
 	get 'planocontas/new' => "planoconta#new", as: :new_planoconta
 	post 'planocontas/save' => 'planoconta#save'		
-	post 'planoconta/save_settings' => 'planoconta#save_settings'
+	post 'planocontas/save_settings' => 'planoconta#save_settings'
+
+	get 'contacorrentes' => "contacorrente#index", as: :contacorrentes
+	post 'contacorrentes' => "contacorrente#index"
+	get 'contacorrentes/new' => "contacorrente#new", as: :new_contacorrente
+	post 'contacorrentes/save' => 'contacorrente#save'		
+	post 'contacorrentes/save_settings' => 'contacorrente#save_settings'
+	get 'contacorrentes/search' => 'contacorrente#search'
+	get 'contacorrentes/atualizarTotais' => 'contacorrente#atualizarTotais'
 
 	#put 'nivelacesso/configurar/:id' => 'nivelacesso#configurar', as: :conf_nivelacesso
 	
@@ -162,8 +172,7 @@ Rails.application.routes.draw do
 	resources :tipomovimentacao, only: [:edit, :update, :new, :create, :destroy]
 	resources :movimentom, only: [:edit, :update, :new, :create, :destroy]
 	resources :planoconta, only: [:edit, :update, :new, :create, :destroy]
-
-
+	resources :contacorrente, only: [:edit, :update, :new, :create, :destroy]
 
 	devise_for :users
 

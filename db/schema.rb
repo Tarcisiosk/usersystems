@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150901130856) do
+ActiveRecord::Schema.define(version: 20150901193444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,11 +65,15 @@ ActiveRecord::Schema.define(version: 20150901130856) do
     t.float    "ipi_aliquota"
   end
 
-  create_table "cstpiscofins", force: :cascade do |t|
-    t.integer  "codigo"
-    t.string   "descricao"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "contacorrentes", force: :cascade do |t|
+    t.date    "data"
+    t.float   "saldo"
+    t.string  "documento"
+    t.string  "descricao"
+    t.integer "entidade_id"
+    t.float   "valor"
+    t.integer "adm_id"
+    t.string  "compensado"
   end
 
   create_table "empresas", force: :cascade do |t|

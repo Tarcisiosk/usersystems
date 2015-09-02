@@ -1,0 +1,219 @@
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container"  ng-view ng-controller="ContaCorrenteIndexCtrl" ng-cloak="">
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+	
+		<!-- END PAGE TITLE -->
+		<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 class="modal-title">Escolher Colunas</h4>
+							</div>
+							<div class="modal-body">
+								<div class="portlet light">
+									<div class="row">
+										<div class = "col-md-6">
+											<div class="portlet-title">
+												<div class="caption">
+													<span class="caption-subject font-green-sharp bold uppercase">Colunas Inativas</span>
+													<div>
+														<%=select_tag 'I_columns[]', options_for_select(inact_columns.collect{|u| [u[:sTitle], u.to_s]}), {:class=> 'form-control', :id=>"Inativas", :size => "5", :disabled=>false} %>
+														
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class = "col-md-6">
+											<div class="portlet-title">
+												<div class="caption">
+													<span class="caption-subject font-green-sharp bold uppercase">Colunas Ativas</span>
+													<div>
+														<%=select_tag 'A_columns[]', options_for_select(act_columns.collect{|u| [u[:sTitle], u.to_s]}) , {:class=> 'form-control', :id=>"Ativas",  :size => "5", :disabled=>false}%>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn blue" id="btnsave">Salvar</button>
+								<button type="button" class="btn default" data-dismiss="modal">Cancelar</button>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Página Inicial", root_path, 'data-no-turbolink' => true %>
+			  		</li>
+			  		<i class="fa fa-circle"></i>
+					<li class="active">
+						Contas Correntes
+					</li>
+				</ul>
+				<div class="row">
+					<div class="col-md-12">
+						<!-- BEGIN SAMPLE TABLE PORTLET-->
+						<div class="portlet light">
+
+							<div class="portlet-title">
+								<div class="caption col-md-12">
+									<i class="fa fa-users font-green-sharp"></i>
+									<span class="caption-subject font-green-sharp bold uppercase">Contas Correntes</span><br><br>
+									<span class="font-red bold uppercase" ng-show="entidades.length == 0" >Empresa sem titular</span>							
+								</div>								
+								<div class="row" ng-show="entidades.length > 0">
+									<div class="col-md-10">		
+									<div class="col-md-6 form-group">							
+										<label class="control-label">Titular</label>									
+										<select class = 'form-control input-large select2me' ng-init="entidade.id = entidade.id || entidades[0].id" 
+										ng-model="entidade.id" ng-options="value.id as value.razao_social for (key,value) in entidades">				
+										</select>								
+									</div>
+									<div class="col-md-6 form-group">										
+										<label class="control-label col-md-2" style="padding-top:5px;">Período</label>												
+										<div class="input-group input-large date-picker input-daterange" data-date-format="dd/mm/yyyy">
+											<input type="text" ng-model="dataInicial" class="form-control" name="from">
+											<span class="input-group-addon">
+											até </span>
+											<input type="text" ng-model="dataFinal" class="form-control" name="to">
+										</div>																				
+									</div>
+									</div>
+									<div class="col-md-2">																				
+										<div class="col-md-12" align="right">
+											<a ng-click="searchContaCorrente()" class="btn btn-icon-only yellow"><i class="fa fa-search"></i></a>					
+											<%if (current_user.nivelacesso.present? && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('contacorrente#new')) && current_user.user_type == 2) or current_user.user_type != 2%>
+												<a id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/contacorrentes/new?entidade={{entidade.id}}"><i class="fa fa-plus"></i></a>									
+											<%end%>
+											<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
+											<i class="fa fa-wrench"></i></a>
+										</div>	
+									</div>								
+								</div><br>						
+							</div>			
+							<div class="portlet-body" ng-if="entidades.length > 0">
+								<div id="totais" class="row" ng-show="totais.ultimoSaldo">
+									<div class="col-md-6"></div>
+									<div class="col-md-6">
+										<div class="well">
+											<div class="row static-info align-reverse">
+												<div class="col-md-9 name">
+													 Saldo Atual ({{totais.ultimoSaldoData}}):
+												</div>
+												<div class="col-md-3 value">
+													 <font ng-show="totais.ultimoSaldo.indexOf('-') == -1" color="blue">{{totais.ultimoSaldo}}</font>
+													 <font ng-show="totais.ultimoSaldo.indexOf('-') != -1" color="red">{{totais.ultimoSaldo}}</font>
+												</div>
+											</div>											
+											<div class="row static-info align-reverse">
+												<div class="col-md-9 name">
+													 Saldo do Período {{dataInicialSaldoPeriodo}} até {{dataFinalSaldoPeriodo}}:
+												</div>
+												<div class="col-md-3 value">
+													 <font ng-show="totais.saldoPeriodo.indexOf('-') == -1" color="blue">{{totais.saldoPeriodo}}</font>
+													 <font ng-show="totais.saldoPeriodo.indexOf('-') != -1" color="red">{{totais.saldoPeriodo}}</font>
+												</div>
+											</div>											
+											<div class="row static-info align-reverse">
+												<div class="col-md-9 name">
+													 Saldo Compensado:
+												</div>
+												<div class="col-md-3 value">
+													<font ng-show="totais.saldoCompensado.indexOf('-') == -1" color="blue">{{totais.saldoCompensado}}</font>
+													<font ng-show="totais.saldoCompensado.indexOf('-') != -1" color="red">{{totais.saldoCompensado}}</font>	
+												</div>
+											</div>	
+										</div>
+									</div>									
+								</div>
+								<div>									
+									<table class="table table-striped table-bordered table-hover" data-source="/contacorrentes/search.json?entidade={{entidade.id}}&dataInicial={{dataInicial}}&dataFinal={{dataFinal}}" id="tabela">										
+									</table>
+								</div>
+							</div>
+						</div>
+						<!-- END SAMPLE TABLE PORTLET-->
+					</div>
+				</div>
+				<!-- END PAGE CONTENT INNER -->
+			</div>
+		</div>
+		<!-- END PAGE CONTENT -->
+	</div>	
+</div>	
+
+<script>
+jQuery(document).ready(function() { 
+	$('#totais').hide();	
+	var btnsave = document.getElementById('btnsave');
+	btnsave.onclick = save;
+
+	function save() {
+		var myOpts = document.getElementById('Ativas').options;
+		var values = [];
+		var values = $.map(myOpts, function(option) {
+			return option.value;
+		});
+		if(myOpts.length > 0){
+			$.ajax({
+				type: 'post',
+				url: '/contacorrentes/save_settings',
+				dataType: 'json',
+				data: {columns_contacorrente : values}
+			});
+			window.location.reload();	
+		}
+		else{
+			bootbox.alert("Escolha no mínimo uma coluna!");
+		}
+	}
+	var checkExist = setInterval(function() {
+	    if ($('#tabela tbody tr td').length) {
+	      $('#totais').show();
+	      clearInterval(checkExist);
+	    }
+    }, 100);	
+});
+myApp.controller('ContaCorrenteIndexCtrl', ['$scope', function($scope){	
+	$scope.entidade = <%=@entidade.to_json.html_safe%>;
+	$scope.entidades = <%=@entidades.to_json.html_safe%>;	
+	var somaMes = new Date(); var subtraiMes = new Date();	
+	somaMes.setDate(somaMes.getDate() + 31);
+	subtraiMes.setDate(subtraiMes.getDate() - 31);
+	$scope.dataInicial = <%=@dataInicial.to_json.html_safe%> == '' ? $.datepicker.formatDate("d/mm/yy", subtraiMes) : <%=@dataInicial.to_json.html_safe%>;
+	$scope.dataFinal = <%=@dataFinal.to_json.html_safe%> == '' ? $.datepicker.formatDate("d/mm/yy", somaMes) : <%=@dataFinal.to_json.html_safe%>;	
+	 
+	$scope.searchContaCorrente = function(){				
+		$('#tabela').DataTable().ajax.url("/contacorrentes/search.json?entidade="+$scope.entidade.id+"&dataInicial="+$scope.dataInicial+"&dataFinal="+$scope.dataFinal).load();	
+		$scope.atualizarTotais();						
+	}
+
+	$scope.atualizarTotais = function(){
+		var id = $scope.entidade.id == null ? $scope.entidades[0].id : $scope.entidade.id;
+		$.ajax({
+			async: false,
+			method: 'get',
+			url: '/contacorrentes/atualizarTotais',
+			data: {entidade: id, dataInicial: $scope.dataInicial, dataFinal: $scope.dataFinal},
+			success: function (data){
+				$scope.totais = data;
+				$scope.dataInicialSaldoPeriodo = $scope.dataInicial;
+				$scope.dataFinalSaldoPeriodo = $scope.dataFinal;				
+			}
+		});
+	}	
+	$scope.atualizarTotais();
+}]);
+
+</script>
+

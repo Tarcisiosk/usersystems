@@ -30,6 +30,7 @@ class User < AbstractRecord
 			s.key :columns_tipomovimentacao, :defaults => {:col => returnDefaults(Tipomovimentacao::TOTAL_COLUMNS_TIPOMOVIMENTACAO)}
 			s.key :columns_movimentom, :defaults => {:col => returnDefaults(Movimentom::TOTAL_COLUMNS_MOVIMENTOM)}
 			s.key :columns_planoconta, :defaults => {:col => returnDefaults(Planoconta::TOTAL_COLUMNS_PLANOCONTA)}
+			s.key :columns_contacorrente, :defaults => {:col => returnDefaults(Contacorrente::TOTAL_COLUMNS_CONTACORRENTE)}
 
 			s.key :last_empresa
 		end

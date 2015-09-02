@@ -304,3 +304,6 @@ DEPENDENCIES
   will_paginate
   yaml_db
   yaml_dump!
+
+BUNDLED WITH
+   1.10.3
