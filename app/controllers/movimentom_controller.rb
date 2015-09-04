@@ -128,7 +128,7 @@ class MovimentomController < ApplicationController
 		@produto = Produto.find(params[:id])
 		
 		if params[:ent] == 'true'
-			if Entidade.find(params[:ent_id]).enderecos
+			if !Entidade.find(params[:ent_id]).empyt?
 				@estado = Estado.find_by_uf(Endereco.find( Entidade.find(params[:ent_id]).enderecos.first.id ).uf)
 			else
 				@estado = Estado.find_by_uf(params[:uf])
