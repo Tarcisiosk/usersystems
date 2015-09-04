@@ -301,8 +301,13 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 	//seta os valores do IPI
 	$scope.setIpi = function()
-	{
+	{	
 		var auxbc = $scope.produto_selected.basecalculoIpi;
+
+		console.log($scope.icmsProdutoSelected);
+		//$scope.produto_selected.ipi_aliquota = $scope.icmsProdutoSelected.ipi_aliquota;
+		//$scope.produto_selected.ipi_cst_id = $scope.icmsProdutoSelected.ipi_cst_id;
+
 		$scope.verifyUndefined();
 		if( $scope.produto_selected.ipi_cst_id == 8 )
 		{

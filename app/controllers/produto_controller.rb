@@ -35,7 +35,7 @@ class ProdutoController < ApplicationController
 			aliquota: est.icms_interno, aliquotafinscalculo: est.icms_interno, icmsst: false, mva: 0,reducaomva: false)
 		end	
 
-		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => 0, :frete => 0, :desconto => 0, :seguro => 0, :outros => 0, :grupo_id => '', :origem_id => 1, :subgrupo_id => '', :empresas => [], :p_photo => '', :pis_cst_id => '', :pis_aliquota => '', :cofins_cst_id => '', :cofins_aliquota => '', :ii_aliquota => '', :ipi_cst_id => '', :ipi_aliquota => '', :classificacaofiscal_id => '', :personalizado => false }
+		@@angularActions = {:descricao => '', :codigo => '', :unidade => '', :preco => 0, :frete => 0, :desconto => 0, :seguro => 0, :outros => 0, :grupo_id => '', :origem_id => 1, :subgrupo_id => '', :empresas => [], :p_photo => '', :pis_cst_id => 0, :pis_aliquota => 0, :cofins_cst_id => 0, :cofins_aliquota => 0, :ii_aliquota => 0, :ipi_cst_id => 0, :ipi_aliquota => 0, :classificacaofiscal_id => '', :personalizado => false }
 		render :edit
 	end
 
@@ -158,7 +158,28 @@ class ProdutoController < ApplicationController
 				end
 			end
 		else
-			@produto = Produto.new(descricao: data_hash[:descricao], codigo: data_hash[:codigo], unidade: data_hash[:unidade], preco: data_hash[:preco], frete: data_hash[:frete], desconto: data_hash[:desconto], seguro: data_hash[:seguro], outros: data_hash[:outros], grupo_id: data_hash[:grupo_id], subgrupo_id: data_hash[:subgrupo_id] , origem_id: data_hash[:origem_id], p_photo: data_hash[:p_photo], empresas: array_empresas, personalizado: data_hash[:personalizado], pis_cst_id: data_hash[:pis_cst_id], pis_aliquota: data_hash[:pis_aliquota], cofins_cst_id: data_hash[:cofins_cst_id], cofins_aliquota: data_hash[:cofins_aliquota], ii_aliquota: data_hash[:ii_aliquota], ipi_cst_id: data_hash[:ipi_cst_id], ipi_aliquota: data_hash[:ipi_aliquota], classificacaofiscal_id: data_hash[:classificacaofiscal_id], adm_id: current_user.adm_id)
+			if data_hash[:personalizado] == true
+				@produto = Produto.new(descricao: data_hash[:descricao], codigo: data_hash[:codigo], unidade: data_hash[:unidade], preco: data_hash[:preco], 
+									  frete: data_hash[:frete], desconto: data_hash[:desconto], seguro: data_hash[:seguro], outros: data_hash[:outros], grupo_id: data_hash[:grupo_id], subgrupo_id: data_hash[:subgrupo_id] ,
+									  origem_id: data_hash[:origem_id], p_photo: data_hash[:p_photo],  empresas: array_empresas, personalizado: data_hash[:personalizado], 
+									  pis_cst_id: data_hash[:pis_cst_id], pis_aliquota: data_hash[:pis_aliquota], cofins_cst_id: data_hash[:cofins_cst_id], cofins_aliquota: data_hash[:cofins_aliquota], 
+									  ii_aliquota: data_hash[:ii_aliquota], ipi_cst_id: data_hash[:ipi_cst_id], ipi_aliquota: data_hash[:ipi_aliquota], classificacaofiscal_id: data_hash[:classificacaofiscal_id], adm_id: current_user.adm_id)
+			else
+				@produto = Produto.new(descricao: data_hash[:descricao], codigo: data_hash[:codigo], unidade: data_hash[:unidade], preco: data_hash[:preco], 
+										  frete: data_hash[:frete], desconto: data_hash[:desconto], seguro: data_hash[:seguro], outros: data_hash[:outros], grupo_id: data_hash[:grupo_id], subgrupo_id: data_hash[:subgrupo_id] ,
+										  origem_id: data_hash[:origem_id], p_photo: data_hash[:p_photo],  empresas: array_empresas, personalizado: data_hash[:personalizado], 
+										  pis_cst_id: data_hash[:pis_cst_id], pis_aliquota: data_hash[:pis_aliquota], cofins_cst_id: data_hash[:cofins_cst_id], cofins_aliquota: data_hash[:cofins_aliquota], 
+										  ii_aliquota: data_hash[:ii_aliquota], ipi_cst_id: data_hash[:ipi_cst_id], ipi_aliquota: data_hash[:ipi_aliquota], classificacaofiscal_id: data_hash[:classificacaofiscal_id], adm_id: current_user.adm_id)
+				@produto.classificacaofiscal_id = data_hash[:classificacaofiscal_id]
+				cf = Classificacaofiscal.find(data_hash[:classificacaofiscal_id])
+				@produto.pis_cst_id = cf.pis_cst_id
+	 			@produto.pis_aliquota = cf.pis_aliquota
+				@produto.cofins_cst_id = cf.cofins_cst_id
+				@produto.cofins_aliquota = cf.cofins_aliquota
+				@produto.ii_aliquota = cf.ii_aliquota
+				@produto.ipi_cst_id = cf.ipi_cst_id
+				@produto.ipi_aliquota = cf.ipi_aliquota
+			end
 		end
 	
 		@produto.save

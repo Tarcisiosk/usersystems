@@ -35,6 +35,10 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 			success: function(data)
 			{
 				$scope.data = data;
+				if($scope.data.personalizado == undefined)
+				{
+					$scope.data.personalizado = false;
+				}
 			}
 		});
 		console.log($scope.data);
@@ -120,8 +124,6 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 				}
 			}
 		});
-		console.log($scope.data);
-
 	}
 
 	$scope.getClassFisc = function()
@@ -133,6 +135,12 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 			success: function(data)
 			{
 				$scope.classfisc_opts = data;
+				if($scope.data.classificacaofiscal_id == '')
+				{
+					$scope.data.classificacaofiscal_id = data[0].id;
+				}
+				console.log(data[0].id);
+				console.log($scope.data.classificacaofiscal_id);
 			}
 		});
 	}
@@ -146,7 +154,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 
 	$scope.setImage = function()
 	{
-		console.log($scope.data);
+		//console.log($scope.data);
 	}
 
 
@@ -308,8 +316,9 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 	
 	$scope.save = function() 
 	{   	
-		Metronic.startPageLoading({animate: true});
+		console.log($scope.data);
 
+		Metronic.startPageLoading({animate: true});
 		var request;
 		request = $.ajax({
 			async: false,

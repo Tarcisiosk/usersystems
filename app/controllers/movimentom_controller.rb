@@ -126,9 +126,8 @@ class MovimentomController < ApplicationController
 
 	def returnIcms
 		@produto = Produto.find(params[:id])
-		
 		if params[:ent] == 'true'
-			if !Entidade.find(params[:ent_id]).empyt?
+			if Entidade.find(params[:ent_id]).enderecos.any?
 				@estado = Estado.find_by_uf(Endereco.find( Entidade.find(params[:ent_id]).enderecos.first.id ).uf)
 			else
 				@estado = Estado.find_by_uf(params[:uf])
@@ -136,7 +135,6 @@ class MovimentomController < ApplicationController
 		else
 			@estado = Estado.find_by_uf(params[:uf])
 		end
-		
 		if @produto.personalizado
 			icms = Icmsproduto.where(produto_id: params[:id], estado_id: @estado.id)
 		else
