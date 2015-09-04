@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' cliente='<%=@cliente.to_json.html_safe%>'>
+<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' icmsss='<%= @icmssupersimple.to_json.html_safe %>' cliente='<%=@cliente.to_json.html_safe%>'>
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 			<!-- END PAGE TITLE -->
@@ -60,6 +60,7 @@
 										        </ui-select><br>
 										       	
 										       	<input type="checkbox" ng-disabled='isDisabled'  id='consumidorfinal' ng-click="setCheckboxes('consumidorfinal', data.consumidor_final)" ng-model="data.consumidor_final"> Consumidor Final </input><br>
+
 											</div>
 										</div>
 									
@@ -409,13 +410,19 @@
 											</div>
 											<div class="tab-pane" id="portlet_tab2">
 												<div class="form-group">
+
 													<div class="row">
 														<div class="col-md-7">
 															<label class="control-label ">Situação tributária</label>
-															<select name="icms_cst_id" class="form-control" ng-change="calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmscsts">				
+															<select name="icms_cst_id" class="form-control" ng-show="empresa_atual.supersimples == false" ng-change="calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmscsts">				
 															</select>
+
+															<select name="icms_cst_id" class="form-control" ng-show="empresa_atual.supersimples == true" ng-change="calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmssupersimples">				
+															</select>
+
+
 														</div>
-														<div class="col-md-5" ng-hide="produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
+														<div class="col-md-5" ng-hide="(produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9) || (empresa_atual.supersimples == true && produto_selected.icms_cst_id != 3 && produto_selected.icms_cst_id != 4 && produto_selected.icms_cst_id != 5)">
 
 															<label class="control-label ">Base de Cálculo</label> 
 
@@ -443,7 +450,7 @@
 															</div>
 														</div>
 													</div><br>
-													<div class="row">
+													<div class="row" ng-hide="empresa_atual.supersimples == true && produto_selected.icms_cst_id != 3 && produto_selected.icms_cst_id != 4 && produto_selected.icms_cst_id != 5 ">
 														<div class="col-md-5" ng-hide="produto_selected.icms_cst_id != 3 && produto_selected.icms_cst_id != 10"> 
 															<label class="control-label">Red. Base de Calculo(%)</label>
 															<div class="input-group">

@@ -97,6 +97,15 @@
 															</div>
 														</div>
 													</div>
+													<div class='row'>
+														<div class='col-md-4'>
+															<div class="form-group">
+																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+																<label class="control-label ">Empresa enquadrada no SUPERSIMPLES</label>
+																<input type="checkbox" name="eess" ng-model='empresa.supersimples' class='form-control placeholder-no-fix'></input>
+															</div>
+														</div>
+													</div>
 
 													<div class="form-body" id="form-endereco">
 														<h3 class="form-section">Endereço</h3><br>
@@ -303,14 +312,17 @@ myApp.controller('EmpresaCtrl', ['$scope', function($scope){
 		}
 	}			
 
-	$scope.containsEmpresa = function(user){
-		for(var index = 0; index < user.empresas.length;index++){
-			if(user.empresas[index].id == $scope.empresa.id){
+	$scope.containsEmpresa = function(user)
+	{
+
+		for(var index = 0; index < user.empresas.length; index++)
+		{	
+			if(user.empresas[index].id == $scope.empresa.id)
+			{
 				return 'true'; 
 			}
 		}
 		return 'false';
-
 	}
 
 	$scope.findCep = function(){
@@ -405,8 +417,8 @@ myApp.controller('EmpresaCtrl', ['$scope', function($scope){
 	}
 
 	$scope.save = function(){			
-		$scope.empresa.cnpj = $('[name="cnpj"]').mask();
-		$scope.empresa.cep = $('[name="cep"]').mask();				
+		$('[name="cnpj"]').unmask();
+		$('[name="cep"]').unmask();		
 		$.ajax({
 			async: false,
       		method: 'post',
@@ -420,6 +432,5 @@ myApp.controller('EmpresaCtrl', ['$scope', function($scope){
       		}
    	 	});   	 
 	}	
-
 }]);
 </script>
