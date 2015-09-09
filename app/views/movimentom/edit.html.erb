@@ -351,7 +351,7 @@
 												<a href="#portlet_tab2" ncheck data-toggle="tab"> ICMS </a>
 											</li>
 											<li>
-												<a href="#portlet_tab3" ncheck  data-toggle="tab" ng-show="produto_selected.icms_cst_id == 2 || produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 10"> ICMS ST </a>
+												<a href="#portlet_tab3" ncheck  data-toggle="tab" ng-show="(empresa_atual.supersimples == false &&  produto_selected.icms_cst_id == 2 || produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 10) || (empresa_atual.supersimples == true && produto_selected.icms_cst_id == 3 || produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5)"> ICMS ST </a>
 											</li>
 										</ul>
 										<div class="tab-content">
@@ -399,7 +399,7 @@
 															</div>
 														</div>
 														<div class="col-md-4" ng-show="produto_selected.ipi_cst_id == 8 || produto_selected.ipi_cst_id == 9">
-															<label class="control-label ">Valor IPI</label>
+															<label class="control-label ">Valor</label>
 															<div class="input-group">
 																 <!--ng-show="produto_selected.ipi_cst_id != 8"-->
 																<input type="text" name="alt" ng-change="setIcms(); setIcmsst()" ui-number-mask="2" ng-model='produto_selected.valoripi' class='form-control placeholder-no-fix'> 
@@ -412,17 +412,19 @@
 												<div class="form-group">
 
 													<div class="row">
-														<div class="col-md-7">
-															<label class="control-label ">Situação tributária</label>
-															<select name="icms_cst_id" class="form-control" ng-show="empresa_atual.supersimples == false" ng-change="calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmscsts">				
+														<div class="col-md-7" ng-show="empresa_atual.supersimples == false">
+															<label class="control-label">Situação tributária</label>
+															<select name="icms_cst_id" class="form-control" ng-change="calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmscsts">				
 															</select>
-
-															<select name="icms_cst_id" class="form-control" ng-show="empresa_atual.supersimples == true" ng-change="calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmssupersimples">				
-															</select>
-
-
 														</div>
-														<div class="col-md-5" ng-hide="(produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9) || (empresa_atual.supersimples == true && produto_selected.icms_cst_id != 3 && produto_selected.icms_cst_id != 4 && produto_selected.icms_cst_id != 5)">
+
+														<div class="col-md-12" ng-show="empresa_atual.supersimples == true">
+															<label class="control-label">CSOSN</label>
+															<select name="icms_cst_id" class="form-control" ng-change="calcBcIcms(); setIcms(); setIcmsst();" ng-model="produto_selected.icms_cst_id" ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in icmssupersimples">				
+															</select>
+														</div>
+														
+														<div class="col-md-5" ng-hide="(empresa_atual.supersimples == false && produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9) || empresa_atual.supersimples == true">
 
 															<label class="control-label ">Base de Cálculo</label> 
 
@@ -450,7 +452,7 @@
 															</div>
 														</div>
 													</div><br>
-													<div class="row" ng-hide="empresa_atual.supersimples == true && produto_selected.icms_cst_id != 3 && produto_selected.icms_cst_id != 4 && produto_selected.icms_cst_id != 5 ">
+													<div class="row" ng-hide="empresa_atual.supersimples == true">
 														<div class="col-md-5" ng-hide="produto_selected.icms_cst_id != 3 && produto_selected.icms_cst_id != 10"> 
 															<label class="control-label">Red. Base de Calculo(%)</label>
 															<div class="input-group">
@@ -466,30 +468,30 @@
 															</div>
 														</div>
 
-														<div class="col-md-3"  ng-hide="produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9"> 
+														<div class="col-md-3" ng-hide="produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9"> 
 															<label class="control-label ">Aliquota(%)</label>
 															<div class="input-group">
 																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
-																<input type="text" name="money" ng-change="setEdited(0, true); setEdited(1, true); setEdited(2, true); setIcms(); setIcmsst()" ui-number-mask="2" ng-model='produto_selected.icms_aliquota' class='form-control placeholder-no-fix'> 
+																<input type="text" name="money" ng-change="setEdited(0, true); setEdited(1, true); setEdited(2, true); setIcms(); setIcmsst()" ui-number-mask="2" ng-model='produto_selected.icms_aliquota' class='form-control placeholder-no-fix'>
+
 															</div>
 														</div>
 
-														<div class="col-md-6"  ng-show="produto_selected.icms_cst_id == 4"> 
+														<!--<div class="col-md-6"  ng-show="produto_selected.icms_cst_id == 4"> 
 															<label class="control-label ">Aliquota para fins de Calculo(%)</label>
 															<div class="input-group">
-																<!-- ng-show="produto_selected.icms_cst_id != 1" -->
 																<input type="text" name="money" ng-change="setIcmsst()" ui-number-mask="2" ng-model='produto_selected.aliquotafins' class='form-control placeholder-no-fix'> 
 															</div>
-														</div>
+														</div>-->
 
 														<div class="col-md-3" ng-hide="produto_selected.icms_cst_id == 4 || produto_selected.icms_cst_id == 5 || produto_selected.icms_cst_id == 6 || produto_selected.icms_cst_id == 7 || produto_selected.icms_cst_id == 9">
-															<label class="control-label ">Valor ICMS</label>
+															<label class="control-label ">Valor</label>
 															<div class="input-group">
 																<input type="text" name="alticms" ng-change="setIcmsst()" ui-number-mask="2" ng-model='produto_selected.valoricms' class='form-control placeholder-no-fix'> 
 															</div>
 														</div>
 														<div class="col-md-3" ng-hide="produto_selected.icms_cst_id != 8">
-															<label class="control-label ">Valor ICMS Dif.</label>
+															<label class="control-label ">Valor Dif.</label>
 															<div class="input-group">
 																<input type="text" name="alticms" ng-change="setIcmsst()" ui-number-mask="2" ng-model='produto_selected.valoricmsdiferido' class='form-control placeholder-no-fix'> 
 															</div>
@@ -501,7 +503,7 @@
 											<div class="tab-pane" id="portlet_tab3" >
 												<div class="row">
 													<div class="col-md-9">
-														<label class="control-label">Modalidade BC ICMS ST</label>
+														<label class="control-label">Modalidade da Base de Calculo</label>
 														<select name="modalidadebcicmsst_id" on-select="getIcms(produto_selected.id, true); setIcmsst()" class="form-control" ng-model="icmsProdutoSelected.modalidadebcicmsst_id"
 															ng-options="value.id as value.codigo + ' - ' +value.descricao for (key, value) in modalidadebcicmssts">
 														</select><br>
@@ -557,10 +559,36 @@
 														</div>
 													</div>
 													<div class="col-md-4">
-														<label class="control-label ">Valor ICMS ST</label>
-														<div class="input-group">
-															<input type="text" name="alticms" ui-number-mask="2" ng-model='produto_selected.valoricmsst' class='form-control placeholder-no-fix'> 
+														<label class="control-label ">Valor</label>
+														
+														<div class="btn-group" ng-show="produto_selected.icms_cst_id == 4 || (empresa_atual.supersimples == true && produto_selected.icms_cst_id  == 3 || produto_selected.icms_cst_id  == 5)">
+															<div class="dropup">
+																<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
+																<ul class="dropdown-menu dropdown-menu-large pull-right" role="menu" style="padding-left:20%;">
+																	<div class="row">
+																		<div class="col-md-11"> 
+																			<label class="control-label"> Base de Calculo para fins de Calculo(%)</label>
+																			<!-- ng-show="produto_selected.icms_cst_id != 1" -->
+																			<input type="text" name="money" ng-change="setIcmsst()" ui-number-mask="2" ng-model='produto_selected.bcfins' class='form-control placeholder-no-fix'> 
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-md-11"> 
+																			<label class="control-label ">Aliquota para fins de Calculo(%)</label>
+																			<!-- ng-show="produto_selected.icms_cst_id != 1" -->
+																			<input type="text" name="money" ng-change="setIcmsst()" ui-number-mask="2" ng-model='produto_selected.aliquotafins' class='form-control placeholder-no-fix'> 
+																		</div>
+																	</div>
+																	<li class="divider"></li>
+																	<div class="row">
+																		<div class="col-md-11"> 
+																			<small><p><i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</i></p></small>
+																		</div>
+																	</div>
+																</ul>
+															</div>
 														</div>
+														<input type="text" name="alticms" ui-number-mask="2" ng-model='produto_selected.valoricmsst' class='form-control placeholder-no-fix'> 	
 													</div>
 												</div>	
 											</div>

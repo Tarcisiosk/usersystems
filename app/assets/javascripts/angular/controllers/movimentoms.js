@@ -232,28 +232,11 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		}
 	}
 
-	$scope.preSetCheckbox = function()
-	{
-		$scope.setCheckboxes('freteipi', $scope.produto_selected.calcFreteIpi);
-		$scope.setCheckboxes('descontoipi', $scope.produto_selected.calcDescontoIpi);
-		$scope.setCheckboxes('seguroipi', $scope.produto_selected.calcSeguroIpi);
-		$scope.setCheckboxes('outrosipi', $scope.produto_selected.calcOutrosipi);
-		$scope.setCheckboxes('ipiicms', $scope.produto_selected.calcIpiIcms);
-		$scope.setCheckboxes('freteicms', $scope.produto_selected.calcFreteIcms);
-		$scope.setCheckboxes('descontoicms', $scope.produto_selected.calcDescontoIcms);
-		$scope.setCheckboxes('seguroicms', $scope.produto_selected.calcSeguroIcms);
-		$scope.setCheckboxes('outrosicms', $scope.produto_selected.calcOutrosIcms);
-		$scope.setCheckboxes('ipiicmsst', $scope.produto_selected.calcIpiIcmsst);
-		$scope.setCheckboxes('freteicmsst', $scope.produto_selected.calcFreteIcmsst);
-		$scope.setCheckboxes('descontoicmsst', $scope.produto_selected.calcDescontoIcmsst);
-		$scope.setCheckboxes('seguroicmsst', $scope.produto_selected.calcSeguroIcmsst);
-		$scope.setCheckboxes('outrosicmsst', $scope.produto_selected.calcOutrosIcmsst);
-		$scope.setCheckboxes('reducaomva', $scope.icmsProdutoSelected.reducaomva);
-	}
-
 	//verifica se icms deve ser calculado pelo valor interestadual
 	$scope.verifyInter = function()
 	{
+		// console.log("Estado cliente: " + $scope.icmsEntidadeSelected.estado_id);
+		// console.log("Estado empresa: " +  $scope.icmsProdutoSelected.estado_id);
 		if($scope.icmsEntidadeSelected.estado_id != $scope.icmsProdutoSelected.estado_id && !$scope.data.consumidor_final)
 		{
 			$scope.interEstadual = true;
@@ -305,7 +288,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{	
 		var auxbc = $scope.produto_selected.basecalculoIpi;
 
-		console.log($scope.icmsProdutoSelected);
 		//$scope.produto_selected.ipi_aliquota = $scope.icmsProdutoSelected.ipi_aliquota;
 		//$scope.produto_selected.ipi_cst_id = $scope.icmsProdutoSelected.ipi_cst_id;
 
@@ -338,9 +320,10 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 													  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
 													  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
 													  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
+			
 		}
 		$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
-		
+
 		if($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 10)
 		{
 			if($scope.produto_selected.reducaobc == undefined)
@@ -379,7 +362,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		//para puxar o icms :)
 		if($scope.isEditing == false && $scope.isNew)
 		{
-			console.log($scope.icmsProdutoSelected);
 			if($scope.icmsProdutoSelected.aliquota > 0)
 			{	
 				//00 - Trib. Integralmente
@@ -448,7 +430,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				}
 				else if($scope.produto_selected.icms_cst_id == 5 || $scope.produto_selected.icms_cst_id == 7)
 				{
-				$scope.produto_selected.icms_cst_id == 7;
+					$scope.produto_selected.icms_cst_id == 7;
 				}
 			}
 			$scope.isNew = false;
@@ -459,20 +441,21 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 8 ||
 			$scope.produto_selected.icms_cst_id == 10 || $scope.produto_selected.icms_cst_id == 11)
 		{
-			$scope.calcBcIcms();
 			if($scope.produto_selected.icms_aliquota == undefined)
 			{
 				$scope.produto_selected.icms_aliquota = $scope.icmsProdutoSelected.aliquota;
+				if($scope.interEstadual)
+				{
+					$scope.produto_selected.icms_aliquota = $scope.aliqInterEstadual;
+				}
 			}
 
-			if($scope.interEstadual)
-			{
-				console.log($scope.interEstadual);
-				$scope.produto_selected.icms_aliquota = $scope.aliqInterEstadual;
-			}
 			$scope.aliqPelaOrigem();
-			
-		}	
+	
+			$scope.calcBcIcms();
+
+		}
+
 		//40/41/50/60
 		else if ($scope.produto_selected.icms_cst_id == 5 || $scope.produto_selected.icms_cst_id == 6 ||
 				 $scope.produto_selected.icms_cst_id == 7 || $scope.produto_selected.icms_cst_id == 9)
@@ -484,6 +467,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		//30
 		else
 		{
+			$scope.produto_selected.bcfins = $scope.produto_selected.basecalculoIcms;
 			$scope.produto_selected.icms_aliquota = 0;
 			$scope.produto_selected.valoricms = 0;
 			$scope.produto_selected.basecalculoIcms = 0;
@@ -508,9 +492,14 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 												  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcmsst) - 
 												  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcmsst);
 
+			if($scope.icmsProdutoSelected.mva == undefined)
+			{
+				$scope.icmsProdutoSelected.mva = 0;
+			}
 			$scope.valormva = $scope.produto_selected.basecalculoIcmsst * ($scope.icmsProdutoSelected.mva/100);
 			$scope.produto_selected.basecalculoIcmsst += $scope.valormva;
 		}
+
 		$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - $scope.produto_selected.valoricms;
 		if ($scope.produto_selected.icms_cst_id == 4)
 		{
@@ -518,9 +507,25 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			{
 				$scope.produto_selected.aliquotafins = $scope.icmsProdutoSelected.aliquotafinscalculo;
 			}
+			if($scope.produto_selected.bcfins == undefined)
+			{
+				$scope.produto_selected.bcfins = $scope.produto_selected.basecalculoIcms;
+			}
 			$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - 
-												  (($scope.produto_selected.basecalculoIcmsst - $scope.valormva) * 
-												  $scope.produto_selected.aliquotafins/100).toFixed(2);
+												  ($scope.produto_selected.bcfins * $scope.produto_selected.aliquotafins/100).toFixed(2);
+		}
+		if($scope.empresa_atual.supersimples)
+		{
+			//201, 202, 203
+			if ($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 4 || $scope.produto_selected.icms_cst_id == 5)
+			{
+				$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - 
+													  ($scope.produto_selected.bcfins * $scope.produto_selected.aliquotafins/100).toFixed(2);
+			}
+		}
+		if($scope.produto_selected.valoricmsst < 0)
+		{
+			$scope.produto_selected.valoricmsst = 0;
 		}
 	}
 
@@ -534,6 +539,21 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		if($scope.icmsProdutoSelected.modalidadebcicmsst_id == 5)
 		{
 			$scope.calcBcIcmsst();
+		}
+		if($scope.empresa_atual.supersimples)
+		{
+			if ($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 4 || $scope.produto_selected.icms_cst_id == 5)
+			{
+				if($scope.produto_selected.aliquotafins == undefined)
+				{
+					$scope.produto_selected.aliquotafins = $scope.icmsProdutoSelected.aliquotafinscalculo;
+				}
+				if($scope.produto_selected.bcfins == undefined)
+				{
+					$scope.produto_selected.bcfins = $scope.produto_selected.basecalculoIcms;
+				}
+				$scope.calcBcIcmsst();
+			}
 		}
 
 		if($scope.produto_selected.basecalculoIcmsst != auxbcicmsst)
@@ -901,6 +921,25 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		{
 			$scope.getIcms($scope.produto_selected.id, false);
 		}
+	}
+
+	$scope.preSetCheckbox = function()
+	{
+		$scope.setCheckboxes('freteipi', $scope.produto_selected.calcFreteIpi);
+		$scope.setCheckboxes('descontoipi', $scope.produto_selected.calcDescontoIpi);
+		$scope.setCheckboxes('seguroipi', $scope.produto_selected.calcSeguroIpi);
+		$scope.setCheckboxes('outrosipi', $scope.produto_selected.calcOutrosipi);
+		$scope.setCheckboxes('ipiicms', $scope.produto_selected.calcIpiIcms);
+		$scope.setCheckboxes('freteicms', $scope.produto_selected.calcFreteIcms);
+		$scope.setCheckboxes('descontoicms', $scope.produto_selected.calcDescontoIcms);
+		$scope.setCheckboxes('seguroicms', $scope.produto_selected.calcSeguroIcms);
+		$scope.setCheckboxes('outrosicms', $scope.produto_selected.calcOutrosIcms);
+		$scope.setCheckboxes('ipiicmsst', $scope.produto_selected.calcIpiIcmsst);
+		$scope.setCheckboxes('freteicmsst', $scope.produto_selected.calcFreteIcmsst);
+		$scope.setCheckboxes('descontoicmsst', $scope.produto_selected.calcDescontoIcmsst);
+		$scope.setCheckboxes('seguroicmsst', $scope.produto_selected.calcSeguroIcmsst);
+		$scope.setCheckboxes('outrosicmsst', $scope.produto_selected.calcOutrosIcmsst);
+		$scope.setCheckboxes('reducaomva', $scope.icmsProdutoSelected.reducaomva);
 	}
 
 	$scope.setCheckboxes = function(id, varCheck)
