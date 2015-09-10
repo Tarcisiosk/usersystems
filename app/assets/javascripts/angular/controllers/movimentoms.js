@@ -324,7 +324,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		}
 		$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
 
-		if($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 10)
+		if($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 10 || $scope.produto_selected.icms_cst_id == 11 || ($scope.empresa_atual.supersimples && $scope.produto_selected.icms_cst_id == 9))
 		{
 			if($scope.produto_selected.reducaobc == undefined)
 			{
@@ -439,7 +439,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		//tributado integralmente - 00/10/20/51/70/90
 		if( $scope.produto_selected.icms_cst_id == 1 || $scope.produto_selected.icms_cst_id == 2 ||
 			$scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 8 ||
-			$scope.produto_selected.icms_cst_id == 10 || $scope.produto_selected.icms_cst_id == 11)
+			$scope.produto_selected.icms_cst_id == 10 || $scope.produto_selected.icms_cst_id == 11 || ($scope.produto_selected.icms_cst_id == 9 && $scope.empresa_atual.supersimples == true))
 		{
 			if($scope.produto_selected.icms_aliquota == undefined)
 			{
@@ -458,7 +458,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 		//40/41/50/60
 		else if ($scope.produto_selected.icms_cst_id == 5 || $scope.produto_selected.icms_cst_id == 6 ||
-				 $scope.produto_selected.icms_cst_id == 7 || $scope.produto_selected.icms_cst_id == 9)
+				 $scope.produto_selected.icms_cst_id == 7 || ($scope.produto_selected.icms_cst_id == 9 && $scope.empresa_atual.supersimples == false))
 		{
 			$scope.produto_selected.basecalculoIcms = 0;
 			$scope.produto_selected.icms_aliquota = 0;
@@ -482,6 +482,12 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	//calcula base de calculo ICMSST
 	$scope.calcBcIcmsst = function()
 	{	
+
+		if($scope.produto_selected.reducaobcst == undefined)
+		{
+			$scope.produto_selected.reducaobcst = 0;
+		}
+
 		if(!$scope.produto_selected.wasIcmsstEdited)
 		{
 			$scope.produto_selected.icmsst_aliquota = $scope.icmsEntidadeSelected.aliquota;
@@ -496,11 +502,19 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			{
 				$scope.icmsProdutoSelected.mva = 0;
 			}
+
+			if($scope.produto_selected.reducaobcst > 0)
+			{				
+				var red = $scope.produto_selected.basecalculoIcmsst * ($scope.produto_selected.reducaobcst/100);
+				$scope.produto_selected.basecalculoIcmsst = $scope.produto_selected.basecalculoIcmsst - red;
+			}
+
 			$scope.valormva = $scope.produto_selected.basecalculoIcmsst * ($scope.icmsProdutoSelected.mva/100);
 			$scope.produto_selected.basecalculoIcmsst += $scope.valormva;
 		}
 
 		$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - $scope.produto_selected.valoricms;
+		
 		if ($scope.produto_selected.icms_cst_id == 4)
 		{
 			if($scope.produto_selected.aliquotafins == undefined)
@@ -540,6 +554,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		{
 			$scope.calcBcIcmsst();
 		}
+
 		if($scope.empresa_atual.supersimples)
 		{
 			if ($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 4 || $scope.produto_selected.icms_cst_id == 5)
@@ -983,6 +998,13 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		}
 	}
 
+	$scope.clearPanel = function($event)
+	{
+		//$('#tabs').tabs();
+		//$( "#tabs" ).tabs( "option", "active", 0 );
+		//$('#produto').prop('selectedIndex', 0);
+	}
+
 	/* END ANGULAR FUNCTIONS */
 
 	//pula para prox input caso teclado enter
@@ -1031,7 +1053,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		//datatable
 		var table = $('#produtos').DataTable({
 			  "bSort" : false,
-			  "iDisplayLength": 100,
+			  "iDisplayLength": 100
 		});
 
 		//funcao para verificacao de mostrar ou nao os detalhes do produto
