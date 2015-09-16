@@ -16,7 +16,7 @@ class GeneralDatatable < ApplicationController
 		data2 = Array.new
 		subData2 = Array.new
 		data.each_with_index do |item, index|
-			item.each_with_index do |subitem, subindex|
+			item.each_with_index do |subitem, subindex|				
 				if @klass.name == "Subgrupo"
 					if subitem.is_a?(Integer)
 						subData2[subindex] = Grupo.find_by(id: subitem).descricao
@@ -29,15 +29,34 @@ class GeneralDatatable < ApplicationController
 					else
 						subData2 = item
 					end
+				elsif @klass.name == "Contacorrente"
+					if subitem.is_a?(Float)
+						if subitem.to_s.include? "-"
+							subData2[subindex] = '<font color="red" style="float: right">'+number_to_currency(subitem, separator: ",", delimiter: ".",format: "%n")+'</font>'
+						else
+							subData2[subindex] = '<font color="blue" style="float: right">'+number_to_currency(subitem, separator: ",", delimiter: ".",format: "%n")+'</font>'
+						end	
+					else
+						subData2 = item
+					end
+					if subitem.is_a?(String)
+						if subitem == "Compensado"
+							subData2[subindex] = '<span class="label label-sm label-success">'+subitem
+						end
+						if subitem == "Não Compensado"
+							subData2[subindex] = '<span class="label label-sm label-danger">'+subitem
+						end	
+					else
+						subData2 = item
+					end	
 				else
-					subData2 = item
+					subData2 = item						
 					if !!subitem == subitem && subitem == true 
 						subData2[subindex] = '<span class="glyphicon glyphicon-ok font-green"/>'
 					elsif !!subitem == subitem  && subitem == false 
 						subData2[subindex] = '<span class="glyphicon glyphicon-remove font-red"/>'
 					end
 				end
-
 				if subitem.is_a?(Date)
 					puts "#{subitem}"
 					subData2[subindex] = subitem.strftime("%d/%m/%Y")
@@ -61,7 +80,7 @@ class GeneralDatatable < ApplicationController
 		records.map do |record|
 			data_array = Array.new
 			links_array = Array.new
-			#usuario master ou adm
+			#usuario master ou adm			
 			if @current_user.user_type == 0 || @current_user.user_type == 1
 				if record.try(:adm_id) != nil
 					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
@@ -70,8 +89,12 @@ class GeneralDatatable < ApplicationController
 								data_array[index] = record.send(item)
 							end
 							actions.each_with_index do |item, index|
-								item[:id] = record.id
-								links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+								if item[:id].to_s == "Settings"
+									links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+								else
+									item[:id] = record.id								
+									links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+								end
 							end
 							final_array << (data_array << links_array.join(""))
 							#record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo) || record.is_a?(Produto) || record.is_a?(Unidade)						
@@ -83,9 +106,13 @@ class GeneralDatatable < ApplicationController
 								columns.each_with_index do |item, index|					
 									data_array[index] = record.send(item)
 								end
-								actions.each_with_index do |item, index|
-									item[:id] = record.id
-									links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+								actions.each_with_index do |item, index|									
+									if item[:id].to_s == "Settings"
+										links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+									else
+										item[:id] = record.id																
+										links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])									
+									end
 								end
 								final_array << (data_array << links_array.join(""))
 							else
@@ -101,8 +128,12 @@ class GeneralDatatable < ApplicationController
 						data_array[index] = record.send(item)
 					end
 					actions.each_with_index do |item, index|
-						item[:id] = record.id
-						links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+						if item[:id].to_s == "Settings"
+							links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+						else
+							item[:id] = record.id
+							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+						end
 					end
 					final_array << (data_array << links_array.join(""))
 				end
@@ -117,8 +148,12 @@ class GeneralDatatable < ApplicationController
 							data_array[index] = record.send(item)
 						end
 						actions.each_with_index do |item, index|
-							item[:id] = record.id
-							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id => item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+							if item[:id].to_s == "Settings"
+								links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+							else
+								item[:id] = record.id
+								links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id => item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+							end
 						end
 						final_array << (data_array << links_array.join(""))
 				
@@ -128,8 +163,12 @@ class GeneralDatatable < ApplicationController
 							data_array[index] = record.send(item)
 						end
 						actions.each_with_index do |item, index|
-							item[:id] = record.id
-							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=>item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+							if item[:id].to_s == "Settings"
+								links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+							else
+								item[:id] = record.id
+								links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=>item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+							end
 						end
 						final_array << (data_array << links_array.join(""))
 					
@@ -141,8 +180,12 @@ class GeneralDatatable < ApplicationController
 									data_array[index] = record.send(item)
 								end
 								actions.each_with_index do |item, index|
-									item[:id] = record.id
-									links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+									if item[:id].to_s == "Settings"
+										links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+									else
+										item[:id] = record.id
+										links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+									end
 								end
 								final_array << (data_array << links_array.join(""))
 							else
@@ -154,8 +197,12 @@ class GeneralDatatable < ApplicationController
 										data_array[index] = record.send(item)
 									end
 									actions.each_with_index do |item, index|
-										item[:id] = record.id
-										links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+										if item[:id].to_s == "Settings"
+											links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+										else	
+											item[:id] = record.id
+											links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+										end
 									end
 									final_array << (data_array << links_array.join(""))
 								else
@@ -230,11 +277,18 @@ class GeneralDatatable < ApplicationController
 	end
 	
 	def search_columns
+		search_string = ""
 		s_string = " ILIKE :search"
 		search_array = Array.new
-		columns.each_with_index do |item, index|
-			search_array[index] = item
-		end
+		columns.each_with_index do |item, index|					
+			if @klass.columns_hash[item.to_s].type.to_s.eql?"date"										
+				search_array[index] = "to_char("+item+",'dd/MM/yyyy')"
+			elsif @klass.columns_hash[item.to_s].type.to_s.eql?"float" or @klass.columns_hash[item.to_s].type.to_s.eql?"integer" 							
+				search_array[index] = "to_char("+item+",'9999999D99')"			
+			else
+				search_array[index] = item	
+			end							
+		end			
 		return search_array.join(" ILIKE :search or ") + s_string
 	end
 

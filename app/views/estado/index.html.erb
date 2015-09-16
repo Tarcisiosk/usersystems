@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container">
+<div class="page-container" ng-cloak="">
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 	
@@ -115,7 +115,7 @@ jQuery(document).ready(function()
 			return option.value;
 		});
 		if(myOpts.length > 0)
-		{
+		{				
 			$.ajax({
 				type: 'post',
 				url: '/estados/save_settings',

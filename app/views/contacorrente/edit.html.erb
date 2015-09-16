@@ -1,0 +1,98 @@
+<!-- BEGIN PAGE CONTAINER -->
+<div class="page-container" ng-view ng-controller="ContaCorrenteCtrl" ng-cloak="">
+	<input type="hidden" id="contacorrente" value="<%=@contacorrente.to_json%>"/>	
+	<!-- BEGIN PAGE HEAD -->
+	<div class="page-head">
+			<!-- END PAGE TITLE -->
+			<!-- BEGIN PAGE CONTENT -->
+		<div class="page-content">
+			<div class="container">
+				<!-- BEGIN PAGE BREADCRUMB -->
+				<ul class="page-breadcrumb breadcrumb">
+					<li>
+						<%= link_to "Pagina Inicial", root_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li>
+						<%= link_to "Contas Correntes", contacorrentes_path, 'data-no-turbolink' => true %>
+					</li>
+					<i class="fa fa-circle"></i>
+					<li class="active">
+						Conta Corrente
+					</li>
+				</ul>
+				<div class="col-md-12">
+					<div class="profile-content">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="portlet light">
+									<div class="portlet-title tabbable-line">
+										<div class="caption caption-md">
+											<i class="icon-globe theme-font hide"></i>
+												<span class="caption-subject font-blue-madison bold uppercase">Conta Corrente</span>
+											<i class="fa fa-plus"></i>
+										</div>
+										<div class="actions btn-set">									
+											<%= link_to '<i class="fa fa-angle-left"></i> Voltar'.html_safe,contacorrentes_path+"?entidade="+@contacorrente.entidade_id.to_s, :type => "button",:name => "back",
+											:class => "btn btn-default btn-circle", 'data-no-turbolink' => true %>											
+											<button ng-click="save()" class="btn green-haze btn-circle"><i class="fa fa-check"></i> Gravar</button>
+										</div>
+									</div>
+									<div id="error_explanation" class="Metronic-alerts alert alert-danger" ng-if="mensagens.length > 0">
+										<ul ng-repeat="m in mensagens">
+											 <li>{{m}}</li>
+										</ul>
+									</div>
+									<form name="form_1" class="css-form" novalidate>
+
+										<div class="portlet-body">
+											<div class="row">
+												<div class="col-md-12">	
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Descrição</label>											
+														<input type="text" name="descricao" ng-model='contacorrente.descricao' class='form-control placeholder-no-fix'>
+													</div>
+												</div>
+												<div class="col-md-3">
+													<div class="form-group">
+														<label class="control-label">Data</label>
+														<input class="form-control form-control-inline input-medium date-picker" data-date-format="dd/mm/yyyy"
+														 type="text" ng-model="contacorrente.data" name="data"/>													
+													</div>
+												</div>	
+												<div class="col-md-4">									
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Documento</label>											
+														<input type="text" name="documento" ng-model='contacorrente.documento' class='form-control placeholder-no-fix' >
+													</div>
+												</div>												
+												<div class="col-md-3">
+													<div class="form-group">
+														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+														<label class="control-label ">Valor</label>											
+														<input type="number" name="valor" ng-model='contacorrente.valor' class='form-control placeholder-no-fix'>
+														<span class="help-block">Exemplo: -10(Débito), 10(Crédito)</span>
+													</div>													
+												</div>
+												<div class="col-md-2">
+													<label class="control-label ">Compensado</label>
+													<div class="checkbox-list">
+														<input ng-click="clickCompensado()" type="checkbox" name="compensado" ng-model='compensado' class='form-control'>
+													</div>
+												</div
+											</div>											
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END PAGE CONTENT -->
+	</div>	
+</div> 
+

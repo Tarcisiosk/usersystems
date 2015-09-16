@@ -60,7 +60,9 @@ class ApplicationController < ActionController::Base
 				       						  				:estado =>{:label =>'Movimentos', :path=>'/movimentoms', :acao=>'movimentom#index'}}},
 				       :mainfinanceiro => {:label=>'Financeiro',
 				       					   :cadastros=>{:label=>'Cadastros',
-				       					   				:planocontas =>{:label=>'Plano de Contas', :path=>'/planocontas', :acao =>'planoconta#index'}}},
+				       					   				:planocontas =>{:label=>'Plano de Contas', :path=>'/planocontas', :acao =>'planoconta#index'}},
+				       					   :financeiro=>{:label=>'Financeiro',
+				       					   				 :contacorrentes=>{:label=>'Conta Corrente', :path=>'/contacorrentes', :acao=>'contacorrentes#index'}}},
 				       :configuracoes => {:label=>'Configurações', 
 						 				  
 						 				  :configuracoes => {label:"Cadastros", 

@@ -41,6 +41,16 @@
 			<meta content="" name="description"/>
 			<meta content="" name="author"/>
 			<link href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css">
+
+			<style>
+			.splash {
+			  display: none;
+			}
+
+			[ng-cloak].splash {
+			  display: block !important;
+			}</style>	
+
 		<%end%>
 	</head>	
 	<body ng-app='myApp'>	
@@ -177,7 +187,14 @@
 		</div>
 	</div>
 	<!-- END HEADER MENU -->
-</div>	
+</div>
+<div class="splash" ng-cloak="">
+    <div ng-spinner-bar class="page-spinner-bar">
+		<div class="bounce1"></div>
+		<div class="bounce2"></div>
+		<div class="bounce3"></div>
+	</div>
+</div>
 <%end%>
 	<% flash.each do |key, value| %>
 		<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
@@ -187,6 +204,6 @@
 		
 	<% end %>
 		
-	<%= yield %>		
-</body>	
+	<%= yield %>			
+</body>
 </html>
