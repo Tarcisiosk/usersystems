@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904171525) do
+ActiveRecord::Schema.define(version: 20150916152829) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -62,17 +63,28 @@ ActiveRecord::Schema.define(version: 20150904171525) do
     t.float    "ii_aliquota"
     t.integer  "ipi_cst_id"
     t.float    "ipi_aliquota"
+    t.boolean  "pisdaempresa"
+    t.boolean  "cofinsdaempresa"
   end
 
   create_table "contacorrentes", force: :cascade do |t|
-    t.date    "data"
-    t.float   "saldo"
-    t.string  "documento"
-    t.string  "descricao"
-    t.integer "entidade_id"
-    t.float   "valor"
-    t.integer "adm_id"
-    t.string  "compensado"
+    t.date     "data"
+    t.float    "saldo"
+    t.string   "documento"
+    t.string   "descricao"
+    t.integer  "entidade_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.float    "valor"
+    t.integer  "adm_id"
+    t.string   "compensado"
+  end
+
+  create_table "cstpiscofins", force: :cascade do |t|
+    t.integer  "codigo"
+    t.string   "descricao"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "empresas", force: :cascade do |t|
@@ -81,17 +93,19 @@ ActiveRecord::Schema.define(version: 20150904171525) do
     t.string   "cnpj"
     t.string   "insc_estadual"
     t.string   "insc_municipal"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.string   "rua"
     t.string   "num_rua"
     t.string   "complemento"
     t.string   "bairro"
     t.string   "uf"
     t.string   "cep"
-    t.integer  "adm_id",         default: 1
+    t.integer  "adm_id",          default: 1
     t.string   "cidade"
     t.boolean  "supersimples"
+    t.float    "aliquotapis"
+    t.float    "aliquotaconfins"
   end
 
   create_table "empresas_entidades", force: :cascade do |t|
@@ -280,7 +294,7 @@ ActiveRecord::Schema.define(version: 20150904171525) do
   end
 
   create_table "piscofinscsts", force: :cascade do |t|
-    t.integer  "codigo"
+    t.string   "codigo"
     t.string   "descricao"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -324,6 +338,8 @@ ActiveRecord::Schema.define(version: 20150904171525) do
     t.float    "seguro",                 default: 0.0
     t.float    "outros",                 default: 0.0
     t.integer  "origem_id"
+    t.boolean  "pisdaempresa"
+    t.boolean  "cofinsdaempresa"
   end
 
   create_table "series", force: :cascade do |t|

@@ -21,6 +21,7 @@ class MovimentomController < ApplicationController
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
 		@icmscst = Icmscst.all.select("id", "codigo", "descricao")
+		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao").order(id: :asc)
 		@icmssupersimple = Icmssupersimple.all.select("id", "codigo", "descricao")
 		@@angularActions = {:data => '', :entidade_id => '', :consumidor_final => false, :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
 		render :edit
@@ -45,6 +46,7 @@ class MovimentomController < ApplicationController
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
 		@icmscst = Icmscst.all.select("id", "codigo", "descricao").order(id: :asc)
+		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao").order(id: :asc)
  		@icmssupersimple = Icmssupersimple.all.select("id", "codigo", "descricao")
 		@@angularActions = {:data => @movimentom.data.strftime("%d/%m/%Y"), :entidade_id => @movimentom.entidade_id, :consumidor_final => @movimentom.consumidor_final, :produtos_list => @movimentom.produtos_list, :totalvalor => @movimentom.totalvalor, :totalquantidade => @movimentom.totalquantidade}
 
@@ -137,9 +139,6 @@ class MovimentomController < ApplicationController
 		else
 			@estado = Estado.find_by_uf(params[:uf])
 		end
-		puts "+++++++++++++++++ Estado: #{@estado.uf}"
-		puts "+++++++++++++++++ ID: #{@estado.id}"
-
 		if @produto.personalizado
 			icms = Icmsproduto.where(produto_id: params[:id], estado_id: @estado.id)
 		else
@@ -158,6 +157,26 @@ class MovimentomController < ApplicationController
 		render :json => icms.to_json.to_s.html_safe
 	end
 	
+	def returnAliqPisCofins
+		@produto = Produto.find(params[:id])
+		cf = Classificacaofiscal.find(@produto.classificacaofiscal_id)
+		aliqpiscofins = Array.new
+		if cf.pisdaempresa == true
+			aliqPis = current_user.settings(:last_empresa).edited.aliquotapis
+		else
+			aliqPis = cf.pis_aliquota 
+		end
+
+		if cf.cofinsdaempresa == true
+			aliqCofins = current_user.settings(:last_empresa).edited.aliquotaconfins
+		else
+			aliqCofins = cf.cofins_aliquota
+		end
+		aliqpiscofins << aliqPis
+		aliqpiscofins << aliqCofins
+		render :json => aliqpiscofins.to_json.to_s.html_safe
+	end
+
 	def movimentom_params
 		params.require(:movimentom).permit(:data, :entidade_id, :adm_id)
 	end

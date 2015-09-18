@@ -1,5 +1,4 @@
-<!-- BEGIN PAGE CONTAINER -->
-<div class="page-container" ng-view ng-controller="ClassificacaofiscalCtrl" ng-cloak="">
+<div class="page-container" ng-view ng-controller="ClassificacaofiscalCtrl" id="EditingObjId" empresa_atual='<%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>' ng-cloak="">
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 			<!-- END PAGE TITLE -->
@@ -92,7 +91,7 @@
 												</div>
 												<div class="panel-body">													
 										 			<div class="row">
-										 				<div class="col-md-10">
+										 				<div class="col-md-12">
 										 					<div class="form-group">
 										 						<label class="control-label">CST (PIS)</label>
 																<select name="pis_cst_id" class="form-control" ng-model="classificacaofiscal.pis_cst_id"
@@ -100,32 +99,34 @@
 																</select>
 										 					</div>	
 										 				</div>
-										 				<div class="col-md-2">
-										 					<div class="form-group">
-										 						<label class="control-label">Alíquota (PIS)</label>
-										 						<div class="input-group">
-																	<input type="number" name="pis_aliquota" ng-model="classificacaofiscal.pis_aliquota" class="form-control placeholder-no-fix"></input>
-																	<span class="input-group-addon">%</span>
-																</div>									 						
-										 					</div>
-										 				</div>
 										 			</div>
 										 			<div class="row">
-										 				<div class="col-md-10">
+										 				<!-- <div class="col-md-9">
 										 					<div class="form-group">
 										 						<label class="control-label">CST (COFINS)</label>
 																<select name="cofins_cst_id" class="form-control" ng-model="classificacaofiscal.cofins_cst_id"
-																		ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in piscofinscsts">											
+																ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in piscofinscsts"> 
 																</select>
-										 					</div>	
+										 					</div>
+										 				</div> -->
+										 				<div class="col-md-6">
+										 					<div class="form-group">
+										 						<label class="control-label">Alíquota (PIS)</label>
+										 						<div class="input-group"  ng-hide="classificacaofiscal.pisdaempresa==true">
+																	<input type="number" name="pis_aliquota" ng-model="classificacaofiscal.pis_aliquota" class="form-control placeholder-no-fix"> </input>
+																	<span class="input-group-addon">%</span>
+																</div><br ng-if="classificacaofiscal.pisdaempresa==true">
+																<input type="checkbox" ng-click="getAliqEmpresa($event, true)" id="pise" ng-model="classificacaofiscal.pisdaempresa">Buscar aliquota da empresa.</input>
+										 					</div>
 										 				</div>
-										 				<div class="col-md-2">
+										 				<div class="col-md-6">
 										 					<div class="form-group">
 										 						<label class="control-label">Alíquota (COFINS)</label>
-										 						<div class="input-group">
-																	<input type="number" name="cofins_aliquota" ng-model="classificacaofiscal.cofins_aliquota" class="form-control placeholder-no-fix"></input>
+										 						<div class="input-group" ng-hide="classificacaofiscal.cofinsdaempresa==true">
+																	<input type="number" name="cofins_aliquota"  ng-model="classificacaofiscal.cofins_aliquota" class="form-control placeholder-no-fix"> </input>
 																	<span class="input-group-addon">%</span>
-																</div>									 						
+																</div><br ng-if="classificacaofiscal.cofinsdaempresa==true">								 						
+																<input type="checkbox" ng-click="getAliqEmpresa($event, false)" id="cofinse" ng-model="classificacaofiscal.cofinsdaempresa">Buscar aliquota da empresa.</input>
 										 					</div>
 										 				</div>
 										 			</div>										 			
@@ -333,6 +334,7 @@
 myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	Metronic.init(); // init metronic core components
 	Layout.init();		
+
 	$scope.mensagens = [];
 	$scope.mensagensIcms = [];
 	$scope.classificacaofiscal = <%= @classificacaofiscal.to_json.html_safe=%>;	
@@ -342,7 +344,9 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 	$scope.modalidadebcicmssts = <%= @modalidadebcicmsst.to_json.html_safe=%>;
 	$scope.icmsclassificacaofiscal = <%= @icmsclassificacaofiscal.to_json.html_safe=%>;	
 	$scope.icmsCFAtual = {};
-	
+
+	$scope.empresa_atual = JSON.parse($('#EditingObjId').attr("empresa_atual"));
+
 	angular.element(document).ready(function () {
 		$('[name="codigo_ncm"]').mask("9999.99.99");
 		$('[name="codigo_ex"]').mask("99");
@@ -398,6 +402,30 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
 
 	$scope.clickReducaomva = function(event){
 		$scope.icmsclassificacaofiscal[$scope.indexIcmsCF].reducaomva = event.target.checked;
+	}
+
+	$scope.getAliqEmpresa = function(event, t)
+	{
+		if(t)
+		{
+			$scope.classificacaofiscal.pisdaempresa = event.target.checked;
+			if($scope.classificacaofiscal.pisdaempresa == true)
+			{
+				var aliq = <%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>
+				$scope.classificacaofiscal.pis_aliquota = aliq.aliquotapis;
+				console.log(aliq);
+			}
+		}
+		else
+		{
+			$scope.classificacaofiscal.cofinsdaempresa = event.target.checked;					
+			if($scope.classificacaofiscal.cofinsdaempresa == true)
+			{
+				var aliq = <%= (current_user.settings(:last_empresa).edited).to_json.html_safe %>
+				$scope.classificacaofiscal.cofins_aliquota = aliq.aliquotaconfins;
+				//console.log(aliq);
+			}
+		}
 	}
 
 	$scope.setIcmsCF = function(id){			
@@ -460,5 +488,27 @@ myApp.controller('ClassificacaofiscalCtrl', ['$scope', function($scope){
       		}
    	 	});
 	}
+
+	$scope.preSetCheckbox = function()
+	{
+		$scope.setCheckboxes('cofinse', $scope.classificacaofiscal.cofinsdaempresa);
+		$scope.setCheckboxes('pise', $scope.classificacaofiscal.pisdaempresa);
+	}
+
+	$scope.setCheckboxes = function(id, varCheck)
+	{
+		if(varCheck == false)
+		{
+			$('span', $('#uniform-' + id)).removeClass("checked");
+			$(id).removeAttr("checked");
+		}
+		else
+		{
+			$('span', $('#uniform-' + id)).addClass("checked");
+			$(id).attr("checked");
+		}
+	}
+	$scope.preSetCheckbox();
+
 }]);
 </script>

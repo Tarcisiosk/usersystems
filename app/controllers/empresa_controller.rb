@@ -102,7 +102,7 @@ class EmpresaController < ApplicationController
 	end
 
 	def empresa_params
-		params.require(:empresa).permit(:razao_social, :users, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :rua, :num_rua, :complemento, :bairro, :cidade, :uf, :cep, :grupos)
+		params.require(:empresa).permit(:razao_social, :users, :nome_fantasia, :cnpj, :insc_estadual, :insc_municipal, :aliquotapis, :aliquotaconfins, :rua, :num_rua, :complemento, :bairro, :cidade, :uf, :cep, :grupos)
 	end
 
 	def require_adm_or_common_acess!

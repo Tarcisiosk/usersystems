@@ -1,4 +1,4 @@
-<div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>' origem='<%=@origem.to_json.html_safe%>' ng-cloak="">
+<div class="page-container" ng-view ng-controller="ProdutoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%=(current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' icmsproduto='<%= @icmsproduto.to_json.html_safe=%>' estados='<%= @estado.to_json.html_safe=%>' pis='<%= @piscofinscst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe=%>' origem='<%=@origem.to_json.html_safe%>' ng-cloak="">
 	<div class="page-head">
 		<div class="page-content">
 			<div class="container">
@@ -208,7 +208,7 @@
 													</div>
 											 		<div class="col-md-6">
 														<label class="control-label">Classificação Fiscal</label>
-														<select ng-model="data.classificacaofiscal_id" ng-hide="data.personalizado" ng-disable="data.personalizado" class='select2-container form-control select2me'>
+														<select ng-model="data.classificacaofiscal_id" ng-disable="data.personalizado" class='select2-container form-control select2me'>
 														    <option ng-repeat="cf in classfisc_opts" ng-selected="cf.id == data.classificacaofiscal_id" value="{{cf.id}}">{{cf.codigo_ncm}} - {{cf.descricao}}</option>
 														 </select>
 													</div>
@@ -224,40 +224,42 @@
 													</div>
 													<div class="panel-body">													
 											 			<div class="row">
-											 				<div class="col-md-10">
+											 				<div class="col-md-12">
 											 					<div class="form-group">
-											 						<label class="control-label">CST (PIS)</label>
+											 						<label class="control-label">CST (PIS/COFINS)</label>
 																	<select name="pis_cst_id" class="form-control" ng-model="data.pis_cst_id"
 																			ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in piscofinscsts">				
 																	</select>
 											 					</div>	
 											 				</div>
-											 				<div class="col-md-2">
-											 					<div class="form-group">
-											 						<label class="control-label">Alíquota (PIS)</label>
-											 						<div class="input-group">
-																		<input type="number" name="pis_aliquota" ng-model="data.pis_aliquota" class="form-control placeholder-no-fix"></input>
-																		<span class="input-group-addon">%</span>
-																	</div>									 						
-											 					</div>
-											 				</div>
 											 			</div>
 											 			<div class="row">
-											 				<div class="col-md-10">
+											 				<!-- <div class="col-md-9">
 											 					<div class="form-group">
 											 						<label class="control-label">CST (COFINS)</label>
 																	<select name="cofins_cst_id" class="form-control" ng-model="data.cofins_cst_id"
 																			ng-options="value.id as value.codigo+' - '+value.descricao for (key,value) in piscofinscsts">											
 																	</select>
 											 					</div>	
+											 				</div> -->
+											 				<div class="col-md-6">
+											 					<div class="form-group">
+											 						<label class="control-label">Alíquota (PIS)</label>
+											 						<div class="input-group"  ng-hide="data.pisdaempresa==true">
+																		<input type="number" name="pis_aliquota" ng-disabled="data.pisdaempresa==true" ng-model="data.pis_aliquota" class="form-control placeholder-no-fix"> </input>
+																		<span class="input-group-addon">%</span>
+																	</div><br ng-if="data.pisdaempresa==true">
+																	<input type="checkbox" ng-click="getAliqEmpresa($event, true)" ng-model="data.pisdaempresa">Buscar aliquota da empresa.</input>
+											 					</div>
 											 				</div>
-											 				<div class="col-md-2">
+											 				<div class="col-md-6">
 											 					<div class="form-group">
 											 						<label class="control-label">Alíquota (COFINS)</label>
-											 						<div class="input-group">
-																		<input type="number" name="cofins_aliquota" ng-model="data.cofins_aliquota" class="form-control placeholder-no-fix"></input>
+											 						<div class="input-group"  ng-hide="data.cofinsdaempresa==true">
+																		<input type="number" name="cofins_aliquota" ng-disabled="data.cofinsdaempresa==true" ng-model="data.cofins_aliquota" class="form-control placeholder-no-fix"> </input>
 																		<span class="input-group-addon">%</span>
-																	</div>									 						
+																	</div><br ng-if="data.cofinsdaempresa==true">
+																	<input type="checkbox" ng-click="getAliqEmpresa($event, false)" ng-model="data.cofinsdaempresa">Buscar aliquota da empresa.</input>
 											 					</div>
 											 				</div>
 											 			</div>										 			

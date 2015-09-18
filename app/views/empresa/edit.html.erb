@@ -47,17 +47,19 @@
 										</div>
 										<ul class="nav nav-tabs">
 										 	<li class="active">
-													<a ncheck="true" href="#tab_1_1" data-toggle="tab">Informações Gerais</a>
+												<a ncheck="true" href="#tab_1_1" data-toggle="tab">Informações Gerais</a>
+											</li>
+											<% if current_user.user_type != 2%>
+												<li ng-if="empresa.id != null">
+													<a ncheck="true" href="#tab_1_2" data-toggle="tab">Usuários</a>
 												</li>
-												<% if current_user.user_type != 2%>
-													<li ng-if="empresa.id != null">
-														<a ncheck="true" href="#tab_1_2" data-toggle="tab">Usuários</a>
-													</li>
-													<li>
-														<a ncheck="true" href="#tab_1_3" data-toggle="tab">Certificados Digitais</a>
-													</li>
-												<%end%>
-											</ul>
+												<li>
+													<a ncheck="true" href="#tab_1_3" data-toggle="tab">Certificados Digitais</a>
+												</li>
+											<%end%>
+											<li>
+												<a ncheck="true" href="#tab_1_4" data-toggle="tab">Fiscal</a>
+											</li>
 										</ul>
 										<div class="tab-content">
 											<div class="tab-pane active" id="tab_1_1">
@@ -238,6 +240,39 @@
 																			</tbody>
 																		</table>
 																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="tab-pane" id="tab_1_4">
+										 			<div class="row">
+														<div class="col-md-6">
+															<div class="panel panel-default">
+																<div class="panel-heading">
+																	<h3 class="panel-title">PIS/COFINS</h3>
+																</div>
+																<div class="panel-body">													
+														 			<div class="row">
+														 				<div class="col-md-6">
+														 					<div class="form-group">
+														 						<label class="control-label">Alíquota (PIS)</label>
+														 						<div class="input-group">
+																					<input type="number" ng-model="empresa.aliquotapis" class="form-control placeholder-no-fix"> </input>
+																					<span class="input-group-addon">%</span>
+																				</div>
+														 					</div>
+														 				</div>
+														 				<div class="col-md-6">
+														 					<div class="form-group">
+														 						<label class="control-label">Alíquota (COFINS)</label>
+														 						<div class="input-group">
+																					<input type="number" ng-model="empresa.aliquotaconfins" class="form-control placeholder-no-fix"> </input>
+																					<span class="input-group-addon">%</span>
+																				</div>
+														 					</div>
+														 				</div>
+														 			</div>										 			
 																</div>
 															</div>
 														</div>

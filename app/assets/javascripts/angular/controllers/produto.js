@@ -7,10 +7,10 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 	$scope.unidade_opts = [];
 	$scope.classfisc_opts = [];			
 	$scope.empresas_total = [];
+	$scope.empresa_atual = JSON.parse($('#EditingObjId').attr("empresa_atual"));
 	$scope.piscofinscsts = JSON.parse($('#EditingObjId').attr("pis"));
 	$scope.ipicsts = JSON.parse($('#EditingObjId').attr("ipi"));
 	$scope.origens = JSON.parse($('#EditingObjId').attr("origem"));
-	$scope.empresa_atual = $('#EditingObjId').attr("empresa_atual");
 	$scope.modalidadebcicmssts = JSON.parse($('#EditingObjId').attr("modalidade"));
 	$scope.icmsproduto = JSON.parse($('#EditingObjId').attr("icmsproduto"));
 	$scope.estados = JSON.parse($('#EditingObjId').attr("estados"));
@@ -60,9 +60,9 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 
 	$scope.getData();
 	$scope.getEmpresas();
-	if ($scope.data.empresas.indexOf($scope.empresa_atual) <= -1)
+	if ($scope.data.empresas.indexOf($scope.empresa_atual.id) <= -1)
 	{
-		$scope.data.empresas.push($scope.empresa_atual);
+		$scope.data.empresas.push($scope.empresa_atual.id);
 	}
 	
 	$scope.getUnidades = function()
@@ -311,7 +311,29 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 				$scope.mensagensIcms = JSON.parse(jqXHR.responseText);
 			}
 		});		
-	}		
+	}
+
+	$scope.getAliqEmpresa = function(event, t)
+	{
+		console.log($scope.empresa_atual);
+		if(t)
+		{
+			$scope.data.pisdaempresa = event.target.checked;
+			if($scope.data.pisdaempresa == true)
+			{
+				$scope.data.pis_aliquota = $scope.empresa_atual.aliquotapis;
+			}
+		}
+		else
+		{
+			$scope.data.cofinsdaempresa = event.target.checked;					
+			if($scope.data.cofinsdaempresa == true)
+			{
+				$scope.data.cofins_aliquota = $scope.empresa_atual.aliquotaconfins;
+			}
+		}
+	}
+
 	//$("[name='money']").maskMoney({ allowNegative: false, thousands:'', decimal:'.', affixesStay: true});
 	
 	$scope.save = function() 

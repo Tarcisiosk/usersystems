@@ -38,6 +38,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.icmscsts = JSON.parse($('#EditingObjId').attr("icms"));
 	$scope.icmssupersimples = JSON.parse($('#EditingObjId').attr("icmsss"));
 	$scope.modalidadebcicmssts = JSON.parse($('#EditingObjId').attr("modalidade"));
+	$scope.piscofinscst = JSON.parse($('#EditingObjId').attr("piscofinscst"));
 	$scope.valormva = 0;
 	$scope.isDisabled = false;
 	$scope.isNew = true;
@@ -155,6 +156,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				{
 					$scope.icmsProdutoSelected = data[0];
 				}
+				console.log(data[0]);
 			},
 			error: function()
 			{      	
@@ -168,7 +170,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		$.ajax({
 			async:false,
 			method: 'get',
-			url: '/movimentoms/get_icmsinterestadual/',
+			url: '/movimentoms/get_icmsinterestadual/' ,
 			data: {"or" : origem, "dest" : destino },
 			dataType: 'json',
 			success: function(data)
@@ -189,6 +191,26 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		});	
 	}
 
+	//pega aliq da empresa caso esteja marcado buscar da empresa.
+	$scope.getAliqPisCofins = function(id_produto)
+	{
+		$.ajax({
+			async: false,
+			method: 'get',
+			url: '/movimentoms/get_piscofins/' + id_produto,
+			dataType: 'json',
+			success: function(data)
+			{
+				$scope.produto_selected.pis_aliquota = data[0];
+				$scope.produto_selected.cofins_aliquota = data[1];
+			},
+			error: function()
+			{
+				alert('ué');
+			}
+		});	
+	}
+	
 	$scope.getData();	
 	$scope.getEntidades();
 
@@ -266,6 +288,11 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		else if(i == 2)
 		{
 			$scope.produto_selected.wasIcmsstEdited = val;
+		}
+		//pis cofins
+		else if(i == 3)
+		{
+			$scope.produto_selected.wasPisCofinstEdited = val;
 		}
 	}
 
@@ -473,6 +500,11 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.produto_selected.basecalculoIcms = 0;
 		}
 
+		if($scope.empresa_atual.supersimples == true)
+		{
+			$scope.produto_selected.valoricms = 0;
+		}
+
 		if($scope.produto_selected.basecalculoIcms != auxbcicms)
 		{
 			$("[name='alticms']").effect( "pulsate", {times:1}, 500 );
@@ -515,7 +547,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 
 		$scope.produto_selected.valoricmsst = ($scope.produto_selected.basecalculoIcmsst * $scope.produto_selected.icmsst_aliquota/100) - $scope.produto_selected.valoricms;
 		
-		if ($scope.produto_selected.icms_cst_id == 4)
+		if ($scope.produto_selected.icms_cst_id == 4 || $scope.produto_selected.icms_cst_id == 9)
 		{
 			if($scope.produto_selected.aliquotafins == undefined)
 			{
@@ -576,6 +608,51 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$("[name='alticmsst']").effect( "pulsate", {times:1}, 500 );
 		}
 	}
+
+	
+	//calcula o pis e cofins
+	$scope.calcBcPisCofins = function()
+	{
+		if(!$scope.produto_selected.wasPisCofinstEdited)
+		{
+			$scope.produto_selected.basecalculopc = ($scope.produto_selected.preco * $scope.produto_selected.qtde) + 
+												 ($scope.produto_selected.frete * $scope.produto_selected.calcFretePC) + 
+												 ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroPC) + 
+												 ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosPC) - 
+												 ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoPC);
+			
+			$scope.produto_selected.valorp = $scope.produto_selected.basecalculopc * ($scope.produto_selected.pis_aliquota/100);
+			$scope.produto_selected.valorc = $scope.produto_selected.basecalculopc * ($scope.produto_selected.cofins_aliquota/100);
+		}
+	}
+
+	//seta de acordo com a st do pis 
+	$scope.setPisCofins = function()
+	{
+		//06 - tributavel aliq = zero 
+		if($scope.produto_selected.pis_cst_id == 6)
+		{
+			$scope.calcBcPisCofins();
+			$scope.produto_selected.pis_aliquota = 0;
+			$scope.produto_selected.cofins_aliquota = 0;
+			$scope.produto_selected.valorp = 0;
+			$scope.produto_selected.valorc = 0;
+		}
+		//07 08 09 - csts inuteis que fazem a mesma coisa
+		else if($scope.produto_selected.pis_cst_id == 7 || $scope.produto_selected.pis_cst_id == 8 || $scope.produto_selected.pis_cst_id == 9)
+		{
+			$scope.produto_selected.basecalculopc = 0;
+			$scope.produto_selected.pis_aliquota = 0;
+			$scope.produto_selected.cofins_aliquota = 0;
+			$scope.produto_selected.valorp = 0;
+			$scope.produto_selected.valorc = 0;
+		}
+		else
+		{
+			$scope.calcBcPisCofins();
+		}
+	}
+
 	
 	//atualiza a aliquota do icms de acordo com a origem
 	$scope.aliqPelaOrigem = function()
@@ -936,6 +1013,32 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		{
 			$scope.getIcms($scope.produto_selected.id, false);
 		}
+		//PIS/COFINS
+		if($scope.produto_selected.valorp == undefined)
+		{
+			$scope.produto_selected.valorp = 0;
+		}
+		if($scope.produto_selected.valorc == undefined)
+		{
+			$scope.produto_selected.valorc = 0;
+		}
+		if($scope.produto_selected.calcFretePC == undefined)
+		{
+			$scope.produto_selected.calcFretePC = 1;
+		}
+		if($scope.produto_selected.calcDescontoPC == undefined)
+		{
+			$scope.produto_selected.calcDescontoPC = 1;
+		}
+		if($scope.produto_selected.calcSeguroPC == undefined)
+		{
+			$scope.produto_selected.calcSeguroPC = 1;
+		}
+		if($scope.produto_selected.calcOutrosPC == undefined)
+		{
+			$scope.produto_selected.calcOutrosPC = 1;
+		}		
+
 	}
 
 	$scope.preSetCheckbox = function()
@@ -955,6 +1058,10 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		$scope.setCheckboxes('seguroicmsst', $scope.produto_selected.calcSeguroIcmsst);
 		$scope.setCheckboxes('outrosicmsst', $scope.produto_selected.calcOutrosIcmsst);
 		$scope.setCheckboxes('reducaomva', $scope.icmsProdutoSelected.reducaomva);
+		$scope.setCheckboxes('fretepc', $scope.produto_selected.calcFretePC);
+		$scope.setCheckboxes('descontopc', $scope.produto_selected.calcDescontoPC);
+		$scope.setCheckboxes('seguropc', $scope.produto_selected.calcSeguroPC);
+		$scope.setCheckboxes('outrospc', $scope.produto_selected.calcOutrosPC);
 	}
 
 	$scope.setCheckboxes = function(id, varCheck)
@@ -1030,8 +1137,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		}
 
 		//informações dentro da row dos produtos
-		function format (d)  {
-			// `d` is the original data object for the row
+		function format (d)  
+		{
 			return '<div class="col-md-5">' + 
 						'<table class="table table-hover"  border="0">'+
 							'<tr>'+
@@ -1041,10 +1148,10 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 								'<td><b>Desconto:</b></td>'+
 							'</tr>'+
 							'<tr>'+
-								'<td style="color: blue;">'+ '+ ' +  d[2] +'</td>'+
-								'<td style="color: blue;">'+ '+ ' + d[4] +'</td>'+
-								'<td style="color: blue;">'+ '+ ' + d[5] +'</td>'+
-								'<td style="color: red;">'+ '- ' + d[3] +'</td>'+
+								'<td style="color: blue;">'+ '+ ' +  $scope.produtos_choosen[d].frete +'</td>'+
+								'<td style="color: blue;">'+ '+ ' + $scope.produtos_choosen[d].seguro +'</td>'+
+								'<td style="color: blue;">'+ '+ ' + $scope.produtos_choosen[d].outros +'</td>'+
+								'<td style="color: red;">'+ '- ' + $scope.produtos_choosen[d].desconto +'</td>'+
 							'</tr>'+
 						'</table>'+
 					'</div>'
@@ -1060,14 +1167,15 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		$('#produtos tbody').on('click', 'td.details-control', function () {
 			var tr = $(this).closest('tr');
 			var row = table.row( tr );
-			if (row.child.isShown()) {
+			if (row.child.isShown()) 
+			{
 				// This row is already open - close it
 				row.child.hide();
 				tr.removeClass('shown');
 			}
 			else 
 			{
-				row.child( format(row.data()) ).show();
+				row.child( format(row.index())).show();
 				tr.addClass('shown');
 			}
 		});
