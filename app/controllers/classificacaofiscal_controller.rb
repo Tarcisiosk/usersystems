@@ -1,11 +1,11 @@
 class ClassificacaofiscalController < ApplicationController
 	
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a classificação fiscal?'}}]
+	@@actions = []
+
 	def index
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(Classificacaofiscal, act_columns_final, classificacaofiscal_actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(Classificacaofiscal.where("status != 'x'"), act_columns_final, classificacaofiscal_actions, view_context, current_user) }
 		end
 	end
 
@@ -84,30 +84,30 @@ class ClassificacaofiscalController < ApplicationController
 
 	def destroy
 		@classificacaofiscal = Classificacaofiscal.find(params[:id])		
-		if @classificacaofiscal.destroy
-				redirect_to classificacaofiscals_path, notice: " "
+		@classificacaofiscal.status = 'x'
+		@classificacaofiscal.save
+		if @classificacaofiscal.status == 'x'
+			redirect_to classificacaofiscals_path, notice: " "
 		end
 	end	
 
 	def classificacaofiscal_actions
+		@@actions = []
 		if current_user.user_type == 2
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('classificacaofiscal#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('classificacaofiscal#destroy'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a classificação fiscal?'}}]
-
-			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('classificacaofiscal#edit'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
-
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('classificacaofiscal#destroy'))
-				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a classificação fiscal?'}}]
+			if  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('classificacaofiscal#edit'))
+				@@actions << [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+			end
 			
-			else
-				@@actions = []
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('classificacaofiscal#destroy'))
+				@@actions << [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a classificação fiscal?'}}]
+			end
+			
+			if	@@actions == []
 				act_columns_final.tap(&:pop)
 			end
 		else
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-						 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a classificação fiscal?'}}]
+						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
 	end
 

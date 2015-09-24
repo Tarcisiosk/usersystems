@@ -29,7 +29,8 @@ class ApplicationController < ActionController::Base
 	helper_method :returnAllEstados
 	helper_method :returnClassFisc
 	helper_method :returnEmpresas
-
+	helper_method :statusset
+	
 	@@checked_rows = []
 	@@checked_users = []
 	@@checked_empresas = []
@@ -109,15 +110,25 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
-#	def json_builder(cls_name)
-#		options = Array.new
-#		(cls_name.capitalize).constantize.all.each do |item|
-#			if item.adm_id ==  current_user.adm_id
-#				options << item.descricao
-#			end
-#		end
-#		return options.to_json
-#	end
+	def statusset
+		obj = instance_variable_get("@" + controller_name.downcase)
+		obj = (controller_name.capitalize).constantize.find(params[:id])
+
+		if obj.status == 'a'
+			obj.status = 'i'
+
+		elsif obj.status == 'i'
+			obj.status = 'a'
+		end
+
+		obj.usuarioalterador = current_user.email
+		obj.dataalteracao = DateTime.now
+		obj.save
+
+		if obj.save
+			redirect_to  :action => "index"
+		end
+	end
 
 	#seta adm para itens criados
 	def setAdmin

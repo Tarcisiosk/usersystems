@@ -1,12 +1,10 @@
 class TipoentidadeController < ApplicationController
+	@@actions = []
 
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o tipo?'}}]
-	
 	def index
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(Tipoentidade, act_columns_final, tipoentidade_actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(Tipoentidade.where("status != 'x'"), act_columns_final, tipoentidade_actions, view_context, current_user) }
 		end
 	end
 
@@ -51,10 +49,15 @@ class TipoentidadeController < ApplicationController
 
 	def destroy
 		@tipoentidade = Tipoentidade.find(params[:id])
-		@tipoentidade.destroy
-		if @tipoentidade.destroy
+		@tipoentidade.status = 'x'
+		@tipoentidade.save
+		if @tipoentidade.status == 'x'
 			redirect_to tipoentidades_path, notice: " "
 		end
+
+		# if @tipoentidade.destroy
+		# 	redirect_to tipoentidades_path, notice: " "
+		# end
 	end
 
 	def tipoentidade_params
@@ -63,25 +66,22 @@ class TipoentidadeController < ApplicationController
 
 
 	def tipoentidade_actions
-		if current_user.user_type == 2
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#destroy'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o Tipo?'}}]
-
-			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#edit'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
-
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#destroy'))
-				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o Tipo?'}}]
-			
-			else
-				@@actions = []
+		@@actions = []
+		if current_user.user_type == 2	
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#edit'))
+				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
+			end
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#destroy'))
+				@@actions << {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o Tipo?'}}
+			end
+			if @@actions == []
 				act_columns_final.tap(&:pop)
 			end
 		else
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o Tipo?'}}]
+						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
 	end 
-
 end
+
+ #{:caption => 'Inativar', :method_name => :get, :class_name => 'btn purple-medium btn-xs ', :action => 'statusset', :type => 'Status', :data => {confirm: 'Tem certeza que deseja ativar/inativar o tipo?'}},

@@ -1,16 +1,13 @@
 class EntidadeController < ApplicationController
 
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}]
-	
-	
-	
+	@@actions = []
+
 	helper_method :send_json
 
 	def index
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(Entidade, act_columns_final, entidade_actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(Entidade.where("status != 'x'"), act_columns_final, entidade_actions, view_context, current_user) }
 		end
 	end
 
@@ -62,8 +59,9 @@ class EntidadeController < ApplicationController
 
 	def destroy
 		@entidade = Entidade.find(params[:id])
-		@entidade.destroy
-		if @entidade.destroy
+		@entidade.status = 'x'
+		@entidade.save
+		if @entidade.status == 'x'
 			redirect_to entidades_path, notice: " "
 		end
 	end
@@ -176,37 +174,24 @@ class EntidadeController < ApplicationController
 	end
 
 	def entidade_actions
+		@@actions = []
 		if current_user.user_type == 2
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#configurar')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))
-				@@actions = [{:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn tn-xs btn-icon-only blue settings', :id => 'Settings'},
-							 {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contatos?'}}]
-
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#configurar')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#edit'))
-				@@actions = [{:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn tn-xs btn-icon-only blue settings', :id => 'Settings'},
-						     {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
-
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#configurar')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))
-				@@actions = [{:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn tn-xs btn-icon-only blue settings', :id => 'Settings'},
-					         {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}]
-			
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-					         {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}]
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#configurar'))
-				@@actions = [{:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn tn-xs btn-icon-only blue settings', :id => 'Settings'}]
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#edit'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))
-				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}]	
-			else
-				@@actions = []
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#configurar'))
+				@@actions << {:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn blue btn-xs', :id => 'Settings'}
+			end
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#edit'))
+				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
+			end
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))
+				@@actions << {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}
+			end
+			if @@actions == []
 				act_columns_final.tap(&:pop)
 			end
 		else
-			@@actions = [{:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn tn-xs btn-icon-only blue settings', :id => 'Settings'},
-						 {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow ', :action => 'edit'},
-				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird  ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}]
+			#{:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn blue btn-xs', :id => 'Settings'},
+			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs', :action => 'edit'},
+						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
 	end
 end

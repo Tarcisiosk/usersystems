@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 	post 'grupos/save_angular' => 'grupo#save_angular'	
 	post 'grupos/save_angular/:id' => 'grupo#save_angular'
 	post 'grupos/save_settings' => 'grupo#save_settings'
+	get 'grupos/statusset/:id' => 'grupo#statusset'
 
 	get 'subgrupos' => "subgrupo#index", as: :sub_grupos
 	get 'subgrupos/new' => "subgrupo#new", as: :new_sub_grupo
@@ -36,6 +37,7 @@ Rails.application.routes.draw do
 	post 'subgrupos/save_angular' => 'subgrupo#save_angular'	
 	post 'subgrupos/save_angular/:id' => 'subgrupo#save_angular'
 	post 'subgrupos/save_settings' => 'subgrupo#save_settings'
+	get 'subgrupos/statusset/:id' => 'subgrupo#statusset'
 
 	get 'produtos' => "produto#index", as: :produtos
 	get 'produtos/new' => "produto#new", as: :new_produto
@@ -51,12 +53,14 @@ Rails.application.routes.draw do
 	post 'produtos/save_angular' => 'produto#save_angular'	
 	post 'produtos/save_angular/:id' => 'produto#save_angular'
 	post 'produtos/saveIcms' => 'produto#saveIcms'		
+	get 'produtos/statusset/:id' => 'produto#statusset'
 
 	get 'tipoentidades' => "tipoentidade#index", as: :tipoentidades
 	get 'tipoentidades/new' => "tipoentidade#new", as: :new_tipoentidade
 	post 'tipoentidades/new'  => 'tipoentidade#create'
 	post 'tipoentidades/save_settings' => 'tipoentidade#save_settings'
-
+	get 'tipoentidades/statusset/:id' => 'tipoentidade#statusset'
+	
 	get 'entidades'=> "entidade#index", as: :entidades
 	get 'entidades/new' => "entidade#new", as: :new_entidade
 	post 'entidades/new' => 'entidade#create'
@@ -69,6 +73,7 @@ Rails.application.routes.draw do
 	post 'entidades/save_angular/:id' => 'entidade#save_angular'
 	get 'entidades/add_end' => "entidade#add_form"
 	get 'entidades/configurar/:id' => "entidades#configurar"
+	get 'entidades/statusset/:id' => 'entidade#statusset'
 
 	get 'enderecos'=> "endereco#index", as: :enderecos
 	get 'enderecos/new' => "endereco#new", as: :new_endereco
@@ -94,12 +99,14 @@ Rails.application.routes.draw do
 	post 'unidades/save_angular' => 'unidade#save_angular'	
 	post 'unidades/save_angular/:id' => 'unidade#save_angular'
 	post 'unidades/save_settings' => 'unidade#save_settings'
+	get 'unidades/statusset/:id' => 'unidade#statusset'
 
 	get 'classificacaofiscal' => "classificacaofiscal#index", as: :classificacaofiscals
 	get 'classificacaofiscal/new' => "classificacaofiscal#new", as: :new_classificacaofiscal
 	post 'classificacaofiscal/save' => 'classificacaofiscal#save'
 	post 'classificacaofiscal/saveIcms' => 'classificacaofiscal#saveIcms'		
 	post 'classificacaofiscal/save_settings' => 'classificacaofiscal#save_settings'
+	get 'classificacaofiscals/statusset/:id' => 'classificacaofiscal#statusset'
 
 	get 'icmsinterestadual' => "icmsinterestadual#index", as: :icmsinterestaduals
 	post 'icmsinterestadual/saveIcmsinterestadual' => 'icmsinterestadual#saveIcmsinterestadual'		

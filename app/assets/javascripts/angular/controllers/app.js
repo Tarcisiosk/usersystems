@@ -211,6 +211,69 @@ myApp.config(function ($routeProvider) {
 	})
 });
 */
+myApp.controller('IndexCtrl', ['$scope', function($scope)
+{
+	$scope.dataoptionselected = 'Ativos';
+
+	$scope.setDataOption = function(data)
+	{
+		$scope.dataoptionselected = data;
+	}
+	
+	$scope.clickOptButton = function(id)
+	{
+		//jQuery(id).append('<select></select>');
+		console.log('Ta indo');
+	}
+
+	$scope.populateDropdowns =  function()
+	{
+		$("table > tbody > tr > td > [id^='Opt']").each(function() 
+		{
+			id = $("table > tbody > tr > td > [id^='Opt']").attr('id').replace("Opt","").trim();
+			control = $('#data').attr('controller');
+			lbl = $("table > tbody > tr > td > [state]").attr('state');
+
+			if(lbl == 'Ativo')
+			{
+				lbl = 'Inativar';
+			}
+			else if( lbl == 'Inativo')
+			{
+				lbl = 'Ativar';
+			}
+			
+			statepath = control + '/statusset/' + id;
+			deletepath = (control.substring(0, control.length - 1)) + '/' + id;
+			contacorrentepath = '/contacorrentes?entidade=' + id;
+			
+			statelink = '<a href="' +statepath+ '" data-confirm="Você tem certeza?" data-method="get"> ' +lbl+ '</a>'
+		  	deletelink = '<a href="' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
+		  	contacorrentelink = '<a href="' +contacorrentepath+ '" data-method="get">Conta Corrente</a>'
+
+		  	$(this).wrap('<div class="btn-group" style="position:absolute !important;"><div class="dropup"></div></div>');
+		  	
+		  	if(control == 'entidades')
+		  	{
+		  		$(this).after('<ul class="dropdown-menu"><li>'+contacorrentelink +'</li><li class="divider"></li> <li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
+		  	}
+		  	else
+		  	{
+				$(this).after('<ul class="dropdown-menu"><li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
+		  	}
+		});
+	}
+
+	$(document).ready(function()
+	{		
+		setTimeout($scope.populateDropdowns, 800);
+	});
+
+	//id = $("table > tbody > tr > td > [id^='Opt']").attr('id').replace("Opt","").trim();
+	// $("#contacorrente").click(function(){
+	// 	window.location.replace("/contacorrentes?entidade="+idEntidade);
+	// });
+}]);
 
 jQuery(document).ready(function() {       	
 	Metronic.init(); // init metronic core components

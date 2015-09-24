@@ -1,14 +1,13 @@
 class SubgrupoController < ApplicationController
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o subgrupo?'}}]
+
+	@@actions = []
 
 	helper_method :send_json
-
 
 	def index
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(Subgrupo, act_columns_final, subgrupo_actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(Subgrupo.where("status != 'x'"), act_columns_final, subgrupo_actions, view_context, current_user) }
 		end
 	end
 
@@ -58,10 +57,15 @@ class SubgrupoController < ApplicationController
 
 	def destroy
 		@subgrupo = Subgrupo.find(params[:id])
-		@subgrupo.destroy
-		if @subgrupo.destroy
-				redirect_to sub_grupos_path, notice: " "
+		@subgrupo.status = 'x'
+		@subgrupo.save
+		if @subgrupo.status == 'x'
+			redirect_to sub_grupos_path, notice: " "
 		end
+		# @subgrupo.destroy
+		# if @subgrupo.destroy
+		# 		redirect_to sub_grupos_path, notice: " "
+		# end
 	end
 
 	def send_json
@@ -123,24 +127,23 @@ class SubgrupoController < ApplicationController
 	end 
 
 	def subgrupo_actions
+		@@actions = []
 		if current_user.user_type == 2
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#destroy'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o subgrupo?'}}]
-
-			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#edit'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
-
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#destroy'))
-				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o subgrupo?'}}]
-			
-			else
-				@@actions = []
+		
+			if  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#edit'))
+				@@actions << [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+			end
+		
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#destroy'))
+				@@actions << [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o subgrupo?'}}]
+			end
+		
+			if @@actions == []
 				act_columns_final.tap(&:pop)
 			end
 		else
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o subgrupo?'}}]
+						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
 	end
 

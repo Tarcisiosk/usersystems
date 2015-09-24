@@ -1,14 +1,13 @@
 class ProdutoController < ApplicationController
 	
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-							 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o produto?'}}]
-	
+	@@actions = []
+
 	helper_method :send_json
 
 	def index
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(Produto, act_columns_final, produto_actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(Produto.where("status != 'x'"), act_columns_final, produto_actions, view_context, current_user) }
 		end
 	end
 
@@ -89,9 +88,10 @@ class ProdutoController < ApplicationController
 
 	def destroy
 		@produto = Produto.find(params[:id])
-		@produto.destroy
-		if @produto.destroy
-				redirect_to produtos_path, notice: " "
+		@produto.status = 'x'
+		@produto.save
+		if @produto.status == 'x'
+			redirect_to produtos_path, notice: " "
 		end
 	end
 
@@ -289,23 +289,24 @@ class ProdutoController < ApplicationController
 	end
 
 	def produto_actions
+		@@actions = []
+
 		if current_user.user_type == 2
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('produto#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('produto#destroy'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-							 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o produto?'}}]
+			if  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('produto#edit'))
+				@@actions << [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+			end
 
-			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('produto#edit'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('produto#destroy'))
+				@@actions << [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o produto?'}}]
+			end
 
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('produto#destroy'))
-				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o produto?'}}]
-			else
-				@@actions = []
+			if @@actions == []
 				act_columns_final.tap(&:pop)
 			end
 		else
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-									 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o produto?'}}]
+						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
+
 		end
 	end 
 end

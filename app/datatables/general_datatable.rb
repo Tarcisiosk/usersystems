@@ -15,6 +15,10 @@ class GeneralDatatable < ApplicationController
 	def as_json(options = {})
 		data2 = Array.new
 		subData2 = Array.new
+		activeData = Array.new
+		inactiveData = Array.new
+		deletedData = Array.new
+
 		data.each_with_index do |item, index|
 			item.each_with_index do |subitem, subindex|				
 				if @klass.name == "Subgrupo"
@@ -29,12 +33,12 @@ class GeneralDatatable < ApplicationController
 					else
 						subData2 = item
 					end
-				elsif @klass.name == "Contacorrente"
+				elsif @klass.name == "Contacorrente" || @klass.name == "Movimentom"
 					if subitem.is_a?(Float)
 						if subitem.to_s.include? "-"
-							subData2[subindex] = '<font color="red" style="float: right">'+number_to_currency(subitem, separator: ",", delimiter: ".",format: "%n")+'</font>'
+							subData2[subindex] = '<font color="red" style="float: right">'+number_to_currency(subitem, separator: ",", delimiter: ".", format: "%n")+'</font>'
 						else
-							subData2[subindex] = '<font color="blue" style="float: right">'+number_to_currency(subitem, separator: ",", delimiter: ".",format: "%n")+'</font>'
+							subData2[subindex] = '<font color="blue" style="float: right">'+number_to_currency(subitem, separator: ",", delimiter: ".", format: "%n")+'</font>'
 						end	
 					else
 						subData2 = item
@@ -64,12 +68,23 @@ class GeneralDatatable < ApplicationController
 			end
 			data2[index] = subData2
 		end
+		
+		data2.each_with_index do |item, index|
+		 	if item.last.include?('Inativo')
+		 		inactiveData << item
+		 	else
+		 		#puts "++++++++++++++++++++++++++++++ ITEM = #{item}"
+		  		activeData << item
+		 	end
+		end
+
 		{
 			sEcho: params[:sEcho].to_i,
 			iTotalRecords: filtered_list.count,
 			iTotalDisplayRecords: records.total_entries,
 			aaColumns: columnsDef,
-			aaData: data2
+			aData: activeData,
+			iData: inactiveData
 		}
 	end
 
@@ -80,7 +95,7 @@ class GeneralDatatable < ApplicationController
 		records.map do |record|
 			data_array = Array.new
 			links_array = Array.new
-			#usuario master ou adm			
+			#usuario logado é master ou adm			
 			if @current_user.user_type == 0 || @current_user.user_type == 1
 				if record.try(:adm_id) != nil
 					if record.adm_id == @current_user.settings(:last_empresa).edited.adm_id
@@ -89,15 +104,18 @@ class GeneralDatatable < ApplicationController
 								data_array[index] = record.send(item)
 							end
 							actions.each_with_index do |item, index|
-								if item[:id].to_s == "Settings"
-									links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+								if item[:state].to_s == 'Status'
+									if record.status == 'a'
+										links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s , :class => item[:class_name], :state => 'Ativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+									elsif record.status == 'i'
+										links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s, :class => item[:class_name], :state => 'Inativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+									end
 								else
-									item[:id] = record.id								
-									links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+									item[:id] = record.id
+									links_array[index] = link_to(item[:caption], item.except(:caption, :class_name), :method => item[:method_name], :id => item[:caption] + record.id.to_s, :class => item[:class_name], :data => item[:data])
 								end
 							end
 							final_array << (data_array << links_array.join(""))
-							#record.is_a?(Entidade) || record.is_a?(Grupo) || record.is_a?(Subgrupo) || record.is_a?(Produto) || record.is_a?(Unidade)						
 						else 
 							empresas = []
 							empresas = record.empresas if record.try(:empresas) != nil
@@ -107,18 +125,21 @@ class GeneralDatatable < ApplicationController
 									data_array[index] = record.send(item)
 								end
 								actions.each_with_index do |item, index|									
-									if item[:id].to_s == "Settings"
-										links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+									if item[:state].to_s == 'Status'
+										if record.status == 'a'
+											links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s , :class => item[:class_name], :state => 'Ativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+										elsif record.status == 'i'
+											links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s, :class => item[:class_name], :state => 'Inativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+										end
 									else
-										item[:id] = record.id																
-										links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])									
+										item[:id] = record.id
+										links_array[index] = link_to(item[:caption], item.except(:caption, :class_name), :method => item[:method_name], :id => item[:caption]+record.id.to_s, :class => item[:class_name], :data => item[:data])
 									end
 								end
 								final_array << (data_array << links_array.join(""))
 							else
 								record = nil
 							end 
-						
 						end
 					else
 						record = nil
@@ -128,11 +149,15 @@ class GeneralDatatable < ApplicationController
 						data_array[index] = record.send(item)
 					end
 					actions.each_with_index do |item, index|
-						if item[:id].to_s == "Settings"
-							links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+						if item[:state].to_s == 'Status'
+							if record.status == 'a'
+								links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s , :class => item[:class_name], :state => 'Ativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+							elsif record.status == 'i'
+								links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s, :class => item[:class_name], :state => 'Inativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+							end
 						else
 							item[:id] = record.id
-							links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+							links_array[index] = link_to(item[:caption], item.except(:caption, :class_name), :method => item[:method_name], :id => item[:caption]+record.id.to_s, :class => item[:class_name], :data => item[:data])
 						end
 					end
 					final_array << (data_array << links_array.join(""))
@@ -148,11 +173,15 @@ class GeneralDatatable < ApplicationController
 							data_array[index] = record.send(item)
 						end
 						actions.each_with_index do |item, index|
-							if item[:id].to_s == "Settings"
-								links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+							if item[:state].to_s == 'Status'
+								if record.status == 'a'
+									links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s , :class => item[:class_name], :state => 'Ativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+								elsif record.status == 'i'
+									links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s, :class => item[:class_name], :state => 'Inativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+								end
 							else
 								item[:id] = record.id
-								links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id => item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+								links_array[index] = link_to(item[:caption], item.except(:caption, :class_name), :method => item[:method_name], :id => item[:caption]+record.id.to_s, :class => item[:class_name], :data => item[:data])
 							end
 						end
 						final_array << (data_array << links_array.join(""))
@@ -163,11 +192,15 @@ class GeneralDatatable < ApplicationController
 							data_array[index] = record.send(item)
 						end
 						actions.each_with_index do |item, index|
-							if item[:id].to_s == "Settings"
-								links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+							if item[:state].to_s == 'Status'
+								if record.status == 'a'
+									links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s , :class => item[:class_name], :state => 'Ativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+								elsif record.status == 'i'
+									links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s, :class => item[:class_name], :state => 'Inativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+								end
 							else
 								item[:id] = record.id
-								links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=>item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+								links_array[index] = link_to(item[:caption], item.except(:caption, :class_name), :method => item[:method_name], :id => item[:caption]+record.id.to_s, :class => item[:class_name], :data => item[:data])
 							end
 						end
 						final_array << (data_array << links_array.join(""))
@@ -180,11 +213,15 @@ class GeneralDatatable < ApplicationController
 									data_array[index] = record.send(item)
 								end
 								actions.each_with_index do |item, index|
-									if item[:id].to_s == "Settings"
-										links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
+									if item[:state].to_s == 'Status'
+										if record.status == 'a'
+											links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s , :class => item[:class_name], :state => 'Ativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+										elsif record.status == 'i'
+											links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s, :class => item[:class_name], :state => 'Inativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+										end
 									else
 										item[:id] = record.id
-										links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+										links_array[index] = link_to(item[:caption], item.except(:caption, :class_name), :method => item[:method_name], :id => item[:caption]+record.id.to_s, :class => item[:class_name], :data => item[:data])
 									end
 								end
 								final_array << (data_array << links_array.join(""))
@@ -197,11 +234,15 @@ class GeneralDatatable < ApplicationController
 										data_array[index] = record.send(item)
 									end
 									actions.each_with_index do |item, index|
-										if item[:id].to_s == "Settings"
-											links_array[index] = link_to(item[:caption],"#modal",:id => item[:id] + record.id.to_s,:class =>item[:class_name], :data=>{:toggle=>'modal'})
-										else	
+										if item[:state].to_s == 'Status'
+											if record.status == 'a'
+												links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s , :class => item[:class_name], :state => 'Ativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+											elsif record.status == 'i'
+												links_array[index] = link_to(item[:caption], "", :id => 'Opt' + record.id.to_s, :class => item[:class_name], :state => 'Inativo', :data => {:toggle=>'dropdown', 'close-others'=> 'true'})
+											end
+										else
 											item[:id] = record.id
-											links_array[index] = link_to(item.values[0], item.except(:caption, :class_name),:method => item.values[1],:id=> item.values[0] + record.id.to_s, :class => item.values[2], :data => item.values[4])
+											links_array[index] = link_to(item[:caption], item.except(:caption, :class_name), :method => item[:method_name], :id => item[:caption]+record.id.to_s, :class => item[:class_name], :data => item[:data])
 										end
 									end
 									final_array << (data_array << links_array.join(""))

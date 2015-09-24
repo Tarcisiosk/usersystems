@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150916152829) do
+ActiveRecord::Schema.define(version: 20150924154708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,8 +44,11 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.string   "codigo"
     t.string   "descricao"
     t.boolean  "devolucao"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "classificacaofiscals", force: :cascade do |t|
@@ -53,8 +56,8 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.string   "descricao"
     t.integer  "adm_id"
     t.integer  "versao"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.string   "codigo_ex"
     t.integer  "pis_cst_id"
     t.float    "pis_aliquota"
@@ -65,6 +68,9 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.float    "ipi_aliquota"
     t.boolean  "pisdaempresa"
     t.boolean  "cofinsdaempresa"
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "contacorrentes", force: :cascade do |t|
@@ -73,11 +79,14 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.string   "documento"
     t.string   "descricao"
     t.integer  "entidade_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.float    "valor"
     t.integer  "adm_id"
     t.string   "compensado"
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "cstpiscofins", force: :cascade do |t|
@@ -93,19 +102,22 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.string   "cnpj"
     t.string   "insc_estadual"
     t.string   "insc_municipal"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.string   "rua"
     t.string   "num_rua"
     t.string   "complemento"
     t.string   "bairro"
     t.string   "uf"
     t.string   "cep"
-    t.integer  "adm_id",          default: 1
+    t.integer  "adm_id",           default: 1
     t.string   "cidade"
     t.boolean  "supersimples"
     t.float    "aliquotapis"
     t.float    "aliquotaconfins"
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "empresas_entidades", force: :cascade do |t|
@@ -159,12 +171,15 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.string   "cnpj"
     t.string   "insc_estadual"
     t.string   "insc_municipal"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "adm_id"
     t.string   "telefone"
     t.string   "celular"
     t.string   "email"
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "entidades_tipoentidades", force: :cascade do |t|
@@ -174,19 +189,25 @@ ActiveRecord::Schema.define(version: 20150916152829) do
 
   create_table "estados", force: :cascade do |t|
     t.integer  "codigo_ibge"
-    t.string   "uf",           limit: 2
-    t.string   "descricao",    limit: 50
+    t.string   "uf",               limit: 2
+    t.string   "descricao",        limit: 50
     t.float    "icms_interno"
     t.float    "diferimento"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.string   "status",                      default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "grupos", force: :cascade do |t|
     t.text     "descricao"
     t.integer  "adm_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "icmsclassificacaofiscals", force: :cascade do |t|
@@ -258,20 +279,26 @@ ActiveRecord::Schema.define(version: 20150916152829) do
   create_table "movimentoms", force: :cascade do |t|
     t.date     "data"
     t.integer  "entidade_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "adm_id"
     t.text     "produtos_list"
     t.float    "totalquantidade"
     t.float    "totalvalor"
     t.boolean  "consumidor_final"
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "nivelacessos", force: :cascade do |t|
     t.string   "descricao"
     t.integer  "adm_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "origems", force: :cascade do |t|
@@ -305,9 +332,12 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.string   "descricao"
     t.integer  "planoconta_id"
     t.integer  "adm_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "empresa_id"
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "produtos", force: :cascade do |t|
@@ -340,6 +370,9 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.integer  "origem_id"
     t.boolean  "pisdaempresa"
     t.boolean  "cofinsdaempresa"
+    t.string   "status",                 default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "series", force: :cascade do |t|
@@ -348,9 +381,12 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.integer  "ultima_nota_fiscal"
     t.string   "ambiente"
     t.integer  "empresa_id"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "adm_id"
+    t.string   "status",             default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   add_index "series", ["empresa_id"], name: "index_series_on_empresa_id", using: :btree
@@ -370,24 +406,33 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.text     "descricao"
     t.integer  "grupo_id"
     t.integer  "adm_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "tipoentidades", force: :cascade do |t|
     t.string   "descricao"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "adm_id"
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "tipomovimentacaos", force: :cascade do |t|
     t.string   "descricao"
     t.string   "tipo"
     t.integer  "adm_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "empresa_id"
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "unidades", force: :cascade do |t|
@@ -395,8 +440,11 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.string   "descricao"
     t.integer  "adm_id"
     t.boolean  "fracionado"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "status",           default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   create_table "users", force: :cascade do |t|
@@ -422,6 +470,9 @@ ActiveRecord::Schema.define(version: 20150916152829) do
     t.string   "n_acesso",               default: "Padrão"
     t.integer  "nivelacesso_id"
     t.string   "api_key"
+    t.string   "status",                 default: "a"
+    t.string   "usuarioalterador"
+    t.datetime "dataalteracao"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

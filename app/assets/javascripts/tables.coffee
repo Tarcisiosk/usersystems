@@ -12,8 +12,9 @@ jQuery ->
                     responsive: true
                     bAutoWidth: true
                     bProcessing: true
-                    bServerSide: true                                    
-                    aoColumns: json.aaColumns )
+                    bServerSide: true 
+                    sAjaxDataProp: 'aData'
+                    aoColumns: json.aaColumns)
         $().ready ->
           $('#Ativas').click ->
             !$('#Ativas option:selected').remove().appendTo('#Inativas')
@@ -24,3 +25,25 @@ jQuery ->
           return
 
 
+jQuery ->
+        $.getJSON $('#tabelainact').data('source'), null, (json) ->
+                $('#tabelainact').DataTable(
+                    search: {caseInsensitive: true, regex: true }
+                    sAjaxSource: $('#tabelainact').data('source')
+                    sPaginationType: "full_numbers"
+                    bStateSave: false
+                    responsive: true
+                    bAutoWidth: true
+                    bProcessing: true
+                    bServerSide: true
+                    sAjaxDataProp: 'iData'
+                    aoColumns: json.aaColumns)
+
+        $().ready ->
+          $('#Ativas').click ->
+            !$('#Ativas option:selected').remove().appendTo('#Inativas')
+            $('option:selected').prop 'selected', false
+          $('#Inativas').click ->
+            !$('#Inativas option:selected').remove().appendTo('#Ativas')
+            $('option:selected').prop 'selected', false
+          return
