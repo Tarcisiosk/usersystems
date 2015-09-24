@@ -226,6 +226,11 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		console.log('Ta indo');
 	}
 
+	$scope.checkForAcesso = function()
+	{
+		
+	}
+
 	$scope.populateDropdowns =  function()
 	{
 		$("table > tbody > tr > td > [id^='Opt']").each(function() 

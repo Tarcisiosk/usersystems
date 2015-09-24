@@ -71,9 +71,11 @@ class TipoentidadeController < ApplicationController
 			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#edit'))
 				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
 			end
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#destroy'))
-				@@actions << {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o Tipo?'}}
+
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#destroy')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#statusset')) 
+				@@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
 			end
+
 			if @@actions == []
 				act_columns_final.tap(&:pop)
 			end

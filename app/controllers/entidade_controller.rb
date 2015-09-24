@@ -176,14 +176,11 @@ class EntidadeController < ApplicationController
 	def entidade_actions
 		@@actions = []
 		if current_user.user_type == 2
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#configurar'))
-				@@actions << {:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn blue btn-xs', :id => 'Settings'}
-			end
 			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#edit'))
 				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
 			end
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))
-				@@actions << {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a empresa/contato?'}}
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#configurar')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#statusset')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))
+				@@actions << {:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn blue btn-xs', :id => 'Settings'}
 			end
 			if @@actions == []
 				act_columns_final.tap(&:pop)

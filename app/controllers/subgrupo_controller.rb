@@ -129,15 +129,13 @@ class SubgrupoController < ApplicationController
 	def subgrupo_actions
 		@@actions = []
 		if current_user.user_type == 2
-		
 			if  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#edit'))
-				@@actions << [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
 			end
 		
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#destroy'))
-				@@actions << [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o subgrupo?'}}]
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#destroy')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('subgrupo#statusset'))
+				@@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
 			end
-		
 			if @@actions == []
 				act_columns_final.tap(&:pop)
 			end

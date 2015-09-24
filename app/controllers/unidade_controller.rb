@@ -90,18 +90,16 @@ class UnidadeController < ApplicationController
 		if current_user.user_type == 2
 			
 			if  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('unidade#edit'))
-				@@actions << [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
+				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
 			end
 			
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('unidade#destroy'))
-				@@actions << [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a unidade?'}}]
-			
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('unidade#destroy')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('unidade#statusset'))
+				@@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
 			end
 			
 			if @@actions == []
 				act_columns_final.tap(&:pop)
 			end
-		
 		else
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 						{:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
