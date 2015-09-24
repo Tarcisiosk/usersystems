@@ -74,8 +74,8 @@ class TipoentidadeController < ApplicationController
 
 			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#destroy')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipoentidade#statusset')) 
 				@@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
-			end
 
+			end
 			if @@actions == []
 				act_columns_final.tap(&:pop)
 			end
@@ -83,6 +83,7 @@ class TipoentidadeController < ApplicationController
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
+		return @@actions
 	end 
 end
 

@@ -105,7 +105,6 @@ class UnidadeController < ApplicationController
 						{:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 
 		end
+		return @@actions
 	end 
-
-
 end

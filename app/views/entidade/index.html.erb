@@ -1,10 +1,13 @@
 <!-- BEGIN PAGE CONTAINER -->
 <div class="page-container" ng-view ng-controller="IndexCtrl" ng-cloak="" id="data" controller='<%=controller_name.pluralize.to_s%>'>
-	<!-- BEGIN PAGE HEAD -->
+
+	<%if current_user.user_type == 2%>
+		<div id="acessos" deletar='<%=current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))%>' 
+						  inativar='<%=current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#statusset'))%>'>
+		</div>
+	<%end%>
+
 	<div class="page-head">
-	
-		<!-- END PAGE TITLE -->
-		<!-- BEGIN PAGE CONTENT -->
 		<div class="page-content">
 			<div class="container">
 			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->

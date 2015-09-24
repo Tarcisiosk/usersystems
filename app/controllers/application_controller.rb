@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 	
 	before_filter :set_current_emp_if_first, only: [:index]
 	
-	before_filter :check_acesso_routes, only: [:index, :new, :edit, :destroy]
+	before_filter :check_acesso_routes, only: [:index, :new, :edit, :destroy, :statusset]
 	
 	helper_method :menu
 	helper_method :getName

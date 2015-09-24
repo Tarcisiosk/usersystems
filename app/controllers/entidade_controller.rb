@@ -180,7 +180,8 @@ class EntidadeController < ApplicationController
 				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
 			end
 			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#configurar')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#statusset')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('entidade#destroy'))
-				@@actions << {:caption => '<i class="fa fa-gears"></i>'.html_safe, :class_name => 'btn blue btn-xs', :id => 'Settings'}
+				@@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
+
 			end
 			if @@actions == []
 				act_columns_final.tap(&:pop)
@@ -190,5 +191,6 @@ class EntidadeController < ApplicationController
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs', :action => 'edit'},
 						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
+		return @@actions
 	end
 end

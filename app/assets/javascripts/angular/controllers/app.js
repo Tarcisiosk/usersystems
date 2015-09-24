@@ -214,6 +214,7 @@ myApp.config(function ($routeProvider) {
 myApp.controller('IndexCtrl', ['$scope', function($scope)
 {
 	$scope.dataoptionselected = 'Ativos';
+	$scope.auxAcesso = false;
 
 	$scope.setDataOption = function(data)
 	{
@@ -226,9 +227,9 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		console.log('Ta indo');
 	}
 
-	$scope.checkForAcesso = function()
+	$scope.checkForAcesso = function(exp)
 	{
-		
+		return !!exp;
 	}
 
 	$scope.populateDropdowns =  function()
@@ -251,13 +252,22 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 			statepath = control + '/statusset/' + id;
 			deletepath = (control.substring(0, control.length - 1)) + '/' + id;
 			contacorrentepath = '/contacorrentes?entidade=' + id;
-			
+
 			statelink = '<a href="' +statepath+ '" data-confirm="Você tem certeza?" data-method="get"> ' +lbl+ '</a>'
 		  	deletelink = '<a href="' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
 		  	contacorrentelink = '<a href="' +contacorrentepath+ '" data-method="get">Conta Corrente</a>'
 
-		  	$(this).wrap('<div class="btn-group" style="position:absolute !important;"><div class="dropup"></div></div>');
-		  	
+
+		  	if($('#acessos').attr('inativar') == 'false')
+		  	{
+		  		statelink = '<a class="hidden" href="' +statepath+ '" data-confirm="Você tem certeza?" data-method="get"> ' +lbl+ '</a>'
+		  	}
+		  	if($('#acessos').attr('deletar') == 'false')
+			{
+		  		deletelink = '<a class="hidden" href="' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
+			}
+
+		  	$(this).wrap('<div class="btn-group" style="position:absolute !important;"><div class="dropup"></div></div>');		  	
 		  	if(control == 'entidades')
 		  	{
 		  		$(this).after('<ul class="dropdown-menu"><li>'+contacorrentelink +'</li><li class="divider"></li> <li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');

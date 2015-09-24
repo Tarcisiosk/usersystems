@@ -109,6 +109,6 @@ class ClassificacaofiscalController < ApplicationController
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
 						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
+		@@actions		
 	end
-
 end
