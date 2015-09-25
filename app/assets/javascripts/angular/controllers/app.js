@@ -256,7 +256,7 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		  		deletelink = '<a class="hidden" href="' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
 			}
 
-		  	$(this).wrap('<div class="btn-group" style="position:absolute !important;"><div class="dropup"></div></div>');		  	
+		  	$(this).wrap('<div class="btn-group" style="position:absolute !important;"></div>');		  	
 		  	if(control == 'entidades')
 		  	{
 		  		$(this).after('<ul class="dropdown-menu"><li>'+contacorrentelink +'</li><li class="divider"></li> <li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
