@@ -108,7 +108,9 @@ class MovimentomController < ApplicationController
 		Entidade.all.each do |entidade|
 			if entidade.adm_id == current_user.settings(:last_empresa).edited.adm_id
 				unless entidades_array.include?(entidade)
-					entidades_array << entidade
+					if entidade.status == 'a'
+						entidades_array << entidade
+					end
 				end
 			end	
 		end
@@ -121,7 +123,9 @@ class MovimentomController < ApplicationController
 		Produto.all.each do |produto|
 			if produto.adm_id == current_user.settings(:last_empresa).edited.adm_id && produto.classificacaofiscal_id >= 1 && produto.empresas.include?(current_user.settings(:last_empresa).edited)
 				unless produtos_array.include?(produto)
-					produtos_array << produto
+					if produto.status == 'a'
+						produtos_array << produto
+					end
 				end
 			end	
 		end

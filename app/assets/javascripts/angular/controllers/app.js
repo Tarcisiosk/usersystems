@@ -221,17 +221,6 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		$scope.dataoptionselected = data;
 	}
 	
-	$scope.clickOptButton = function(id)
-	{
-		//jQuery(id).append('<select></select>');
-		console.log('Ta indo');
-	}
-
-	$scope.checkForAcesso = function(exp)
-	{
-		return !!exp;
-	}
-
 	$scope.populateDropdowns =  function()
 	{
 		$("table > tbody > tr > td > [id^='Opt']").each(function() 
@@ -282,6 +271,8 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 	$(document).ready(function()
 	{		
 		setTimeout($scope.populateDropdowns, 800);
+
+		 setTimeout(function() { $('#flash').slideUp(); }, 5000);		
 	});
 
 	//id = $("table > tbody > tr > td > [id^='Opt']").attr('id').replace("Opt","").trim();

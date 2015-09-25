@@ -230,7 +230,9 @@ class ProdutoController < ApplicationController
 			empresas_array.each do |empresa|
 				if unidade.adm_id == current_user.settings(:last_empresa).edited.adm_id && unidade.empresas.include?(empresa) 
 					unless unidade_array.include?(unidade)
-						unidade_array << unidade
+						if unidade.status = 'a'
+							unidade_array << unidade
+						end
 					end
 				end	
 			end
@@ -277,7 +279,9 @@ class ProdutoController < ApplicationController
 		subgrupos_array = Array.new
 		Subgrupo.all.each do |item|
 			if item.grupo_id == params[:gid].to_i
-				subgrupos_array << item
+				if item.status == 'a'
+					subgrupos_array << item
+				end
 			end
 		end		
 

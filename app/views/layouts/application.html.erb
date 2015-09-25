@@ -199,7 +199,7 @@
 </div>
 <%end%>
 	<% flash.each do |key, value| %>
-		<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in" unless value.blank? %>
+		<%= content_tag :div, value, :class => "Metronic-alerts alert alert-danger fade in", :id =>"flash" unless value.blank? %>
 	<% end %>
 
 	<% if notice %>

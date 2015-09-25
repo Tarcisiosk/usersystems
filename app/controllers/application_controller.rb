@@ -13,7 +13,8 @@ class ApplicationController < ActionController::Base
 	before_filter :set_current_emp_if_first, only: [:index]
 	
 	before_filter :check_acesso_routes, only: [:index, :new, :edit, :destroy, :statusset]
-	
+	before_filter :check_if_is_not_using, only: [:destroy, :statusset]
+
 	helper_method :menu
 	helper_method :getName
 	helper_method :act_columns
@@ -128,6 +129,87 @@ class ApplicationController < ActionController::Base
 		if obj.save
 			redirect_to  :action => "index"
 		end
+	end
+
+	def check_if_is_not_using
+		
+		obj = instance_variable_get("@" + controller_name.downcase)
+		obj = (controller_name.capitalize).constantize.find(params[:id])
+
+		if controller_name == 'tipoentidade'
+			Entidade.all.each do |item|
+				if item.status == 'a'
+					if item.tipoentidades.include?(obj)
+						flash[:notice] = 'Este tipo de empresa/contato está sendo utilizado em uma empresa/contato e não pode ser inativado/deletado.'
+						redirect_to :action => "index" and return
+					end
+				end
+			end
+		elsif controller_name == 'entidade'
+			Movimentom.all.each do |item|
+				if item.entidade_id == obj.id
+					flash[:notice] = 'Esta empresa/contato está sendo utilizado em um movimento e não pode ser inativado/deletado.'
+					redirect_to :action => "index" and return
+				end
+			end
+			Contacorrente.all.each do |item|
+				if item.entidade_id == obj.id
+					flash[:notice] = 'Esta empresa/contato está sendo utilizado em uma conta corrente e não pode ser inativado/deletado.'
+					redirect_to :action => "index" and return
+				end
+			end
+		elsif controller_name == 'grupo'
+			Subgrupo.all.each do |item|
+				if item.status == 'a'
+					if item.grupo_id == obj.id
+						flash[:notice] = 'Este grupo está sendo utilizado em um subgrupo e não pode ser inativado/deletado.'
+						redirect_to :action => "index" and return
+					end
+				end
+			end
+			Produto.all.each do |item|
+				if item.status == 'a'
+					if item.grupo_id == obj.id
+						flash[:notice] = 'Este grupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
+						redirect_to :action => "index" and return
+					end
+				end
+			end 
+		elsif controller_name == 'subgrupo'
+			Produto.all.each do |item|
+				if item.status == 'a'
+					if item.subgrupo_id == obj.id
+						flash[:notice] = 'Este subgrupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
+						redirect_to :action => "index" and return
+					end
+				end
+			end 
+		elsif controller_name == 'unidade'
+			Produto.all.each do |item|
+				if item.status == 'a'
+					if item.grupo_id == obj.id
+						flash[:notice] = 'Este subgrupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
+						redirect_to :action => "index" and return
+					end
+				end
+			end 
+		elsif controller_name == 'produto'
+			Movimentom.all.each do |item|
+				if item.produtos_list.include?('"id":' + obj.id.to_s)
+	 				flash[:notice] = 'Este produto está sendo utilizado em um movimento e não pode ser inativado/deletado.'
+					redirect_to :action => "index" and return
+				end
+			end
+		elsif controller_name == 'classificacaofiscal'
+			Produto.all.each do |item|
+				if item.status == 'a'
+					if item.classificacaofiscal_id == obj.id
+						flash[:notice] = 'Esta classificação fiscal está sendo utilizada em um produto e não pode ser inativada/deletada.'
+						redirect_to :action => "index" and return
+					end
+				end
+			end 		
+		end		
 	end
 
 	#seta adm para itens criados
@@ -279,7 +361,9 @@ class ApplicationController < ActionController::Base
 		classFisc = Array.new
 		Classificacaofiscal.all.each do |cf|
 			if cf.adm_id == current_user.adm_id
-				classFisc << cf
+				if cf.status == 'a'				
+					classFisc << cf
+				end
 			end
 		end
 		render :json =>(classFisc.sort_by{|e| e[:descricao]}).to_json.to_s.html_safe
@@ -311,8 +395,10 @@ class ApplicationController < ActionController::Base
 		itensUser = Array.new
 		if controller_name == "subgrupo"
 			Grupo.all.each do |item|				
-				if item.empresas.include?(current_user.settings(:last_empresa).edited) && item.adm_id == current_user.settings(:last_empresa).edited.adm_id					
-					itensUser << item					
+				if item.empresas.include?(current_user.settings(:last_empresa).edited) && item.adm_id == current_user.settings(:last_empresa).edited.adm_id	
+					if item.status == 'a'				
+						itensUser << item					
+					end
 				end
 			end
 		end
@@ -320,11 +406,15 @@ class ApplicationController < ActionController::Base
 			Tipoentidade.all.each do |item|
 				if current_user.user_type != 0
 					if item.adm_id == current_user.settings(:last_empresa).edited.adm_id || item.adm_id == current_user.id
-						itensUser << item
+						if item.status == 'a'				
+							itensUser << item					
+						end
 					end
 				else
 					if item.adm_id == current_user.settings(:last_empresa).edited.adm_id
-						itensUser << item
+						if item.status == 'a'				
+							itensUser << item					
+						end
 					end
 				end
 			end

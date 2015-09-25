@@ -7,8 +7,9 @@ class ContacorrenteController < ApplicationController
     @dataFinal = ''
     @entidade = Entidade.find(params[:entidade]) unless params[:entidade].blank?
     @dataInicial = params[:dataInicial] unless params[:dataInicial].blank?
-    @dataFinal = params[:dataFinal] unless params[:dataInicial].blank?      
-    @entidades = Entidade.joins(:empresas).where("empresas.id = #{current_user.settings(:last_empresa).edited.id}")   
+    @dataFinal = params[:dataFinal] unless params[:dataInicial].blank? 
+    status = "a"
+    @entidades = Entidade.joins(:empresas).where("empresas.id = #{current_user.settings(:last_empresa).edited.id} and entidades.status like '#{status}'")   
   end
 
   def search      
