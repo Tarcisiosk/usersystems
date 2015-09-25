@@ -270,7 +270,7 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 
 	$(document).ready(function()
 	{		
-		setTimeout($scope.populateDropdowns, 800);
+		setTimeout($scope.populateDropdowns, 1000);
 
 		 setTimeout(function() { $('#flash').slideUp(); }, 5000);		
 	});
