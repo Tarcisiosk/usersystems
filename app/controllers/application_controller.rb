@@ -148,13 +148,13 @@ class ApplicationController < ActionController::Base
 		elsif controller_name == 'entidade'
 			Movimentom.all.each do |item|
 				if item.entidade_id == obj.id
-					flash[:notice] = 'Esta empresa/contato está sendo utilizado em um movimento e não pode ser inativado/deletado.'
+					flash[:notice] = 'Esta empresa/contato está sendo utilizado(a) em um movimento e não pode ser inativado/deletado.'
 					redirect_to :action => "index" and return
 				end
 			end
 			Contacorrente.all.each do |item|
 				if item.entidade_id == obj.id
-					flash[:notice] = 'Esta empresa/contato está sendo utilizado em uma conta corrente e não pode ser inativado/deletado.'
+					flash[:notice] = 'Esta empresa/contato está sendo utilizado(a) em uma conta corrente e não pode ser inativado/deletado.'
 					redirect_to :action => "index" and return
 				end
 			end
@@ -429,8 +429,8 @@ class ApplicationController < ActionController::Base
 	#configurações das tables e dados enviados.
 	#colunas ativas
 	def act_columns
-		if (current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col.include?({:sTitle => 'Opções', :bSortable => false, :width => '40px'}))
-			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col - [{:sTitle => 'Opções', :bSortable => false, :width => '40px'}]
+		if (current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col.include?({:sTitle => 'Opções', :bSortable => false, :width => '80px'}))
+			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col - [{:sTitle => 'Opções', :bSortable => false, :width => '80px'}]
 		else
 			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col
 		end
@@ -442,10 +442,10 @@ class ApplicationController < ActionController::Base
 
 	#linhas com a coluna opçoes para mandar para o generalDatatabme 
 	def act_columns_final
-		if (current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col.include?({:sTitle => 'Opções', :bSortable => false, :width => '40px'}))
+		if (current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col.include?({:sTitle => 'Opções', :bSortable => false, :width => '80px'}))
 			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col
 		else	
-			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col << {:sTitle => 'Opções', :bSortable => false, :width => '40px'}
+			current_user.settings(("columns_" + controller_name.classify.downcase).to_sym).col << {:sTitle => 'Opções', :bSortable => false, :width => '80px'}
 		end
 	end
 

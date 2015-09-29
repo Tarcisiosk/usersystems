@@ -1,6 +1,5 @@
 var myApp = angular.module('myApp',['ui.utils.masks', 'ngSanitize', 'ui.select']); 
 
-//diretiva para somente numeros
 myApp.directive('numbersOnly', function(){
 	return { require: 'ngModel',
 		link: function(scope, element, attrs, modelCtrl) {
@@ -109,8 +108,7 @@ myApp.directive('focusMe', function($timeout, $parse) {
           });
         }
       });
-      // to address @blesh's comment, set attribute value to 'false'
-      // on blur event:
+
       element.bind('blur', function() {
          console.log('blur');
          scope.$apply(model.assign(scope, false));
@@ -188,29 +186,7 @@ myApp.filter("customCurrency", function (numberFilter)
 myApp.config(function(uiSelectConfig) {
   uiSelectConfig.resetSearchInput = true;
 });
-/*
-myApp.config(function ($routeProvider) {
-	$routeProvider
-	.when('/cfops/*', {
-		controller: 'CfopCtrl'
-	})
-	.when('/entidade/*', {
-		controller: 'EntidadeCtrl'
-	})
-	.when('/grupo/*', {
-		controller: 'GrupoCtrl'
-	})
-	.when('/subgrupo/*', {
-		controller: 'SubgrupoCtrl'
-	})
-	.when('/produto/*', {
-		controller: 'ProdutoCtrl'
-	})
-	.when('/unidade/*', {
-		controller: 'UnidadeCtrl'
-	})
-});
-*/
+
 myApp.controller('IndexCtrl', ['$scope', function($scope)
 {
 	$scope.dataoptionselected = 'Ativos';
@@ -257,9 +233,10 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 			}
 
 		  	$(this).wrap('<div class="btn-group" style="position:absolute !important;"></div>');		  	
+		  	
 		  	if(control == 'entidades')
 		  	{
-		  		$(this).after('<ul class="dropdown-menu"><li>'+contacorrentelink +'</li><li class="divider"></li> <li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
+		  		$(this).after('<ul class="dropdown-menu"><li>' +contacorrentelink+ '</li><li class="divider"></li> <li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
 		  	}
 		  	else
 		  	{
@@ -270,15 +247,9 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 
 	$(document).ready(function()
 	{		
-		setTimeout($scope.populateDropdowns, 1000);
-
-		 setTimeout(function() { $('#flash').slideUp(); }, 5000);		
+		setTimeout($scope.populateDropdowns, 1000); 
+		setTimeout(function() { $('#flash').slideUp(); }, 7000);		
 	});
-
-	//id = $("table > tbody > tr > td > [id^='Opt']").attr('id').replace("Opt","").trim();
-	// $("#contacorrente").click(function(){
-	// 	window.location.replace("/contacorrentes?entidade="+idEntidade);
-	// });
 }]);
 
 jQuery(document).ready(function() {       	
@@ -310,7 +281,6 @@ jQuery(document).ready(function() {
 			return r;
 		}
 	});
-
 
 	$('[name="emp_link"]').click(function () 
 	{
