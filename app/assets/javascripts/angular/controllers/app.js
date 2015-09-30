@@ -202,6 +202,7 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		$("table > tbody > tr > td > [id^='Opt']").each(function() 
 		{
 			id = $("table > tbody > tr > td > [id^='Opt']").attr('id').replace("Opt","").trim();
+			
 			control = $('#data').attr('controller');
 			lbl = $("table > tbody > tr > td > [state]").attr('state');
 
@@ -268,7 +269,7 @@ jQuery(document).ready(function() {
 	};
 
 	$('#date').datepicker({
-      dateFormat: 'dd-mm-yy'
+    	dateFormat: 'dd-mm-yy'
 	});
 
 	$('form').dirtyFields(options);

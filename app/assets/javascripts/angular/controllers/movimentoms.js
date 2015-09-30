@@ -48,7 +48,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{
 		$.ajax({
 			async:false,
-			method: 'get',
+			method: 'post',
 			url: '/movimentoms/get_json/',
 			dataType: 'json',
 			success: function(data)
@@ -72,14 +72,15 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{
 		$.ajax({
 			async:false,
-			method: 'get',
+			method: 'post',
 			url: '/movimentoms/get_entidades/',
 			dataType: 'json',
 			success: function(data)
 			{
 				$scope.entidade_opts = data;
 				$scope.entidade_selected = data[0];
-				
+				console.log($scope.entidade_opts);
+			
 				if($scope.data.entidade_id == undefined)
 				{
 					$scope.data.entidade_id = data[0].id;
@@ -122,7 +123,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{
 		$.ajax({
 			async:false,
-			method: 'get',
+			method: 'post',
 			url: '/movimentoms/get_produtos/',
 			dataType: 'json',
 			success: function(data)
@@ -142,7 +143,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{
 		$.ajax({
 			async:false,
-			method: 'get',
+			method: 'post',
 			url: '/movimentoms/get_icms/' + id_produto,
 			data: {"uf" : $scope.estado_atual, "ent" : ent, "ent_id" : $scope.data.entidade_id},
 			dataType: 'json',
@@ -169,7 +170,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{
 		$.ajax({
 			async:false,
-			method: 'get',
+			method: 'post',
 			url: '/movimentoms/get_icmsinterestadual/' ,
 			data: {"or" : origem, "dest" : destino },
 			dataType: 'json',
@@ -196,7 +197,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	{
 		$.ajax({
 			async: false,
-			method: 'get',
+			method: 'post',
 			url: '/movimentoms/get_piscofins/' + id_produto,
 			dataType: 'json',
 			success: function(data)
@@ -225,7 +226,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			data: { data: $scope.data },
 			success: function (data)
 			{
-				window.location.replace('/movimentoms');
+				window.location.replace('/movimentoms/' + $scope.data.id_tipomovimentacao);
 			},
 			error: function (jqXHR, textStatus, errorThrown)
 			{
@@ -347,8 +348,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 													  ($scope.produto_selected.seguro * $scope.produto_selected.calcSeguroIcms) + 
 													  ($scope.produto_selected.outros * $scope.produto_selected.calcOutrosIcms) - 
 													  ($scope.produto_selected.desconto * $scope.produto_selected.calcDescontoIcms);
-			
 		}
+		
 		$scope.produto_selected.valoricms = $scope.produto_selected.basecalculoIcms * ($scope.produto_selected.icms_aliquota/100).toFixed(2);
 
 		if($scope.produto_selected.icms_cst_id == 3 || $scope.produto_selected.icms_cst_id == 10 || $scope.produto_selected.icms_cst_id == 11 || ($scope.empresa_atual.supersimples && $scope.produto_selected.icms_cst_id == 9))

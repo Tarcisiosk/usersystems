@@ -120,7 +120,7 @@
 					</li>
 					<% menu.each do |hkey, hvalue|%>
 						<li class="menu-dropdown mega-menu-dropdown mega-menu-full">
-							<a data-hover="megamenu-dropdown" data-close-others="true" ncheck data-toggle="dropdown" href="javascript:;" class="dropdown-toggle"> <%= hvalue[:label]%> <i class="fa fa-angle-down"></i></a>
+							<a data-hover="megamenu-dropdown" data-close-others="true" ncheck data-toggle="dropdown" href="javascript:;" class="dropdown-toggle" aria-expanded='false'> <%= hvalue[:label]%> <i class="fa fa-angle-down"></i></a>
 							<ul class="dropdown-menu">
 								<li>
 									<div class="mega-menu-content">
@@ -128,7 +128,7 @@
 											<%if hvalue.is_a?(Hash)%>
 												<% hvalue.each do |subkey, subvalue|%>
 													<%if subvalue.is_a?(Hash)%>
-														<div class="col-md-2">
+														<div class="col-md-4">
 															<ul class="mega-menu-submenu">
 																<li>
 																	<h3><%=subvalue[:label]%></h3>

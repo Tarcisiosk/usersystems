@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150924154708) do
+ActiveRecord::Schema.define(version: 20150929185101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -279,16 +279,17 @@ ActiveRecord::Schema.define(version: 20150924154708) do
   create_table "movimentoms", force: :cascade do |t|
     t.date     "data"
     t.integer  "entidade_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.integer  "adm_id"
     t.text     "produtos_list"
     t.float    "totalquantidade"
     t.float    "totalvalor"
     t.boolean  "consumidor_final"
-    t.string   "status",           default: "a"
+    t.string   "status",              default: "a"
     t.string   "usuarioalterador"
     t.datetime "dataalteracao"
+    t.integer  "id_tipomovimentacao"
   end
 
   create_table "nivelacessos", force: :cascade do |t|

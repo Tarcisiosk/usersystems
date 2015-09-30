@@ -286,7 +286,7 @@ class GeneralDatatable < ApplicationController
  
 	def filtered_list
 		if current_user.user_type != 0
-			@klass = @klass.where(:adm_id => current_user.adm_id) 
+			@klass = @klass.where(:adm_id => current_user.settings(:last_empresa).edited.adm_id) 
 		else
 			@klass.all
 		end

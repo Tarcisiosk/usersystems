@@ -69,7 +69,7 @@
 myApp.controller('TipomovimentacaoCtrl', ['$scope', function($scope){
 	$scope.mensagens = [];
 	$scope.tipomovimentacao = <%= @tipomovimentacao.to_json.html_safe=%>;	
-	$scope.tipos = [{'codigo':1,'descricao':'Entrada'},{'codigo':2,'descricao':'Saída'}];
+	$scope.tipos = [{'codigo':1,'descricao':'Entrada'},{'codigo':2,'descricao':'Saída'},{'codigo':3,'descricao':'Outros'}];
 
 	$scope.save = function(){
 		$.ajax({

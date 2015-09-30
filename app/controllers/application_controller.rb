@@ -44,6 +44,28 @@ class ApplicationController < ActionController::Base
 	  render :json => { :errors => model.errors }, status: 422
 	end
 
+
+	def menuMovimentos(i)
+		movMenu = Array.new
+		if i == 0
+			movEntradas = Tipomovimentacao.where("tipo='Entrada'");
+			movEntradas.each_with_index do |item, index|
+				movMenu[index] = {:label => item.descricao, :path => '/movimentoms/' + item.id.to_s, :acao => 'movimentom#index'}
+			end	
+		elsif i == 1
+			movSaidas = Tipomovimentacao.where("tipo='Saída'");
+			movSaidas.each_with_index do |item, index|
+				movMenu[index] = {:label => item.descricao, :path => '/movimentoms/' + item.id.to_s, :acao => 'movimentom#index'}
+			end	
+		else i == 2
+			movOutros = Tipomovimentacao.where("tipo='Outros'");
+			movOutros.each_with_index do |item, index|
+				movMenu[index] = {:label => item.descricao, :path => '/movimentoms/' + item.id.to_s, :acao => 'movimentom#index'}
+			end	
+		end
+		return movMenu
+	end
+
 	def menu
 		menuBuilder = {:maincadastros => {:label=>'Cadastros', 
 										  :tipo_entidade => {:label=>'Empresas e Contatos',
@@ -58,8 +80,9 @@ class ApplicationController < ActionController::Base
 														 	:classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}},	   
 				       
 				       :mainmovimentacoes => {:label=>'Movimentações', 
-				       						  :cadastros =>{:label=>'Movimentações', 
-				       						  				:estado =>{:label =>'Movimentos', :path=>'/movimentoms', :acao=>'movimentom#index'}}},
+				       						  :entrada =>{:label=>'Entradas', },
+				       						  :saida =>{:label=>'Saídas',  },
+				       						  :outro =>{:label=>'Outros',  }},
 				       :mainfinanceiro => {:label=>'Financeiro',
 				       					   :cadastros=>{:label=>'Cadastros',
 				       					   				:planocontas =>{:label=>'Plano de Contas', :path=>'/planocontas', :acao =>'planoconta#index'}},
@@ -78,6 +101,24 @@ class ApplicationController < ActionController::Base
 				       						  				:estado =>{:label =>'Estados', :path=>'/estados', :acao=>'estado#index'},
 				       						  				:icmsinterestadual =>{:label =>'ICMS Interestadual', :path=>'/icmsinterestadual', :acao=>'icmsinterestadual#index'},
 				       						  				:cfop =>{:label =>'CFOP', :path=>'/cfops', :acao=>'cfop#index'}}}}
+		
+		menuMovimentos(0).each do |item|
+			if item
+				menuBuilder[:mainmovimentacoes][:entrada][item[:label].to_sym] = item
+			end
+		end
+
+		menuMovimentos(1).each do |item|
+			if item
+				menuBuilder[:mainmovimentacoes][:saida][item[:label].to_sym] = item
+			end
+		end
+
+		menuMovimentos(2).each do |item|
+			if item
+				menuBuilder[:mainmovimentacoes][:outro][item[:label].to_sym] = item
+			end
+		end
 		if current_user.user_type != 0
 			menuBuilder.except!(:mainadministracao)
 		end	
@@ -132,84 +173,86 @@ class ApplicationController < ActionController::Base
 	end
 
 	def check_if_is_not_using
-		
-		obj = instance_variable_get("@" + controller_name.downcase)
-		obj = (controller_name.capitalize).constantize.find(params[:id])
+		if controller_name != "sessions"
 
-		if controller_name == 'tipoentidade'
-			Entidade.all.each do |item|
-				if item.status == 'a'
-					if item.tipoentidades.include?(obj)
-						flash[:notice] = 'Este tipo de empresa/contato está sendo utilizado em uma empresa/contato e não pode ser inativado/deletado.'
+			obj = instance_variable_get("@" + controller_name.downcase)
+			obj = (controller_name.capitalize).constantize.find(params[:id])
+
+			if controller_name == 'tipoentidade'
+				Entidade.all.each do |item|
+					if item.status == 'a'
+						if item.tipoentidades.include?(obj)
+							flash[:notice] = 'Este tipo de empresa/contato está sendo utilizado em uma empresa/contato e não pode ser inativado/deletado.'
+							redirect_to :action => "index" and return
+						end
+					end
+				end
+			elsif controller_name == 'entidade'
+				Movimentom.all.each do |item|
+					if item.entidade_id == obj.id
+						flash[:notice] = 'Esta empresa/contato está sendo utilizado(a) em um movimento e não pode ser inativado/deletado.'
 						redirect_to :action => "index" and return
 					end
 				end
-			end
-		elsif controller_name == 'entidade'
-			Movimentom.all.each do |item|
-				if item.entidade_id == obj.id
-					flash[:notice] = 'Esta empresa/contato está sendo utilizado(a) em um movimento e não pode ser inativado/deletado.'
-					redirect_to :action => "index" and return
-				end
-			end
-			Contacorrente.all.each do |item|
-				if item.entidade_id == obj.id
-					flash[:notice] = 'Esta empresa/contato está sendo utilizado(a) em uma conta corrente e não pode ser inativado/deletado.'
-					redirect_to :action => "index" and return
-				end
-			end
-		elsif controller_name == 'grupo'
-			Subgrupo.all.each do |item|
-				if item.status == 'a'
-					if item.grupo_id == obj.id
-						flash[:notice] = 'Este grupo está sendo utilizado em um subgrupo e não pode ser inativado/deletado.'
+				Contacorrente.all.each do |item|
+					if item.entidade_id == obj.id
+						flash[:notice] = 'Esta empresa/contato está sendo utilizado(a) em uma conta corrente e não pode ser inativado/deletado.'
 						redirect_to :action => "index" and return
 					end
 				end
-			end
-			Produto.all.each do |item|
-				if item.status == 'a'
-					if item.grupo_id == obj.id
-						flash[:notice] = 'Este grupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
+			elsif controller_name == 'grupo'
+				Subgrupo.all.each do |item|
+					if item.status == 'a'
+						if item.grupo_id == obj.id
+							flash[:notice] = 'Este grupo está sendo utilizado em um subgrupo e não pode ser inativado/deletado.'
+							redirect_to :action => "index" and return
+						end
+					end
+				end
+				Produto.all.each do |item|
+					if item.status == 'a'
+						if item.grupo_id == obj.id
+							flash[:notice] = 'Este grupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
+							redirect_to :action => "index" and return
+						end
+					end
+				end 
+			elsif controller_name == 'subgrupo'
+				Produto.all.each do |item|
+					if item.status == 'a'
+						if item.subgrupo_id == obj.id
+							flash[:notice] = 'Este subgrupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
+							redirect_to :action => "index" and return
+						end
+					end
+				end 
+			elsif controller_name == 'unidade'
+				Produto.all.each do |item|
+					if item.status == 'a'
+						if item.grupo_id == obj.id
+							flash[:notice] = 'Este subgrupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
+							redirect_to :action => "index" and return
+						end
+					end
+				end 
+			elsif controller_name == 'produto'
+				Movimentom.all.each do |item|
+					if item.produtos_list.include?('"id":' + obj.id.to_s)
+		 				flash[:notice] = 'Este produto está sendo utilizado em um movimento e não pode ser inativado/deletado.'
 						redirect_to :action => "index" and return
 					end
 				end
-			end 
-		elsif controller_name == 'subgrupo'
-			Produto.all.each do |item|
-				if item.status == 'a'
-					if item.subgrupo_id == obj.id
-						flash[:notice] = 'Este subgrupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
-						redirect_to :action => "index" and return
+			elsif controller_name == 'classificacaofiscal'
+				Produto.all.each do |item|
+					if item.status == 'a'
+						if item.classificacaofiscal_id == obj.id
+							flash[:notice] = 'Esta classificação fiscal está sendo utilizada em um produto e não pode ser inativada/deletada.'
+							redirect_to :action => "index" and return
+						end
 					end
-				end
-			end 
-		elsif controller_name == 'unidade'
-			Produto.all.each do |item|
-				if item.status == 'a'
-					if item.grupo_id == obj.id
-						flash[:notice] = 'Este subgrupo está sendo utilizado em um produto e não pode ser inativado/deletado.'
-						redirect_to :action => "index" and return
-					end
-				end
-			end 
-		elsif controller_name == 'produto'
-			Movimentom.all.each do |item|
-				if item.produtos_list.include?('"id":' + obj.id.to_s)
-	 				flash[:notice] = 'Este produto está sendo utilizado em um movimento e não pode ser inativado/deletado.'
-					redirect_to :action => "index" and return
-				end
-			end
-		elsif controller_name == 'classificacaofiscal'
-			Produto.all.each do |item|
-				if item.status == 'a'
-					if item.classificacaofiscal_id == obj.id
-						flash[:notice] = 'Esta classificação fiscal está sendo utilizada em um produto e não pode ser inativada/deletada.'
-						redirect_to :action => "index" and return
-					end
-				end
-			end 		
-		end		
+				end 		
+			end	
+		end
 	end
 
 	#seta adm para itens criados

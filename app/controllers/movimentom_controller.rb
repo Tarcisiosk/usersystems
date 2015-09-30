@@ -6,8 +6,8 @@ class MovimentomController < ApplicationController
 
 	def index
 		respond_to do |format|
-			format.html
-			format.json { render json: GeneralDatatable.new(Movimentom, act_columns_final, movimentom_actions, view_context, current_user) }
+			format.html 
+			format.json { render json: GeneralDatatable.new(Movimentom.where(:id_tipomovimentacao => params[:id]), act_columns_final, movimentom_actions, view_context, current_user) }
 		end
 	end
 
@@ -23,7 +23,7 @@ class MovimentomController < ApplicationController
 		@icmscst = Icmscst.all.select("id", "codigo", "descricao")
 		@piscofinscst = Piscofinscst.all.select("id","codigo","descricao").order(id: :asc)
 		@icmssupersimple = Icmssupersimple.all.select("id", "codigo", "descricao")
-		@@angularActions = {:data => '', :entidade_id => '', :consumidor_final => false, :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
+		@@angularActions = {:data => '',:id_tipomovimentacao => params[:id], :entidade_id => '', :consumidor_final => false, :produtos_list => '', :totalvalor => 0, :totalquantidade => 0}
 		render :edit
 	end
 
@@ -90,7 +90,7 @@ class MovimentomController < ApplicationController
 			@movimentom.totalquantidade = data_hash[:totalquantidade]
 			@movimentom.consumidor_final = data_hash[:consumidor_final]
 		else
-			@movimentom = Movimentom.new(data: data_hash[:data], entidade_id: data_hash[:entidade_id], consumidor_final: data_hash[:consumidorfinal] ,produtos_list: data_hash[:produtos_list], totalvalor: data_hash[:totalvalor], totalquantidade: data_hash[:totalquantidade], adm_id: current_user.settings(:last_empresa).edited.adm_id)
+			@movimentom = Movimentom.new(data: data_hash[:data], id_tipomovimentacao: data_hash[:id_tipomovimentacao], entidade_id: data_hash[:entidade_id], consumidor_final: data_hash[:consumidorfinal] ,produtos_list: data_hash[:produtos_list], totalvalor: data_hash[:totalvalor], totalquantidade: data_hash[:totalquantidade], adm_id: current_user.settings(:last_empresa).edited.adm_id)
 		end
 	
 		@movimentom.save
@@ -104,7 +104,6 @@ class MovimentomController < ApplicationController
 
 	def returnEntidadeMovimentos
 		entidades_array =  Array.new
-
 		Entidade.all.each do |entidade|
 			if entidade.adm_id == current_user.settings(:last_empresa).edited.adm_id
 				unless entidades_array.include?(entidade)

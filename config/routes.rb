@@ -129,19 +129,19 @@ Rails.application.routes.draw do
 	post 'tipomovimentacaos/save' => 'tipomovimentacao#save'
 	post 'tipomovimentacaos/save_settings' => 'tipomovimentacao#save_settings'
 
-
-	get 'movimentoms' => "movimentom#index", as: :movimentoms
-	get 'movimentoms/new' => "movimentom#new", as: :new_movimentom
+	#get 'movimentoms' => "movimentom#index", as: :movimentoms
+	get 'movimentoms/:id' => "movimentom#index", as: :movimentoms
+	get 'movimentoms/:id/new/' => "movimentom#new", as: :new_movimentom
 	post 'movimentoms/new'  => 'movimentom#create'
-	get 'movimentoms/get_json' => "movimentom#send_json"
+	post 'movimentoms/get_json' => "movimentom#send_json"
 	post 'movimentoms/save_angular' => 'movimentom#save_angular'	
 	post 'movimentoms/save_angular/:id' => 'movimentom#save_angular'
 	post 'movimentoms/save_settings' => 'movimentom#save_settings'
-	get 'movimentoms/get_entidades' => "movimentom#returnEntidadeMovimentos"
-	get 'movimentoms/get_produtos' => "movimentom#returnProdutosMovimentos"
-	get 'movimentoms/get_icms/:id' => "movimentom#returnIcms"
-	get 'movimentoms/get_icmsinterestadual' => "movimentom#returnIcmsInterEstadual"
-	get 'movimentoms/get_piscofins/:id' => "movimentom#returnAliqPisCofins"
+	post 'movimentoms/get_entidades' => "movimentom#returnEntidadeMovimentos"
+	post 'movimentoms/get_produtos' => "movimentom#returnProdutosMovimentos"
+	post 'movimentoms/get_icms/:id' => "movimentom#returnIcms"
+	post 'movimentoms/get_icmsinterestadual' => "movimentom#returnIcmsInterEstadual"
+	post 'movimentoms/get_piscofins/:id' => "movimentom#returnAliqPisCofins"
 
 	get 'planocontas' => "planoconta#index", as: :planocontas
 	get 'planocontas/new' => "planoconta#new", as: :new_planoconta
