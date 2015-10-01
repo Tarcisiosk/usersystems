@@ -199,6 +199,7 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 	
 	$scope.populateDropdowns =  function()
 	{
+		//alert("OI!");
 		$("table > tbody > tr > td > [id^='Opt']").each(function() 
 		{
 			id = $("table > tbody > tr > td > [id^='Opt']").attr('id').replace("Opt","").trim();
@@ -223,7 +224,6 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		  	deletelink = '<a href="' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
 		  	contacorrentelink = '<a href="' +contacorrentepath+ '" data-method="get">Conta Corrente</a>'
 
-
 		  	if($('#acessos').attr('inativar') == 'false')
 		  	{
 		  		statelink = '<a class="hidden" href="' +statepath+ '" data-confirm="Você tem certeza?" data-method="get"> ' +lbl+ '</a>'
@@ -239,16 +239,24 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		  	{
 		  		$(this).after('<ul class="dropdown-menu"><li>' +contacorrentelink+ '</li><li class="divider"></li> <li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
 		  	}
+		  	else if(control == 'cfops')
+		  	{
+		  		$(this).after('<ul class="dropdown-menu"><li>' +deletelink+ '</li></ul>');
+		  	}
 		  	else
 		  	{
-				$(this).after('<ul class="dropdown-menu"><li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
+		  		$(this).after('<ul class="dropdown-menu"><li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
 		  	}
 		});
 	}
 
 	$(document).ready(function()
 	{		
-		setTimeout($scope.populateDropdowns, 1000); 
+		$(document).ajaxStop(function() 
+		{
+			$scope.populateDropdowns();
+		});     
+
 		setTimeout(function() { $('#flash').slideUp(); }, 7000);		
 	});
 }]);

@@ -91,6 +91,7 @@ Rails.application.routes.draw do
 	post 'cfops/save_angular' => 'cfop#save_angular'	
 	post 'cfops/save_angular/:id' => 'cfop#save_angular'
 	post 'cfops/save_settings' => 'cfop#save_settings'
+	#get 'cfops/statusset/:id' => 'cfop#statusset'
 
 	get 'unidades' => "unidade#index", as: :unidades
 	get 'unidades/new' => "unidade#new", as: :new_unidade

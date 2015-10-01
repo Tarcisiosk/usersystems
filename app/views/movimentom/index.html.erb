@@ -2,7 +2,11 @@
 <div class="page-container" ng-cloak="">
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
-	
+		
+		<%if current_user.user_type == 2%>
+			<div id="acessos" deletar='<%=current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('cfop#destroy'))%>'>
+			</div>
+		<%end%>	
 		<!-- END PAGE TITLE -->
 		<!-- BEGIN PAGE CONTENT -->
 		<div class="page-content">
@@ -59,7 +63,7 @@
 			  		</li>
 			  		<i class="fa fa-circle"></i>
 					<li class="active">
-						Movimentos
+						<%= Tipomovimentacao.find(request.path.delete! 'movimentoms/').descricao%>
 					</li>
 				</ul>
 				<div class="row">
@@ -70,17 +74,17 @@
 							<div class="portlet-title">
 								<div class="caption">
 									<i class="fa fa-users font-green-sharp"></i>
-									<span class="caption-subject font-green-sharp bold uppercase">Movimentos</span>
+									<span class="caption-subject font-green-sharp bold uppercase"><%= Tipomovimentacao.find(request.path.delete! 'movimentoms/').descricao%></span>
 								</div>
 								
 								<div class="tools">
 									<div class="btn-group">
 										<%if current_user.nivelacesso.present? && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#new')) && current_user.user_type == 2%>
-											<a  id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/movimentoms/new"><i class="fa fa-plus"></i></a>
+											<a  id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="<%=request.path%>/new"><i class="fa fa-plus"></i></a>
 										<%elsif current_user.user_type == 1%>
 											<a  id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="<%=request.path%>/new"><i class="fa fa-plus"></i></a>
 										<%elsif current_user.user_type == 0%>
-										<a  id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/movimentoms/new/"><i class="fa fa-plus"></i></a>
+										<a  id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="<%=request.path%>/new"><i class="fa fa-plus"></i></a>
 										<%end%>
 											<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
 											<i class="fa fa-wrench"></i>

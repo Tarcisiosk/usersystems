@@ -8,7 +8,7 @@ class CfopController < ApplicationController
 	def index
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(Cfop, act_columns_final, cfop_actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(Cfop.where("status != 'x'"), act_columns_final, cfop_actions, view_context, current_user) }
 		end
 	end
 
@@ -29,8 +29,9 @@ class CfopController < ApplicationController
 
 	def destroy
 		@cfop = Cfop.find(params[:id])
-		@cfop.destroy
-		if @cfop.destroy
+		@cfop.status = 'x'
+		@cfop.save
+		if @cfop.status == 'x'
 			redirect_to cfops_path, notice: " "
 		end
 	end
@@ -67,7 +68,7 @@ class CfopController < ApplicationController
 
 	def cfop_actions
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o cfop?'}}]
+						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 
 	end 
 
