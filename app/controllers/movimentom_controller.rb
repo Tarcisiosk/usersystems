@@ -1,13 +1,12 @@
 class MovimentomController < ApplicationController
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir a movimentação?'}}]
-	
+	@@actions = []
+
 	helper_method :send_json
 
 	def index
 		respond_to do |format|
 			format.html 
-			format.json { render json: GeneralDatatable.new(Movimentom.where(:id_tipomovimentacao => params[:id]), act_columns_final, movimentom_actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(Movimentom.where("id_tipomovimentacao = #{params[:id]} AND status != 'x'"), act_columns_final, movimentom_actions, view_context, current_user) }
 		end
 	end
 
@@ -17,6 +16,7 @@ class MovimentomController < ApplicationController
 
 	def new
 		@movimentom = Movimentom.new
+		@movimentom.id_tipomovimentacao = params[:id]
 		@cliente = ''
 		@modalidadebcicmsst = Modalidadebcicmsst.all.select("id","codigo","descricao")		
 		@ipicst = Ipicst.all.select("id","codigo","descricao").where('codigo >= 50')
@@ -68,9 +68,10 @@ class MovimentomController < ApplicationController
 
 	def destroy
 		@movimentom = Movimentom.find(params[:id])
-		@movimentom.destroy
-		if @movimentom.destroy
-				redirect_to movimentoms_path, notice: " "
+		@movimentom.status = 'x'
+		@movimentom.save
+		if @movimentom.status == 'x'
+			redirect_to '/movimentoms/' + @movimentom.id_tipomovimentacao.to_s , notice: " " and  return
 		end
 	end
 
@@ -96,7 +97,7 @@ class MovimentomController < ApplicationController
 		@movimentom.save
 
 		if @movimentom.valid?
-			render :index
+			redirect_to '/movimentoms/' + @movimentom.id_tipomovimentacao.to_s , notice: " " and  return
 		else
 		 	render json: @movimentom.errors.full_messages, status: :unprocessable_entity 
 		end
@@ -145,7 +146,6 @@ class MovimentomController < ApplicationController
 		if @produto.personalizado
 			icms = Icmsproduto.where(produto_id: params[:id], estado_id: @estado.id)
 		else
-
 			icms = Classificacaofiscal.find(@produto.classificacaofiscal_id).icmsclassificacaofiscals.where(classificacaofiscal_id: @produto.classificacaofiscal_id, estado_id: @estado.id)
 		end
 		render :json => icms.to_json.to_s.html_safe
@@ -186,22 +186,19 @@ class MovimentomController < ApplicationController
 
 	def movimentom_actions
 		if current_user.user_type == 2
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#destroy'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o movimentom?'}}]
-			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#edit'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
-
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#destroy'))
-				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o movimentom?'}}]
-			
-			else
-				@@actions = []
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#edit'))
+				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
+			end
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#destroy')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('movimentom#statusset')) 
+				@@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
+			end
+			if @@actions = []
 				act_columns_final.tap(&:pop)
 			end
 		else
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o movimentom?'}}]
+						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
+		return @@actions
 	end 
 end

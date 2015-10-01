@@ -143,6 +143,7 @@ Rails.application.routes.draw do
 	post 'movimentoms/get_icms/:id' => "movimentom#returnIcms"
 	post 'movimentoms/get_icmsinterestadual' => "movimentom#returnIcmsInterEstadual"
 	post 'movimentoms/get_piscofins/:id' => "movimentom#returnAliqPisCofins"
+	get 'movimentoms/statusset/:id' => 'movimentom#statusset'
 
 	get 'planocontas' => "planoconta#index", as: :planocontas
 	get 'planocontas/new' => "planoconta#new", as: :new_planoconta

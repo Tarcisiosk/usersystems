@@ -221,7 +221,7 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 			contacorrentepath = '/contacorrentes?entidade=' + id;
 
 			statelink = '<a href="' +statepath+ '" data-confirm="Você tem certeza?" data-method="get"> ' +lbl+ '</a>'
-		  	deletelink = '<a href="' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
+		  	deletelink = '<a href="/' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
 		  	contacorrentelink = '<a href="' +contacorrentepath+ '" data-method="get">Conta Corrente</a>'
 
 		  	if($('#acessos').attr('inativar') == 'false')
@@ -230,7 +230,7 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		  	}
 		  	if($('#acessos').attr('deletar') == 'false')
 			{
-		  		deletelink = '<a class="hidden" href="' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
+		  		deletelink = '<a class="hidden" href=" '+deletepath+' " data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
 			}
 
 		  	$(this).wrap('<div class="btn-group" style="position:absolute !important;"></div>');		  	
@@ -239,15 +239,17 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		  	{
 		  		$(this).after('<ul class="dropdown-menu"><li>' +contacorrentelink+ '</li><li class="divider"></li> <li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
 		  	}
-		  	else if(control == 'cfops')
+		  	else if(control == 'cfops' || control == 'movimentoms')
 		  	{
 		  		$(this).after('<ul class="dropdown-menu"><li>' +deletelink+ '</li></ul>');
+
 		  	}
 		  	else
 		  	{
 		  		$(this).after('<ul class="dropdown-menu"><li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
 		  	}
 		});
+
 	}
 
 	$(document).ready(function()
@@ -255,6 +257,10 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 		$(document).ajaxStop(function() 
 		{
 			$scope.populateDropdowns();
+	  		if($("#data").attr('tipomov') == 'Entrada')
+	  		{
+				$("table > thead > tr > th:contains('Cliente')").text('Fornecedor');
+	  		} 	
 		});     
 
 		setTimeout(function() { $('#flash').slideUp(); }, 7000);		

@@ -39,6 +39,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 	$scope.icmssupersimples = JSON.parse($('#EditingObjId').attr("icmsss"));
 	$scope.modalidadebcicmssts = JSON.parse($('#EditingObjId').attr("modalidade"));
 	$scope.piscofinscst = JSON.parse($('#EditingObjId').attr("piscofinscst"));
+	$scope.tipomovimentacao = JSON.parse($('#EditingObjId').attr("tipomov"));
 	$scope.valormva = 0;
 	$scope.isDisabled = false;
 	$scope.isNew = true;
@@ -79,7 +80,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			{
 				$scope.entidade_opts = data;
 				$scope.entidade_selected = data[0];
-				console.log($scope.entidade_opts);
 			
 				if($scope.data.entidade_id == undefined)
 				{
@@ -138,6 +138,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			}
 		});
 	}
+	
 	//icms do estado da entidade ou do produto...
 	$scope.getIcms = function(id_produto, ent)
 	{
@@ -157,7 +158,6 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				{
 					$scope.icmsProdutoSelected = data[0];
 				}
-				console.log(data[0]);
 			},
 			error: function()
 			{      	
@@ -263,7 +263,22 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		if($scope.icmsEntidadeSelected.estado_id != $scope.icmsProdutoSelected.estado_id && !$scope.data.consumidor_final)
 		{
 			$scope.interEstadual = true;
-			$scope.getIcmsInterEstadual($scope.icmsProdutoSelected.estado_id, $scope.icmsEntidadeSelected.estado_id);
+			console.log("Essa é interestadual");
+
+			if($scope.tipomovimentacao.tipo == 'Entrada')
+			{
+				console.log("e é uma entrada");
+				console.log("Estado empresa: " +  $scope.icmsProdutoSelected.estado_id);
+				console.log("Estado fornecedor: " + $scope.icmsEntidadeSelected.estado_id);
+				$scope.getIcmsInterEstadual($scope.icmsEntidadeSelected.estado_id, $scope.icmsProdutoSelected.estado_id);
+			}
+			else
+			{
+				console.log("mas nao é uma entrada");
+				console.log("Estado empresa: " + $scope.icmsProdutoSelected.estado_id);
+				console.log("Estado cliente: " +  $scope.icmsEntidadeSelected.estado_id);
+				$scope.getIcmsInterEstadual($scope.icmsProdutoSelected.estado_id, $scope.icmsEntidadeSelected.estado_id);
+			}
 		}
 		else
 		{

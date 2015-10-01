@@ -1,4 +1,4 @@
-<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%=(current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' icmsss='<%= @icmssupersimple.to_json.html_safe %>' piscofinscst='<%= @piscofinscst.to_json.html_safe%>' cliente='<%=@cliente.to_json.html_safe%>' ng-cloak="">
+<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%=(current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' icmsss='<%= @icmssupersimple.to_json.html_safe %>' piscofinscst='<%= @piscofinscst.to_json.html_safe%>' cliente='<%=@cliente.to_json.html_safe%>' tipomov='<%=Tipomovimentacao.find(@movimentom.id_tipomovimentacao).to_json.html_safe%>' ng-cloak="">
 	<div class="page-head">
 		<div class="page-content">
 			<div class="container">
@@ -9,7 +9,7 @@
 					</li>
 					<i class="fa fa-circle"></i>
 					<li>
-						<%= link_to "Movimentos", movimentoms_path, 'data-no-turbolink' => true %>
+						<%= link_to "Movimentos", '/movimentoms/' + @movimentom.id_tipomovimentacao.to_s , 'data-no-turbolink' => true %>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
@@ -26,7 +26,7 @@
 									<i class="fa fa-plus"></i>
 								</div>
 								<div class="actions btn-set">
-									<%= link_to "Voltar", movimentoms_path, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
+									<%= link_to "Voltar", '/movimentoms/' + @movimentom.id_tipomovimentacao.to_s, :class => "btn default btn-circle ", 'data-no-turbolink' => true %>
 									<button ng-click="save()" class="btn btn-default btn-circle"><i class="fa fa-check"></i> Salvar</button><br>
 								</div>
 							</div>
@@ -47,7 +47,9 @@
 										</div>
 										<div class="col-md-6">
 											<div class="form-group">
-												<label class="control-label ">Cliente</label>
+												<label class="control-label" ng-show="tipomovimentacao.tipo == 'Entrada'">Fornecedor </label>
+												<label class="control-label" ng-show="tipomovimentacao.tipo == 'Saída'">Cliente </label>
+
 												<ui-select ng-model="data.entidade_id" on-select="setEntidadeSelected($item); setCheckboxes('consumidorfinal', data.consumidor_final)" name="entidade" theme="bootstrap" >
 										            <ui-select-match allow-clear="false" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>
 										            <ui-select-choices repeat="e.id as e in entidade_opts | filter: $select.search">
