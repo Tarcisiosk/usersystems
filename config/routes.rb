@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 	post 'users/save_settings' => 'user#save_settings'
 	post 'users/checked_rows' => 'user#checked_rows'
 	post 'users/set_current_emp' => 'user#set_current_emp'
+	get 'users/statusset/:id' => 'user#statusset'
 
 	get 'empresas'=> "empresa#index", as: :empresas
 	get 'empresas/new' => "empresa#new", as: :new_empresa
@@ -129,6 +130,7 @@ Rails.application.routes.draw do
 	get 'tipomovimentacaos/new' => "tipomovimentacao#new", as: :new_tipomovimentacao
 	post 'tipomovimentacaos/save' => 'tipomovimentacao#save'
 	post 'tipomovimentacaos/save_settings' => 'tipomovimentacao#save_settings'
+	get 'tipomovimentacaos/statusset/:id' => 'tipomovimentacao#statusset'
 
 	#get 'movimentoms' => "movimentom#index", as: :movimentoms
 	get 'movimentoms/:id' => "movimentom#index", as: :movimentoms
@@ -149,6 +151,7 @@ Rails.application.routes.draw do
 	get 'planocontas/new' => "planoconta#new", as: :new_planoconta
 	post 'planocontas/save' => 'planoconta#save'		
 	post 'planocontas/save_settings' => 'planoconta#save_settings'
+	get 'planoconta/statusset/:id' => 'planoconta#statusset'
 
 	get 'contacorrentes' => "contacorrente#index", as: :contacorrentes
 	post 'contacorrentes' => "contacorrente#index"

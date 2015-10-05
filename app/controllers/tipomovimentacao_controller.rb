@@ -1,14 +1,14 @@
 class TipomovimentacaoController < ApplicationController
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o tipo de movimentação?'}}]
+	@@actions = []
+
   def index
   	respond_to do |format|
 		format.html
-		format.json { render json: GeneralDatatable.new(Tipomovimentacao, act_columns_final, tipomovimentacao_actions, view_context, current_user) }
+		format.json { render json: GeneralDatatable.new(Tipomovimentacao.where("status != 'x'"), act_columns_final, tipomovimentacao_actions, view_context, current_user) }
 	end
   end
 
-  def new
+  def new	
   	@tipomovimentacao = Tipomovimentacao.new(adm_id: current_user.settings(:last_empresa).edited.adm_id,empresa_id:current_user.settings(:last_empresa).edited.id)
   	render :edit
   end
@@ -37,29 +37,30 @@ class TipomovimentacaoController < ApplicationController
   end
 
   def destroy
-	@tipomovimentacao = Tipomovimentacao.find(params[:id])		
-	if @tipomovimentacao.destroy
-			redirect_to tipomovimentacaos_path, notice: " "
+	@tipomovimentacao = Tipomovimentacao.find(params[:id])	
+	@tipomovimentacao.status =  'x'
+	@tipomovimentacao.save	
+	if @tipomovimentacao.status == 'x'
+		redirect_to tipomovimentacaos_path, notice: " "
 	end
   end	
 
   def tipomovimentacao_actions
+  	 @@actions = []
  	 if current_user.user_type == 2
-		if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipomovimentacao#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipomovimentacao#destroy'))
-			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-			 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o tipo de movimentação?'}}]
-			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipomovimentacao#edit'))
-			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipomovimentacao#destroy'))
-			@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o tipo de movimentação?'}}]
-		
+		if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipomovimentacao#edit'))
+			@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
+		end
+		if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('tipomovimentacao#destroy'))
+			@@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
 		else
 			@@actions = []
 			act_columns_final.tap(&:pop)
 		end
 	else
 		@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-			 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o tipo de movimentação?'}}]
+			 	     {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
+
 	end 
   end	
 end

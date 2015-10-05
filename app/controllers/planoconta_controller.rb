@@ -1,11 +1,10 @@
 class PlanocontaController < ApplicationController
-    @@actions = [{:caption => 'Incluir', :method_name => :get, :class_name => 'btn blue btn-xs ', :action => 'new'},
-                 {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-                 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o plano de conta?'}}]
+    @@actions = []
+
   def index
     respond_to do |format|
       format.html
-      format.json { render json: GeneralDatatable.new(Planoconta, act_columns_final, planoconta_actions, view_context, current_user) }
+      format.json { render json: GeneralDatatable.new(Planoconta.where("status != 'x'"), act_columns_final, planoconta_actions, view_context, current_user) }
     end
   end
 
@@ -79,40 +78,29 @@ class PlanocontaController < ApplicationController
 
   def destroy
     @planoconta = Planoconta.find(params[:id])
-    if @planoconta.destroy      
+    @planoconta.status = 'x'
+    @planoconta.save
+    if @planoconta.status == 'x'      
       redirect_to planocontas_path, notice:""
     end  
   end
 
   def planoconta_actions
+    @@actions = []
     if current_user.user_type == 2
-      if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#new')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#destroy'))
-        @@actions = [{:caption => 'Incluir', :method_name => :get, :class_name => 'btn blue btn-xs ', :action => 'new'},
-                    {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-                    {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o plano de conta?'}}]
-      elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#new')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#edit'))
-        @@actions = [{:caption => 'Incluir', :method_name => :get, :class_name => 'btn blue btn-xs', :action => 'new'},
-               {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'}]
-      elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#new')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#destroy'))
-        @@actions = [{:caption => 'Incluir', :method_name => :get, :class_name => 'btn blue btn-xs', :action => 'new'},
-               {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy'}, :data => {confirm: 'Tem certeza que deseja excluir o plano de conta?'}]
-      elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#destroy'))
-        @@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs', :action => 'edit'},
-               {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy'}, :data => {confirm: 'Tem certeza que deseja excluir o plano de conta?'}]
-      elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#new'))
-        @@actions = [{:caption => 'Incluir', :method_name => :get, :class_name => 'btn blue btn-xs', :action => 'new'}]
-      elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#edit'))
-        @@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'}]
-      elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#destroy'))
-        @@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o plano de conta?'}}]
-      else
-        @@actions = []
+      if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#new')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#destroy')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#statusset'))
+        @@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
+        #@@actions << {:caption => 'Incluir', :method_name => :get, :class_name => 'btn blue btn-xs ', :action => 'new'}
+      end
+      if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('planoconta#edit'))
+        @@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'}
+      end
+     if  @@actions = []
         act_columns_final.tap(&:pop)
       end
     else
-      @@actions = [{:caption => 'Incluir', :method_name => :get, :class_name => 'btn blue btn-xs ', :action => 'new'},
-              {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-             {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o plano de conta?'}}]
+      @@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
+        {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
     end
   end  
 

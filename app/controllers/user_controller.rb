@@ -2,8 +2,7 @@ class UserController < ApplicationController
 	before_filter :authenticate_user!
 	after_action :setNivelAcesso, only: [:update, :create]
 
-	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuario?'}}]
+	@@actions = []
 
 	helper_method :show_image
 
@@ -16,7 +15,7 @@ class UserController < ApplicationController
  		#	current_user.save!
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(User, act_columns_final, user_actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(User.where("status != 'x'"), act_columns_final, user_actions, view_context, current_user) }
 		end
 	end
 
@@ -82,8 +81,9 @@ class UserController < ApplicationController
  			redirect_to notAllowed_path, notice: "Você não tem permissão para isso!"
  		else
 			@user = User.find(params[:id])
-			@user.destroy
-			if @user.destroy
+			@user.status = 'x'
+			@user.save
+			if @user.status == 'x'
 				redirect_to users_path, notice: " "
 			end
 		end
@@ -116,24 +116,22 @@ class UserController < ApplicationController
 	end
 
 	def user_actions
+		@@actions = []
 		if current_user.user_type == 2
-			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#edit')) && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#destroy'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'},
-				 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#edit'))
+				@@actions << {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}
 
-			elsif  current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#edit'))
-				@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs pull-center', :action => 'edit'}]
-
-			elsif current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#destroy'))
-				@@actions = [{:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
+			end
+			if current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#destroy')) || current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('user#statusset'))
+				@@actions << {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}
 			
-			else
-				@@actions = []
+			end
+			if @@actions = []
 				act_columns_final.tap(&:pop)
 			end
 		else
 			@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 		 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o usuário?'}}]
+						 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 		end
 	end
 	
@@ -143,6 +141,5 @@ class UserController < ApplicationController
 		user.save!
 		redirect_to users_path
 	end
-
 end
 	
