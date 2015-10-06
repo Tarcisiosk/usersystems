@@ -1,4 +1,4 @@
-<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%=(current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' icmsss='<%= @icmssupersimple.to_json.html_safe %>' piscofinscst='<%= @piscofinscst.to_json.html_safe%>' cliente='<%=@cliente.to_json.html_safe%>' tipomov='<%=Tipomovimentacao.find(@movimentom.id_tipomovimentacao).to_json.html_safe%>' ng-cloak="">
+<div class="page-container" ng-view ng-controller="MovimentomsCtrl" id="EditingObjId" data="<%=editingUser.id%>" empresa_atual='<%=(current_user.settings(:last_empresa).edited).to_json.html_safe %>' modalidade='<%= @modalidadebcicmsst.to_json.html_safe=%>' ipi='<%= @ipicst.to_json.html_safe %>' icms='<%= @icmscst.to_json.html_safe %>' icmsss='<%= @icmssupersimple.to_json.html_safe %>' piscofinscst='<%= @piscofinscst.to_json.html_safe%>' cliente='<%=@cliente.to_json.html_safe%>' tipomov='<%=Tipomovimentacao.find(@movimentom.id_tipomovimentacao).to_json.html_safe%>' id_tipo='<%=@movimentom.id_tipomovimentacao %>' ng-cloak="">
 	<div class="page-head">
 		<div class="page-content">
 			<div class="container">
@@ -136,7 +136,7 @@
 																	<td align="right">{{ p.valoripi | currency : ""}}</td>
 																	<td align="right">{{ p.valoricms | currency : ""}}</td>
 																	<td align="right">{{(((p.preco * 1) * p.qtde ) + (p.frete * 1) + (p.seguro * 1) + (p.outros * 1) + (p.valoripi * 1) - (p.desconto * 1))  | currency : ""}}</td>
-																	<td align="center"> 
+																	<td align="center" widht='90px;'> 
 																		<a ncheck href="#portlet-config" ng-click="edit_produto($index); getIcms(p.id, false); getIcms(p.id, true); verifyInter(); preSetCheckbox();" data-toggle="modal" class="btn yellow btn-sm"> <i class="fa fa-pencil"></i> </a>
 																		<a ng-click="delete_produto($index)" class="btn red btn-sm"><i class="fa fa-trash-o"></i></a>
 																	</td>
@@ -157,7 +157,7 @@
 												</div>
 											</div>
 
-											<div class="well " style="font-family:Lucida console;">
+											<div class="well">
 												<div class="row static-info">
 													<div class="col-md-8 name" >
 														 Quantidade de Itens:
@@ -171,7 +171,7 @@
 														 Total frete:
 													</div>
 													<div class="col-md-6 "  style="color: blue;" align="right">
-														{{totalfrete | currency : "R$" }} (+)
+														{{totalfrete | currency : "R$" }} ( + )
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totaldesconto > 0">
@@ -179,7 +179,7 @@
 														 Total desconto:
 													</div>
 													<div class="col-md-6 "  style="color: red;" align="right">
-														{{totaldesconto | currency : "R$" }} (-)
+														{{totaldesconto | currency : "R$" }} ( - )
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totalseguro > 0">
@@ -187,7 +187,7 @@
 														 Total seguro:
 													</div>
 													<div class="col-md-6 "  style="color: blue;" align="right">
-														 {{totalseguro | currency : "R$" }} (+)
+														 {{totalseguro | currency : "R$" }} ( + )
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totaloutros > 0">
@@ -195,7 +195,7 @@
 														 Total outros:
 													</div>
 													<div class="col-md-6 "  style="color: blue;" align="right">
-														 {{totaloutros | currency : "R$" }} (+)
+														 {{totaloutros | currency : "R$" }} ( + )
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totalipi > 0">
@@ -203,7 +203,7 @@
 														 Total IPI:
 													</div>
 													<div class="col-md-6 " style="color: blue;" align="right">
-														 {{totalipi | currency : "R$" }} (+)
+														 {{totalipi | currency : "R$" }} ( + )
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totalicms > 0">

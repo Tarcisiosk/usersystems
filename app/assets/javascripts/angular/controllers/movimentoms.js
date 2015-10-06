@@ -226,7 +226,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			data: { data: $scope.data },
 			success: function (data)
 			{
-				window.location.replace('/movimentoms/' + $scope.data.id_tipomovimentacao);
+				var tpm = $('#EditingObjId').attr("id_tipo");
+				window.location.replace('/movimentoms/' + tpm);
 			},
 			error: function (jqXHR, textStatus, errorThrown)
 			{
