@@ -1,11 +1,11 @@
 class EstadoController < ApplicationController
 	
 	@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o estado?'}}]
+				 {:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
 	def index
 		respond_to do |format|
 			format.html
-			format.json { render json: GeneralDatatable.new(Estado, act_columns_final, @@actions, view_context, current_user) }
+			format.json { render json: GeneralDatatable.new(Estado.where("status != 'x'"), act_columns_final, @@actions, view_context, current_user) }
 		end
 	end
 
@@ -54,7 +54,9 @@ class EstadoController < ApplicationController
 
 	def destroy
 		@estado = Estado.find(params[:id])	
-		if @estado.destroy
+		@estado.status = 'x'
+		@estado.save
+		if @estado.status == 'x'
 			redirect_to estados_path, notice: " "
 		end
 	end

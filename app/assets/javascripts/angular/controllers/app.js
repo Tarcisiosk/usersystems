@@ -220,7 +220,8 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 			deletepath = (control.substring(0, control.length - 1)) + '/' + id;
 			contacorrentepath = '/contacorrentes?entidade=' + id;
 			includepath = '/planocontas/new?id=' + id
-			
+			configpath = '/nivelacesso/configurar/' + id
+
 			if(control == 'planoconta')
 			{
 				deletepath = (control.substring(0, control.length)) + '/' +id
@@ -230,6 +231,7 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 			deletelink = '<a href="/' +deletepath+ '" data-confirm="Você tem certeza que deseja excluir?" data-method="delete">Deletar</a>'
 			contacorrentelink = '<a href="' +contacorrentepath+ '" data-method="get">Conta Corrente</a>'
 			includelink = '<a href="' + includepath + '" data-method="get">Incluir</a>'
+			configlink = '<a href="' + configpath + '" data-method="get">Configurar</a>'
 
 			if($('#acessos').attr('inativar') == 'false')
 			{
@@ -246,11 +248,17 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 			{
 				$(this).after('<ul class="dropdown-menu"><li>' +contacorrentelink+ '</li><li class="divider"></li> <li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
 			}
+			else if(control == 'nivelacessos')
+			{
+				$(this).after('<ul class="dropdown-menu"><li>' +configlink+ '</li><li class="divider"></li><li>' +deletelink+ '</li></ul>');
+
+			}
 			else if(control == 'planoconta')
 			{
 				$(this).after('<ul class="dropdown-menu"><li>' +includelink+ '</li><li class="divider"></li> <li><li>' +statelink+ '</li> <li>' +deletelink+ '</li></ul>');
 			}
-			else if(control == 'cfops' || control == 'movimentoms' || control == 'tipomovimentacaos')
+			else if(control == 'cfops' || control == 'movimentoms' || control == 'tipomovimentacaos' ||
+				    control == 'series' || control == 'estados')
 			{
 				$(this).after('<ul class="dropdown-menu"><li>' +deletelink+ '</li></ul>');
 			}

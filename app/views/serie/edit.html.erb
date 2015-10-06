@@ -89,7 +89,7 @@ myApp.controller('SerieCtrl', ['$scope', function($scope){
 	$scope.serie = <%= @serie.to_json.html_safe=%>;
 	$scope.modelos =[{'codigo':55,'descricao':'Nota Fiscal Eletrônica'},{'codigo':65,'descricao':'Nota Fiscal de Consumidor Eletrônica'}];
 	$scope.ambientes = [{'codigo':1,'descricao':'Produção'},{'codigo':2,'descricao':'Homologação'}];
-	$('[name="serie"]').mask("?999");
+	$('[name="serie"]').mask("999");
 
 	$scope.save = function(){
 		$.ajax({

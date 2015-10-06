@@ -1,13 +1,15 @@
 class NivelacessoController < ApplicationController
-	@@actions = [{:caption => 'Configurar', :method_name => :get, :class_name => 'btn blue btn-xs ', :action => 'configurar'},
-				 {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
-				 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o nivel de acesso?'}}]
-
+	# @@actions = [{:caption => 'Configurar', :method_name => :get, :class_name => 'btn blue btn-xs ', :action => 'configurar'},
+	# 			 {:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
+	# 			 {:caption => 'Deletar', :method_name => :delete, :class_name => 'btn red-thunderbird btn-xs ', :action => 'destroy', :data => {confirm: 'Tem certeza que deseja excluir o nivel de acesso?'}}]
+@@actions = [{:caption => 'Editar', :method_name => :get, :class_name => 'btn yellow btn-xs ', :action => 'edit'},
+			{:caption => '<i class="fa fa-gear"></i>'.html_safe, :class_name => 'btn green-haze dropdown-toggle btn-xs', :state => 'Status'}]
+	
 	def index
 		if current_user.user_type != 2
 			respond_to do |format|
 				format.html
-				format.json { render json: GeneralDatatable.new(Nivelacesso, act_columns_final, @@actions, view_context, current_user) }
+				format.json { render json: GeneralDatatable.new(Nivelacesso.where("status != 'x'"), act_columns_final, @@actions, view_context, current_user) }
 			end
 		else
 			respond_to do |format|
@@ -55,8 +57,9 @@ class NivelacessoController < ApplicationController
 
 	def destroy
 		@nivelacesso = Nivelacesso.find(params[:id])
-		@nivelacesso.destroy
-		if @nivelacesso.destroy
+		@nivelacesso.status = 'x'
+		@nivelacesso.save
+		if @nivelacesso.status == 'x'
 			redirect_to nivelacessos_path, notice: " "
 		end
 	end

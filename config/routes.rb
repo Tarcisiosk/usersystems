@@ -125,6 +125,7 @@ Rails.application.routes.draw do
 	get 'series/new' => "serie#new", as: :new_serie
 	post 'series/save' => 'serie#save'
 	post 'series/save_settings' => 'serie#save_settings'
+	get 'series/statusset/:id' => 'serie#statusset'
 
 	get 'tipomovimentacaos' => "tipomovimentacao#index", s: :tipomovimentacaos
 	get 'tipomovimentacaos/new' => "tipomovimentacao#new", as: :new_tipomovimentacao
