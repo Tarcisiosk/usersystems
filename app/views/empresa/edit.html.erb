@@ -49,6 +49,9 @@
 										 	<li class="active">
 												<a ncheck="true" href="#tab_1_1" data-toggle="tab">Informações Gerais</a>
 											</li>
+											<li>
+												<a ncheck="true" href="#tab_1_0" data-toggle="tab">Endereço</a>
+											</li>
 											<% if current_user.user_type != 2%>
 												<li ng-if="empresa.id != null">
 													<a ncheck="true" href="#tab_1_2" data-toggle="tab">Usuários</a>
@@ -63,112 +66,110 @@
 										</ul>
 										<div class="tab-content">
 											<div class="tab-pane active" id="tab_1_1">
-																									
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Razao Social</label>
-														<input type="text" name="razao_social" ng-model='empresa.razao_social' class='form-control placeholder-no-fix'></input>														
-													</div>
+												<div class="form-group">
+													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+													<label class="control-label ">Razao Social</label>
+													<input type="text" name="razao_social" ng-model='empresa.razao_social' class='form-control placeholder-no-fix'></input>														
+												</div>
 
-													<div class="form-group">
-														<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-														<label class="control-label ">Nome Fantasia</label>
-														<input type="text" name="nome_fantasia" ng-model='empresa.nome_fantasia' class='form-control placeholder-no-fix'></input>														
-													</div>
+												<div class="form-group">
+													<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+													<label class="control-label ">Nome Fantasia</label>
+													<input type="text" name="nome_fantasia" ng-model='empresa.nome_fantasia' class='form-control placeholder-no-fix'></input>														
+												</div>
 
-													<div class='row'>
-														<div class='col-md-4'>
-															<div class="form-group">
-																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-																<label class="control-label ">CNPJ</label>
-																<input type="text" name="cnpj" ng-model='empresa.cnpj' class='form-control placeholder-no-fix'></input>
-															</div>
+												<div class='row'>
+													<div class='col-md-4'>
+														<div class="form-group">
+															<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+															<label class="control-label ">CNPJ</label>
+															<input type="text" name="cnpj" ng-model='empresa.cnpj' class='form-control placeholder-no-fix'></input>
 														</div>
-														<div class='col-md-4'>
-															<div class="form-group">
-																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-																<label class="control-label ">Inscrição Estadual</label>
-																<input type="text" name="insc_estadual" ng-model='empresa.insc_estadual' class='form-control placeholder-no-fix'></input>																
-															</div>
+													</div>
+													<div class='col-md-4'>
+														<div class="form-group">
+															<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+															<label class="control-label ">Inscrição Estadual</label>
+															<input type="text" name="insc_estadual" ng-model='empresa.insc_estadual' class='form-control placeholder-no-fix'></input>																
 														</div>
-														<div class='col-md-4'>
+													</div>
+													<div class='col-md-4'>
+														<div class="form-group">
+															<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+															<label class="control-label ">Inscrição Municipal</label>
+															<input type="text" name="insc_municipal" ng-model='empresa.insc_municipal' class='form-control placeholder-no-fix'></input>																
+														</div>
+													</div>
+												</div>
+												<div class='row'>
+													<div class='col-md-4'>
+														<div class="form-group">
+															<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+															<label class="control-label ">Empresa enquadrada no SUPERSIMPLES</label>
+															<input type="checkbox" name="eess" ng-model='empresa.supersimples' class='form-control placeholder-no-fix'></input>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="tab-pane" id="tab_1_0" >								
+												<div class="form-body" id="form-endereco">
+													<div class="row">
+														<div class="col-md-12 ">
 															<div class="form-group">
-																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-																<label class="control-label ">Inscrição Municipal</label>
-																<input type="text" name="insc_municipal" ng-model='empresa.insc_municipal' class='form-control placeholder-no-fix'></input>																
+																<label>Rua</label>
+																<input type="text" name="rua" ng-model='empresa.rua' class='form-control placeholder-no-fix'></input>																	
 															</div>
 														</div>
 													</div>
-													<div class='row'>
-														<div class='col-md-4'>
+													<div class="row">
+														<div class="col-md-6">
 															<div class="form-group">
-																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-																<label class="control-label ">Empresa enquadrada no SUPERSIMPLES</label>
-																<input type="checkbox" name="eess" ng-model='empresa.supersimples' class='form-control placeholder-no-fix'></input>
+																<label>Numero</label>
+																<input type="text" name="num_rua" ng-model='empresa.num_rua' class='form-control placeholder-no-fix'></input>																	
+															</div>
+														</div>
+														<!--/span-->
+														<div class="col-md-6">
+															<div class="form-group">
+																<label>Complemento</label>
+																<input type="text" name="complemento" ng-model='empresa.complemento' class='form-control placeholder-no-fix'></input>																	
+															</div>
+														</div>
+														<!--/span-->
+													</div>
+													<!--/row-->
+													<div class="row">
+														<div class="col-md-6">
+															<div class="form-group">
+																<label>Bairro</label>
+																<input type="text" name="bairro" ng-model='empresa.bairro' class='form-control placeholder-no-fix'></input>																	
+															</div>
+														</div>
+														<!--/span-->
+														
+														<div class="col-md-6">
+															<div class="form-group">
+																<label>CEP</label>
+																<input type="text" name="cep" ng-model='empresa.cep' ng-blur="findCep()" class='form-control placeholder-no-fix'></input>																	
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="form-group">
+																<label>Cidade</label>
+																<input type="text" name="cidade" ng-model='empresa.cidade' class='form-control placeholder-no-fix'></input>																	
+															</div>
+														</div>
+														<!--/span-->
+														<div class="col-md-6">
+															<div class="form-group">
+																<label>UF</label>
+																<select name="uf" class="form-control" ng-model="empresa.uf"
+																	ng-options="value.uf as value.descricao for (key,value) in estados">				
+															</select>
 															</div>
 														</div>
 													</div>
-
-													<div class="form-body" id="form-endereco">
-														<h3 class="form-section">Endereço</h3><br>
-														<div class="row">
-															<div class="col-md-12 ">
-																<div class="form-group">
-																	<label>Rua</label>
-																	<input type="text" name="rua" ng-model='empresa.rua' class='form-control placeholder-no-fix'></input>																	
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-md-6">
-																<div class="form-group">
-																	<label>Numero</label>
-																	<input type="text" name="num_rua" ng-model='empresa.num_rua' class='form-control placeholder-no-fix'></input>																	
-																</div>
-															</div>
-															<!--/span-->
-															<div class="col-md-6">
-																<div class="form-group">
-																	<label>Complemento</label>
-																	<input type="text" name="complemento" ng-model='empresa.complemento' class='form-control placeholder-no-fix'></input>																	
-																</div>
-															</div>
-															<!--/span-->
-														</div>
-														<!--/row-->
-														<div class="row">
-															<div class="col-md-6">
-																<div class="form-group">
-																	<label>Bairro</label>
-																	<input type="text" name="bairro" ng-model='empresa.bairro' class='form-control placeholder-no-fix'></input>																	
-																</div>
-															</div>
-															<!--/span-->
-															
-															<div class="col-md-6">
-																<div class="form-group">
-																	<label>CEP</label>
-																	<input type="text" name="cep" ng-model='empresa.cep' ng-blur="findCep()" class='form-control placeholder-no-fix'></input>																	
-																</div>
-															</div>
-															<div class="col-md-6">
-																<div class="form-group">
-																	<label>Cidade</label>
-																	<input type="text" name="cidade" ng-model='empresa.cidade' class='form-control placeholder-no-fix'></input>																	
-																</div>
-															</div>
-															<!--/span-->
-															<div class="col-md-6">
-																<div class="form-group">
-																	<label>UF</label>
-																	<select name="uf" class="form-control" ng-model="empresa.uf"
-																		ng-options="value.uf as value.descricao for (key,value) in estados">				
-																</select>
-																</div>
-															</div>
-														</div>
-													</div>													
-												
+												</div>								
 											</div>
 											<% if current_user.user_type != 2%>
 												<div class="tab-pane" id="tab_1_2" ng-if="empresa.id != null">								
@@ -205,8 +206,11 @@
 												<div class="tab-pane" id="tab_1_3">
 													<div class="row">
 														<div class="col-md-12 col-sm-12">
-															<div class="portlet grey-cascade box">
-																<div class="portlet-title">																	
+															<div class="portlet light bordered">
+																<div class="portlet-title">	
+																	<div class="caption font-grey-gallery">
+																		<span class="caption-subject bold uppercase">Certificado</span>
+																	</div>																
 																	<div class="actions">
 																		<a href="#modalCD" data-toggle="modal" ncheck="true" ng-click="cleanCertificado()" class="btn btn-default btn-sm">
 																		<i class="fa fa-plus"></i> Novo </a>

@@ -91,12 +91,14 @@
 									</div>
 									<div class="col-md-2">																				
 										<div class="col-md-12" align="right">
-											<a ng-click="searchContaCorrente()" class="btn btn-icon-only yellow"><i class="fa fa-search"></i></a>					
-											<%if (current_user.nivelacesso.present? && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('contacorrente#new')) && current_user.user_type == 2) or current_user.user_type != 2%>
-												<a id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/contacorrentes/new?entidade={{entidade.id}}"><i class="fa fa-plus"></i></a>									
-											<%end%>
-											<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
-											<i class="fa fa-wrench"></i></a>
+											<div class="btn-group">
+												<a ng-click="searchContaCorrente()" class="btn btn-icon-only yellow"><i class="fa fa-search"></i></a>					
+												<%if (current_user.nivelacesso.present? && current_user.nivelacesso.acessos.include?(Acesso.find_by_acao('contacorrente#new')) && current_user.user_type == 2) or current_user.user_type != 2%>
+													<a id="Novo" class="btn btn-icon-only green-meadow" data-no-turbolink="true" href="/contacorrentes/new?entidade={{entidade.id}}"><i class="fa fa-plus"></i></a>									
+												<%end%>
+												<a href="#portlet-config" data-toggle="modal" class="btn btn-icon-only blue" data-original-title="" title="">
+												<i class="fa fa-wrench"></i></a>
+											</div>
 										</div>	
 									</div>								
 								</div><br>						
@@ -184,6 +186,7 @@ jQuery(document).ready(function() {
 	    }
     }, 100);	
 });
+
 myApp.controller('ContaCorrenteIndexCtrl', ['$scope', function($scope){	
 	$scope.entidade = <%=@entidade.to_json.html_safe%>;
 	$scope.entidades = <%=@entidades.to_json.html_safe%>;	
