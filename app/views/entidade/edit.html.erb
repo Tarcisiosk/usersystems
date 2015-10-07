@@ -186,7 +186,7 @@
 															<div class="form-group">
 																<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 																<label class="control-label ">CNPJ/CPF</label>
-																<input type="text" name="cnpj" id="campocnpj" ng-focus="RemoveMask(2)" ng-blur="ApplyMask(2)" ng-model='data.cnpj'  maxlength="14" numbers-only="numbers-only" class='form-control placeholder-no-fix'>
+																<input type="text" name="cnpj" ui-br-cpfcnpj-mask id="campocnpj" ng-focus="RemoveMask(2)" ng-blur="" ng-model='data.cnpj' numbers-only="numbers-only" class='form-control placeholder-no-fix'>
 															</div>
 														</div>
 														<div class="col-md-4">
