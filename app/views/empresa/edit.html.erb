@@ -83,7 +83,7 @@
 														<div class="form-group">
 															<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 															<label class="control-label ">CNPJ</label>
-															<input type="text" name="cnpj" ng-model='empresa.cnpj' class='form-control placeholder-no-fix'></input>
+															<input type="text" name="cnpj" ui-br-cnpj-mask ng-model='empresa.cnpj' class='form-control placeholder-no-fix'></input>
 														</div>
 													</div>
 													<div class='col-md-4'>
@@ -150,7 +150,7 @@
 														<div class="col-md-6">
 															<div class="form-group">
 																<label>CEP</label>
-																<input type="text" name="cep" ng-model='empresa.cep' ng-blur="findCep()" class='form-control placeholder-no-fix'></input>																	
+																<input type="text" name="cep" ng-model='empresa.cep' ui-br-cep-mask ng-blur="findCep()" class='form-control placeholder-no-fix'></input>																	
 															</div>
 														</div>
 														<div class="col-md-6">
@@ -332,8 +332,8 @@
 <script>
 myApp.controller('EmpresaCtrl', ['$scope', function($scope){
 	angular.element(document).ready(function () {
-		$('[name="cnpj"]').mask("99.999.999/9999-99");	
-		$('[name="cep"]').mask("99.999-999");		
+		//$('[name="cnpj"]').mask("99.999.999/9999-99");	
+		//$('[name="cep"]').mask("99.999-999");		
 	});	
 	$scope.mensagens = [];
 	$scope.mensagensCD = [];

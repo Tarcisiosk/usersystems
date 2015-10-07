@@ -251,7 +251,6 @@ myApp.controller('IndexCtrl', ['$scope', function($scope)
 			else if(control == 'nivelacessos')
 			{
 				$(this).after('<ul class="dropdown-menu"><li>' +configlink+ '</li><li class="divider"></li><li>' +deletelink+ '</li></ul>');
-
 			}
 			else if(control == 'planoconta')
 			{

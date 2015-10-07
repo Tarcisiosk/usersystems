@@ -41,7 +41,6 @@
 										<div class="col-md-3">
 											<div class="form-group">
 												<label class="control-label ">Data de Emissão</label>
-
 												<input type="text" name="data" ng-model='data.data' id="datepicker" data-date-format="dd/mm/yyyy" class="form-control form-control-inline input-medium date-picker" size="16">
 											</div>
 										</div>
@@ -58,7 +57,6 @@
 										        </ui-select><br>
 										       	
 										       	<input type="checkbox" ng-disabled='isDisabled'  id='consumidorfinal' ng-click="setCheckboxes('consumidorfinal', data.consumidor_final)" ng-model="data.consumidor_final"> Consumidor Final </input><br>
-
 											</div>
 										</div>
 									
@@ -171,7 +169,7 @@
 														 Total frete:
 													</div>
 													<div class="col-md-6 "  style="color: blue;" align="right">
-														{{totalfrete | currency : "R$" }} ( + )
+														{{totalfrete | currency : "R$" }} + 
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totaldesconto > 0">
@@ -179,7 +177,7 @@
 														 Total desconto:
 													</div>
 													<div class="col-md-6 "  style="color: red;" align="right">
-														{{totaldesconto | currency : "R$" }} ( - )
+														{{totaldesconto | currency : "R$" }} - 
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totalseguro > 0">
@@ -187,7 +185,7 @@
 														 Total seguro:
 													</div>
 													<div class="col-md-6 "  style="color: blue;" align="right">
-														 {{totalseguro | currency : "R$" }} ( + )
+														 {{totalseguro | currency : "R$" }} + 
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totaloutros > 0">
@@ -195,7 +193,7 @@
 														 Total outros:
 													</div>
 													<div class="col-md-6 "  style="color: blue;" align="right">
-														 {{totaloutros | currency : "R$" }} ( + )
+														 {{totaloutros | currency : "R$" }} + 
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totalipi > 0">
@@ -203,7 +201,7 @@
 														 Total IPI:
 													</div>
 													<div class="col-md-6 " style="color: blue;" align="right">
-														 {{totalipi | currency : "R$" }} ( + )
+														 {{totalipi | currency : "R$" }} + 
 													</div>
 												</div>
 												<div class="row static-info" ng-show="totalicms > 0">

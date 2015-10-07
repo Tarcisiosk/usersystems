@@ -162,7 +162,7 @@
 														<label class="control-label ">Preço</label>
 														<div class="input-group">
 															<span class="input-group-addon"> R$ </span>
-															<input type="text" name="money" ng-model='data.preco' class='form-control placeholder-no-fix'> 
+															<input type="text" name="money"  ui-number-mask="2" ng-model='data.preco' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 												</div>
@@ -173,25 +173,25 @@
 													<div class="col-md-3">
 														<label class="control-label ">Frete</label>
 														<div class="input-group">
-															<input type="text" name="money" ng-model='data.frete' class='form-control placeholder-no-fix'> 
+															<input type="text" name="money"  ui-number-mask="2" ng-model='data.frete' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 													<div class="col-md-3">
 														<label class="control-label ">Desconto</label>
 														<div class="input-group">
-															<input type="text" name="money" ng-model='data.desconto' class='form-control placeholder-no-fix'> 
+															<input type="text" name="money"  ui-number-mask="2" ng-model='data.desconto' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 													<div class="col-md-3">
 														<label class="control-label ">Seguro</label>
 														<div class="input-group">
-															<input type="text" name="money" ng-model='data.seguro' class='form-control placeholder-no-fix'> 
+															<input type="text" name="money"  ui-number-mask="2" ng-model='data.seguro' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 													<div class="col-md-3">
 														<label class="control-label ">Outros</label>
 														<div class="input-group">
-															<input type="text" name="money" ng-model='data.outros' class='form-control placeholder-no-fix'> 
+															<input type="text" name="money"  ui-number-mask="2" ng-model='data.outros' class='form-control placeholder-no-fix'> 
 														</div>
 													</div>
 												</div>
@@ -340,7 +340,7 @@
 														<td><span ng-if="icmscf.modalidadebcicmsst_id == '5'">{{icmscf.mva}}</span></td>
 														<td>
 															<span ng-if="icmscf.modalidadebcicmsst_id == '5' && icmscf.reducaomva" 
-																  class="glyphicon glyphicon-ok font-green"/>														
+															class="glyphicon glyphicon-ok font-green"/>														
 														</td>
 														<td><a id="editarIcms" ng-click="setIcmsCF(icmscf.estado_id)" class="btn yellow btn-xs" data-toggle="modal" href="#popupIcms">Editar</a></td>
 													</tr>

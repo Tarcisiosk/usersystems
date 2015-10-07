@@ -237,7 +237,7 @@ myApp.controller('EntidadeCtrl', ['$scope', function($scope)
 		{
 			if($scope.enderecoEditar.cep.length == 8)
 			{
-				$("#campocep").mask("99999-999");
+				//$("#campocep").mask("99999-999");
 			}
 			else
 			{
