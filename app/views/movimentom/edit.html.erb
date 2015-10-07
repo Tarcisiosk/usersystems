@@ -47,7 +47,7 @@
 										<div class="col-md-6">
 											<div class="form-group">
 												<label class="control-label" ng-show="tipomovimentacao.tipo == 'Entrada'">Fornecedor </label>
-												<label class="control-label" ng-show="tipomovimentacao.tipo == 'Saída'">Cliente </label>
+												<label class="control-label" ng-show="tipomovimentacao.tipo != 'Entrada'">Cliente </label>
 
 												<ui-select ng-model="data.entidade_id" on-select="setEntidadeSelected($item); setCheckboxes('consumidorfinal', data.consumidor_final)" name="entidade" theme="bootstrap" >
 										            <ui-select-match allow-clear="false" placeholder="">{{$select.selected.nome_fantasia}}</ui-select-match>

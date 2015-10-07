@@ -9,11 +9,11 @@
 				<!-- BEGIN PAGE BREADCRUMB -->
 				<ul class="page-breadcrumb breadcrumb">
 					<li>
-						<%= link_to "Página Inicial", root_path %>
+						<a check href="/" data-no-turbolink="true">Página Inicial </a>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li>
-						<%= link_to "Usuários", users_path%>
+						<a href='/users' data-no-turbolink="true"> Usuários </a>
 					</li>
 					<i class="fa fa-circle"></i>
 					<li class="active">
@@ -152,7 +152,8 @@
 													<div class="actions">
 														<left><%= f.submit "Atualizar", :class => "btn yellow" %></left>
 													</div><br>
-													<%= link_to "Voltar", users_path, :class => "btn default " %>
+													<a href='/users' data-no-turbolink="true" class="btn default"> Voltar </a>
+
 												<% end %>
 
 
