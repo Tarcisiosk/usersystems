@@ -291,6 +291,8 @@ jQuery(document).ready(function() {
 	ComponentsDropdowns.init();
 	Demo.init(); // init demo features		
 	ComponentsPickers.init();
+  
+  	$.ajaxSetup({ cache: false });
 
 	var options = 
 	{

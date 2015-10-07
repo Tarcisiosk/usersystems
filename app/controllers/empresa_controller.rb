@@ -10,7 +10,7 @@ class EmpresaController < ApplicationController
 	def index
 		#current_user.settings(:last_empresa).edited = Empresa.find(11)
 		respond_to do |format|
-			format.html
+			format.html 
 			format.json { render json: GeneralDatatable.new(Empresa, act_columns_final, empresa_actions, view_context, current_user) }
 		end
 	end
