@@ -340,7 +340,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 	{   	
 		console.log($scope.data);
 
-		Metronic.startPageLoading({animate: true});
+		//Metronic.startPageLoading({animate: true});
 		var request;
 		request = $.ajax({
 			async: false,
@@ -350,13 +350,13 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 			success: function(data)
 			{
 				window.location.replace('/produtos');
-					Metronic.stopPageLoading();
+				//Metronic.stopPageLoading();
 			},
 			error: function (jqXHR, textStatus, errorThrown)
 			{      			     			
 				$scope.mensagens = JSON.parse(jqXHR.responseText);
-				Metronic.stopPageLoading();
-				}
+				//Metronic.stopPageLoading();
+			}
 		});
 	}
 }]);

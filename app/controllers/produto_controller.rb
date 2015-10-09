@@ -197,7 +197,7 @@ class ProdutoController < ApplicationController
 					@icmsproduto.save
 				end	
 			end	
-			render :index
+			render :index and return
 		else
 			render json: @produto.errors.full_messages, status: :unprocessable_entity 
 		end
@@ -212,7 +212,7 @@ class ProdutoController < ApplicationController
 						:reducaobasecalculo,:diferimento,:aliquota, :aliquotafinscalculo, :icmsst,:modalidadebcicmsst_id,:mva,:reducaomva))	
 		end
 		if @icf.valid?
-			render :index
+			render :index and return
 		else
 			render json: @icf.errors.full_messages, status: :unprocessable_entity
 		end			
