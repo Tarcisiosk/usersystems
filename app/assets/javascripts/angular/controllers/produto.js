@@ -345,7 +345,7 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 		request = $.ajax({
 			async: false,
 			method: 'post',
-			url: '/produtos/save_angular/' +  $('#EditingObjId').attr("data"),
+			url: '/produtos/save_angular/' +  $('#EditingObjId').attr("data").id,
 			data: { data: $scope.data, icmsprodutos: JSON.stringify($scope.icmsproduto) },
 			success: function(data)
 			{
