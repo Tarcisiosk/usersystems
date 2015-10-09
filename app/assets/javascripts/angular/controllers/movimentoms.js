@@ -726,6 +726,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 				$scope.data.produtos_list = JSON.stringify($scope.produtos_choosen);
 			}
 		}
+		$scope.addRow();
+
 	}
 
 	//edita o produto
@@ -745,6 +747,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.produtos_choosen[auxindex] = produto;
 		}
 		$scope.endEdit();
+		$scope.addRow();
+
 	}
 
 	//cancela edicao
@@ -1129,6 +1133,8 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 		//$('#produto').prop('selectedIndex', 0);
 	}
 
+
+
 	/* END ANGULAR FUNCTIONS */
 
 	//pula para prox input caso teclado enter
@@ -1173,12 +1179,23 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 						'</table>'+
 					'</div>'
 		}
-		
+
 		//datatable
 		var table = $('#produtos').DataTable({
+			  "retrieve": true,
 			  "bSort" : false,
 			  "iDisplayLength": 100
 		});
+
+		$scope.addRow = function()
+		{
+			var table = $('#produtos').DataTable({
+			  "retrieve": true,
+			  "bSort" : false,
+			  "iDisplayLength": 100
+			});
+			console.log("added");
+		}
 
 		//funcao para verificacao de mostrar ou nao os detalhes do produto
 		$('#produtos tbody').on('click', 'td.details-control', function () {
