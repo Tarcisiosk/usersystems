@@ -298,7 +298,7 @@ jQuery(document).ready(function() {
 	{
 		denoteDirtyForm: true,
 		denoteDirtyOptions: true,
-		trimText:true,
+		trimText:true
 	};
 
 	$('#date').datepicker({

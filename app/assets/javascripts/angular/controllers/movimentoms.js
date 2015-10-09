@@ -341,7 +341,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 			$scope.calcBcIpi();
 		}
 		//outras saidas...
-		if( $scope.produto_selected.ipi_cst_id != 8)
+		if( $scope.produto_selected.ipi_cst_id != 8 || $scope.produto_selected.industrializado == false)
 		{
 			$scope.produto_selected.ipi_aliquota = 0;
 			$scope.produto_selected.valoripi = 0;
@@ -1173,6 +1173,7 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 						'</table>'+
 					'</div>'
 		}
+		
 		//datatable
 		var table = $('#produtos').DataTable({
 			  "bSort" : false,

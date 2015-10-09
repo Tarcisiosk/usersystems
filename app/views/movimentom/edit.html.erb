@@ -69,7 +69,7 @@
 														Itens
 													</div>
 													<div class="actions"> 
-														<a class="btn btn-default btn-sm"  ng-disabled="!data.entidade_id" ncheck href="#portlet-config" ng-click="setFocusInput(); clearPanel()" data-toggle="modal">
+														<a class="btn btn-default btn-sm" ng-disabled="!data.entidade_id" ncheck href="#portlet-config" ng-click="setFocusInput(); clearPanel()" data-toggle="modal">
 														<i class="fa fa-plus"></i> Adicionar </a>
 													</div>
 												</div>
@@ -316,7 +316,7 @@
 												<a href="#portlet_tab0" ncheck data-toggle="tab"> Outras Inf. </a>
 											</li>
 											<li>
-												<a href="#portlet_tab1" ncheck data-toggle="tab"> IPI </a>
+												<a ng-show="produto_selected.industrializado == true" href="#portlet_tab1" ncheck data-toggle="tab"> IPI </a>
 											</li>
 											<li>
 												<a href="#portlet_tab2" ncheck data-toggle="tab"> ICMS </a>
@@ -435,7 +435,9 @@
 																	<a href="javascript:;" ncheck class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
 																	<ul class="dropdown-menu pull-right" role="menu">
 																		<li>
-																			<input type="checkbox" ng-model="produto_selected.calcIpiIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='ipiicms' ng-click="setCheckboxes('ipiicms', produto_selected.calcIpiIcms)" > IPI </input><br>
+																			<div ng-show="produto_selected.industrializado == true">
+																				<input type="checkbox"  ng-model="produto_selected.calcIpiIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='ipiicms' ng-click="setCheckboxes('ipiicms', produto_selected.calcIpiIcms)" > IPI </input><br>
+																			</div>
 
 																			<input type="checkbox" ng-model="produto_selected.calcFreteIcms" ng-change="setEdited(1, false); setEdited(2, false); calcBcIcms(); setIcms(); setIcmsst()" ng-true-value='1' ng-false-value='0' id='freteicms' ng-click="setCheckboxes('freteicms', produto_selected.calcFreteIcms)" > Frete </input><br>
 																			
@@ -512,8 +514,9 @@
 																<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true"> <i class="fa fa-cog"></i> </a>
 																<ul class="dropdown-menu pull-right" role="menu">
 																	<li>
-																		<input type="checkbox" ng-model="produto_selected.calcIpiIcmsst" ng-change="setEdited(2, false); calcBcIcmsst(); setIcmsst();" ng-true-value='1' ng-false-value='0' id='ipiicmsst' ng-click="setCheckboxes('ipiicmsst', produto_selected.calcIpiIcmsst)" > IPI </input><br>
-
+																		<div ng-show="produto_selected.industrializado == true">
+																			<input type="checkbox" ng-model="produto_selected.calcIpiIcmsst" ng-change="setEdited(2, false); calcBcIcmsst(); setIcmsst();" ng-true-value='1' ng-false-value='0' id='ipiicmsst' ng-click="setCheckboxes('ipiicmsst', produto_selected.calcIpiIcmsst)" > IPI </input><br>
+																		</div>
 																		<input type="checkbox" ng-model="produto_selected.calcFreteIcmsst" ng-change="setEdited(2, false); calcBcIcmsst(); setIcmsst();" ng-true-value='1' ng-false-value='0' id='freteicmsst' ng-click="setCheckboxes('freteicmsst', produto_selected.calcFreteIcmsst)" > Frete </input><br>
 																		
 															        	<input type="checkbox" ng-model="produto_selected.calcDescontoIcmsst" ng-change="setEdited(2, false); calcBcIcmsst(); setIcmsst();" ng-true-value='1' ng-false-value='0' id='descontoicmsst' ng-click="setCheckboxes('descontoicmsst', produto_selected.calcDescontoIcmsst)" > Desconto </input><br>

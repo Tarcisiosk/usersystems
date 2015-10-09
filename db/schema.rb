@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151007124005) do
+ActiveRecord::Schema.define(version: 20151009141733) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -346,8 +346,8 @@ ActiveRecord::Schema.define(version: 20151007124005) do
     t.string   "codigo"
     t.float    "preco"
     t.string   "unidade"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
     t.integer  "adm_id"
     t.integer  "grupo_id"
     t.integer  "subgrupo_id"
@@ -374,6 +374,7 @@ ActiveRecord::Schema.define(version: 20151007124005) do
     t.string   "status",                 default: "a"
     t.string   "usuarioalterador"
     t.datetime "dataalteracao"
+    t.boolean  "industrializado",        default: true
   end
 
   create_table "series", force: :cascade do |t|
