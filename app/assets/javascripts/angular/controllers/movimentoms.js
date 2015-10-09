@@ -1165,10 +1165,10 @@ myApp.controller('MovimentomsCtrl', ['$scope', function($scope)
 								'<td><b>Desconto:</b></td>'+
 							'</tr>'+
 							'<tr>'+
-								'<td style="color: blue;">'+ '+ ' + $scope.produtos_choosen[d].frete + '</td>'+
-								'<td style="color: blue;">'+ '+ ' + $scope.produtos_choosen[d].seguro + '</td>'+
-								'<td style="color: blue;">'+ '+ ' + $scope.produtos_choosen[d].outros + '</td>'+
-								'<td style="color: red;">'+ '- ' + $scope.produtos_choosen[d].desconto + '</td>'+
+								'<td style="color: blue;">'+ '+ R$' + $scope.produtos_choosen[d].frete + '</td>'+
+								'<td style="color: blue;">'+ '+ R$' + $scope.produtos_choosen[d].seguro + '</td>'+
+								'<td style="color: blue;">'+ '+ R$' + $scope.produtos_choosen[d].outros + '</td>'+
+								'<td style="color: red;">'+ '- R$' + $scope.produtos_choosen[d].desconto + '</td>'+
 							'</tr>'+
 						'</table>'+
 					'</div>'
