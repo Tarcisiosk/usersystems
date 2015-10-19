@@ -338,14 +338,18 @@ myApp.controller('ProdutoCtrl', ['$scope', function($scope)
 	
 	$scope.save = function() 
 	{   	
-		console.log($scope.data);
+		if($scope.data.origem_id == 2 || $scope.data.origem_id == 3 || 
+		   $scope.data.origem_id == 7 || $scope.data.origem_id == 8)
+		{
+			$scope.data.industrializado = false;
+		}
 
 		//Metronic.startPageLoading({animate: true});
 		var request;
 		request = $.ajax({
 			async: false,
 			method: 'post',
-			url: '/produtos/save_angular/' +  $('#EditingObjId').attr("data").id,
+			url: '/produtos/save_angular/' +  $('#EditingObjId').attr("data"),
 			data: { data: $scope.data, icmsprodutos: JSON.stringify($scope.icmsproduto) },
 			success: function(data)
 			{

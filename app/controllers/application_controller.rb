@@ -44,25 +44,17 @@ class ApplicationController < ActionController::Base
 	  render :json => { :errors => model.errors }, status: 422
 	end
 
+	def is_number? string
+	  true if Float(string) rescue false
+	end
 
-	def menuMovimentos(i)
+	def menuMovimentos()
 		movMenu = Array.new
-		if i == 0
-			movEntradas = Tipomovimentacao.where("tipo='Entrada'");
-			movEntradas.each_with_index do |item, index|
-				movMenu[index] = {:label => item.descricao, :path => '/movimentoms/' + item.id.to_s, :acao => 'movimentom#index'}
-			end	
-		elsif i == 1
-			movSaidas = Tipomovimentacao.where("tipo='Saída'");
-			movSaidas.each_with_index do |item, index|
-				movMenu[index] = {:label => item.descricao, :path => '/movimentoms/' + item.id.to_s, :acao => 'movimentom#index'}
-			end	
-		else i == 2
-			movOutros = Tipomovimentacao.where("tipo='Outros'");
-			movOutros.each_with_index do |item, index|
-				movMenu[index] = {:label => item.descricao, :path => '/movimentoms/' + item.id.to_s, :acao => 'movimentom#index'}
-			end	
-		end
+	
+		mov = Tipomovimentacao.where("status != 'x'");
+		mov.each_with_index do |item, index|
+			movMenu[index] = {:label => item.descricao, :path => '/movimentoms/' + item.id.to_s, :acao => 'movimentom#index'}
+		end	
 		return movMenu
 	end
 
@@ -80,9 +72,8 @@ class ApplicationController < ActionController::Base
 														 	:classificacaofiscals =>{:label => 'Classific. Fiscais', :path => '/classificacaofiscal', :acao => 'classificacaofiscal#index'}}},	   
 				       
 				       :mainmovimentacoes => {:label=>'Movimentações', 
-				       						  :entrada =>{:label=>'Entradas', },
-				       						  :saida =>{:label=>'Saídas',  },
-				       						  :outro =>{:label=>'Outros',  }},
+				       						  :movimentos =>{:label=>'Movimentos', }},
+
 				       :mainfinanceiro => {:label=>'Financeiro',
 				       					   :cadastros=>{:label=>'Cadastros',
 				       					   				:planocontas =>{:label=>'Plano de Contas', :path=>'/planocontas', :acao =>'planoconta#index'}},
@@ -102,21 +93,9 @@ class ApplicationController < ActionController::Base
 				       						  				:icmsinterestadual =>{:label =>'ICMS Interestadual', :path=>'/icmsinterestadual', :acao=>'icmsinterestadual#index'},
 				       						  				:cfop =>{:label =>'CFOP', :path=>'/cfops', :acao=>'cfop#index'}}}}
 		
-		menuMovimentos(0).each do |item|
+		menuMovimentos.each do |item|
 			if item
-				menuBuilder[:mainmovimentacoes][:entrada][item[:label].to_sym] = item
-			end
-		end
-
-		menuMovimentos(1).each do |item|
-			if item
-				menuBuilder[:mainmovimentacoes][:saida][item[:label].to_sym] = item
-			end
-		end
-
-		menuMovimentos(2).each do |item|
-			if item
-				menuBuilder[:mainmovimentacoes][:outro][item[:label].to_sym] = item
+				menuBuilder[:mainmovimentacoes][:movimentos][item[:label].to_sym] = item
 			end
 		end
 		if current_user.user_type != 0

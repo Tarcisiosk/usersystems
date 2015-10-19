@@ -37,7 +37,6 @@ class GrupoController < ApplicationController
 	def edit
 		@grupo = Grupo.find(params[:id]) 
 		@@angularActions = {:descricao => @grupo.descricao, :empresas => @grupo.empresas.ids }
-
 	end
 
 	def update
@@ -61,16 +60,6 @@ class GrupoController < ApplicationController
 		if @grupo.status == 'x'
 			redirect_to grupos_path, notice: " "
 		end
-
-		# Subgrupo.all.each do |item|
-		# 	if item.grupo_id == @grupo.id
-		# 		item.destroy
-		# 	end
-		# end
-		# @grupo.destroy
-		# if @grupo.destroy
-		# 		redirect_to grupos_path, notice: " "
-		# end
 	end
 
 	def send_json

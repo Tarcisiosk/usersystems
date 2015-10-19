@@ -129,7 +129,9 @@ Rails.application.routes.draw do
 
 	get 'tipomovimentacaos' => "tipomovimentacao#index", s: :tipomovimentacaos
 	get 'tipomovimentacaos/new' => "tipomovimentacao#new", as: :new_tipomovimentacao
-	post 'tipomovimentacaos/save' => 'tipomovimentacao#save'
+	get 'tipomovimentacaos/get_json' => "tipomovimentacao#send_json"
+	post 'tipomovimentacaos/save_angular' => 'tipomovimentacao#save_angular'	
+	post 'tipomovimentacaos/save_angular/:id' => 'tipomovimentacao#save_angular'
 	post 'tipomovimentacaos/save_settings' => 'tipomovimentacao#save_settings'
 	get 'tipomovimentacaos/statusset/:id' => 'tipomovimentacao#statusset'
 

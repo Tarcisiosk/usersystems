@@ -1,5 +1,5 @@
 <!-- BEGIN PAGE CONTAINER -->
-<div class="page-container" ng-view ng-controller="TipomovimentacaoCtrl" ng-cloak="">
+<div class="page-container" ng-view ng-controller="TipomovimentacaoCtrl"  id="EditingObjId" data="<%=editingUser.id%>" empresa_atual="<%=(current_user.settings(:last_empresa).edited).id%>" ng-cloak="" ng-mousemove="reorderWorkflow()">
 	<!-- BEGIN PAGE HEAD -->
 	<div class="page-head">
 			<!-- END PAGE TITLE -->
@@ -41,62 +41,106 @@
 						</div>					
 						<div class="portlet-body">
 							<div class="row">
-								<div class="col-md-8">
+								<div class="col-md-12">
 									<div class="form-group">
 									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
 										<label class="control-label ">Descrição</label>
-										<input type="text" name="descricao" ng-model='tipomovimentacao.descricao' class='form-control placeholder-no-fix'></input>
+										<input type="text" name="descricao" ng-model='data.descricao' class='form-control placeholder-no-fix'></input>
 									</div>
 								</div>
-								<div class="col-md-4">
-									<div class="form-group">
-									<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-										<label class="control-label ">Tipo</label>
-										<select class="form-control" name="tipo" ng-model="tipomovimentacao.tipo"
-												ng-options="value.descricao as value.codigo+' - '+value.descricao for (key,value) in tipos">					
-										</select>
-									</div>
-								</div>				
+								
 							</div>
-							<!-- <div class="row">
-								<div class="col-md-3">
-									<input type="checkbox" ng-model="tipomovimentacao.incide_ipi"> Incide IPI </input>
+							<div class ="row">
+								<div class="col-md-12">
+									<div class="portlet">
+										<div class="portlet-title">
+											<div class="caption">
+												Workflow
+											</div>
+											<div class="actions"> 
+												<a class="btn btn-default btn-sm" ncheck ng-click="setWorkflowSelected('')" href="#portlet-config" data-toggle="modal">
+												<i class="fa fa-plus"></i> Adicionar </a>
+											</div>
+										</div>
+										<div class="portlet-body">
+											<div class="table-container">
+												<table class="table table-striped table-bordered table-hover" id="workflow_table" >
+													<thead>
+														<tr role="row">
+															<th width='2%'>
+															</th>
+															<th width='5%' id="sort">
+																Ord.
+															</th>
+															<th width='60%'>
+																Descrição
+															</th>
+															<th style="text-align:center" width="30%">
+																Tipo
+															</th>
+															<th style="text-align:center" width="10%">
+																Ações
+															</th>
+														</tr>
+													</thead>
+													<tbody >
+														<tr ng-repeat="w in workflow_list track by w.descricao"  >
+															<td><i class="fa fa-bars"></i></td>
+															<td align="center"> {{ w.ordem }} </td>
+															<td>{{ w.descricao }}</td>
+															<td>{{ w.tipo }}</td>
+															<td align="center"> 
+																<a ncheck href="#portlet-config" ng-click=" editWorkflow($index);" data-toggle="modal" class="btn yellow btn-xs"> <i class="fa fa-pencil"></i> </a>
+																<a ng-click="deleteWorkflow($index)" class="btn red btn-xs"><i class="fa fa-trash-o"></i></a>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
 								</div>
-								<div class="col-md-3">
-									<input type="checkbox" ng-model="tipomovimentacao.incide_icms"> Incide ICMS </input>
-								</div>
-								<div class="col-md-3">
-									<input type="checkbox" ng-model="tipomovimentacao.incide_piscofins"> Incide PIS/COFINS </input>
-								</div>
-							</div> -->
+							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade " id="portlet-config" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content" id="end_form">
+					<div class="modal-header">
+						<div ng-show="isEditing == false">
+							<h4 class="modal-title">Adicionar Workflow</h4>
+						</div>
+						<div ng-show="isEditing == true">
+							<h4 class="modal-title">Editar Workflow</h4>
+						</div>
+					</div>
+					<div class="modal-body" >
+						<div class="row">
+							<div class="col-md-8">
+								<label class="control-label ">Descrição</label>
+								<input type="text" name="descricao" ng-model='workflow_selected.descricao' class='form-control placeholder-no-fix'></input>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+								<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+									<label class="control-label ">Tipo</label>
+									<select class="form-control" name="tipo" ng-model="workflow_selected.tipo"
+											ng-options="value.descricao as value.codigo+' - '+value.descricao for (key,value) in tipos">					
+									</select>
+								</div>
+							</div>									
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" ng-disabled="workflow_selected.descricao == '' || workflow_selected.tipo == ''" 
+						ng-click="addWorkflow(workflow_selected); saveWorkflow(workflow_selected);" class="btn blue" data-dismiss="modal">Salvar</button>
+						<button type="button" ng-click="cancelEdit(); " class="btn default" data-dismiss="modal">Cancelar</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<script>
-
-myApp.controller('TipomovimentacaoCtrl', ['$scope', function($scope){
-	$scope.mensagens = [];
-	$scope.tipomovimentacao = <%= @tipomovimentacao.to_json.html_safe=%>;	
-	$scope.tipos = [{'codigo':1,'descricao':'Entrada'},{'codigo':2,'descricao':'Saída'},{'codigo':3,'descricao':'Outros'}];
-
-	$scope.save = function(){
-		$.ajax({
-			async: false,
-      		method: 'post',
-      		url: '/tipomovimentacaos/save/',
-      		data: { tipomovimentacao: $scope.tipomovimentacao},
-      		success: function (data){      			      			
-      			window.location.replace('<%=tipomovimentacaos_path=%>');
-      		},
-      		error: function (jqXHR, textStatus, errorThrown)
-      		{      			     			
-      			$scope.mensagens = JSON.parse(jqXHR.responseText);
-      		}
-   	 	});
-	}
-}]);
-</script>							

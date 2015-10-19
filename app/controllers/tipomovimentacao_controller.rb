@@ -10,30 +10,38 @@ class TipomovimentacaoController < ApplicationController
 
   def new	
   	@tipomovimentacao = Tipomovimentacao.new(adm_id: current_user.settings(:last_empresa).edited.adm_id,empresa_id:current_user.settings(:last_empresa).edited.id)
+	@@angularActions = {:descricao => '', :workflow_list => '' }
   	render :edit
-  end
-
-  def save
-  	if params[:tipomovimentacao][:id].blank?
-  		@tipomovimentacao = Tipomovimentacao.new(params[:tipomovimentacao].symbolize_keys)
-  		@tipomovimentacao.save
-  	else
-  		@tipomovimentacao = Tipomovimentacao.find(params[:tipomovimentacao][:id])
-		@tipomovimentacao.update(params[:tipomovimentacao].symbolize_keys)
-  	end	
-  	respond_to do |format|
-		if @tipomovimentacao.valid?			
-			format.html { render :index}
-			format.json { render :show, status: :created, location: @tipomovimentacao }
-		else
-			format.html { render json: @tipomovimentacao.errors.full_messages, status: :unprocessable_entity }
-			format.json { render json: @tipomovimentacao.errors.full_messages, status: :unprocessable_entity }
-		end
-	end
   end
 
   def edit
   	@tipomovimentacao = Tipomovimentacao.find(params[:id])
+ 	@@angularActions = {:descricao => @tipomovimentacao.descricao, :workflow_list => @tipomovimentacao.workflow_list }
+  end
+
+  def send_json
+	render :json => @@angularActions.to_json.to_s.html_safe
+  end
+
+  def save_angular
+	data_hash = params[:data].symbolize_keys
+	array_empresas = Array.new
+
+	if Tipomovimentacao.where(:id => params[:id]).present? 
+		@tipomovimentacao = Tipomovimentacao.find(params[:id])
+		@tipomovimentacao.descricao = data_hash[:descricao]
+		@tipomovimentacao.workflow_list = data_hash[:workflow_list]
+	else
+		@tipomovimentacao = Tipomovimentacao.new(descricao: data_hash[:descricao], workflow_list: data_hash[:workflow_list])
+	end
+
+	@tipomovimentacao.save
+
+	if @tipomovimentacao.valid?
+		render :index
+	else
+	 	render json: @tipomovimentacao.errors.full_messages, status: :unprocessable_entity 
+	end
   end
 
   def destroy
